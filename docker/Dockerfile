@@ -11,7 +11,7 @@ COPY package.json package-lock.json ./
 
 RUN npm install
 CMD npm run serve
-EXPOSE 80
+EXPOSE 81
 
 ### Build stage
 FROM node:lts-alpine as build-stage
