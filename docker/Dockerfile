@@ -1,5 +1,5 @@
 ### Development stage
-FROM node:lts-alpine as development-stage
+FROM node:lts as development-stage
 
 ARG NPM_AUTH_TOKEN
 # We need to set NPM_AUTH_TOKEN build ARG to ENV because we need valid .npmrc file for development aswell
