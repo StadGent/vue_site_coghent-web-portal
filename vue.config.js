@@ -1,6 +1,7 @@
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const nodeExternals = require('webpack-node-externals')
 const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
   chainWebpack: (webpackConfig) => {
