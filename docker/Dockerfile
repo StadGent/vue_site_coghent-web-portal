@@ -7,10 +7,11 @@ ENV NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+ENTRYPOINT ["/entrypoint.sh"]
+COPY docker/entrypoint*.sh /
+COPY package*.json ./
 
 RUN npm install
-CMD npm run serve
 EXPOSE 81
 
 ### Build stage
@@ -20,7 +21,7 @@ ARG NPM_AUTH_TOKEN
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
 RUN npm install
 
