@@ -31,10 +31,20 @@
 </template>
 
 <script>
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import { GetEntitiesDocument } from '../../coghent-vue-3-component-library/src/queries'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  setup: (props) => {
+    const { result, loading, fetchMore } = useQuery(
+      GetEntitiesDocument, {
+        searchQuery: "strijkijzer"
+      }
+    )
+    console.log(result)
   }
 }
 </script>
