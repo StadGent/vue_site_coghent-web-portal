@@ -9,12 +9,11 @@ export default function () {
   const app = createSSRApp(App)
   const router = createRouter()
   const apolloClient = new ApolloClient({
-    link: createHttpLink({ uri: "http://localhost:8071/api/graphql" }),
+    link: createHttpLink({ uri: 'http://localhost:8071/api/graphql' }),
     cache: new InMemoryCache(),
   })
 
   app.use(router).provide(DefaultApolloClient, apolloClient)
-
 
   return {
     app,
