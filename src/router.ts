@@ -7,8 +7,9 @@ const isServer = typeof window === 'undefined'
 const history = isServer ? createMemoryHistory() : createWebHistory()
 
 const routes = [
-  { path: '/', component: TheGrid },
-  { path: '/entity/:entityId', component: EntityDetails }
+  { path: '/', redirect: '/home' },
+  {path:  '/home', component: TheGrid},
+  { path: '/entity/:entityID', component: EntityDetails, props:true },
 ]
 
 export default function () {

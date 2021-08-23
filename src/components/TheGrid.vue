@@ -2,14 +2,15 @@
   <section>
     <div class="grid grid-cols-4 gap-4">
       <div v-for="entity in entities" :key="entity.id">
-        <div v-if="entity.image"><img :src="entity.image" /></div>
+        <router-link :to="'/entity/' + entity._id" v-show="entity.image"><img :src="entity.image" /></router-link>
+        
       </div>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, provide } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { GetEntitiesDocument } from '../../coghent-vue-3-component-library/src/queries'
 import axios from 'axios'
@@ -58,8 +59,9 @@ export default defineComponent({
     })
     console.log('result', result)
 
+
     return {
-      entities,
+      entities
     }
   },
 })

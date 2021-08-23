@@ -1,17 +1,13 @@
 <template>
-  <section>
-    <TheGrid />
-  </section>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import TheGrid from './components/TheGrid.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    TheGrid,
   },
 })
 </script>
