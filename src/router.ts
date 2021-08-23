@@ -9,7 +9,7 @@ const history = isServer ? createMemoryHistory() : createWebHistory()
 const routes = [
   { path: '/', redirect: '/home' },
   {path:  '/home', component: TheGrid},
-  { path: '/entity/:entityID', component: EntityDetails, props:true },
+  { path: '/entity/:entityID', component: EntityDetails },
 ]
 
 export default function () {
