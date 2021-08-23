@@ -15,6 +15,7 @@ export default function () {
 
   app.use(router).provide(DefaultApolloClient, apolloClient)
 
+
   return {
     app,
     router,

@@ -11,6 +11,8 @@ ENTRYPOINT ["/entrypoint.sh"]
 COPY docker/entrypoint*.sh /
 COPY package*.json ./
 
+RUN rm -rf node_modules
+RUN npm cache clean --force
 RUN npm install
 EXPOSE 81
 
@@ -22,7 +24,8 @@ ARG NPM_AUTH_TOKEN
 WORKDIR /app
 
 COPY package*.json ./
-
+RUN rm -rf node_modules
+RUN npm cache clean --force
 RUN npm install
 
 COPY ./ ./
