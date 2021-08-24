@@ -3,6 +3,7 @@
     <h1 class="text-5xl font-bold w-8/12 text-center py-10 block leading-normal">
       Duik mee in de geschiedenis en ontdek de vele werken uit onze <span class="text-accent-purple">rijke collectie!</span>
     </h1>
+    <!-- <p>{{t('main.title')}}</p> -->
     <div class="w-8/12 py-6">
       <base-input v-model="keyword" label="bibliotheek" @on-click="getData" />
     </div>
@@ -22,6 +23,7 @@ import { useQuery } from '@vue/apollo-composable'
 import { GetFullEntitiesDocument, BaseInput } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import TheMasonry from './TheMasonry.vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -43,11 +45,15 @@ export default defineComponent({
       })
     }
 
+    const { t } = useI18n();
+
+
     return {
       keyword,
       getData,
       loading,
       result,
+      t
     }
   },
 })

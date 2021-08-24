@@ -102,6 +102,10 @@ export default defineComponent({
       }
     }
 
+     console.log('resultRelation', resultRelation)
+
+    console.log('Result', result.value?.Entity?.relations)
+
     return { result, selectedImageIndex, nextImage, prevImage, relations, resultRelation, setRelation, loadingRelation }
   },
 })
