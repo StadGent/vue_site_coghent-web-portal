@@ -13,15 +13,15 @@
       </svg>
     </div>
 
-    <div v-show="!loading" class="grid--masonry">
-      <router-link v-for="entity in entities" v-show="entity.image" :key="entity.id" class="relative group" :to="'/entity/' + entity._id">
+    <div v-if='result'  class="grid--masonry">
+      <router-link v-for="entity in result.Entities.results" v-show="entity.mediafiles && entity.mediafiles.length > 0" :key="entity.id" class="relative group" :to="'/entity/' + entity.id">
         <span
           :class="{
             'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
             'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
           }"
         />
-        <img :src="entity.image" />
+        <img v-if="entity.mediafiles && entity.mediafiles.length > 0" :src="entity.mediafiles[0].original_file_location" />
       </router-link>
     </div>
   </section>
@@ -29,61 +29,36 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, provide } from 'vue'
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import { GetEntitiesDocument, BaseInput } from 'coghent-vue-3-component-library'
-import axios from 'axios'
+import {  useQuery } from '@vue/apollo-composable'
+import { GetFullEntitiesDocument, BaseInput } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
-import { DataRepository } from '../repositories/DataRepository'
-import { Collection, Result } from '../models/CollectionModel'
 
 export default defineComponent({
   name: 'AssetGrid',
   components: { BaseInput },
   props: {},
-  setup: (props) => {
+  setup: () => {
     const keyword = ref<string>('asset')
-    const entities = ref<Result[]>([])
-    const dataRepo: DataRepository = new DataRepository()
-    const loading = ref<boolean>(true)
+
+    const { result, fetchMore, loading } = useQuery<any>(GetFullEntitiesDocument, {
+      searchQuery: keyword.value,
+    })
 
     const getData = () => {
-      loading.value = true
-      dataRepo.getCollectionData(keyword.value).then((response: Collection) => {
-        const length = response.results.length - 1
-        response.results.forEach((result: Result, index) => {
-          dataRepo.getRelationData(result._id).then((relations: any) => {
-            result.relations = relations
-
-            dataRepo.getMediaData(result._id).then((media: any) => {
-              if (media[0]) {
-                result.image = media[0].original_file_location
-              }
-
-              if (index === length) {
-                entities.value = response.results
-                console.log('entities', entities)
-              }
-            })
-          })
-        })
-        loading.value = false
-      })
+      fetchMore({
+          variables:  {
+        searchQuery: keyword.value
+      },
+          updateQuery: (prev, { fetchMoreResult: res }) => res || prev,
+      });
     }
-
-    onMounted(() => {
-      getData()
-    })
-
-    const { result, fetchMore } = useQuery(GetEntitiesDocument, {
-      searchQuery: '',
-    })
-    console.log('result', result)
+    console.log(result)
 
     return {
-      entities,
       keyword,
       getData,
       loading,
+      result
     }
   },
 })

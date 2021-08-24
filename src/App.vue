@@ -1,7 +1,7 @@
 <template>
   <div class="bg-background-light font-body py-6 min-h-screen flex flex-col items-center">
     <div class="container">
-      <div class="flex items-center">
+      <a href='/home' class="flex items-center">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="48" height="48" fill="#FDC20B" />
           <g filter="url(#filter0_i)">
@@ -21,7 +21,7 @@
           </defs>
         </svg>
         <h2 class="font-bold text-lg ml-4">Ontdek de collectie</h2>
-      </div>
+      </a>
       <router-view />
     </div>
   </div>
