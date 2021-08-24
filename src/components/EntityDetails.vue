@@ -44,9 +44,6 @@
             metaData.value
           }}</span>
         </div>
-        <!-- <p style="max-width: 500px; margin: auto">
-        {{  }}
-      </p> -->
       </div>
     </section>
     <section class="col-span-2">
@@ -89,6 +86,7 @@ export default defineComponent({
         selectedImageIndex.value = selectedImageIndex.value === 0 ? result.value.Entity?.mediafiles.length - 1 : selectedImageIndex.value - 1
       }
     }
+
 
     const {
       result: resultRelation,
