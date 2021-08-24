@@ -38,7 +38,7 @@ export default defineComponent({
   components: { BaseInput },
   props: {},
   setup: () => {
-    const keyword = ref<string>('asset')
+    const keyword = ref<string>('')
 
     const { result, fetchMore, loading } = useQuery<any>(GetFullEntitiesDocument, {
       searchQuery: keyword.value,
