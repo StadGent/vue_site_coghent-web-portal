@@ -13,29 +13,20 @@
       </svg>
     </div>
 
-    <div v-if='result'  class="grid--masonry">
-      <router-link v-for="entity in result.Entities.results" v-show="entity.mediafiles && entity.mediafiles.length > 0" :key="entity.id" class="relative group" :to="'/entity/' + entity.id">
-        <span
-          :class="{
-            'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
-            'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
-          }"
-        />
-        <img v-if="entity.mediafiles && entity.mediafiles.length > 0" :src="entity.mediafiles[0].original_file_location" />
-      </router-link>
-    </div>
+    <the-masonry v-if="result" :entities="result.Entities" :loading="loading" />
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, provide } from 'vue'
-import {  useQuery } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { GetFullEntitiesDocument, BaseInput } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
+import TheMasonry from './TheMasonry.vue'
 
 export default defineComponent({
   name: 'AssetGrid',
-  components: { BaseInput },
+  components: { BaseInput, TheMasonry },
   props: {},
   setup: () => {
     const keyword = ref<string>('')
@@ -46,52 +37,19 @@ export default defineComponent({
 
     const getData = () => {
       fetchMore({
-          variables:  {
-        searchQuery: keyword.value
-      },
-          updateQuery: (prev, { fetchMoreResult: res }) => res || prev,
-      });
+        variables: {
+          searchQuery: keyword.value,
+        },
+        updateQuery: (prev, { fetchMoreResult: res }) => res || prev,
+      })
     }
-    console.log(result)
 
     return {
       keyword,
       getData,
       loading,
-      result
+      result,
     }
   },
 })
 </script>
-
-<style scoped>
-/* basic reset */
-* {
-  margin: 0;
-}
-
-/* grid styles */
-.grid--masonry {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, Min(30em, 100%));
-  grid-template-rows: masonry;
-  justify-content: center;
-  grid-gap: 0.5em;
-  padding: 0.5em;
-}
-.grid--masonry > * {
-  align-self: start;
-}
-
-/* prettifying styles */
-html {
-  background: #555;
-}
-
-img {
-  display: block;
-  width: 100%;
-  border-radius: 4px;
-  box-shadow: 2px 2px 5px rgba(#000, 0.7);
-}
-</style>
