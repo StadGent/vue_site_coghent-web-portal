@@ -1,6 +1,13 @@
 {
-    "main": {
-        "title":"Duik mee in de geschiedenis en ontdek de vele werken uit onze" ,
-        "rich": "rijke collectie!"
-    }
+  "main" : {
+    "title" : "Duik mee in de geschiedenis en ontdek de vele werken uit onze",
+    "rich" : "rijke collectie!",
+    "library": "bibliotheek"
+  },
+  "header": {
+    "discover" : "Ontdek de collectie"
+  },
+  "details":{
+    "discover": "Ontdek ook andere gerelateerde werken"
+  }
 }

@@ -52,6 +52,7 @@ module.exports = {
       })
     )
   },
+
   configureWebpack: {
     resolve: {
       symlinks: false,
@@ -63,8 +64,21 @@ module.exports = {
       },
     },
   },
+
   devServer: {
     disableHostCheck: true,
     progress: false,
   },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'nl',
+      fallbackLocale: 'nl',
+      localeDir: 'locales',
+      enableLegacy: false,
+      runtimeOnly: false,
+      compositionOnly: false,
+      fullInstall: true
+    }
+  }
 }
