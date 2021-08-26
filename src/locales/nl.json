@@ -5,7 +5,12 @@
     "library": "bibliotheek"
   },
   "header": {
-    "discover" : "Ontdek de collectie"
+    "discover" : "Ontdek de collectie",
+    "pavilion" : "Het paviljoen"
+  },
+  "buttons":{
+    "login": "Aanmelden",
+    "storybox": "Verhalenbox"
   },
   "details":{
     "discover": "Ontdek ook andere gerelateerde werken"
