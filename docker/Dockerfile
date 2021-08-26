@@ -11,8 +11,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 COPY docker/entrypoint*.sh /
 COPY package*.json ./
 
-RUN rm -rf node_modules
-RUN npm cache clean --force
+RUN npm install -g @vue/cli 
 RUN npm install
 EXPOSE 81
 
