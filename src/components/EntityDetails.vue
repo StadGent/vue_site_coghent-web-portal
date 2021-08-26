@@ -90,7 +90,7 @@
     </section>
     <section class="col-span-2">
       <h2 class="font-bold text-2xl w-full text-center pt-10">
-        {{t("details.discover")}}
+        {{ t("details.discover") }}
       </h2>
       <div class="pt-5 font-medium pb-2">
         <relation-tag

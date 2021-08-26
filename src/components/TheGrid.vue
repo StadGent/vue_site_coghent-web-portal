@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col items-center">
     <h1 class="text-5xl font-bold w-8/12 text-center py-10 block leading-normal">
-      {{t('main.title')}} <span class="text-accent-purple">{{t('main.rich')}}</span>
+      {{ t('main.title') }} <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div class="w-8/12 py-6">
       <base-input
