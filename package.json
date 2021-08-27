@@ -21,6 +21,7 @@
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",
     "jest": "^27.0.6",
+    "session-vue-3-oidc-library": "git+https://gitlab.com/inuits/coghent/session-vue-3-oidc-library.git#main",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-i18n": "^9.1.7",

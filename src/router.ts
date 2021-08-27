@@ -18,6 +18,13 @@ const routes = [
   {path : '/storybox', component: TheStoryboxPage}
 ]
 
-export default function () {
+export default function (auth: any) {
+  const router = createRouter({ routes, history: createWebHistory(process.env.BASE_URL) });
+  router.beforeEach(async (to, _from, next) => {
+    if (!to.matched.some((route) => route.meta.requiresAuth)) {
+      return next();
+    }
+    await auth.assertIsAuthenticated(to.fullPath, next);
+  })
   return createRouter({ routes, history })
 }

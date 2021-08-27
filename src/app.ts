@@ -3,18 +3,27 @@ import { createSSRApp } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+import { OpenIdConnectClient } from 'session-vue-3-oidc-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import i18n from './i18n'
 
-export default function () {
+export default async function () {
   const app = createSSRApp(App)
-  const router = createRouter()
+
+  const config = await fetch('../config.json').then((r) => r.json());
+  const auth = new OpenIdConnectClient(config.oidc);
+  const router = createRouter(auth)
   const apolloClient = new ApolloClient({
-    link: createHttpLink({ uri: 'http://localhost:8071/api/graphql' }),
+    link: createHttpLink({ uri: config.graphQlLink }),
     cache: new InMemoryCache(),
   })
 
-  app.use(router).use(i18n).provide(DefaultApolloClient, apolloClient)
+  const authCode = new URLSearchParams(window.location.search).get('code');
+  if (authCode) {
+    auth.processAuthCode(authCode, router);
+  }
+
+  app.use(router).use(auth).use(i18n).provide(DefaultApolloClient, apolloClient)
 
   return {
     app,

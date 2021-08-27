@@ -1,0 +1,14 @@
+{
+  "graphQlLink": "http://localhost:8071/api/graphql",
+  "oidc": {
+    "baseUrl": "http://localhost:8080/auth/realms/dams",
+    "tokenEndpoint": "protocol/openid-connect/token",
+    "authEndpoint": "protocol/openid-connect/auth",
+    "logoutEndpoint": "protocol/openid-connect/logout",
+    "clientId": "coghent-web-portal",
+    "authorizedRedirectRoute": "/",
+    "serverTokenEndpoint": "api/oidc/v1/token",
+    "serverRefreshEndpoint": "api/oidc/v1/refresh",
+    "apiCodeEndpoint": "/api/auth_code"
+  }
+}
