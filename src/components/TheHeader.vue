@@ -21,20 +21,20 @@
               </filter>
             </defs>
           </svg>
-          <h2 class="ml-4" :class="{ [`font-bold text-lg`]: isHomeActive }">{{ t('header.discover') }}</h2>
+          <h2 class="ml-4 text-lg" :class="{ [`font-bold`]: isHomeActive }">{{ t('header.discover') }}</h2>
         </router-link>
-        <div v-show="isHomeActive" class="w-2 h-2 ml-14 bg-accent-yellow rounded mt-1"></div>
+        <div v-show="isHomeActive" class="w-2 h-2 sm:ml-0 lg:ml-14 bg-accent-yellow rounded mt-1"></div>
       </div>
-      <div class="flex flex-col items-center pt-3">
+      <div class="flex flex-col items-center lg:pt-2.5">
         <router-link to="/pavilion" class="flex items-center">
-          <h2 :class="{ [`font-bold text-lg`]: isPavilionActive }">{{ t('header.pavilion') }}</h2>
+          <h2 class="text-lg" :class="{ [`font-bold`]: isPavilionActive }">{{ t('header.pavilion') }}</h2>
         </router-link>
         <div v-show="isPavilionActive" class="w-2 h-2 bg-accent-yellow rounded mt-3"></div>
       </div>
     </div>
 
-    <div class="flex">
-      <language-selector />
+    <div class="flex ml-3">
+      <language-selector/>
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2"></div>
       <base-button :text="t('buttons.login')" :on-click="buttonClick" custom-style="primary" :iconShown="false" />
       <base-button :text="t('buttons.storybox')" :on-click="buttonClick" custom-style="ghost-purple" :iconShown="true" />
