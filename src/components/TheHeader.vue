@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-between">
     <div class="flex gap-8">
-      <div>
-        <a href="/home" class="flex items-center">
+      <div class="flex flex-col items-center">
+        <router-link to="/home" class="flex items-center">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" fill="#FDC20B" />
             <g filter="url(#filter0_i)">
@@ -21,19 +21,20 @@
               </filter>
             </defs>
           </svg>
-          <h2 class="font-bold text-lg ml-4">{{ t('header.discover') }}</h2>
-        </a>
+          <h2 class="ml-4" :class="{ [`font-bold text-lg`]: isHomeActive }">{{ t('header.discover') }}</h2>
+        </router-link>
+        <div v-show="isHomeActive" class="w-2 h-2 ml-14 bg-accent-yellow rounded mt-1"></div>
       </div>
       <div class="flex flex-col items-center pt-3">
-        <a href="/pavilion" class="flex items-center">
-          <h2 class="font-bold text-lg">{{ t('header.pavilion') }}</h2>
-        </a>
-        <div class="w-2 h-2 bg-accent-yellow rounded mt-3"></div>
+        <router-link to="/pavilion" class="flex items-center">
+          <h2 :class="{ [`font-bold text-lg`]: isPavilionActive }">{{ t('header.pavilion') }}</h2>
+        </router-link>
+        <div v-show="isPavilionActive" class="w-2 h-2 bg-accent-yellow rounded mt-3"></div>
       </div>
     </div>
 
     <div class="flex">
-      <!-- <language-selector /> -->
+      <language-selector />
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2"></div>
       <base-button :text="t('buttons.login')" :on-click="buttonClick" custom-style="primary" :iconShown="false" />
       <base-button :text="t('buttons.storybox')" :on-click="buttonClick" custom-style="ghost-purple" :iconShown="true" />
@@ -43,20 +44,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, LanguageSelector } from 'coghent-vue-3-component-library'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'TheHeader',
-  components: { BaseButton },
+  components: { BaseButton, LanguageSelector },
   setup() {
+    const route = useRoute()
+    const isHomeActive = ref<Boolean>(true)
+    const isPavilionActive = ref<Boolean>(false)
+
+    watch(
+      () => route.path,
+      () => {
+        isHomeActive.value = route.path === '/home'
+        isPavilionActive.value = route.path === '/pavilion'
+      }
+    )
+
     const buttonClick = () => {
       console.log('click')
     }
 
     const { t } = useI18n()
-    return { t, buttonClick }
+    return { t, buttonClick, isHomeActive, isPavilionActive }
   },
 })
 </script>
