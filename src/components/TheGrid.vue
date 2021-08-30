@@ -10,6 +10,11 @@
         @on-click="getData"
       />
     </div>
+    <Filter
+      :filter-all="'Alle werken'"
+      :filters="['Foto collectie', 'Associatie 1', 'Associatie 2', 'Associatie 3']"
+      @selected="setSelectedFilters"
+    />
     <div
       v-show="loading"
       class="pt-10"
@@ -44,31 +49,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, provide } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { GetFullEntitiesDocument, BaseInput } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
+import Filter from './Filter.vue';
 
 export default defineComponent({
   name: 'AssetGrid',
-  components: { BaseInput, TheMasonry },
+  components: { BaseInput, TheMasonry, Filter },
   props: {},
   setup: () => {
     const keyword = ref<string>('')
-
     const { result, fetchMore, loading } = useQuery<any>(GetFullEntitiesDocument, {
-      searchQuery: keyword.value,
+      searchValue: keyword.value,
     })
 
     const getData = () => {
       fetchMore({
         variables: {
-          searchQuery: keyword.value,
+          searchValue: keyword.value,
         },
         updateQuery: (prev, { fetchMoreResult: res }) => res || prev,
       })
+    }
+
+    const setSelectedFilters = (values: string[]) => {
+      console.log(values);
     }
 
     const { t } = useI18n();
@@ -79,7 +88,8 @@ export default defineComponent({
       getData,
       loading,
       result,
-      t
+      t,
+      setSelectedFilters
     }
   },
 })
