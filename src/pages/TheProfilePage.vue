@@ -17,20 +17,46 @@
       </div>
       <p class="mt-8 font-bold">Gebruikersnaam</p>
       <div class="flex mt-4 items-center">
-        <input class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent" 
-        placeholder="Gebruikersnaam" :disabled="!edit.username.value" />
-        <base-button text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+        <input
+          class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent"
+          placeholder="Gebruikersnaam"
+          ref="usernameRef"
+          :disabled="!edit.username.value"
+        />
+        <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+      </div>
+      <div class="flex gap-4 my-4" v-show="edit.username.value">
+        <base-button text="Annuleren" @click="editField('username')" custom-style="secondary" :iconShown="false" />
+        <base-button text="Opslaan" @click="saveEdit('username')" custom-style="primary" :iconShown="false" />
       </div>
       <p class="mt-8 font-bold">Email adres</p>
       <div class="flex mt-4 items-center">
-        <input class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent" 
-        placeholder="Email" :disabled="!edit.email.value" />
-        <base-button text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+        <input
+          class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent"
+          placeholder="Email"
+          ref="emailRef"
+          :focus="edit.email.value"
+          :disabled="!edit.email.value"
+        />
+        <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+      </div>
+      <div class="flex gap-4 my-4" v-show="edit.email.value">
+        <base-button text="Annuleren" @click="editField('email')" custom-style="secondary" :iconShown="false" />
+        <base-button text="Opslaan" @click="saveEdit('email')" custom-style="primary" :iconShown="false" />
       </div>
       <p class="mt-8 font-bold">Wachtwoord</p>
       <div class="flex mt-4 items-center">
-        <input class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent" placeholder="Wachtwoord" :disabled="!edit.password.value" />
-        <base-button text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+        <input
+          class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent"
+          ref="passwordRef"
+          placeholder="Wachtwoord"
+          :disabled="!edit.password.value"
+        />
+        <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+      </div>
+      <div class="flex gap-4 my-4" v-show="edit.password.value">
+        <base-button text="Annuleren" @click="editField('password')" custom-style="secondary" :iconShown="false" />
+        <base-button text="Opslaan" @click="saveEdit('password')" custom-style="primary" :iconShown="false" />
       </div>
       <p class="mt-8 font-bold">Delete account</p>
       <div class="flex mt-4 xl:space-x-44 sm:space-x-24 lg:space-x-44 items-center">
@@ -43,6 +69,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
+
+const usernameRef = ref<HTMLElement | null>(null)
+const emailRef = ref<HTMLElement | null>(null)
+const passwordRef = ref<HTMLElement | null>(null)
+
+const input = {
+  username: ref<String>(''),
+  email: ref<String>(''),
+  password: ref<String>(''),
+}
 
 const user = {
   username: ref<String>('Bert De Backer'),
@@ -59,6 +95,7 @@ const edit = {
 export default defineComponent({
   components: { BaseButton },
   setup() {
+    //temp
     const buttonClick = () => {
       console.log('click')
     }
@@ -67,26 +104,43 @@ export default defineComponent({
       //TODO Shorten this
       switch (field) {
         case 'username':
-          if (edit.username.value === false) edit.username.value = !edit.username.value
-          else {
+          if (edit.username.value === false) {
             edit.username.value = !edit.username.value
-            //TODO needs saving logic
+            if (usernameRef.value) usernameRef.value.focus()
+          } else {
+            edit.username.value = !edit.username.value
           }
-          break
+          break;
         case 'email':
-          if (edit.email.value === false) edit.email.value = !edit.email.value
-          else {
+          if (edit.email.value === false) {
             edit.email.value = !edit.email.value
-            //TODO needs saving logic
+            //TODO Fix automatic focus on edit
+          } else {
+            edit.email.value = !edit.email.value
           }
-          break
+          break;
         case 'password':
-          if (edit.password.value === false) edit.password.value = !edit.password.value
-          else {
+          if (edit.password.value === false) {
             edit.password.value = !edit.password.value
-            //TODO needs saving logic
+            if (passwordRef.value) passwordRef.value.focus()
+          } else {
+            edit.password.value = !edit.password.value
           }
-          break
+          break;
+      }
+    }
+
+    const saveEdit = (field: String) => {
+      switch(field){
+        case 'username':
+          
+          break;
+        case 'email':
+          
+          break;
+        case 'password':
+          
+          break;
       }
     }
 
@@ -95,6 +149,9 @@ export default defineComponent({
       editField,
       edit,
       user,
+      usernameRef,
+      emailRef,
+      passwordRef,
     }
   },
 })

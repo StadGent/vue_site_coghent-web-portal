@@ -23,7 +23,7 @@
           </svg>
           <h2 class="ml-4 text-lg" :class="{ [`font-bold`]: isHomeActive }">{{ t('header.discover') }}</h2>
         </router-link>
-        <div v-show="isHomeActive" class="w-2 h-2 sm:ml-0 lg:ml-14 bg-accent-yellow rounded mt-1"></div>
+        <div class="w-2 h-2 sm:ml-0 lg:ml-14 mt-1" :class="{[`bg-accent-yellow rounded`]: isHomeActive}"></div>
       </div>
       <div class="flex flex-col items-center lg:pt-2.5">
         <router-link to="/pavilion" class="flex items-center">
@@ -36,7 +36,7 @@
     <div class="flex ml-3">
       <language-selector/>
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2"></div>
-      <base-button :text="t('buttons.login')" :on-click="goToProfilePage" custom-style="primary" :iconShown="false" class="px-2 mx-2" />
+      <base-button :text="t('buttons.login')" :on-click="goToProfilePage" custom-style="primary" :iconShown="false" class="px-2 mx-2 mb-2 flex-grow-0" />
       <base-button :text="t('buttons.storybox')" :on-click="buttonClick" custom-style="ghost-purple" :iconShown="true" customIcon="storybox" class="px-2 mx-2" />
     </div>
   </div>
