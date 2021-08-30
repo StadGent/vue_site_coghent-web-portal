@@ -36,8 +36,8 @@
     <div class="flex ml-3">
       <language-selector/>
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2"></div>
-      <base-button :text="t('buttons.login')" :on-click="buttonClick" custom-style="primary" :iconShown="false" />
-      <base-button :text="t('buttons.storybox')" :on-click="buttonClick" custom-style="ghost-purple" :iconShown="true" />
+      <base-button :text="t('buttons.login')" :on-click="goToProfilePage" custom-style="primary" :iconShown="false" class="px-2 mx-2" />
+      <base-button :text="t('buttons.storybox')" :on-click="buttonClick" custom-style="ghost-purple" :iconShown="true" customIcon="storybox" class="px-2 mx-2" />
     </div>
   </div>
   <div class="border-t-2 w-auto border-background-dark mt-5 border-opacity-70"></div>
@@ -47,15 +47,16 @@
 import { defineComponent, watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BaseButton, LanguageSelector } from 'coghent-vue-3-component-library'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'TheHeader',
   components: { BaseButton, LanguageSelector },
   setup() {
     const route = useRoute()
-    const isHomeActive = ref<Boolean>(true)
-    const isPavilionActive = ref<Boolean>(false)
+    const router = useRouter()
+    const isHomeActive = ref<Boolean>(route.path === '/home')
+    const isPavilionActive = ref<Boolean>(route.path ==='/pavilion')
 
     watch(
       () => route.path,
@@ -65,12 +66,16 @@ export default defineComponent({
       }
     )
 
+    const goToProfilePage = () => {
+      router.push("/profile")
+    }
+
     const buttonClick = () => {
       console.log('click')
     }
 
     const { t } = useI18n()
-    return { t, buttonClick, isHomeActive, isPavilionActive }
+    return { t, buttonClick, isHomeActive, isPavilionActive, goToProfilePage}
   },
 })
 </script>
