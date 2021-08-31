@@ -64,7 +64,7 @@ export default defineComponent({
   setup: () => {
     const keyword = ref<string>('')
     const { result, fetchMore, loading } = useQuery<any>(GetFullEntitiesDocument, {
-      searchValue: keyword.value,
+      searchValue: {value: keyword.value},
     })
 
     const getData = () => {

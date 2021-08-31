@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="filters.length > 0"
-    class="flex flex-wrap flex-row w-full"
+    class="flex flex-wrap flex-row w-full justify-center"
   >
-    <p>{{ setAllTag.value }}</p>
     <FilterTag
       v-model:isSelected="setAllTag"
       :filter="filterAll"
+      :icon="'globe'"
       @click="toggleFilters"
     />
     <FilterTag
@@ -14,6 +14,7 @@
       :key="tag"
       v-model:isSelected="tags"
       :filter="tag"
+      :icon="'globe'"
       @click="addToSelectedTags(tag)"
     />
   </div>
