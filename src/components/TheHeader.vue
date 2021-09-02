@@ -37,7 +37,7 @@
       <language-selector />
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
       <base-button :text="t('buttons.login')" :on-click="goToProfilePage" custom-style="primary" :icon-shown="false" class="px-2 mx-2 mb-2 flex-grow-0" />
-      <base-button :text="t('buttons.storybox')" :on-click="buttonClick" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-2" />
+      <base-button :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-2" />
     </div>
   </div>
   <div class="border-t-2 w-auto border-background-dark mt-5 border-opacity-70" />
@@ -70,12 +70,16 @@ export default defineComponent({
       router.push('/profile')
     }
 
+    const goToVerhalenBox = () => {
+      router.push('/design')
+    }
+
     const buttonClick = () => {
       console.log('click')
     }
 
     const { t } = useI18n()
-    return { t, buttonClick, isHomeActive, isPavilionActive, goToProfilePage }
+    return { t, buttonClick, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox }
   },
 })
 </script>

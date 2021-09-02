@@ -4,7 +4,7 @@
       {{ t('main.title') }} <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div class="w-8/12 py-6">
-      <base-input
+      <base-search
         v-model="keyword"
         :label="t('main.library')"
         @on-click="getData"
@@ -51,7 +51,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { GetFullEntitiesDocument, BaseInput } from 'coghent-vue-3-component-library'
+import { GetFullEntitiesDocument, BaseSearch } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
@@ -59,7 +59,7 @@ import Filter from './Filter.vue';
 
 export default defineComponent({
   name: 'AssetGrid',
-  components: { BaseInput, TheMasonry, Filter },
+  components: { BaseSearch, TheMasonry, Filter },
   props: {},
   setup: () => {
     const keyword = ref<string>('')

@@ -4,8 +4,9 @@
       <div class="flex-col justify-between flex-1">
         <h2 class="mt-5 font-bold text-4xl">Hoi Bert!</h2>
         <p class="text-accent-yellow font-bold mt-10 text-lg">Account details</p>
-        <p class="mt-8 text-lg">Mijn verhalen</p>
-        <p class="mt-8 text-lg">Mijn werken</p>
+        <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">Mijn verhalen</p></router-link>
+        <br />
+        <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">Mijn werken</p></router-link>
       </div>
       <base-button text="Afmelden" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="logout" />
     </div>
@@ -17,12 +18,7 @@
       </div>
       <p class="mt-8 font-bold">Gebruikersnaam</p>
       <div class="flex mt-4 items-center">
-        <input
-          class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent"
-          placeholder="Gebruikersnaam"
-          ref="usernameRef"
-          :disabled="!edit.username.value"
-        />
+        <base-input ref="usernameRef" placeholder="Gebruikersnaam" :disabled="!edit.username.value" />
         <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
       </div>
       <div class="flex gap-4 my-4" v-show="edit.username.value">
@@ -31,13 +27,7 @@
       </div>
       <p class="mt-8 font-bold">Email adres</p>
       <div class="flex mt-4 items-center">
-        <input
-          class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent"
-          placeholder="Email"
-          ref="emailRef"
-          :focus="edit.email.value"
-          :disabled="!edit.email.value"
-        />
+        <base-input ref="emailRef" placeholder="Email" :disabled="!edit.email.value" />
         <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
       </div>
       <div class="flex gap-4 my-4" v-show="edit.email.value">
@@ -46,12 +36,7 @@
       </div>
       <p class="mt-8 font-bold">Wachtwoord</p>
       <div class="flex mt-4 items-center">
-        <input
-          class="p-3 h-10 w-9/12 mr-5 bg-text-white focus:outline-none focus:ring-2 focus:ring-accent-yellow focus:border-transparent"
-          ref="passwordRef"
-          placeholder="Wachtwoord"
-          :disabled="!edit.password.value"
-        />
+        <base-input :ref="passwordRef" placeholder="Wachtwoord" :disabled="!edit.password.value" />
         <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
       </div>
       <div class="flex gap-4 my-4" v-show="edit.password.value">
@@ -68,7 +53,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
 
 const usernameRef = ref<HTMLElement | null>(null)
 const emailRef = ref<HTMLElement | null>(null)
@@ -93,7 +78,7 @@ const edit = {
 }
 
 export default defineComponent({
-  components: { BaseButton },
+  components: { BaseButton, BaseInput },
   setup() {
     //temp
     const buttonClick = () => {
@@ -110,7 +95,7 @@ export default defineComponent({
           } else {
             edit.username.value = !edit.username.value
           }
-          break;
+          break
         case 'email':
           if (edit.email.value === false) {
             edit.email.value = !edit.email.value
@@ -118,7 +103,7 @@ export default defineComponent({
           } else {
             edit.email.value = !edit.email.value
           }
-          break;
+          break
         case 'password':
           if (edit.password.value === false) {
             edit.password.value = !edit.password.value
@@ -126,21 +111,18 @@ export default defineComponent({
           } else {
             edit.password.value = !edit.password.value
           }
-          break;
+          break
       }
     }
 
     const saveEdit = (field: String) => {
-      switch(field){
+      switch (field) {
         case 'username':
-          
-          break;
+          break
         case 'email':
-          
-          break;
+          break
         case 'password':
-          
-          break;
+          break
       }
     }
 
