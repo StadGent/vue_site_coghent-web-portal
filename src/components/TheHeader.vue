@@ -71,7 +71,7 @@ export default defineComponent({
     }
 
     const goToVerhalenBox = () => {
-      router.push('/design')
+      router.push('/storybox')
     }
 
     const buttonClick = () => {
