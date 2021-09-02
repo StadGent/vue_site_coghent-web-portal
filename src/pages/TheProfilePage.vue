@@ -14,12 +14,12 @@
       <p class="mt-5 font-bold">Profielfoto</p>
       <div class="flex mt-4">
         <img class="w-36 h-36 mr-4 bg-accent-yellow rounded-md" src="../assets/logo.png" />
-        <base-button class="self-end" text="Verwijderen" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="delete" />
+        <!-- <base-button class="self-end" text="Verwijderen" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="delete" /> -->
       </div>
       <p class="mt-8 font-bold">Gebruikersnaam</p>
       <div class="flex mt-4 items-center">
         <base-input ref="usernameRef" placeholder="Gebruikersnaam" :disabled="!edit.username.value" />
-        <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+        <!-- <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
       <div class="flex gap-4 my-4" v-show="edit.username.value">
         <base-button text="Annuleren" @click="editField('username')" custom-style="secondary" :iconShown="false" />
@@ -28,7 +28,7 @@
       <p class="mt-8 font-bold">Email adres</p>
       <div class="flex mt-4 items-center">
         <base-input ref="emailRef" placeholder="Email" :disabled="!edit.email.value" />
-        <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+        <!-- <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
       <div class="flex gap-4 my-4" v-show="edit.email.value">
         <base-button text="Annuleren" @click="editField('email')" custom-style="secondary" :iconShown="false" />
@@ -37,7 +37,7 @@
       <p class="mt-8 font-bold">Wachtwoord</p>
       <div class="flex mt-4 items-center">
         <base-input :ref="passwordRef" placeholder="Wachtwoord" :disabled="!edit.password.value" />
-        <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+        <!-- <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
       <div class="flex gap-4 my-4" v-show="edit.password.value">
         <base-button text="Annuleren" @click="editField('password')" custom-style="secondary" :iconShown="false" />
