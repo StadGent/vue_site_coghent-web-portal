@@ -28,6 +28,7 @@ export default async function () {
   return {
     app,
     router,
+    auth,
     i18n,
   }
 }
