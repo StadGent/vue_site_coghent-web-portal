@@ -23,7 +23,7 @@ export default async function () {
     auth.processAuthCode(authCode, router);
   }
 
-  app.use(router).use(auth).use(i18n).provide(DefaultApolloClient, apolloClient)
+  app.use(router).use(auth as any).use(i18n).provide(DefaultApolloClient, apolloClient)
 
   return {
     app,
