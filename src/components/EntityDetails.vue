@@ -62,7 +62,7 @@
         />
       </svg>
     </section>
-    <section v-if="result">
+    <CardComponent :large='true' v-if="result">
       <div class="flex flex-col bg-background-medium px-10 py-10">
         <h1 class="text-lg font-bold">
           {{ result.Entity?.title[0]?.value }}
@@ -87,7 +87,7 @@
           }}</span>
         </div>
       </div>
-    </section>
+    </CardComponent>
     <section class="col-span-2">
       <h2 class="font-bold text-2xl w-full text-center pt-10">
         {{ t("details.discover") }}
@@ -97,7 +97,7 @@
           v-for="relation in result.Entity?.relations"
           :id="relation.key"
           :key="relation.value"
-          @click="setRelation(relation.value)"
+          @click="setRelation(relation.key)"
         />
       </div>
       <the-masonry
@@ -114,7 +114,7 @@
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, GetFullEntitiesDocument } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, GetFullEntitiesDocument, CardComponent } from 'coghent-vue-3-component-library'
 import RelationTag from './RelationTag.vue'
 import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
@@ -123,7 +123,7 @@ const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
 export default defineComponent({
   name: 'EntityDetails',
-  components: { RelationTag, TheMasonry },
+  components: { RelationTag, TheMasonry, CardComponent },
   setup: () => {
     const id = asString(useRoute().params['entityID'])
     const { result, onResult } = useQuery(GetEntityByIdDocument, { id })
@@ -153,8 +153,24 @@ export default defineComponent({
 
     const setRelation = (id: string) => {
       variables.value = {
-        searchQuery: id,
-      }
+      searchValue: {
+        raw: true,
+        value: `{
+        "query": {
+          "nested": {
+            "path": "relations",
+            "query": {
+              "bool": {
+                "must": [
+                  { "match": { "relations.key": "` + id + `" }}
+                ]
+              }
+            }
+          }
+        }
+      }`
+      },
+    }
     }
 
     const { t } = useI18n();
