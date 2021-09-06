@@ -1,4 +1,5 @@
 <template>
+  <div id="modals"></div>
   <div class="bg-background-light font-body py-6 min-h-screen flex flex-col items-center">
     <div class="container">
       <the-header />

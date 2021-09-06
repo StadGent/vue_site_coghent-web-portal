@@ -34,19 +34,18 @@
     </div>
 
     <div class="flex ml-3">
-      <language-selector />
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
       <base-button :text="t('buttons.login')" :on-click="goToProfilePage" custom-style="primary" :icon-shown="false" class="px-2 mx-2 mb-2 flex-grow-0" />
       <base-button :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-2" />
     </div>
   </div>
-  <div class="border-t-2 w-auto border-background-dark mt-5 border-opacity-70" />
+  <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
 </template>
 
 <script lang="ts">
 import { defineComponent, watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton, LanguageSelector } from 'coghent-vue-3-component-library'
+import { BaseButton } from 'coghent-vue-3-component-library'
 import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
