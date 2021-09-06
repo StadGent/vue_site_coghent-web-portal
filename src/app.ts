@@ -9,20 +9,24 @@ import i18n from './i18n'
 import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 
-export default async function () {
+export default async function (authenticated: boolean = true) {
   const app = createSSRApp(App)
 
-  const config = await fetch('../config.json').then((r) => r.json())
-  const auth = new OpenIdConnectClient(config.oidc)
+  const config = await fetch('../config.json').then((r) => r.json());
+  let auth = undefined
+  if(authenticated){
+    auth = new OpenIdConnectClient(config.oidc);
+  }
   const router = createRouter(auth)
+  
   const apolloClient = new ApolloClient({
     link: createHttpLink({ uri: config.graphQlLink }),
     cache: new InMemoryCache(),
   })
 
-  const authCode = new URLSearchParams(window.location.search).get('code')
-  if (authCode) {
-    auth.processAuthCode(authCode, router)
+  const authCode = new URLSearchParams(window.location.search).get('code');
+  if (authCode && auth) {
+    auth.processAuthCode(authCode, router);
   }
 
   app
