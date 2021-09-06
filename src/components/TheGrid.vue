@@ -70,7 +70,7 @@ export default defineComponent({
     const getData = () => {
       fetchMore({
         variables: {
-          searchValue: keyword.value,
+          searchValue: {value: keyword.value},
         },
         updateQuery: (prev, { fetchMoreResult: res }) => res || prev,
       })
