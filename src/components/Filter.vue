@@ -6,7 +6,7 @@
     <FilterTag
       v-model:isSelected="setAllTag"
       :filter="filterAll"
-      :icon="'globe'"
+      :icon="'check'"
       @click="toggleFilters"
     />
     <FilterTag
@@ -14,7 +14,7 @@
       :key="tag"
       v-model:isSelected="tags"
       :filter="tag"
-      :icon="'globe'"
+      :icon="'check'"
       @click="addToSelectedTags(tag)"
     />
   </div>
