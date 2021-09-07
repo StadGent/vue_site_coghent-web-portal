@@ -1,7 +1,7 @@
 <template>
   <base-modal v-model:isShow="openModal" class="z-50 p-10">
     <section class="flex">
-      <section id="column" class="bg-background-medium">
+      <section id="column" class="bg-background-light">
         <section id="title" class="px-10">
           <h1 class="text-2xl font-black my-8">{{ result.Entity?.title[0]?.value }}</h1>
           <p>
@@ -30,7 +30,7 @@
         </div>
       </section>
     </section>
-    <section id="footer" class="flex items-center justify-center bg-background-medium p-10">
+    <section id="footer" class="flex items-center justify-center bg-background-light p-10">
       <base-button class="w-max" :text="t('details.modal.link')" :on-click="onClick" customStyle="ghost-black" customIcon="link" :iconShown="true" />
       <div class="border-r-2 h-6 border-text-dark border-opacity-70 mx-6" />
       <base-button class="w-max" :text="t('details.modal.edit')" :on-click="onClick" customStyle="ghost-black" customIcon="edit" :iconShown="true" />
