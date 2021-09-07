@@ -22,6 +22,20 @@
       "objectNumber": "Objectnummer",
       "objectName": "Objectnaam",
       "associations": "Associaties"
-     }
+     }     
+  },
+  "profile":{
+    "greeting": "Hoi Bert!",
+    "details": "Account details",
+    "stories": "Mijn verhalen",
+    "works": "Mijn werken", 
+    "picture": "Profielfoto",
+    "username": "Gebruikersnaam",
+    "email": "Email",
+    "password": "Wachtwoord",
+    "delete": "Verwijder account",
+    "delete-info": "Door je account te verwijderen gaan al je gegevens definitief verloren",
+    "delete-button": "Account verwijderen",
+    "logout": "Afmelden"
   }
 }

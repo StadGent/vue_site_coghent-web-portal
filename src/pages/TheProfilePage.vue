@@ -2,51 +2,51 @@
   <section class="flex mt-16">
     <div class="bg-background-medium flex p-8 flex-col w-2/6">
       <div class="flex-col justify-between flex-1">
-        <h2 class="mt-5 font-bold text-4xl">Hoi Bert!</h2>
-        <p class="text-accent-yellow font-bold mt-10 text-lg">Account details</p>
-        <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">Mijn verhalen</p></router-link>
-        <br />
-        <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">Mijn werken</p></router-link>
+        <h2 class="mt-5 font-bold text-4xl">{{t('profile.greeting')}}</h2>
+        <p class="text-accent-yellow font-bold mt-10 text-lg">{{t('profile.details')}}</p>
+        <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">{{t('profile.stories')}}</p></router-link>
+        <br/>
+        <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">{{t('profile.works')}}</p></router-link>
       </div>
-      <base-button text="Afmelden" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="logout" />
+      <base-button :text="t('profile.logout')" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="logout" />
     </div>
     <div class="flex-1 xl:ml-48 sm:ml-24 p-8">
-      <p class="mt-5 font-bold">Profielfoto</p>
+      <p class="mt-5 font-bold">{{t('profile.picture')}}</p>
       <div class="flex mt-4">
         <img class="w-36 h-36 mr-4 bg-accent-yellow rounded-md" src="../assets/logo.png" />
         <!-- <base-button class="self-end" text="Verwijderen" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="delete" /> -->
       </div>
-      <p class="mt-8 font-bold">Gebruikersnaam</p>
+      <p class="mt-8 font-bold">{{t('profile.username')}}</p>
       <div class="flex mt-4 items-center">
-        <base-input ref="usernameRef" placeholder="Gebruikersnaam" :disabled="!edit.username.value" />
+        <base-input ref="usernameRef" :placeholder="t('profile.username')" :disabled="!edit.username.value" />
         <!-- <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
       <div class="flex gap-4 my-4" v-show="edit.username.value">
         <base-button text="Annuleren" @click="editField('username')" custom-style="secondary" :iconShown="false" />
         <base-button text="Opslaan" @click="saveEdit('username')" custom-style="primary" :iconShown="false" />
       </div>
-      <p class="mt-8 font-bold">Email adres</p>
+      <p class="mt-8 font-bold">{{t('profile.email')}}</p>
       <div class="flex mt-4 items-center">
-        <base-input ref="emailRef" placeholder="Email" :disabled="!edit.email.value" />
+        <base-input ref="emailRef" :placeholder="t('profile.email')" :disabled="!edit.email.value" />
         <!-- <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
       <div class="flex gap-4 my-4" v-show="edit.email.value">
         <base-button text="Annuleren" @click="editField('email')" custom-style="secondary" :iconShown="false" />
         <base-button text="Opslaan" @click="saveEdit('email')" custom-style="primary" :iconShown="false" />
       </div>
-      <p class="mt-8 font-bold">Wachtwoord</p>
+      <p class="mt-8 font-bold">{{t('profile.password')}}</p>
       <div class="flex mt-4 items-center">
-        <base-input :ref="passwordRef" placeholder="Wachtwoord" :disabled="!edit.password.value" />
+        <base-input :ref="passwordRef" :placeholder="t('profile.password')" :disabled="!edit.password.value" />
         <!-- <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
       <div class="flex gap-4 my-4" v-show="edit.password.value">
         <base-button text="Annuleren" @click="editField('password')" custom-style="secondary" :iconShown="false" />
         <base-button text="Opslaan" @click="saveEdit('password')" custom-style="primary" :iconShown="false" />
       </div>
-      <p class="mt-8 font-bold">Delete account</p>
+      <p class="mt-8 font-bold">{{t('profile.delete')}}</p>
       <div class="flex mt-4 xl:space-x-44 sm:space-x-24 lg:space-x-44 items-center">
-        <p class="xl:max-w-xs sm:max-w-md text-sm">Door je account te verwijderen gaan al je gegevens definitief verloren</p>
-        <base-button text="Account verwijderen" :on-click="buttonClick" custom-style="ghost-red" :iconShown="true" customIcon="delete" />
+        <p class="xl:max-w-xs sm:max-w-md text-sm">{{t('profile.delete-info')}}</p>
+        <base-button :text="t('profile.delete-button')" :on-click="buttonClick" custom-style="ghost-red" :iconShown="true" customIcon="delete" />
       </div>
     </div>
   </section>
@@ -54,6 +54,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
+import { useI18n } from 'vue-i18n'
 
 const usernameRef = ref<HTMLElement | null>(null)
 const emailRef = ref<HTMLElement | null>(null)
@@ -125,6 +126,9 @@ export default defineComponent({
           break
       }
     }
+    
+    const { t } = useI18n();
+
 
     return {
       buttonClick,
@@ -134,6 +138,7 @@ export default defineComponent({
       usernameRef,
       emailRef,
       passwordRef,
+      t
     }
   },
 })
