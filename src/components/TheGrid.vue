@@ -82,7 +82,6 @@ export default defineComponent({
 
     const { t } = useI18n();
 
-
     return {
       keyword,
       getData,

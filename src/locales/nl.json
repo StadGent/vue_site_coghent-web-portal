@@ -13,6 +13,15 @@
     "storybox": "Verhalenbox"
   },
   "details":{
-    "discover": "Ontdek ook andere gerelateerde werken"
+    "discover": "Ontdek ook andere gerelateerde werken",
+    "more" : "Meer info over dit werk",
+    "modal": {
+      "link": "Link naar object kopiëren",
+      "edit": "Informatie wijzigen of aanvullen",
+      "add": "Aan mijn verhalenbox toevoegen",
+      "objectNumber": "Objectnummer",
+      "objectName": "Objectnaam",
+      "associations": "Associaties"
+     }
   }
 }
