@@ -1,5 +1,5 @@
 <template>
-  <base-modal :isShow="openModal" class="z-50 p-10">
+  <base-modal v-model:isShow="openModal" class="z-50 p-10">
     <section class="flex">
       <section id="column" class="bg-background-medium">
         <section id="title" class="px-10">
@@ -162,13 +162,11 @@ export default defineComponent({
 
       const typeArray : any[] = []
       queryResult.data.Entity?.metadata.forEach((value: any) => {
-        console.log('type', value.value)
         if(value.key ==="type"){
           typeArray.push(value.value)
         }
       })
       types.value = typeArray
-      console.log('types', types)
     })
 
     const { t } = useI18n()
