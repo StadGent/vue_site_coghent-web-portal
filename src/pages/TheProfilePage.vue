@@ -1,5 +1,5 @@
 <template>
-  <section class="flex mt-16">
+  <section class="flex mt-16" v-if="user">
     <div class="bg-background-medium flex p-8 flex-col w-2/6">
       <div class="flex-col justify-between flex-1">
         <h2 class="mt-5 font-bold text-4xl">{{t('profile.greeting')}}</h2>
@@ -18,31 +18,31 @@
       </div>
       <p class="mt-8 font-bold">{{t('profile.username')}}</p>
       <div class="flex mt-4 items-center">
-        <base-input ref="usernameRef" :placeholder="t('profile.username')" :disabled="!edit.username.value" />
+        <base-input ref="user.preferred_username" placeholder="t('profile.username')" :disabled="!user.preferred_username" />
         <!-- <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
-      <div class="flex gap-4 my-4" v-show="edit.username.value">
+      <!-- <div class="flex gap-4 my-4" v-show="edit.username.value">
         <base-button text="Annuleren" @click="editField('username')" custom-style="secondary" :iconShown="false" />
         <base-button text="Opslaan" @click="saveEdit('username')" custom-style="primary" :iconShown="false" />
-      </div>
+      </div> -->
       <p class="mt-8 font-bold">{{t('profile.email')}}</p>
       <div class="flex mt-4 items-center">
-        <base-input ref="emailRef" :placeholder="t('profile.email')" :disabled="!edit.email.value" />
+        <base-input ref="user.email" placeholder="Email" :disabled="!user.email" />
         <!-- <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
-      <div class="flex gap-4 my-4" v-show="edit.email.value">
+      <!-- <div class="flex gap-4 my-4" v-show="edit.email.value">
         <base-button text="Annuleren" @click="editField('email')" custom-style="secondary" :iconShown="false" />
         <base-button text="Opslaan" @click="saveEdit('email')" custom-style="primary" :iconShown="false" />
-      </div>
+      </div> -->
       <p class="mt-8 font-bold">{{t('profile.password')}}</p>
       <div class="flex mt-4 items-center">
-        <base-input :ref="passwordRef" :placeholder="t('profile.password')" :disabled="!edit.password.value" />
+        <!-- <base-input :ref="passwordRef" placeholder="Wachtwoord" :disabled="!edit.password.value" /> -->
         <!-- <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
       </div>
-      <div class="flex gap-4 my-4" v-show="edit.password.value">
+      <!-- <div class="flex gap-4 my-4" v-show="edit.password.value">
         <base-button text="Annuleren" @click="editField('password')" custom-style="secondary" :iconShown="false" />
         <base-button text="Opslaan" @click="saveEdit('password')" custom-style="primary" :iconShown="false" />
-      </div>
+      </div> -->
       <p class="mt-8 font-bold">{{t('profile.delete')}}</p>
       <div class="flex mt-4 xl:space-x-44 sm:space-x-24 lg:space-x-44 items-center">
         <p class="xl:max-w-xs sm:max-w-md text-sm">{{t('profile.delete-info')}}</p>
@@ -53,12 +53,16 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
 import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
+import { GetMeDocument } from 'coghent-vue-3-component-library'
+import { User } from '../models/UserModel'
 
-const usernameRef = ref<HTMLElement | null>(null)
+/*const usernameRef = ref<HTMLElement | null>(null)
 const emailRef = ref<HTMLElement | null>(null)
 const passwordRef = ref<HTMLElement | null>(null)
+*/
 
 const input = {
   username: ref<String>(''),
@@ -66,27 +70,46 @@ const input = {
   password: ref<String>(''),
 }
 
-const user = {
+/*const user = {
   username: ref<String>('Bert De Backer'),
   email: ref<String>('Bert_De_Backer@hotmail.com'),
   password: ref<String>('bertje123'),
-}
+}*/
 
-const edit = {
+/*const edit = {
   username: ref<Boolean>(false),
   email: ref<Boolean>(false),
   password: ref<Boolean>(false),
-}
+}*/
 
 export default defineComponent({
   components: { BaseButton, BaseInput },
   setup() {
+    const user = ref<User>()
+
+    /*fetch("/api/me", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+    .then(response => response.json())
+    .then((data: User) => user.value = data)*/
+
+    const { result, fetchMore, loading, onResult } = useQuery<any>(GetMeDocument, {})
+
+    onResult(({ data, error }) => {
+      console.log(data)
+      user.value = data.User
+    })
+
     //temp
     const buttonClick = () => {
       console.log('click')
     }
 
-    const editField = (field: String) => {
+    /*const editField = (field: String) => {
       //TODO Shorten this
       switch (field) {
         case 'username':
@@ -114,9 +137,9 @@ export default defineComponent({
           }
           break
       }
-    }
+    }*/
 
-    const saveEdit = (field: String) => {
+    /*const saveEdit = (field: String) => {
       switch (field) {
         case 'username':
           break
@@ -126,18 +149,18 @@ export default defineComponent({
           break
       }
     }
-    
-    const { t } = useI18n();
+    }*/
 
+    const { t } = useI18n();
 
     return {
       buttonClick,
-      editField,
-      edit,
+      //editField,
+      //edit,
       user,
-      usernameRef,
-      emailRef,
-      passwordRef,
+      //usernameRef,
+      //emailRef,
+      //passwordRef,
       t
     }
   },

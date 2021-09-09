@@ -9,13 +9,14 @@ const isServer = typeof window === 'undefined'
 
 const history = isServer ? createMemoryHistory() : createWebHistory()
 
+// , meta: { requiresAuth: true }
 const routes = [
-  { path: '/', redirect: '/home', meta: { requiresAuth: true }},
-  { path: '/home', component: TheGrid, meta: { requiresAuth: true }},
-  { path: '/entity/:entityID', component: EntityDetails, meta: { requiresAuth: true }},
-  { path: '/pavilion', component: ThePavilion, meta: { requiresAuth: true }},
+  { path: '/', redirect: '/home'},
+  { path: '/home', component: TheGrid},
+  { path: '/entity/:entityID', component: EntityDetails},
+  { path: '/pavilion', component: ThePavilion},
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true }},
-  { path : '/storybox', component: TheStoryboxPage, meta: { requiresAuth: true }}
+  { path : '/storybox', component: TheStoryboxPage}
 ]
 
 export default function (auth: any) {
