@@ -1,6 +1,7 @@
 <template>
+<!--Details modal-->
   <base-modal v-model:isShow="openModal" class="z-50 p-10">
-    <section class="flex">
+    <section class="flex w-11/12">
       <section id="column" class="bg-background-light">
         <section id="title" class="px-10">
           <h1 class="text-2xl font-black my-8">{{ result.Entity?.title[0]?.value }}</h1>
@@ -39,6 +40,7 @@
     </section>
   </base-modal>
 
+<!-- main-->
   <div v-if="result" class="grid grid-cols-2 mt-20">
     <section class="flex items-center justify-between px-10">
       <the-carousel v-if="photos" :source="photos" />
@@ -58,7 +60,7 @@
             metaData.value
           }}</span>
         </div>
-        <base-button :text="t('details.more')" customStyle="ghost-black" customIcon="info" :iconShown="true" :on-click="openInfoModal" />
+        <base-button class="inline⁻block w-max" :text="t('details.more')" customStyle="ghost-black" customIcon="info" :iconShown="true" :on-click="openInfoModal" />
       </div>
     </CardComponent>
     <section class="col-span-2">

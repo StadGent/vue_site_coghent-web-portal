@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.21",
+    "@types/openseadragon": "^2.4.7",
     "@vue/apollo-composable": "^4.0.0-alpha.14",
     "@vue/composition-api": "^1.1.1",
     "@vue/server-renderer": "^3.1.5",
@@ -21,6 +22,7 @@
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",
     "jest": "^27.0.6",
+    "openseadragon": "^2.4.2",
     "session-vue-3-oidc-library": "git+https://gitlab.com/inuits/coghent/session-vue-3-oidc-library.git#main",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
