@@ -2,7 +2,7 @@
   <section class="flex mt-16" v-if="user">
     <div class="bg-background-medium flex p-8 flex-col w-2/6">
       <div class="flex-col justify-between flex-1">
-        <h2 class="mt-5 font-bold text-4xl">{{t('profile.greeting')}}</h2>
+        <h2 class="mt-5 font-bold text-4xl">Hey {{user.preferred_username}}!</h2>
         <p class="text-accent-yellow font-bold mt-10 text-lg">{{t('profile.details')}}</p>
         <router-link to="/"><p class="mt-8 text-lg w-auto inline-block">{{t('profile.stories')}}</p></router-link>
         <br/>
