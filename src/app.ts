@@ -8,11 +8,15 @@ import 'coghent-vue-3-component-library/lib/index.css'
 import i18n from './i18n'
 import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
+import StoreFactory from './stores/StoreFactory'
+import { ConfigStore } from './stores/ConfigStore'
 
 export default async function (authenticated: boolean = true) {
+  const configStore = StoreFactory.get(ConfigStore)
   const app = createSSRApp(App)
 
   const config = await fetch('../config.json').then((r) => r.json());
+  configStore.setConfig(config)
   let auth = undefined
   if(authenticated){
     auth = new OpenIdConnectClient(config.oidc);

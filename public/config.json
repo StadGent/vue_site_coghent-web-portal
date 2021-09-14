@@ -9,6 +9,7 @@
     "authorizedRedirectRoute": "/",
     "serverTokenEndpoint": "api/oidc/v1/token",
     "serverRefreshEndpoint": "api/oidc/v1/refresh",
-    "apiCodeEndpoint": "/api/auth_code"
+    "apiCodeEndpoint": "/api/auth_code",
+    "userEditUrl": "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/"
   }
 }

@@ -4,6 +4,7 @@ import EntityDetails from './components/EntityDetails.vue'
 import ThePavilion from './components/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
+import TheLoginPage from './pages/TheLoginPage.vue'
 
 const isServer = typeof window === 'undefined'
 
@@ -16,7 +17,8 @@ const routes = [
   { path: '/entity/:entityID', component: EntityDetails},
   { path: '/pavilion', component: ThePavilion},
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true }},
-  { path : '/storybox', component: TheStoryboxPage}
+  { path: '/storybox', component: TheStoryboxPage},
+  { path: '/login', component: TheLoginPage, meta: { requiresAuth: true }},
 ]
 
 export default function (auth: any) {

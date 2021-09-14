@@ -35,7 +35,8 @@
 
     <div class="flex ml-3">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <base-button :text="t('buttons.login')" :on-click="goToProfilePage" custom-style="primary" :icon-shown="false" class="px-2 mx-3 mb-2 flex-grow-0" />
+      <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-3 mb-2 flex-grow-0" />
+      <base-button v-if="userStore.hasUser" :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-3" />
       <base-button :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-3" />
     </div>
   </div>
@@ -45,8 +46,10 @@
 <script lang="ts">
 import { defineComponent, watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, User } from 'coghent-vue-3-component-library'
 import { useRoute, useRouter } from 'vue-router'
+import { UserStore } from '../stores/UserStore'
+import StoreFactory from '../stores/StoreFactory'
 
 export default defineComponent({
   name: 'TheHeader',
@@ -56,6 +59,8 @@ export default defineComponent({
     const router = useRouter()
     const isHomeActive = ref<Boolean>(route.path === '/home')
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
+    const userStore = StoreFactory.get(UserStore)
+    const user: User = userStore.user
 
     watch(
       () => route.path,
@@ -64,6 +69,10 @@ export default defineComponent({
         isPavilionActive.value = route.path === '/pavilion'
       }
     )
+
+    const goToLoginPage = () => {
+      router.push('/login')
+    }
 
     const goToProfilePage = () => {
       router.push('/profile')
@@ -78,7 +87,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, buttonClick, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox }
+    return { t, buttonClick, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user }
   },
 })
 </script>
