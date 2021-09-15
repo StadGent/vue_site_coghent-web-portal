@@ -26,7 +26,7 @@
      }     
   },
   "profile":{
-    "greeting": "Hoi Bert!",
+    "greeting": "Hoi!",
     "details": "Account details",
     "stories": "Mijn verhalen",
     "works": "Mijn werken", 
@@ -34,6 +34,7 @@
     "username": "Gebruikersnaam",
     "email": "Email",
     "password": "Wachtwoord",
+    "edit": "Wijzig account",
     "delete": "Verwijder account",
     "delete-info": "Door je account te verwijderen gaan al je gegevens definitief verloren",
     "delete-button": "Account verwijderen",

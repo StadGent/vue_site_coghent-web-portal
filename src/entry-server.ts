@@ -7,7 +7,7 @@ export default function () {
     app,
   }*/
 
-  createApp().then(({ app }) => {
+  createApp(false).then(({ app }) => {
     return app
   })
 }

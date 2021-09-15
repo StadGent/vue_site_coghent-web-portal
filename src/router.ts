@@ -4,18 +4,21 @@ import EntityDetails from './components/EntityDetails.vue'
 import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
+import TheLoginPage from './pages/TheLoginPage.vue'
 
 const isServer = typeof window === 'undefined'
 
 const history = isServer ? createMemoryHistory() : createWebHistory()
 
+// , meta: { requiresAuth: true }
 const routes = [
-  { path: '/', redirect: '/home', meta: { requiresAuth: true }},
-  { path: '/home', component: TheGrid, meta: { requiresAuth: true }},
-  { path: '/entity/:entityID', component: EntityDetails, meta: { requiresAuth: true }},
-  { path: '/pavilion', component: ThePavilion, meta: { requiresAuth: true }},
+  { path: '/', redirect: '/home'},
+  { path: '/home', component: TheGrid},
+  { path: '/entity/:entityID', component: EntityDetails},
+  { path: '/pavilion', component: ThePavilion},
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true }},
-  { path : '/storybox', component: TheStoryboxPage, meta: { requiresAuth: true }}
+  { path: '/storybox', component: TheStoryboxPage},
+  { path: '/login', component: TheLoginPage, meta: { requiresAuth: true }},
 ]
 
 export default function (auth: any) {
