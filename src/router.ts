@@ -1,7 +1,7 @@
 import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
 import TheGrid from './components/TheGrid.vue'
 import EntityDetails from './components/EntityDetails.vue'
-import ThePavilion from './components/ThePavilion.vue'
+import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
 

@@ -1,34 +1,27 @@
 <template>
-  <div
-    class="grid--masonry"
-    :class="{ small: small }"
-  >
-    <a
-      v-for="entity in entities.results"
-      v-show="entity.mediafiles && entity.mediafiles.length > 0"
-      :key="entity.id"
-      class="relative group"
-      :href="'/entity/' + entity.id"
-    >
+  <div class="grid--masonry" :class="{ small: small }">
+    <a v-for="entity in entities.results" v-show="entity.mediafiles && entity.mediafiles.length > 0" :key="entity.id" class="relative group" :href="'/entity/' + entity.id">
       <span
         :class="{
           'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
           'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
         }"
       />
-      <img
-        v-if="entity.mediafiles && entity.mediafiles.length > 0"
-        :src="entity.mediafiles[0].original_file_location"
-      >
+      <img v-if="entity.mediafiles && entity.mediafiles.length > 0" :src="entity.mediafiles[0].original_file_location" />
+      <!-- <component :is="CTAHome"/> -->
     </a>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
+// import CTAHome from 'src/components/CTAHome.vue'
 
 export default defineComponent({
   name: 'TheMasonry',
+  components:{
+    // CTAHome
+    },
   props: {
     entities: {
       type: Object,
@@ -42,6 +35,13 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    callToAction: {
+      type: String,
+      required: false,
+    },
+  },
+  setup: (props) => {
+  
   },
 })
 </script>
