@@ -1,8 +1,19 @@
 <template>
-  <card-component :large="false" @click="goToPavilion">
+  <card-component
+    :large="false"
+    @click="goToPavilion"
+  >
     <section class="cursor-pointer m-5 flex-col content-between text-center">
-      <span v-html="t('main.cta')" class="font-bold text-xl"></span>
-      <div class="w-full h-auto mt-10 flex justify-center"><base-icon icon="chest" class="w-36 h-36 stroke-current fill-current text-text-white" /></div>
+      <span
+        class="font-bold text-xl"
+        v-html="t('main.cta')"
+      />
+      <div class="w-full h-auto mt-10 flex justify-center">
+        <base-icon
+          icon="chest"
+          class="w-36 h-36 stroke-current fill-current text-text-white"
+        />
+      </div>
     </section>
   </card-component>
 </template>

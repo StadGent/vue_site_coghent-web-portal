@@ -1,5 +1,5 @@
 <template>
-  <div><CTAHome/></div>
+  <div><CTAHome /></div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
