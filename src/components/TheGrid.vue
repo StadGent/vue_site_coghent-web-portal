@@ -51,7 +51,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { GetFullEntitiesDocument, BaseSearch } from 'coghent-vue-3-component-library'
+import { GetFullEntitiesDocument, BaseSearch, GetRelationsDocument } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
@@ -65,8 +65,19 @@ export default defineComponent({
   setup: () => {
     let listWithCTA: Object[] = []
     const keyword = ref<string>('')
-    const { result, fetchMore, loading } = useQuery<any>(GetFullEntitiesDocument, {
-      searchValue: { value: keyword.value },
+    
+    const { result, loading, fetchMore } = useQuery(GetFullEntitiesDocument, {
+        limit: 20,
+        skip: 0,
+        searchValue: {
+          value: keyword.value,
+          isAsc: false,
+          key: "title",
+        },
+      });
+
+    const { result: Relations, fetchMore: fetchMoreRelations, loading: relationsLoading } = useQuery<any>(GetRelationsDocument, {
+      searchValue: {value: keyword.value},
     })
 
     const getData = () => {

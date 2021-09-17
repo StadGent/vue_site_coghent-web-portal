@@ -18,7 +18,7 @@ export default defineComponent({
     const { result, fetchMore, loading, onResult } = useQuery<any>(GetMeDocument, {})
 
     onResult(({ data, error }) => {
-      console.log(data)
+      // console.log(data)
       userStore.setUser(data.User)
     })
 

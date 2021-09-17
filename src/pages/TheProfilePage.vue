@@ -58,9 +58,35 @@
         </a>
       </div>
 
-      <p class="mt-8 font-bold">
-        {{ t('profile.delete') }}
-      </p>
+      <p class="mt-8 font-bold">{{t('profile.username')}}</p>
+      <div class="flex mt-4 items-center">
+        <base-input :modelValue="user.preferred_username" :ref="user.preferred_username" :placeholder="t('profile.username')" :disabled="!user.preferred_username" />
+        <!-- <base-button v-show="!edit.username.value" text="Wijzigen" @click="editField('username')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
+      </div>
+      <!-- <div class="flex gap-4 my-4" v-show="edit.username.value">
+        <base-button text="Annuleren" @click="editField('username')" custom-style="secondary" :iconShown="false" />
+        <base-button text="Opslaan" @click="saveEdit('username')" custom-style="primary" :iconShown="false" />
+      </div> -->
+      <p class="mt-8 font-bold">{{t('profile.email')}}</p>
+      <div class="flex mt-4 items-center">
+        <base-input :modelValue="user.email" :ref="user.email" placeholder="Email" :disabled="!user.email" />
+        <!-- <base-button v-show="!edit.email.value" text="Wijzigen" @click="editField('email')" custom-style="ghost-black" :iconShown="true" customIcon="edit" /> -->
+      </div>
+      <!-- <div class="flex gap-4 my-4" v-show="edit.email.value">
+        <base-button text="Annuleren" @click="editField('email')" custom-style="secondary" :iconShown="false" />
+        <base-button text="Opslaan" @click="saveEdit('email')" custom-style="primary" :iconShown="false" />
+      </div> -->
+      <!-- <p class="mt-8 font-bold">{{t('profile.password')}}</p>
+      <div class="flex mt-4 items-center">
+        <base-input :ref="passwordRef" placeholder="Wachtwoord" :disabled="!edit.password.value" />
+        <base-button v-show="!edit.password.value" text="Wijzigen" @click="editField('password')" custom-style="ghost-black" :iconShown="true" customIcon="edit" />
+      </div> -->
+      <!-- <div class="flex gap-4 my-4" v-show="edit.password.value">
+        <base-button text="Annuleren" @click="editField('password')" custom-style="secondary" :iconShown="false" />
+        <base-button text="Opslaan" @click="saveEdit('password')" custom-style="primary" :iconShown="false" />
+      </div> -->
+
+      <p class="mt-8 font-bold">{{t('profile.delete')}}</p>
       <div class="flex mt-4 xl:space-x-44 sm:space-x-24 lg:space-x-44 items-center">
         <p class="xl:max-w-xs sm:max-w-md text-sm">
           {{ t('profile.delete-info') }}
@@ -80,7 +106,7 @@
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { GetMeDocument, User } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
@@ -89,7 +115,7 @@ import StoreFactory from '../stores/StoreFactory'
 
 
 export default defineComponent({
-  components: { BaseButton },
+  components: { BaseButton, BaseInput },
   setup() {
     const router = useRouter()
     const userStore = StoreFactory.get(UserStore)
