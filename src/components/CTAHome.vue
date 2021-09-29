@@ -11,7 +11,7 @@
       <div class="w-full h-auto mt-10 flex justify-center">
         <base-icon
           icon="chest"
-          class="w-36 h-36 stroke-current fill-current text-text-white"
+          class="w-44 h-36 stroke-current fill-current text-text-white"
         />
       </div>
     </section>
