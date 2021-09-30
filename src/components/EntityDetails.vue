@@ -32,7 +32,7 @@
             v-for="photo in photos"
             :key="photo"
             class="mb-5 w-96"
-            :src="photo"
+            :src="replaceStringStorageApi(photo)"
           >
         </section>
       </section>
@@ -200,18 +200,6 @@ export default defineComponent({
     const openModal = ref<Boolean>(false)
     const types = ref<any[] | undefined>()
 
-    const nextImage = () => {
-      if (result.value && result.value.Entity && result.value.Entity.mediafiles) {
-        selectedImageIndex.value = selectedImageIndex.value < result.value.Entity?.mediafiles.length ? selectedImageIndex.value + 1 : 0
-      }
-    }
-
-    const prevImage = () => {
-      if (result.value && result.value.Entity && result.value.Entity.mediafiles) {
-        selectedImageIndex.value = selectedImageIndex.value === 0 ? result.value.Entity?.mediafiles.length - 1 : selectedImageIndex.value - 1
-      }
-    }
-
     const {
       result: resultRelation,
       loading: loadingRelation,
@@ -254,6 +242,10 @@ export default defineComponent({
       console.log(openModal.value)
     }
 
+    const replaceStringStorageApi = (input: string) => {
+      return input.replace("storage-api", "localhost");
+    };
+
     onResult((queryResult: any) => {
       const photosArray: string[] = []
       queryResult.data.Entity?.mediafiles.forEach((value: any) => {
@@ -275,8 +267,8 @@ export default defineComponent({
 
     const { t } = useI18n()
 
-    return { result, selectedImageIndex, nextImage, prevImage, relations, 
-    resultRelation, setRelation, loadingRelation, t, photos, openInfoModal, openModal, onClick, types}
+    return { result, selectedImageIndex, relations, 
+    resultRelation, setRelation, loadingRelation, t, photos, openInfoModal, openModal, onClick, types, replaceStringStorageApi}
   },
 })
 </script>
