@@ -1,18 +1,9 @@
 <template>
   <!--Details modal-->
-  <base-modal
-    v-model:isShow="openModal"
-    class="z-50 p-10"
-  >
+  <base-modal v-model:isShow="openModal" class="z-50 p-10">
     <section class="flex w-11/12">
-      <section
-        id="column"
-        class="bg-background-light"
-      >
-        <section
-          id="title"
-          class="px-10"
-        >
+      <section id="column" class="bg-background-light">
+        <section id="title" class="px-10">
           <h1 class="text-2xl font-black my-8">
             {{ result.Entity?.title[0]?.value }}
           </h1>
@@ -36,123 +27,55 @@
           >
         </section>
       </section>
-      <section
-        id="content"
-        class="h-auto overflow-x-auto pl-10 flex-col w-8/12 pt-16"
-      >
-        <div
-          v-for="metaData in result.Entity?.metadata"
-          :key="metaData.value"
-          class="pt-5 font-light"
-        >
-          <p
-            v-show="metaData.key === 'description'"
-            class=""
-          >
+      <section id="content" class="h-auto overflow-x-auto pl-10 flex-col w-8/12 pt-16">
+        <div v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="pt-5 font-light">
+          <p v-show="metaData.key === 'description'" class="">
             {{ metaData.value }}
           </p>
         </div>
         <div class="font-medium pb-2">
-          <relation-tag
-            v-for="relation in result.Entity?.relations"
-            :id="relation.key"
-            :key="relation.value"
-            class="bg-tag-neutral"
-          />
+          <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
         </div>
         <h1 class="font-bold text-md mt-5">
           {{ t('details.modal.associations') }}
         </h1>
         <div class="mt-5 flex gap-3">
-          <p
-            v-for="type in types"
-            :key="type"
-            class="px-2 py-2 bg-tag-neutral cursor-pointer mr-4 bg-opacity-50"
-          >
+          <p v-for="type in types" :key="type" class="px-2 py-2 bg-tag-neutral cursor-pointer mr-4 bg-opacity-50">
             {{ type }}
           </p>
         </div>
       </section>
     </section>
-    <section
-      id="footer"
-      class="flex items-center justify-center bg-background-light p-10"
-    >
-      <base-button
-        class="w-max"
-        :text="t('details.modal.link')"
-        :on-click="onClick"
-        custom-style="ghost-black"
-        custom-icon="link"
-        :icon-shown="true"
-      />
+    <section id="footer" class="flex items-center justify-center bg-background-light p-10">
+      <base-button class="w-max" :text="t('details.modal.link')" :on-click="onClick" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
       <div class="border-r-2 h-6 border-text-dark border-opacity-70 mx-6" />
-      <base-button
-        class="w-max"
-        :text="t('details.modal.edit')"
-        :on-click="onClick"
-        custom-style="ghost-black"
-        custom-icon="edit"
-        :icon-shown="true"
-      />
+      <base-button class="w-max" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
       <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6" />
-      <base-button
-        class="w-max"
-        :text="t('details.modal.add')"
-        :on-click="onClick"
-        custom-style="ghost-purple"
-        custom-icon="storybox"
-        :icon-shown="true"
-      />
+      <base-button class="w-max" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
     </section>
   </base-modal>
 
   <!-- main-->
-  <div
-    v-if="result"
-    class="grid grid-cols-2 mt-20"
-  >
+  <div v-if="result" class="grid grid-cols-2 mt-20">
     <section class="flex items-center justify-between px-10">
-      <the-carousel
-        v-if="photos"
-        :source="photos"
-      />
+      <the-carousel v-if="photos" :source="photos" />
     </section>
-    <CardComponent
-      v-if="result"
-      :large="true"
-    >
+    <CardComponent v-if="result" :large="true">
       <div class="flex flex-col bg-background-medium px-10 py-10">
         <h1 class="text-lg font-bold">
           {{ result.Entity?.title[0]?.value }}
         </h1>
-        <div
-          v-for="metaData in result.Entity?.metadata"
-          :key="metaData.value"
-          class="pt-5 font-light"
-        >
+        <div v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="pt-5 font-light">
           <p v-show="metaData.key === 'description'">
             {{ metaData.value }}
           </p>
         </div>
         <div class="pt-5 font-medium">
-          <span
-            v-for="metaData in result.Entity?.metadata"
-            v-show="metaData.key === 'type'"
-            :key="metaData.value"
-            class="inline-block px-2 py-2 bg-background-dark mr-4 bg-opacity-50"
-          >{{
+          <span v-for="metaData in result.Entity?.metadata" v-show="metaData.key === 'type'" :key="metaData.value" class="inline-block px-2 py-2 bg-background-dark mr-4 bg-opacity-50">{{
             metaData.value
           }}</span>
         </div>
-        <base-button
-          class="inline⁻block w-max"
-          :text="t('details.more')"
-          custom-style="ghost-black"
-          custom-icon="info"
-          :icon-shown="true"
-          :on-click="openInfoModal"
-        />
+        <base-button class="inline⁻block w-max" :text="t('details.more')" custom-style="ghost-black" custom-icon="info" :icon-shown="true" :on-click="openInfoModal" />
       </div>
     </CardComponent>
     <section class="col-span-2">
@@ -160,19 +83,9 @@
         {{ t('details.discover') }}
       </h2>
       <div class="pt-5 font-medium pb-2">
-        <relation-tag
-          v-for="relation in result.Entity?.relations"
-          :id="relation.key"
-          :key="relation.value"
-          @click="setRelation(relation.key)"
-        />
+        <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" @click="setRelation(relation.key)" />
       </div>
-      <the-masonry
-        v-if="resultRelation"
-        :small="true"
-        :entities="resultRelation.Entities"
-        :loading="loadingRelation"
-      />
+      <the-masonry v-if="resultRelation" :small="true" :entities="resultRelation.Entities" :loading="loadingRelation" />
     </section>
   </div>
 </template>
@@ -256,9 +169,9 @@ export default defineComponent({
       })
       photos.value = photosArray
 
-      const typeArray : any[] = []
+      const typeArray: any[] = []
       queryResult.data.Entity?.metadata.forEach((value: any) => {
-        if(value.key ==="type"){
+        if (value.key === 'type') {
           typeArray.push(value.value)
         }
       })
