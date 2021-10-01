@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col items-center">
     <h1
-      class="text-5xl font-bold w-8/12 text-center py-10 block leading-normal"
+      class="md:text-5xl sm:text-4xl text-3xl font-bold w-8/12 text-center py-10 block leading-normal "
     >
       {{ t("main.title") }}
       <span class="text-accent-purple">{{ t("main.rich") }}</span>

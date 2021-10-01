@@ -1,10 +1,10 @@
 <template>
-  <div class="flex justify-between">
+  <div class="flex justify-between flex-wrap sm:flex-nowrap">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
         <router-link
           to="/home"
-          class="flex items-center"
+          class="flex items-center sm:ml-0 ml-3"
         >
           <svg
             width="48"
@@ -83,8 +83,8 @@
           </h2>
         </router-link>
         <div
-          class="w-2 h-2 sm:ml-0 lg:ml-14 mt-1"
-          :class="{ [`bg-accent-yellow rounded`]: isHomeActive }"
+          class="w-2 h-2 sm:ml-0 lg:ml-14 mt-3"
+          :class="{ [`bg-accent-yellow rounded ml-2 md:ml-8 mb-3 sm:mb-0`]: isHomeActive }"
         />
       </div>
       <div class="flex flex-col items-center pt-3">
@@ -93,7 +93,7 @@
           class="flex items-center"
         >
           <h2
-            class="text-lg"
+            class="text-lg  -mt-3 md:-mt-0 lg:mt-0"
             :class="{ [`font-bold`]: isPavilionActive }"
           >
             {{ t('header.pavilion') }}
@@ -101,20 +101,20 @@
         </router-link>
         <div
           class="w-2 h-2 mt-3"
-          :class="{ [`bg-accent-yellow rounded`]: isPavilionActive }"
+          :class="{ [`bg-accent-yellow rounded -ml-5 sm:ml-0 mb-3 sm:mb-0`]: isPavilionActive}"
         />
       </div>
     </div>
 
     <div class="flex ml-3">
-      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
+      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 invisible sm:visible" />
       <base-button
         v-if="!userStore.hasUser"
         :text="t('buttons.login')"
         :on-click="goToLoginPage"
         custom-style="primary"
         :icon-shown="false"
-        class="px-2 mx-3 mb-2 flex-grow-0"
+        class="px-2 mx-1 mb-2 flex-grow-0"
       />
       <base-button
         v-if="userStore.hasUser"
@@ -122,7 +122,7 @@
         :on-click="goToProfilePage"
         custom-style="ghost-purple"
         :icon-shown="false"
-        class="px-2 mx-3"
+        class="px-2 mx-1"
       />
       <base-button
         :text="t('buttons.storybox')"
@@ -130,7 +130,7 @@
         custom-style="ghost-purple"
         :icon-shown="true"
         custom-icon="storybox"
-        class="px-2 mx-3"
+        class="px-2 mx-3 ml-3 "
       />
     </div>
   </div>
