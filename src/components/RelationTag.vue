@@ -1,28 +1,31 @@
 <template>
   <span
-    v-if="result"
-    class="inline-block px-2 py-2 bg-background-dark cursor-pointer mr-4 bg-opacity-50"
-  >{{ result.Entity.title[0].value }}</span>
+    v-if="label"
+    class="
+      inline-block
+      px-2
+      py-2
+      bg-background-dark
+      cursor-pointer
+      mr-4
+      bg-opacity-50
+    "
+    >{{ label }}</span
+  >
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument } from 'coghent-vue-3-component-library'
+import { defineComponent } from "vue"
 
 export default defineComponent({
-  name: 'RelationTag',
+  name: "RelationTag",
   props: {
-    id: {
+    label: {
       type: String,
       required: true,
     },
   },
-  setup: (props) => {
-    const { result, onResult } = useQuery(GetEntityByIdDocument, { id: props.id })
-
-    return { result }
-  },
+  setup: () => {},
 })
 </script>
 
