@@ -50,28 +50,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
-import { useQuery } from "@vue/apollo-composable";
+import { defineComponent, onMounted, ref, watch } from "vue"
+import { useQuery } from "@vue/apollo-composable"
 import {
-  GetFullEntitiesDocument,
   BaseSearch,
-  GetRelationsDocument,
-} from "coghent-vue-3-component-library";
-import "coghent-vue-3-component-library/lib/index.css";
-import TheMasonry from "./TheMasonry.vue";
-import { useI18n } from "vue-i18n";
-import Filter from "./Filter.vue";
+  GetEntitiesDocument,
+} from "coghent-vue-3-component-library"
+import "coghent-vue-3-component-library/lib/index.css"
+import TheMasonry from "./TheMasonry.vue"
+import { useI18n } from "vue-i18n"
+import Filter from "./Filter.vue"
 
 export default defineComponent({
   name: "AssetGrid",
   components: { BaseSearch, TheMasonry, Filter },
   props: {},
   setup: () => {
-    let listWithCTA: Object[] = [];
-    const keyword = ref<string>("");
+    let listWithCTA: Object[] = []
+    const keyword = ref<string>("")
 
     const { result, loading, fetchMore, onResult } = useQuery(
-      GetFullEntitiesDocument,
+      GetEntitiesDocument,
       {
         limit: 20,
         skip: 0,
@@ -81,27 +80,18 @@ export default defineComponent({
           key: "title",
         },
       }
-    );
-
-    const {
-      result: Relations,
-      fetchMore: fetchMoreRelations,
-      loading: relationsLoading,
-    } = useQuery<any>(GetRelationsDocument, {
-      searchValue: { value: keyword.value },
-    });
+    )
 
     onResult((queryResult: any) => {
-      console.log("queryresult", queryResult);
+      console.log("queryresult", queryResult)
       let counter = 0
       queryResult.data.Entities.results.forEach((entity: Object) => {
         counter++
-        if(counter % 6 === 0) listWithCTA.push('CTA')
+        if (counter % 6 === 0) listWithCTA.push("CTA")
         listWithCTA.push(entity)
-        
-      });
-      console.log('listwithCTA', listWithCTA)
-    });
+      })
+      console.log("listwithCTA", listWithCTA)
+    })
 
     const getData = () => {
       fetchMore({
@@ -109,14 +99,14 @@ export default defineComponent({
           searchValue: { value: keyword.value },
         },
         updateQuery: (prev, { fetchMoreResult: res }) => res || prev,
-      });
-    };
+      })
+    }
 
     const setSelectedFilters = (values: string[]) => {
-      console.log(values);
-    };
+      console.log(values)
+    }
 
-    const { t } = useI18n();
+    const { t } = useI18n()
 
     return {
       keyword,
@@ -126,7 +116,7 @@ export default defineComponent({
       t,
       setSelectedFilters,
       listWithCTA,
-    };
+    }
   },
-});
+})
 </script>

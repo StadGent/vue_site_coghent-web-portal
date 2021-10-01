@@ -1,7 +1,9 @@
 <template>
   <div>
-    <masonry :cols="{default: 3, 800: 2}"
-    :gutter="{default: '30px', 800: '15px'}">
+    <masonry
+      :cols="{ default: 3, 800: 2 }"
+      :gutter="{ default: '30px', 800: '15px' }"
+    >
       <a
         v-for="entity in entities.results"
         v-show="entity.mediafiles && entity.mediafiles.length > 0"
@@ -19,9 +21,7 @@
         />
         <img
           v-if="entity.mediafiles && entity.mediafiles.length > 0"
-          :src="
-            replaceStringStorageApi(entity.mediafiles[0].original_file_location)
-          "
+          :src="replaceStringStorageApi(entity.mediafiles[0].location)"
         />
       </a>
     </masonry>
@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
-import CTAHome from "./CTAHome.vue";
+import { defineComponent, ref, watch, onMounted } from "vue"
+import CTAHome from "./CTAHome.vue"
 
 export default defineComponent({
   name: "TheMasonry",
@@ -53,14 +53,14 @@ export default defineComponent({
   },
   setup: (props) => {
     const replaceStringStorageApi = (input: string) => {
-      return input.replace("storage-api", "localhost");
-    };
-  
+      return input.replace("storage-api", "localhost")
+    }
+
     return {
       replaceStringStorageApi,
-    };
+    }
   },
-});
+})
 </script>
 
 <style scoped>
