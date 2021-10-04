@@ -5,7 +5,12 @@
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div class="w-8/12 py-6">
-      <base-search v-model="searchQueryForInput" :label="t('main.library')" @on-click="getData" />
+      <base-search
+        v-model="searchQueryForInput"
+        :label="t('main.library')"
+        :searchLabel="t('main.search')" 
+        @on-click="getData"
+      />
     </div>
     <Filter v-if="relationResult" @new-selected="updatSelectedFilters" :selected="selectedFilters" :filter-all="'Alle werken'" :filters="relationResult.Entities.relations" />
     <div v-show="loading" class="pt-10">

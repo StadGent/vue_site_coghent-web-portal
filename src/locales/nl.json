@@ -3,7 +3,8 @@
     "title" : "Duik mee in de geschiedenis en ontdek de vele werken uit onze",
     "rich" : "rijke collectie!",
     "library": "bibliotheek",
-    "cta": "Ook iets op zolder gevonden? Laat het ons weten en <span class='text-accent-purple'>draag bij</span> aan de collectie!"
+    "cta": "Ook iets op zolder gevonden? Laat het ons weten en <span class='text-accent-purple'>draag bij</span> aan de collectie!",
+    "search": "Zoeken"
   },
   "header": {
     "discover" : "Ontdek de collectie",
