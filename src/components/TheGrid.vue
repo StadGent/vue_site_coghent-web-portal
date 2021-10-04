@@ -23,13 +23,14 @@
         :searchLabel="t('main.search')"
         @on-click="getData"
       />
+      <p class="text-center" v-if="emptySearch">{{t('main.empty')}}</p>
     </div>
     <Filter
-      v-if="relationResult"
+      v-if="relationData"
       @new-selected="updatSelectedFilters"
       :selected="selectedFilters"
       :filter-all="'Alle werken'"
-      :filters="relationResult.Entities.relations"
+      :filters="relationData.Entities.relations"
     />
     <div v-show="loading" class="pt-10">
       <svg
@@ -53,7 +54,11 @@
         />
       </svg>
     </div>
-    <the-masonry v-if="result" :entities="result.Entities" :loading="loading" />
+    <the-masonry
+      v-if="entityData"
+      :entities="entityData.Entities"
+      :loading="loading"
+    />
     <base-button
       v-show="!loading && !endOfData"
       :text="t('main.load')"
@@ -88,6 +93,7 @@ import TheMasonry from "./TheMasonry.vue";
 import { useI18n } from "vue-i18n";
 import Filter from "./Filter.vue";
 import { Maybe, Scalars } from "coghent-vue-3-component-library/lib/queries";
+import { empty } from "@apollo/client/core";
 
 export default defineComponent({
   name: "AssetGrid",
@@ -106,7 +112,10 @@ export default defineComponent({
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery);
     let _skip: Maybe<Scalars["Int"]> = 0;
     const _limit: Maybe<Scalars["Int"]> = 20;
-    const endOfData = ref<Boolean>(false)
+    const endOfData = ref<Boolean>(false);
+    const entityData = ref<GetEntitiesQuery | undefined>();
+    const relationData = ref<GetEntitiesQuery | undefined>();
+    const emptySearch = ref<Boolean>(false);
 
     const { result, loading, fetchMore, onResult } = useQuery<
       GetEntitiesQuery,
@@ -128,7 +137,7 @@ export default defineComponent({
       })
     );
 
-    const { result: relationResult } = useQuery<
+    const { result: relationResult, onResult: onRelationResult } = useQuery<
       GetEntitiesQuery,
       GetEntitiesQueryVariables
     >(
@@ -148,6 +157,31 @@ export default defineComponent({
       })
     );
 
+    onResult(() => {
+      const temp = result.value;
+      if (temp?.Entities?.results?.length === 0 || !temp?.Entities?.results) {
+        endOfData.value = true;
+        emptySearch.value = true;
+      } else {
+        endOfData.value = false;
+        entityData.value = temp;
+        emptySearch.value = false
+      }
+    });
+
+    onRelationResult(() => {
+      const temp = relationResult.value;
+      console.log("relationData", temp);
+      if (
+        temp?.Entities?.relations?.length === 0 ||
+        !temp?.Entities?.relations
+      ) {
+        //do nothing for now
+      } else {
+        relationData.value = temp;
+      }
+    });
+
     const getData = () => {
       selectedFilters.value = [];
       searchQueryForQuery.value =
@@ -160,8 +194,8 @@ export default defineComponent({
       selectedFilters.value = input;
     };
 
-   const loadMore = () => {
-      _skip = _skip! + _limit
+    const loadMore = () => {
+      _skip = _skip! + _limit;
       fetchMore({
         variables: {
           skip: _skip,
@@ -169,23 +203,30 @@ export default defineComponent({
         updateQuery: (previousData, { fetchMoreResult }) => {
           if (fetchMoreResult?.Entities?.results?.length == 0) {
             endOfData.value = true;
-            return previousData
+            return previousData;
           }
-          if (previousData.Entities && previousData.Entities.results && fetchMoreResult!.Entities?.results) {
+          if (
+            previousData.Entities &&
+            previousData.Entities.results &&
+            fetchMoreResult!.Entities?.results
+          ) {
             endOfData.value = false;
             return {
               previousData,
               Entities: {
                 ...previousData.Entities,
-                results: [...previousData.Entities.results, ...fetchMoreResult!.Entities.results],
+                results: [
+                  ...previousData.Entities.results,
+                  ...fetchMoreResult!.Entities.results,
+                ],
               },
-            }
+            };
           } else {
-            return previousData
+            return previousData;
           }
         },
-      })
-    }
+      });
+    };
 
     return {
       t,
@@ -196,9 +237,11 @@ export default defineComponent({
       updatSelectedFilters,
       searchQueryForQuery,
       searchQueryForInput,
-      relationResult,
+      relationData,
       loadMore,
-      endOfData
+      endOfData,
+      entityData,
+      emptySearch
     };
   },
 });
