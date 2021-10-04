@@ -13,26 +13,25 @@
       >
         <span
           :class="{
-            'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute':
-              loading,
-            'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute':
-              !loading,
+            'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
+            'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
           }"
         />
         <img
           v-if="entity.mediafiles && entity.mediafiles.length > 0"
-          :src="replaceStringStorageApi(entity.mediafiles[0].location)">
+          :src="replaceStringStorageApi(entity.mediafiles[0].location)"
+        >
       </a>
     </masonry>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue"
-import CTAHome from "./CTAHome.vue"
+import { defineComponent, ref, watch, onMounted } from 'vue'
+import CTAHome from './CTAHome.vue'
 
 export default defineComponent({
-  name: "TheMasonry",
+  name: 'TheMasonry',
   components: {
     // CTAHome
   },
@@ -52,7 +51,7 @@ export default defineComponent({
   },
   setup: (props) => {
     const replaceStringStorageApi = (input: string) => {
-      return input.replace("http://localhost:8001http://storage-api:8001/", "http://localhost:8001/")
+      return input.replace('http://storage-api:8001http://localhost:8001/', 'http://localhost:8001/')
     }
 
     return {
@@ -69,7 +68,7 @@ html {
 }
 
 img {
-  margin-top:25px;
+  margin-top: 25px;
   display: block;
   width: 100%;
   border-radius: 4px;
