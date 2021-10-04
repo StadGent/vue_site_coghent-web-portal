@@ -1,28 +1,13 @@
 <template>
-  <div
-    v-if="filters.length > 0"
-    class="flex flex-wrap flex-row w-full justify-center"
-  >
-    <FilterTag
-      v-model:isSelected="setAllTag"
-      :filter="filterAll"
-      :icon="'check'"
-      @click="toggleFilters"
-    />
-    <FilterTag
-      v-for="tag in filters"
-      :key="tag"
-      v-model:isSelected="tags"
-      :filter="tag"
-      :icon="'check'"
-      @click="addToSelectedTags(tag)"
-    />
+  <div v-if="filters.length > 0" class="flex flex-wrap flex-row w-full justify-center">
+    <FilterTag :is-selected="selected.length === 0" :filter="filterAll" :icon="'check'" @click="toggleFilters" />
+    <FilterTag v-for="tag in filtersWithLabel" :key="tag" :is-selected="isTagSelected(tag.key)" :filter="tag.label" :icon="'check'" @click="addToSelectedTags(tag.key)" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, SetupContext, ref, watch } from 'vue'
-import { FilterTag } from 'coghent-vue-3-component-library'
+import { defineComponent, PropType, SetupContext, ref, watch, computed } from 'vue'
+import { FilterTag, FullRelationFragment } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'Filter',
@@ -34,51 +19,49 @@ export default defineComponent({
       required: false,
     },
     filters: {
-      type: Array as PropType<String[]>,
+      type: Array as PropType<FullRelationFragment[]>,
       default: () => [],
       required: false,
     },
     selected: {
-      type: Array as PropType<String[]>,
+      type: Array as PropType<FullRelationFragment[]>,
       default: () => [],
       required: false,
     },
   },
-  emits: ['selected'],
+  emits: ['newSelected'],
   setup(props: any, { emit }: SetupContext) {
-    let selectedTags: Array<string> = []
     let tags = ref(false)
-    let setAllTag = ref(true)
 
     const toggleFilters = () => {
-      setAllTag.value = !setAllTag.value
-      selectedTags = []
-      emit('selected', selectedTags)
+      emit('newSelected', [])
     }
 
     const addToSelectedTags = (tag: string) => {
+      let selectedTags = props.selected
       console.log(`Add "${tag}" to filters`)
       if (selectedTags.includes(tag, 0)) {
         selectedTags.splice(selectedTags.indexOf(tag), 1)
-        if (selectedTags.length <= 0) {
-          tags.value = false
-          setAllTag.value = true
-        }
       } else {
         selectedTags.push(tag)
-        tags.value = true
-        setAllTag.value = false
       }
-      emit('selected', selectedTags)
+
+      emit('newSelected', selectedTags)
     }
-    watch(tags, (value: boolean) => {
-      console.log('TAGS watch', value)
-    })
-    watch(setAllTag, (value: boolean) => {
-      console.log('SETALLTAG watch', value)
+
+    const filtersWithLabel = computed(() => {
+      return props.filters.filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
     })
 
-    return { toggleFilters, addToSelectedTags, tags, setAllTag }
+    const isTagSelected = (tag: string): boolean => {
+      const filterd = props.selected.filter((tagFromFilter: string) => {
+        return tagFromFilter === tag
+      })
+
+      return filterd.length > 0
+    }
+
+    return { toggleFilters, addToSelectedTags, filtersWithLabel, isTagSelected }
   },
 })
 </script>

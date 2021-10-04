@@ -10,8 +10,7 @@
       mr-4
       bg-opacity-50
     "
-    >{{ label }}</span
-  >
+  >{{ label }}</span>
 </template>
 
 <script lang="ts">

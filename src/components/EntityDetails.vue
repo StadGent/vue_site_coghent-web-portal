@@ -1,9 +1,18 @@
 <template>
   <!--Details modal-->
-  <base-modal v-model:isShow="openModal" class="z-50 p-10">
+  <base-modal
+    v-model:isShow="openModal"
+    class="z-50 p-10"
+  >
     <section class="flex w-11/12">
-      <section id="column" class="bg-background-light">
-        <section id="title" class="px-10">
+      <section
+        id="column"
+        class="bg-background-light"
+      >
+        <section
+          id="title"
+          class="px-10"
+        >
           <h1 class="text-2xl font-black my-8">
             {{ result.Entity?.title[0]?.value }}
           </h1>
@@ -24,7 +33,7 @@
             :key="photo"
             class="mb-5 w-96"
             :src="replaceStringStorageApi(photo)"
-          />
+          >
         </section>
       </section>
       <section
@@ -36,7 +45,10 @@
           :key="metaData.value"
           class="pt-5 font-light"
         >
-          <p v-show="metaData.key === 'description'" class="">
+          <p
+            v-show="metaData.key === 'description'"
+            class=""
+          >
             {{ metaData.value }}
           </p>
         </div>
@@ -104,11 +116,20 @@
   </base-modal>
 
   <!-- main-->
-  <div v-if="result" class="grid grid-cols-2 mt-20">
+  <div
+    v-if="result"
+    class="grid grid-cols-2 mt-20"
+  >
     <section class="flex items-center justify-between px-10">
-      <the-carousel v-if="photos" :source="photos" />
+      <the-carousel
+        v-if="photos"
+        :source="photos"
+      />
     </section>
-    <CardComponent v-if="result" :large="true">
+    <CardComponent
+      v-if="result"
+      :large="true"
+    >
       <div class="flex flex-col bg-background-medium px-10 py-10">
         <h1 class="text-lg font-bold">
           {{ result.Entity?.title[0]?.value }}
@@ -128,8 +149,7 @@
             v-show="metaData.key === 'type'"
             :key="metaData.value"
             class="inline-block px-2 py-2 bg-background-dark mr-4 bg-opacity-50"
-            >{{ metaData.value }}</span
-          >
+          >{{ metaData.value }}</span>
         </div>
         <base-button
           class="inline⁻block w-max"

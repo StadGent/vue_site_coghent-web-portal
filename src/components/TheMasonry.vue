@@ -22,7 +22,7 @@
         <img
           v-if="entity.mediafiles && entity.mediafiles.length > 0"
           :src="replaceStringStorageApi(entity.mediafiles[0].location)"
-        />
+        >
       </a>
     </masonry>
   </div>
