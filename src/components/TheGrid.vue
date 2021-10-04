@@ -23,7 +23,7 @@
         :searchLabel="t('main.search')"
         @on-click="getData"
       />
-      <p class="text-center" v-if="emptySearch">{{t('main.empty')}}</p>
+      <p class="text-center" v-if="emptySearch" v-show="!loading">{{t('main.empty')}}</p>
     </div>
     <Filter
       v-if="relationData"
