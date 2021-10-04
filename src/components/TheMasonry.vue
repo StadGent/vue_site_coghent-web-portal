@@ -1,26 +1,14 @@
 <template>
   <div>
-    <masonry
-      :cols="{ default: 3, 800: 2 }"
-      :gutter="{ default: '30px', 800: '15px' }"
-    >
-      <a
-        v-for="entity in entities.results"
-        v-show="entity.mediafiles && entity.mediafiles.length > 0"
-        :key="entity.id"
-        class="relative group"
-        :href="'/entity/' + entity.id"
-      >
+    <masonry :cols="{ default: small ? 5 : 3, 800: 2 }" :gutter="{ default: small ? '15px' : '30px', 800: '15px' }">
+      <a v-for="entity in entities.results" v-show="entity.mediafiles && entity.mediafiles.length > 0" :key="entity.id" class="relative group" :href="'/entity/' + entity.id">
         <span
           :class="{
             'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
             'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
           }"
         />
-        <img
-          v-if="entity.mediafiles && entity.mediafiles.length > 0"
-          :src="replaceStringStorageApi(entity.mediafiles[0].location)"
-        >
+        <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="{ src: replaceStringStorageApi(entity.mediafiles[0].location) }" />
       </a>
     </masonry>
   </div>

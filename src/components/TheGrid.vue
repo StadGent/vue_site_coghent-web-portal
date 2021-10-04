@@ -17,7 +17,7 @@
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
       </svg>
     </div>
-    <the-masonry v-if="entityData" :entities="entityData.Entities" :loading="loading" />
+    <the-masonry :small="small" v-if="entityData" v-show="!loading" :entities="entityData.Entities" :loading="loading" />
     <base-button v-show="!loading && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4" />
   </section>
 </template>
@@ -46,6 +46,10 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       required: false,
       default: () => [],
+    },
+    small: {
+      type: Boolean,
+      default: false,
     },
   },
   setup: (props) => {

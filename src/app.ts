@@ -10,34 +10,38 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
-import masonry from 'vue-next-masonry';
+import masonry from 'vue-next-masonry'
+import VueLazyLoad from 'vue3-lazyload'
 
 export default async function (authenticated: boolean = true) {
   const configStore = StoreFactory.get(ConfigStore)
   const app = createSSRApp(App)
 
-  const config = await fetch('../config.json').then((r) => r.json());
+  const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
   let auth = undefined
-  if(authenticated){
-    auth = new OpenIdConnectClient(config.oidc);
+  if (authenticated) {
+    auth = new OpenIdConnectClient(config.oidc)
   }
   const router = createRouter(auth)
-  
+
   const apolloClient = new ApolloClient({
     link: createHttpLink({ uri: config.graphQlLink }),
     cache: new InMemoryCache(),
   })
 
-  const authCode = new URLSearchParams(window.location.search).get('code');
+  const authCode = new URLSearchParams(window.location.search).get('code')
   if (authCode && auth) {
-    auth.processAuthCode(authCode, router);
+    auth.processAuthCode(authCode, router)
   }
 
   app
     .use(router)
     .use(auth as any)
     .use(i18n)
+    .use(VueLazyLoad, {
+      loading: 'http://localhost:8070/lazy-loading.svg',
+    })
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
     })
