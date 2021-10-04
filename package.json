@@ -18,6 +18,7 @@
     "axios": "^0.21.1",
     "coghent-vue-3-component-library": "git+https://gitlab.com/inuits/coghent/coghent-vue-3-component-library.git#main",
     "core-js": "^3.16.2",
+    "crocks": "^0.2.3",
     "fork-ts-checker-webpack-plugin-v5": "npm:fork-ts-checker-webpack-plugin@^5.2.1",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",

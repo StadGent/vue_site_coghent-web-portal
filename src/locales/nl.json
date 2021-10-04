@@ -4,7 +4,8 @@
     "rich" : "rijke collectie!",
     "library": "bibliotheek",
     "cta": "Ook iets op zolder gevonden? Laat het ons weten en <span class='text-accent-purple'>draag bij</span> aan de collectie!",
-    "search": "Zoeken"
+    "search": "Zoeken",
+    "load": "Meer laden"
   },
   "header": {
     "discover" : "Ontdek de collectie",

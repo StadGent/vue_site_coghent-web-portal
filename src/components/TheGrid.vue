@@ -5,12 +5,7 @@
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div class="w-8/12 py-6">
-      <base-search
-        v-model="searchQueryForInput"
-        :label="t('main.library')"
-        :searchLabel="t('main.search')" 
-        @on-click="getData"
-      />
+      <base-search v-model="searchQueryForInput" :label="t('main.library')" :searchLabel="t('main.search')" @on-click="getData" />
     </div>
     <Filter v-if="relationResult" @new-selected="updatSelectedFilters" :selected="selectedFilters" :filter-all="'Alle werken'" :filters="relationResult.Entities.relations" />
     <div v-show="loading" class="pt-10">
@@ -20,21 +15,23 @@
       </svg>
     </div>
     <the-masonry v-if="result" :entities="result.Entities" :loading="loading" />
+    <base-button :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4" />
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, PropType, computed, toRaw } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables } from 'coghent-vue-3-component-library'
+import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
+import { Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
 
 export default defineComponent({
   name: 'AssetGrid',
-  components: { BaseSearch, TheMasonry, Filter },
+  components: { BaseSearch, TheMasonry, BaseButton, Filter },
   props: {
     defaultSearchQuery: {
       type: String,
@@ -47,12 +44,15 @@ export default defineComponent({
     const selectedFilters = ref<string[]>([])
     const searchQueryForInput = ref<string>('')
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery)
+    let _skip: Maybe<Scalars['Int']> = 0
+    const _limit: Maybe<Scalars['Int']> = 20
+    let resultList = ref<Object[]>([])
 
-    const { result, loading } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
+    const { result, loading, fetchMore, onResult } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
       GetEntitiesDocument,
       () => ({
-        limit: 20,
-        skip: 0,
+        limit: _limit,
+        skip: _skip,
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
@@ -68,8 +68,8 @@ export default defineComponent({
     const { result: relationResult } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
       GetEntitiesDocument,
       () => ({
-        limit: 20,
-        skip: 0,
+        limit: _limit,
+        skip: _skip,
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
@@ -82,6 +82,18 @@ export default defineComponent({
       })
     )
 
+    // watch(
+    //   () => result.value,
+    //   () => {
+    //     resultList.value = result.value?.Entities?.results
+    //     result.value?.Entities?.results?.forEach(element => {
+    //       list!.value?.push(element)
+    //     })
+    //     console.log('result', result.value)
+    //     console.log('Result filled list', list.value)
+    //   }
+    // )
+
     const getData = () => {
       selectedFilters.value = []
       searchQueryForQuery.value = searchQueryForInput.value === '' ? props.defaultSearchQuery : searchQueryForInput.value
@@ -89,6 +101,24 @@ export default defineComponent({
 
     const updatSelectedFilters = (input: string[]) => {
       selectedFilters.value = input
+    }
+
+    const loadMore = () => {
+      _skip = _skip! + _limit
+      fetchMore({
+        variables: {
+          skip: _skip,
+        },
+        updateQuery: (previousData, { fetchMoreResult }) => {
+          if (!fetchMoreResult) {
+            return previousData
+          }
+          return {
+            ...previousData,
+            ...fetchMoreResult,
+          }
+        },
+      })
     }
 
     return {
@@ -101,7 +131,7 @@ export default defineComponent({
       searchQueryForQuery,
       searchQueryForInput,
       relationResult,
-    }
+      loadMore    }
   },
 })
 </script>

@@ -269,7 +269,7 @@ export default defineComponent({
     }
 
     const replaceStringStorageApi = (input: string) => {
-      return input.replace("storage-api", "localhost")
+      return input.replace("http://localhost:8001http://storage-api:8001/", "http://localhost:8001/")
     }
 
     onResult((queryResult: any) => {
