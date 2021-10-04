@@ -82,18 +82,6 @@ export default defineComponent({
       })
     )
 
-    // watch(
-    //   () => result.value,
-    //   () => {
-    //     resultList.value = result.value?.Entities?.results
-    //     result.value?.Entities?.results?.forEach(element => {
-    //       list!.value?.push(element)
-    //     })
-    //     console.log('result', result.value)
-    //     console.log('Result filled list', list.value)
-    //   }
-    // )
-
     const getData = () => {
       selectedFilters.value = []
       searchQueryForQuery.value = searchQueryForInput.value === '' ? props.defaultSearchQuery : searchQueryForInput.value
