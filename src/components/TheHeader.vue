@@ -90,7 +90,7 @@
       <div class="flex flex-col items-center pt-3">
         <router-link
           to="/pavilion"
-          class="flex items-center"
+          class="flex items-center invisible"
         >
           <h2
             class="text-lg  -mt-3 md:-mt-0 lg:mt-0"
@@ -130,7 +130,7 @@
         custom-style="ghost-purple"
         :icon-shown="true"
         custom-icon="storybox"
-        class="px-2 mx-3 ml-3 "
+        class="px-2 mx-3 ml-3 invisible"
       />
     </div>
   </div>
