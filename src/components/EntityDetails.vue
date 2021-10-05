@@ -15,7 +15,7 @@
           </p>
         </section>
         <section v-if="photos" id="mediafiles" class="h-96 mt-10 w-max overflow-x-auto px-10">
-          <img v-for="photo in photos" :key="photo" class="mb-5 w-96" :src="replaceStringStorageApi(photo)" />
+          <img v-for="photo in photos" :key="photo" class="mb-5 w-96" :src="util.replaceStringStorageApi(photo)" />
         </section>
       </section>
       <section id="content" class="h-auto overflow-x-auto pl-10 flex-col w-8/12 pt-16">
@@ -86,6 +86,7 @@ import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardCompon
 import RelationTag from './RelationTag.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
+import * as util from '../utils/stringUtil'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
@@ -116,10 +117,6 @@ export default defineComponent({
     const openInfoModal = () => {
       openModal.value = true
       console.log(openModal.value)
-    }
-
-    const replaceStringStorageApi = (input: string) => {
-      return input.replace('http://localhost:8001http://storage-api:8001/', 'http://localhost:8001/')
     }
 
     onResult((queryResult: any) => {
@@ -159,8 +156,9 @@ export default defineComponent({
       openModal,
       onClick,
       types,
-      replaceStringStorageApi,
+      
       relationStringArray,
+      util
     }
   },
 })
