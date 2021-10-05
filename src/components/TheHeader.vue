@@ -106,8 +106,8 @@
       </div>
     </div>
 
-    <div class="flex ml-3">
-      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 invisible sm:visible" />
+    <div class="flex ml-3 invisible">
+      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 invisible sm:invisible" />
       <base-button
         v-if="!userStore.hasUser"
         :text="t('buttons.login')"
@@ -130,7 +130,7 @@
         custom-style="ghost-purple"
         :icon-shown="true"
         custom-icon="storybox"
-        class="px-2 mx-3 ml-3 invisible"
+        class="px-2 mx-3 ml-3 "
       />
     </div>
   </div>
