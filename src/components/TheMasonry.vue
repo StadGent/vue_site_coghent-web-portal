@@ -8,7 +8,7 @@
             'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
           }"
         />
-        <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="{ src: replaceStringStorageApi(entity.mediafiles[0].location) }" />
+        <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="{ src: util.replaceStringStorageApi(entity.mediafiles[0].location) }" />
       </a>
     </masonry>
   </div>
@@ -17,6 +17,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue'
 import CTAHome from './CTAHome.vue'
+import * as util from '../utils/stringUtil'
 
 export default defineComponent({
   name: 'TheMasonry',
@@ -38,12 +39,10 @@ export default defineComponent({
     },
   },
   setup: (props) => {
-    const replaceStringStorageApi = (input: string) => {
-      return input.replace('http://storage-api:8001http://localhost:8001/', 'http://localhost:8001/')
-    }
+  
 
     return {
-      replaceStringStorageApi,
+      util,
     }
   },
 })
