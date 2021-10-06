@@ -47,11 +47,11 @@
   </base-modal>
 
   <!-- main-->
-  <div v-if="result" class="grid grid-cols-2 mt-20">
-    <section class="flex items-center justify-between px-10">
+  <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
+    <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
       <the-carousel v-if="photos" :source="photos" />
     </section>
-    <CardComponent v-if="result" :large="true">
+    <CardComponent v-if="result" :large="true" class="mx-4 sm:mx-0">
       <div class="flex flex-col bg-background-medium px-10 py-10">
         <h1 class="text-lg font-bold">
           {{ result.Entity?.title[0]?.value }}
