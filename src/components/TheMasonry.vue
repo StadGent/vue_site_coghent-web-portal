@@ -1,18 +1,6 @@
 <template>
   <div>
-    <!-- <masonry :cols="{ default: small ? 5 : 3, 800: 2 }" :gutter="{ default: small ? '15px' : '30px', 800: '15px' }">
-      <a v-for="entity in entities.results" v-show="entity.mediafiles && entity.mediafiles.length > 0" :key="entity.id" class="relative group" :href="'/entity/' + entity.id">
-        <span
-          :class="{
-            'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
-            'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
-          }"
-        />
-        <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="{ src: util.replaceStringStorageApi(entity.mediafiles[0].location) }" />
-      </a>
-    </masonry> -->
-
-    <div class="masonry">
+    <div class="masonry mx-5 sm:mx-0">
       <div
         v-for="entity in entities.results"
         v-show="entity.mediafiles && entity.mediafiles.length > 0"
@@ -31,8 +19,13 @@
             />
             <img
               v-if="entity.mediafiles && entity.mediafiles.length > 0"
-              :src="util.replaceStringStorageApi(entity.mediafiles[0].location)"
+              v-lazy="{
+                src: util.replaceStringStorageApi(
+                  entity.mediafiles[0].location
+                ),
+              }"
               @load="rendered"
+              class="flex w-full rounded-md shadow"
             />
           </a>
         </div>
@@ -42,17 +35,9 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  watch,
-  onMounted,
-  onUpdated,
-  onBeforeMount,
-} from "vue";
+import { defineComponent, ref, watch, onMounted } from "vue";
 import CTAHome from "./CTAHome.vue";
 import * as util from "../utils/stringUtil";
-
 
 export default defineComponent({
   name: "TheMasonry",
@@ -95,8 +80,6 @@ export default defineComponent({
       item.style.gridRowEnd = "span " + rowSpan;
     };
 
-  
-
     onMounted(() => {
       let masonryEvents = ["load", "resize"];
       masonryEvents.forEach(function (event) {
@@ -107,13 +90,14 @@ export default defineComponent({
         () => props.entities.results,
         () => {
           resizeAllMasonryItems();
-          if(temp.value.length > 0){
-            if(temp.value[0].id != props.entities.results[0].id){
-              imagesCount.value = 0
+          if (temp.value.length > 0) {
+            if (temp.value[0].id != props.entities.results[0].id) {
+              imagesCount.value = 0;
             }
           }
-          temp.value = props.entities.results
-        }, {immediate: true}
+          temp.value = props.entities.results;
+        },
+        { immediate: true }
       );
     });
 
@@ -152,17 +136,30 @@ html {
   background: #555;
 }
 
-img {
-  margin-top: 25px;
-  display: flex;
-  width: 100%;
-  border-radius: 4px;
-  box-shadow: 2px 2px 5px rgba(#000, 0.7);
-}
 .masonry {
         display: grid;
         grid-gap: 15px;
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         grid-auto-rows: 0;
+
     }
+
+    @media screen and (min-width: 520px) {
+      .masonry{
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      }
+    }
+
+    @media screen and (min-width: 760px) {
+      .masonry{
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+
+    @media screen and (min-width: 1024px) {
+      .masonry{
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      }
+    }
+
 </style>

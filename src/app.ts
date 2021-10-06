@@ -10,7 +10,6 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
-import masonry from 'vue-next-masonry'
 import VueLazyLoad from 'vue3-lazyload'
 
 export default async function (authenticated: boolean = true) {
@@ -45,7 +44,6 @@ export default async function (authenticated: boolean = true) {
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
     })
-    .use(masonry)
     .provide(DefaultApolloClient, apolloClient)
 
   return {
