@@ -39,7 +39,7 @@ export default defineComponent({
   props: {
     defaultSearchQuery: {
       type: String,
-      default: '',
+      default: 'Nova',
       required: false,
     },
     defaultRelations: {
