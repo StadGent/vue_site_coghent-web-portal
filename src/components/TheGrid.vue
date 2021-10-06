@@ -76,7 +76,7 @@ export default defineComponent({
 
       () => ({
         limit: _limit,
-        skip: _skip,
+        skip: (_skip = 0),
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
