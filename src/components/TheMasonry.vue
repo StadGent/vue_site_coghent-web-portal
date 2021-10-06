@@ -52,7 +52,6 @@ import {
 } from "vue";
 import CTAHome from "./CTAHome.vue";
 import * as util from "../utils/stringUtil";
-import { GetEntitiesQuery } from 'coghent-vue-3-component-library'
 
 
 export default defineComponent({
@@ -75,28 +74,10 @@ export default defineComponent({
     },
   },
   setup: (props) => {
-    const imageCounter = ref<number>(-1);
     const imagesCount = ref<number>(1);
     const temp = ref<Array<any>>([]);
 
-    // let masonryEvents = ["load", "resize"];
-    // masonryEvents.forEach(function (event) {
-    //   window.addEventListener(event, resizeAllMasonryItems);
-    //   console.log("IsThisHappening?");
-    // });
-
-    const calculateImageCount = () => {
-      imageCounter.value = 0;
-      for (let i = 0; i < props.entities.results.length; i++) {
-        if (props.entities.results[i].mediafiles.length > 0) {
-          imageCounter.value++;
-        }
-      }
-      console.log("calculated", imageCounter.value);
-    };
-
     const resizeMasonryItem = (item: any) => {
-      /* Get the grid object, its row-gap, and the size of its implicit rows */
       let grid = document.getElementsByClassName("masonry")[0],
         rowGap = parseInt(
           window.getComputedStyle(grid).getPropertyValue("grid-row-gap")
@@ -114,12 +95,9 @@ export default defineComponent({
       item.style.gridRowEnd = "span " + rowSpan;
     };
 
-    const checkIfResize = () => {
-      if (imagesCount.value === imageCounter.value) resizeAllMasonryItems();
-    };
+  
 
     onMounted(() => {
-      calculateImageCount();
       let masonryEvents = ["load", "resize"];
       masonryEvents.forEach(function (event) {
         window.addEventListener(event, resizeAllMasonryItems);
@@ -128,36 +106,23 @@ export default defineComponent({
       watch(
         () => props.entities.results,
         () => {
-          calculateImageCount();
-          checkIfResize();
-          console.log('Temp value at the start of the START of the function', temp.value)
+          resizeAllMasonryItems();
           if(temp.value.length > 0){
-            console.log('Temp contains data and is compairing' + temp.value[0].id + ' with ' + props.entities.results[0].id)
             if(temp.value[0].id != props.entities.results[0].id){
-              console.log('Reset to 0')
               imagesCount.value = 0
             }
           }
-          console.log('Triggered props watcher', props.entities.results)
           temp.value = props.entities.results
-          console.log('Temp value at the END of function', temp.value)
         }, {immediate: true}
       );
     });
 
-    const onResize = () => {
-      console.log("Resize");
-      checkIfResize();
-    };
-
     watch(
       () => imagesCount.value,
       () => {
-        checkIfResize();
+        resizeAllMasonryItems();
       }
     );
-
-    
 
     const resizeAllMasonryItems = () => {
       let allItems = document.getElementsByClassName("card");
