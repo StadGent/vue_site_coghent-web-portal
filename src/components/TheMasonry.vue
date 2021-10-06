@@ -79,11 +79,11 @@ export default defineComponent({
     const imagesCount = ref<number>(1);
     const temp = ref<Array<any>>([]);
 
-    let masonryEvents = ["load", "resize"];
-    masonryEvents.forEach(function (event) {
-      window.addEventListener(event, resizeAllMasonryItems);
-      console.log("IsThisHappening?");
-    });
+    // let masonryEvents = ["load", "resize"];
+    // masonryEvents.forEach(function (event) {
+    //   window.addEventListener(event, resizeAllMasonryItems);
+    //   console.log("IsThisHappening?");
+    // });
 
     const calculateImageCount = () => {
       imageCounter.value = 0;
@@ -114,23 +114,16 @@ export default defineComponent({
       item.style.gridRowEnd = "span " + rowSpan;
     };
 
-    // onMounted(() => {
-    //   watch(
-    //     () => props.entities.results,
-    //     () => {
-    //       resizeAllMasonryItems();
-    //     },
-    //     { immediate: true }
-    //   );
-    // });
-
     const checkIfResize = () => {
       if (imagesCount.value === imageCounter.value) resizeAllMasonryItems();
     };
 
     onMounted(() => {
       calculateImageCount();
-      window.addEventListener("resize", onResize);
+      let masonryEvents = ["load", "resize"];
+      masonryEvents.forEach(function (event) {
+        window.addEventListener(event, resizeAllMasonryItems);
+      });
 
       watch(
         () => props.entities.results,
