@@ -4,3 +4,5 @@ node_modules
 dist
 .npmrc
 .devcontainer.json
+coghent-vue-3-component-library
+session-vue-3-oidc-library
