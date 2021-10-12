@@ -15,24 +15,32 @@
           </p>
         </section>
         <section v-if="photos" id="mediafiles" class="h-96 mt-10 w-max overflow-x-auto px-10">
-          <img v-for="photo in photos" :key="photo" class="mb-5 w-96" :src="util.replaceStringStorageApi(photo)" />
+          <img v-for="photo in photos" :key="photo" class="mb-5 w-96" :src="photo" />
         </section>
       </section>
-      <section id="content" class="h-auto overflow-x-auto pl-10 flex-col w-8/12 pt-16">
-        <div v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="pt-5 font-light">
-          <p v-show="metaData.key === 'description'" class="">
-            {{ metaData.value }}
+      <section id="content" class="h-auto overflow-x-auto pl-10 flex-col w-8/12 pt-16 pb-5">
+        <div class="pt-5 font-light">
+          <p v-show="result.Entity?.description && result.Entity?.description[0]" class="">
+            {{ result.Entity?.description[0]?.value }}
           </p>
         </div>
         <div class="font-medium pb-2">
           <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
         </div>
-        <h1 class="font-bold text-md mt-5">
+        <h3 class="font-bold text-lg mt-5">
+          {{ t('details.modal.characteristics') }}
+        </h3>
+        <ul class="mt-5 flex flex-col gap-3">
+          <li class="w-100 inline-block" v-for="metaData in result.Entity?.metadata" :key="metaData.value">
+            <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
+          </li>
+        </ul>
+        <h3 class="font-bold text-lg mt-5">
           {{ t('details.modal.associations') }}
-        </h1>
+        </h3>
         <div class="mt-5 flex gap-3">
-          <p v-for="type in types" :key="type" class="px-2 py-2 bg-tag-neutral cursor-pointer mr-4 bg-opacity-50">
-            {{ type }}
+          <p v-for="relationLabel in relationsLabelArray" :key="relationLabel" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
+            {{ relationLabel }}
           </p>
         </div>
       </section>
@@ -56,9 +64,9 @@
         <h1 class="text-lg font-bold">
           {{ result.Entity?.title[0]?.value }}
         </h1>
-        <div v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="pt-5 font-light">
-          <p v-show="metaData.key === 'description'">
-            {{ metaData.value }}
+        <div class="pt-5 font-light">
+          <p v-show="result.Entity?.description && result.Entity?.description[0]">
+            {{ result.Entity?.description[0]?.value }}
           </p>
         </div>
         <div class="pt-5 font-medium">
@@ -66,14 +74,14 @@
             metaData.value
           }}</span>
         </div>
-        <base-button class="inline⁻block w-max" :text="t('details.more')" custom-style="ghost-black" custom-icon="info" :icon-shown="true" :on-click="openInfoModal" />
+        <base-button class="inline⁻block w-max ml-3 mt-3" :text="t('details.more')" custom-style="ghost-black" custom-icon="info" :icon-shown="true" :on-click="openInfoModal" />
       </div>
     </CardComponent>
     <section class="col-span-2">
       <h2 class="font-bold text-2xl w-full text-center pt-10">
         {{ t('details.discover') }}
       </h2>
-      <the-grid :small="true" v-if="relationStringArray.length > 0" :default-relations="relationStringArray" />
+      <the-grid v-if="relationStringArray.length > 0" :small="true" :default-relations="relationStringArray" />
     </section>
   </div>
 </template>
@@ -86,7 +94,6 @@ import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardCompon
 import RelationTag from './RelationTag.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
-import * as util from '../utils/stringUtil'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
@@ -109,6 +116,7 @@ export default defineComponent({
     const openModal = ref<Boolean>(false)
     const types = ref<any[] | undefined>()
     const relationStringArray = ref<string[]>([])
+    const relationsLabelArray = ref<string[]>([])
 
     const onClick = () => {
       console.log('Click', result.value)
@@ -133,6 +141,7 @@ export default defineComponent({
         .filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
         .forEach((relation: any) => {
           relationStringArray.value.push(relation.key)
+          relation.label && relationsLabelArray.value.push(relation.label)
         })
 
       const typeArray: any[] = []
@@ -156,9 +165,8 @@ export default defineComponent({
       openModal,
       onClick,
       types,
-      
       relationStringArray,
-      util
+      relationsLabelArray,
     }
   },
 })

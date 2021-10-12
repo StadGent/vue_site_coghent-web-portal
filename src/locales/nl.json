@@ -1,7 +1,7 @@
 {
-  "main" : {
-    "title" : "Duik mee in de geschiedenis en ontdek de vele werken uit onze",
-    "rich" : "rijke collectie!",
+  "main": {
+    "title": "Duik mee in de geschiedenis en ontdek de vele werken uit onze",
+    "rich": "rijke collectie!",
     "library": "bibliotheek",
     "cta": "Ook iets op zolder gevonden? Laat het ons weten en <span class='text-accent-purple'>draag bij</span> aan de collectie!",
     "search": "Zoeken",
@@ -9,30 +9,31 @@
     "empty": "Zoekopdracht gaf geen resultaten"
   },
   "header": {
-    "discover" : "Ontdek de collectie",
-    "pavilion" : "Het paviljoen"
+    "discover": "Ontdek de collectie",
+    "pavilion": "Het paviljoen"
   },
-  "buttons":{
+  "buttons": {
     "login": "Aanmelden",
     "storybox": "Verhalenbox"
   },
-  "details":{
+  "details": {
     "discover": "Ontdek ook andere gerelateerde werken",
-    "more" : "Meer info over dit werk",
+    "more": "Meer info over dit werk",
     "modal": {
       "link": "Link naar object kopiëren",
       "edit": "Informatie wijzigen of aanvullen",
       "add": "Aan mijn verhalenbox toevoegen",
       "objectNumber": "Objectnummer",
       "objectName": "Objectnaam",
-      "associations": "Associaties"
-     }     
+      "associations": "Associaties",
+      "characteristics": "Kenmerken"
+    }
   },
-  "profile":{
+  "profile": {
     "greeting": "Hoi!",
     "details": "Account details",
     "stories": "Mijn verhalen",
-    "works": "Mijn werken", 
+    "works": "Mijn werken",
     "picture": "Profielfoto",
     "username": "Gebruikersnaam",
     "email": "Email",
