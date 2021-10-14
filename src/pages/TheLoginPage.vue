@@ -11,7 +11,7 @@ import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 
 export default defineComponent({
-  components: { },
+  components: {},
   setup() {
     const userStore = StoreFactory.get(UserStore)
 
@@ -22,11 +22,9 @@ export default defineComponent({
       userStore.setUser(data.User)
     })
 
-    return {
-    }
+    return {}
   },
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

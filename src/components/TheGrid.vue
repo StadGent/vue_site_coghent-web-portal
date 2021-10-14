@@ -10,7 +10,7 @@
         {{ t('main.empty') }}
       </p>
     </div>
-    <Filter class="my-5" v-if="relationData" :selected="selectedFilters" :filter-all="'Alle werken'" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
+    <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="'Alle werken'" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
     <div v-show="loading" class="pt-10">
       <svg class="animate-spin -ml-1 mr-3 h-20 w-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />

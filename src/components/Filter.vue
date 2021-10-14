@@ -1,22 +1,7 @@
 <template>
-  <div
-    v-if="filters.length > 0"
-    class="flex flex-wrap flex-row w-full justify-center"
-  >
-    <FilterTag
-      :is-selected="selected.length === 0"
-      :filter="filterAll"
-      :icon="'check'"
-      @click="toggleFilters"
-    />
-    <FilterTag
-      v-for="tag in filtersWithLabel"
-      :key="tag"
-      :is-selected="isTagSelected(tag.key)"
-      :filter="tag.label"
-      :icon="'check'"
-      @click="addToSelectedTags(tag.key)"
-    />
+  <div v-if="filters.length > 0" class="flex flex-wrap flex-row w-full justify-center">
+    <FilterTag :is-selected="selected.length === 0" :filter="filterAll" :icon="'check'" @click="toggleFilters" />
+    <FilterTag v-for="tag in filtersWithLabel" :key="tag" :is-selected="isTagSelected(tag.key)" :filter="tag.label" :icon="'check'" @click="addToSelectedTags(tag.key)" />
   </div>
 </template>
 

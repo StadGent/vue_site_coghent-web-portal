@@ -31,7 +31,7 @@
           {{ t('details.modal.characteristics') }}
         </h3>
         <ul class="mt-5 flex flex-col gap-3">
-          <li class="w-100 inline-block" v-for="metaData in result.Entity?.metadata" :key="metaData.value">
+          <li v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="w-100 inline-block">
             <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
           </li>
         </ul>

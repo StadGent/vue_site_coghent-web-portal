@@ -2,18 +2,18 @@ import { ref } from 'vue'
 import BaseStore from './BaseStore'
 
 export class ConfigStore extends BaseStore {
-    id = 'ConfigStore'
+  id = 'ConfigStore'
 
-    loading: boolean = false
+  loading: boolean = false
 
-    config = ref<any>({})
+  config = ref<any>({})
 
-    get hasConfig(): boolean {
-        return !!this.config.value
-    }
+  get hasConfig(): boolean {
+    return !!this.config.value
+  }
 
-    setConfig(config: any): void {
-        this.config.value = config
-        this.loading = false
-    }
+  setConfig(config: any): void {
+    this.config.value = config
+    this.loading = false
+  }
 }

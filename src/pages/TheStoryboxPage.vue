@@ -6,11 +6,10 @@ import { defineComponent, ref } from 'vue'
 import CTAHome from '../components/CTAHome.vue'
 
 export default defineComponent({
-  components: {CTAHome},
+  components: { CTAHome },
   setup() {
     return {}
   },
 })
 </script>
-<style scoped>
-</style>
+<style scoped></style>
