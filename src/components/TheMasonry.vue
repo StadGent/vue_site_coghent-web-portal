@@ -12,9 +12,7 @@
             />
             <img
               v-if="entity.mediafiles && entity.mediafiles.length > 0"
-              v-lazy="{
-                src: entity.mediafiles[0].location,
-              }"
+              :src='entity.mediafiles[0].location'
               class="flex w-full rounded-md shadow"
               @load="rendered"
             />

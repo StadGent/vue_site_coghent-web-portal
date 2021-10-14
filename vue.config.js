@@ -2,6 +2,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const nodeExternals = require('webpack-node-externals')
 const webpack = require('webpack')
 const path = require('path')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 
 module.exports = {
   chainWebpack: (webpackConfig) => {
@@ -63,6 +64,7 @@ module.exports = {
         //'@vee-validate/rules': path.resolve('./node_modules/@vee-validate/rules'),
       },
     },
+    plugins: [new FriendlyErrorsWebpackPlugin()],
   },
 
   devServer: {
@@ -78,7 +80,7 @@ module.exports = {
       enableLegacy: false,
       runtimeOnly: false,
       compositionOnly: false,
-      fullInstall: true
-    }
-  }
+      fullInstall: true,
+    },
+  },
 }
