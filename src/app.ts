@@ -10,8 +10,8 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
-import VueLazyLoad from 'vue3-lazyload'
 import { environment as env } from './environment';
+import lazyPlugin from 'vue3-lazy'
 
 export default async function (authenticated: boolean = true) {
   const graphqlURL = env.graphQl
@@ -41,8 +41,9 @@ export default async function (authenticated: boolean = true) {
     .use(router)
     .use(auth as any)
     .use(i18n)
-    .use(VueLazyLoad, {
+    .use(lazyPlugin, {
       loading: lazyLoad,
+      error: 'error.png'
     })
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
