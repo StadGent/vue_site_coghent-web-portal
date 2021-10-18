@@ -97,8 +97,9 @@ export default defineComponent({
       console.log('rendered', imagesCount.value)
     }
 
+
     return {
-      rendered,
+      rendered
     }
   },
 })

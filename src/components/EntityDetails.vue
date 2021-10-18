@@ -1,56 +1,59 @@
 <template>
   <!--Details modal-->
-  <base-modal v-model:isShow="openModal" class="z-50 p-10">
-    <section class="flex w-11/12">
-      <section id="column" class="bg-background-light">
-        <section id="title" class="px-10">
-          <h1 class="text-2xl font-black my-8">
+   <base-modal v-model:isShow="openModal" class="z-50">
+    <section class="flex flex-col">
+      <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
+        <section class="bg-background-light lg:w-11/12">
+          <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ result.Entity?.title[0]?.value }}
           </h1>
-          <p>
-            <strong>{{ t('details.modal.objectNumber') }}</strong> ongekend
-          </p>
-          <p>
-            <strong>{{ t('details.modal.objectName') }}</strong> ongekend
-          </p>
+          <div class="m-3 lg:ml-6 lg:mt-6">
+            <p>
+              <strong>{{ t('details.modal.objectNumber') }}</strong> ongekend
+            </p>
+            <p>
+              <strong>{{ t('details.modal.objectName') }}</strong> ongekend
+            </p>
+          </div>
+          <div v-if="photos" class="flex flex-row lg:flex-col lg:h-96 overflow-y-scroll md:overflow-y-none md:overflow-x-scroll">
+            <img v-for="photo in photos" :key="photo" class="m-3 lg:ml-6 w-96 lg:min-w-full" :src="photo" />
+          </div>
         </section>
-        <section v-if="photos" id="mediafiles" class="h-96 mt-10 w-max overflow-x-auto px-10">
-          <img v-for="photo in photos" :key="photo" class="mb-5 w-96" :src="photo" />
-        </section>
-      </section>
-      <section id="content" class="h-auto overflow-x-auto pl-10 flex-col w-8/12 pt-16 pb-5">
-        <div class="pt-5 font-light">
-          <p v-show="result.Entity?.description && result.Entity?.description[0]" class="">
+        <section class="bg-background-medium">
+          <p v-show="result.Entity?.description && result.Entity?.description[0]" class="m-3 mt-6 lg:mr-10 lg:mt-20">
             {{ result.Entity?.description[0]?.value }}
           </p>
-        </div>
-        <div class="font-medium pb-2">
-          <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
-        </div>
-        <h3 class="font-bold text-lg mt-5">
-          {{ t('details.modal.characteristics') }}
-        </h3>
-        <ul class="mt-5 flex flex-col gap-3">
-          <li v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="w-100 inline-block">
-            <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
-          </li>
-        </ul>
-        <h3 class="font-bold text-lg mt-5">
-          {{ t('details.modal.associations') }}
-        </h3>
-        <div class="mt-5 flex gap-3">
-          <p v-for="relationLabel in relationsLabelArray" :key="relationLabel" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
-            {{ relationLabel }}
-          </p>
-        </div>
+          <div class="font-medium pb-2">
+            <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
+          </div>
+          <h3 class="font-bold text-lg mt-5 ml-3">
+            {{ t('details.modal.characteristics') }}
+          </h3>
+          <ul class="mt-5 flex flex-col gap-3 ml-3">
+            <li v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="w-full inline-block">
+              <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
+            </li>
+          </ul>
+          <h3 class="font-bold text-lg mt-5 mb-3 ml-3">
+            {{ t('details.modal.associations') }}
+          </h3>
+          <div class="mx-5 flex gap-3 ml-3">
+            <p v-for="relationLabel in relationsLabelArray" :key="relationLabel" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
+              {{ relationLabel }}
+            </p>
+          </div>
+        </section>
       </section>
-    </section>
-    <section id="footer" class="flex items-center justify-center bg-background-light p-10">
-      <base-button class="w-max" :text="t('details.modal.link')" :on-click="onClick" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-      <div class="border-r-2 h-6 border-text-dark border-opacity-70 mx-6" />
-      <base-button class="w-max" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-      <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6" />
-      <base-button class="w-max" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+      <section id="footer" class="flex items-center justify-center bg-background-medium lg:bg-background-light p-2 lg:p-10 mb-3 lg:mb-0">
+        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="link" :icon-shown="true" />
+        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="onClick" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
+        <div class="border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
+        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
+        <base-button class="w-max hidden lg:flex" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
+        <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
+        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
+        <base-button class="w-max hidden lg:flex" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+      </section>
     </section>
   </base-modal>
 
