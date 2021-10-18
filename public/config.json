@@ -1,7 +1,5 @@
 {
-  "graphQlLink": "http://localhost:8070/api/graphql",
   "oidc": {
-    "baseUrl": "http://localhost:8080/auth/realms/dams",
     "tokenEndpoint": "protocol/openid-connect/token",
     "authEndpoint": "protocol/openid-connect/auth",
     "logoutEndpoint": "protocol/openid-connect/logout",
@@ -9,7 +7,6 @@
     "authorizedRedirectRoute": "/",
     "serverTokenEndpoint": "api/oidc/v1/token",
     "serverRefreshEndpoint": "api/oidc/v1/refresh",
-    "apiCodeEndpoint": "/api/auth_code",
-    "userEditUrl": "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/"
+    "apiCodeEndpoint": "/api/auth_code"
   }
 }

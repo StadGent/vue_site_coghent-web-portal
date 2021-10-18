@@ -89,6 +89,8 @@ import { GetMeDocument, User } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
 import { ConfigStore } from '../stores/ConfigStore'
 import StoreFactory from '../stores/StoreFactory'
+import { environment as env } from '../environment';
+
 
 export default defineComponent({
   components: { BaseButton, BaseInput },
@@ -97,6 +99,7 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const user: User = userStore.user
     const configStore = StoreFactory.get(ConfigStore)
+    const userEditUrl = env.userEditUrl
 
     //temp
     const buttonClick = () => {
@@ -104,7 +107,7 @@ export default defineComponent({
     }
 
     const getEditPage = () => {
-      const editRoute = configStore.config.value.oidc.userEditUrl + userStore.user.value.id
+      const editRoute = userEditUrl + userStore.user.value.id
       return editRoute
     }
 

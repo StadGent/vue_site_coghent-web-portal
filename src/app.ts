@@ -11,8 +11,11 @@ import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
 import VueLazyLoad from 'vue3-lazyload'
+import { environment as env } from './environment';
 
 export default async function (authenticated: boolean = true) {
+  const graphqlURL = env.graphQl
+  const lazyLoad = env.lazyLoad
   const configStore = StoreFactory.get(ConfigStore)
   const app = createSSRApp(App)
 
@@ -25,7 +28,7 @@ export default async function (authenticated: boolean = true) {
   const router = createRouter(auth)
 
   const apolloClient = new ApolloClient({
-    link: createHttpLink({ uri: config.graphQlLink }),
+    link: createHttpLink({ uri: graphqlURL }),
     cache: new InMemoryCache(),
   })
 
@@ -39,7 +42,7 @@ export default async function (authenticated: boolean = true) {
     .use(auth as any)
     .use(i18n)
     .use(VueLazyLoad, {
-      loading: 'http://localhost:8070/lazy-loading.svg',
+      loading: lazyLoad,
     })
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
