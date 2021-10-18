@@ -3,7 +3,7 @@
    <base-modal v-model:isShow="openModal" class="z-50">
     <section class="flex flex-col">
       <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
-        <section class="bg-background-light lg:w-11/12">
+        <section class="bg-background-light lg:w-11/12 lg:max-w-8/12">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ result.Entity?.title[0]?.value }}
           </h1>
@@ -15,8 +15,8 @@
               <strong>{{ t('details.modal.objectName') }}</strong> ongekend
             </p>
           </div>
-          <div v-if="photos" class="flex flex-row lg:flex-col lg:h-96 overflow-y-scroll md:overflow-y-none md:overflow-x-scroll">
-            <img v-for="photo in photos" :key="photo" class="m-3 lg:ml-6 w-96 lg:min-w-full" :src="photo" />
+          <div v-if="photos" class="flex flex-row lg:flex-col lg:h-96 overflow-x-auto">
+            <img v-for="photo in photos" :key="photo" class="m-3 lg:ml-6 w-96 sm:w-96 lg:min-w-11/12" :src="photo" />
           </div>
         </section>
         <section class="bg-background-medium">
@@ -169,7 +169,7 @@ export default defineComponent({
       onClick,
       types,
       relationStringArray,
-      relationsLabelArray,
+      relationsLabelArray
     }
   },
 })

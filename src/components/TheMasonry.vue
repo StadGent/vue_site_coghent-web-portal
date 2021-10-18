@@ -94,7 +94,6 @@ export default defineComponent({
       imagesCount.value++
     }
 
-
     return {
       rendered
     }
