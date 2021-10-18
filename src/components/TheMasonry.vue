@@ -85,8 +85,6 @@ export default defineComponent({
 
     const resizeAllMasonryItems = () => {
       let allItems = document.getElementsByClassName('card')
-      console.log('Allitems', allItems.length)
-
       for (let i = 0; i < allItems.length; i++) {
         resizeMasonryItem(allItems[i])
       }
@@ -94,7 +92,6 @@ export default defineComponent({
 
     const rendered = () => {
       imagesCount.value++
-      console.log('rendered', imagesCount.value)
     }
 
 
