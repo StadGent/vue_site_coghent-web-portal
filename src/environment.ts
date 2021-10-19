@@ -15,8 +15,11 @@ type domain = {
     sessionSecret: string;
     clientSecret: string;
     oauthBaseUrl: string;
-    search_api: string;
-    collection_api: string;
+    api: {
+      collectionAPIUrl: string;
+      searchAPIUrl: string;
+    };
+  
     graphQl: string;
     lazyLoad: string;
     userEditUrl: string;
@@ -33,8 +36,10 @@ type domain = {
       process.env.APOLLO_CLIENT_SECRET || "445cac0c-101f-4916-8cb2-dade093d38a7",
     oauthBaseUrl:
       process.env.OAUTH_BASE_URL || "http://localhost:8080/auth/realms/dams/",
-    collection_api: process.env.COLLECTION_API_URL || "http://localhost:8000",
-    search_api: process.env.SEARCH_API_URL || "http://localhost:8002",
+      api: {
+        collectionAPIUrl: process.env.COLLECTION_API_URL || 'http://collection-api:8000',
+        searchAPIUrl: process.env.SEARCH_API_URL || 'http://search-api:8002',
+      },
     graphQl: process.env.GRAPHQL || "http://localhost:8070/api/graphql",
     lazyLoad: process.env.LAZYLOAD || "http://localhost:8070/lazy-loading.svg",
     userEditUrl: process.env.USER_EDIT_URL || "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/"
