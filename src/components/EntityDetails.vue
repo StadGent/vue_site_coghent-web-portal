@@ -3,7 +3,7 @@
    <base-modal v-model:isShow="openModal" class="z-50">
     <section class="flex flex-col">
       <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
-        <section class="bg-background-light lg:w-11/12 lg:max-w-8/12">
+        <section class="bg-background-light lg:min-w-max">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ result.Entity?.title[0]?.value }}
           </h1>
@@ -20,24 +20,24 @@
           </div>
         </section>
         <section class="bg-background-medium">
-          <p v-show="result.Entity?.description && result.Entity?.description[0]" class="m-3 mt-6 lg:mr-10 lg:mt-20">
+          <p v-show="result.Entity?.description && result.Entity?.description[0]" class=" ml-8 m-3 mt-6 lg:mr-10 lg:mt-20">
             {{ result.Entity?.description[0]?.value }}
           </p>
           <div class="font-medium pb-2">
             <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
           </div>
-          <h3 class="font-bold text-lg mt-5 ml-3">
+          <h3 class="font-bold text-lg mt-5 ml-8">
             {{ t('details.modal.characteristics') }}
           </h3>
-          <ul class="mt-5 flex flex-col gap-3 ml-3">
+          <ul class="mt-5 flex flex-col gap-3 ml-8">
             <li v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="w-full inline-block">
               <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
             </li>
           </ul>
-          <h3 class="font-bold text-lg mt-5 mb-3 ml-3">
+          <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
             {{ t('details.modal.associations') }}
           </h3>
-          <div class="mx-5 flex gap-3 ml-3">
+          <div class="mx-5 flex gap-3 ml-8 mb-4">
             <p v-for="relationLabel in relationsLabelArray" :key="relationLabel" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
               {{ relationLabel }}
             </p>
