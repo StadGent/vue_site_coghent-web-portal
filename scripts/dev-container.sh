@@ -8,4 +8,4 @@ if [ -x "$(command -v podman)" ]; then
   DOCKER=podman
 fi
 
-${DOCKER} run -it --rm -v ${__DIR}/src:/app/src -p 4000:4000 --env-file=.env.local coghent-web-portal:dev $@
+${DOCKER} run -it --rm -v ${__DIR}:/app -p ${1:8080}:8080 --env-file=.env.local coghent-web-portal:dev $@

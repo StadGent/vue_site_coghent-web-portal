@@ -2,7 +2,7 @@ node_modules
 .DS_Store
 .env
 dist
-.npmrc
 .devcontainer.json
 coghent-vue-3-component-library
 session-vue-3-oidc-library
+*.local

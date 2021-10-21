@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node dist/server",
-    "serve": "vue-cli-service serve --port 81",
+    "serve": "vue-cli-service serve",
     "build": "npm run build:client && npm run build:server",
     "lint": "vue-cli-service lint",
     "build:client": "vue-cli-service build --dest dist/client",
