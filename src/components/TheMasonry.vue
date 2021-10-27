@@ -10,12 +10,13 @@
                 'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
               }"
             />
-            <img
+            <img v-if="entity.mediafiles && entity.mediafiles.length > 0" class="flex w-full rounded-md shadow" @load="rendered" />
+            <!-- <img
               v-if="entity.mediafiles && entity.mediafiles.length > 0"
               v-lazy="entity.mediafiles[0].location"
               class="flex w-full rounded-md shadow"
               @load="rendered"
-            />
+            /> -->
           </a>
         </div>
       </div>
