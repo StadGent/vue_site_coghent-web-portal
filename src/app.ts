@@ -10,12 +10,9 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
-import { environment as env } from './environment';
 import lazyPlugin from 'vue3-lazy'
 
 export default async function (authenticated: boolean = true) {
-  const graphqlURL = env.graphQl
-  const lazyLoad = env.lazyLoad
   const configStore = StoreFactory.get(ConfigStore)
   const app = createSSRApp(App)
 
@@ -28,7 +25,7 @@ export default async function (authenticated: boolean = true) {
   const router = createRouter(auth)
 
   const apolloClient = new ApolloClient({
-    link: createHttpLink({ uri: graphqlURL }),
+    link: createHttpLink({ uri: config.graphQlLink || '/api/graphql' }),
     cache: new InMemoryCache(),
   })
 
@@ -42,8 +39,8 @@ export default async function (authenticated: boolean = true) {
     .use(auth as any)
     .use(i18n)
     .use(lazyPlugin, {
-      loading: lazyLoad,
-      error: 'error.png'
+      loading: config.lazyLoad,
+      error: 'error.png',
     })
     .use(VueUniversalModal, {
       teleportTarget: '#modals',

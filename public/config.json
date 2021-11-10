@@ -1,12 +1,12 @@
 {
+  "graphQlLink": "/api/graphql",
+  "lazyLoad": "http://localhost:8070/lazy-loading.svg",
+  "userEditUrl": "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/",
   "oidc": {
-    "tokenEndpoint": "protocol/openid-connect/token",
-    "authEndpoint": "protocol/openid-connect/auth",
-    "logoutEndpoint": "protocol/openid-connect/logout",
+    "baseUrl": "http://localhost:8080/auth/realms/dams",
     "clientId": "coghent-web-portal",
-    "authorizedRedirectRoute": "/",
-    "serverTokenEndpoint": "api/oidc/v1/token",
-    "serverRefreshEndpoint": "api/oidc/v1/refresh",
+    "tokenEndpoint": "/protocol/openid-connect/token",
+    "authEndpoint": "/protocol/openid-connect/auth",
     "apiCodeEndpoint": "/api/auth_code"
   }
 }
