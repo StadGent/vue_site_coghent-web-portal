@@ -12,12 +12,36 @@
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TheHeader from '@/components/TheHeader.vue'
+import { useHead } from '@vueuse/head'
+import { ConfigStore } from './stores/ConfigStore'
+import StoreFactory from './stores/StoreFactory'
 
 export default defineComponent({
   name: 'App',
   components: { TheHeader },
   setup: () => {
     const { t } = useI18n()
+    const configStore = StoreFactory.get(ConfigStore)
+    const indexValue = configStore.config.value.vueAppIndex;
+
+    const getIndexValue = () => {
+      let indexStr = ''
+      if (indexValue) {
+        indexStr = 'INDEX, FOLLOW'
+      } else {
+        indexStr = 'NOINDEX, NOFOLLOW'
+      }
+      return indexStr
+    }
+
+    useHead({
+      meta: [
+        {
+          name: `ROBOTS`,
+          content: getIndexValue(),
+        },
+      ],
+    })
 
     return {
       t,

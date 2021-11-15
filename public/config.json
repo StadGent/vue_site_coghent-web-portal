@@ -2,6 +2,7 @@
   "graphQlLink": "/api/graphql",
   "lazyLoad": "http://localhost:8070/lazy-loading.svg",
   "userEditUrl": "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/",
+  "vueAppIndex": false,
   "oidc": {
     "baseUrl": "http://localhost:8080/auth/realms/dams",
     "clientId": "coghent-web-portal",
