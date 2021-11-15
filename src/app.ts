@@ -10,7 +10,7 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
-import lazyPlugin from 'vue3-lazy'
+import VueLazyLoad from 'vue3-lazyload'
 import { createHead } from '@vueuse/head'
 
 
@@ -42,10 +42,7 @@ export default async function (authenticated: boolean = true) {
     .use(auth as any)
     .use(i18n)
     .use(head)
-    .use(lazyPlugin, {
-      loading: config.lazyLoad,
-      error: 'error.png',
-    })
+    .use(VueLazyLoad)
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
     })
