@@ -11,10 +11,13 @@ import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
 import lazyPlugin from 'vue3-lazy'
+import { createHead } from '@vueuse/head'
+
 
 export default async function (authenticated: boolean = true) {
   const configStore = StoreFactory.get(ConfigStore)
   const app = createSSRApp(App)
+  const head = createHead();
 
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
@@ -38,6 +41,7 @@ export default async function (authenticated: boolean = true) {
     .use(router)
     .use(auth as any)
     .use(i18n)
+    .use(head)
     .use(lazyPlugin, {
       loading: config.lazyLoad,
       error: 'error.png',
