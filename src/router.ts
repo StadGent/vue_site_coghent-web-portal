@@ -21,16 +21,16 @@ const routes = [
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
 ]
 
-export default function (auth: any) {
+export default function (/*auth: any*/) {
   const router = createRouter({ routes, history: createWebHistory(process.env.BASE_URL) })
-  if (auth) {
-    router.beforeEach(async (to, _from, next) => {
-      if (!to.matched.some((route) => route.meta.requiresAuth)) {
-        console.log('next')
-        return next()
-      }
-      await auth.assertIsAuthenticated(to.fullPath, next)
-    })
-  }
+  // if (auth) {
+  //   router.beforeEach(async (to, _from, next) => {
+  //     if (!to.matched.some((route) => route.meta.requiresAuth)) {
+  //       console.log('next')
+  //       return next()
+  //     }
+  //     await auth.assertIsAuthenticated(to.fullPath, next)
+  //   })
+  // }
   return router
 }

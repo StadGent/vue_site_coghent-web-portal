@@ -5,7 +5,7 @@
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div v-show="defaultRelations.length === 0" class="w-8/12 py-6">
-      <base-search v-model="searchQueryForInput" :label="t('main.library')" :search-label="t('main.search')" @on-click="getData" />
+      <base-search v-model="searchQueryForInput" :label="t('main.library')" :search-label="t('main.search')" @on-click="getData" v-on:keyup.enter="getData" />
       <p v-if="emptySearch" v-show="!loading" class="text-center">
         {{ t('main.empty') }}
       </p>
