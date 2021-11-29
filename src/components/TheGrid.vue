@@ -6,9 +6,6 @@
     </h1>
     <div v-show="defaultRelations.length === 0" class="w-8/12 py-6">
       <base-search v-model="searchQueryForInput" :label="t('main.library')" :search-label="t('main.search')" @on-click="getData" v-on:keyup.enter="getData" />
-      <p v-if="emptySearch" v-show="!loading" class="text-center">
-        {{ t('main.empty') }}
-      </p>
     </div>
     <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="'Alle werken'" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
     <div v-show="loading" class="pt-10">
@@ -17,8 +14,15 @@
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
       </svg>
     </div>
-    <the-masonry v-if="entityData" v-show="!loading" :small="small" :entities="entityData.Entities" :loading="loading" />
-    <base-button v-show="!loading && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4" />
+    <div v-if="emptySearch">
+      <p v-show="!loading" class="text-center">
+        {{ t('main.empty') }}
+      </p>
+    </div>
+    <div v-if="!emptySearch">
+      <the-masonry v-if="entityData" v-show="!loading" :small="small" :entities="entityData.Entities" :loading="loading" />
+      <base-button v-show="!loading && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4" />
+    </div>
   </section>
 </template>
 
