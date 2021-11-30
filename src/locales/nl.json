@@ -6,7 +6,8 @@
     "cta": "Ook iets op zolder gevonden? Laat het ons weten en <span class='text-accent-purple'>draag bij</span> aan de collectie!",
     "search": "Zoeken",
     "load": "Meer laden",
-    "empty": "Zoekopdracht gaf geen resultaten"
+    "empty": "Zoekopdracht gaf geen resultaten",
+    "more": "Lees meer"
   },
   "header": {
     "discover": "Ontdek de collectie",

@@ -3,26 +3,23 @@
     <div :class="['masonry mx-5 sm:mx-0', { big: !small }]">
       <div v-for="entity in entities.results" v-show="entity.mediafiles && entity.mediafiles.length > 0" :key="entity.id" class="card">
         <div id="card-content" class="card-content">
-          <a class="relative group" :href="'/entity/' + entity.id">
+          <a class="relative group block" :href="'/entity/' + entity.id">
             <span
               :class="{
                 'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
                 'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
               }"
-            />
-            <!-- <img v-if="entity.mediafiles && entity.mediafiles.length > 0" :src="entity.mediafiles[0].location" class="flex w-full rounded-md shadow" @load="rendered" /> -->
-            <img
-              v-if="entity.mediafiles && entity.mediafiles.length > 0"
-              v-lazy="entity.mediafiles[0].original_file_location"
-              @mouseover="hover = entity.id"
-              @mouseleave="hover = ''"
-              class="flex w-full rounded-md shadow"
-              @load="rendered"
-            />
-            <div v-show="hover === entity.id" class="absolute left-O top-5 h-full w-full bg-background-dark opacity-100">
-              <div class="flex flex-col flex-wrap w-full h-full items-center justify-center"><h1 class="flex-wrap">{{entity.title[0].value}}</h1>
-              <p>{{entity.description[0].value}}</p></div>
-            </div>
+            >
+            </span>
+
+            <span class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
+                <p class="opacity-100 mb-2 px-10 font-bold">{{ entity.title[0].value }}</p>
+                <p id="description" class="opacity-100 px-10 overflow-ellipsis break-words">{{ entity.description[0].value }}</p>
+                <base-button :text="t('main.more')" custom-style="ghost-white" :icon-shown="true" :iconLeft="false" custom-icon="arrowRight" />
+              </div>
+            </span>
+            <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="entity.mediafiles[0].original_file_location" class="flex w-full rounded-md shadow" @load="rendered" />
           </a>
         </div>
       </div>
@@ -33,11 +30,13 @@
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue'
 import CTAHome from './CTAHome.vue'
-
+import { BaseButton } from 'coghent-vue-3-component-library'
+import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'TheMasonry',
   components: {
     // CTAHome
+    BaseButton,
   },
   props: {
     entities: {
@@ -107,9 +106,12 @@ export default defineComponent({
       imagesCount.value++
     }
 
+    const { t } = useI18n()
+
     return {
       rendered,
       hover,
+      t,
     }
   },
 })
@@ -119,6 +121,14 @@ export default defineComponent({
 /* prettifying styles */
 html {
   background: #555;
+}
+
+#description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .masonry {
