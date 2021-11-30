@@ -11,7 +11,18 @@
               }"
             />
             <!-- <img v-if="entity.mediafiles && entity.mediafiles.length > 0" :src="entity.mediafiles[0].location" class="flex w-full rounded-md shadow" @load="rendered" /> -->
-            <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="entity.mediafiles[0].location" class="flex w-full rounded-md shadow" @load="rendered" />
+            <img
+              v-if="entity.mediafiles && entity.mediafiles.length > 0"
+              v-lazy="entity.mediafiles[0].original_file_location"
+              @mouseover="hover = entity.id"
+              @mouseleave="hover = ''"
+              class="flex w-full rounded-md shadow"
+              @load="rendered"
+            />
+            <div v-show="hover === entity.id" class="absolute left-O top-5 h-full w-full bg-background-dark opacity-100">
+              <div class="flex flex-col flex-wrap w-full h-full items-center justify-center"><h1 class="flex-wrap">{{entity.title[0].value}}</h1>
+              <p>{{entity.description[0].value}}</p></div>
+            </div>
           </a>
         </div>
       </div>
@@ -45,6 +56,7 @@ export default defineComponent({
   setup: (props) => {
     const imagesCount = ref<number>(1)
     const temp = ref<Array<any>>([])
+    const hover = ref<String>()
 
     const resizeMasonryItem = (item: any) => {
       let grid = document.getElementsByClassName('masonry')[0],
@@ -97,6 +109,7 @@ export default defineComponent({
 
     return {
       rendered,
+      hover,
     }
   },
 })

@@ -19,9 +19,9 @@
         {{ t('main.empty') }}
       </p>
     </div>
-    <div v-if="!emptySearch">
+    <div v-if="!emptySearch" class="flex flex-col items-center justify-center">
       <the-masonry v-if="entityData" v-show="!loading" :small="small" :entities="entityData.Entities" :loading="loading" />
-      <base-button v-show="!loading && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4" />
+      <base-button v-show="!loading && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4 text-center" />
     </div>
   </section>
 </template>
