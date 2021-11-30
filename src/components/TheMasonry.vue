@@ -7,16 +7,18 @@
             <span
               :class="{
                 'w-full bg-background-dark animate-pulse h-full left-0 top-0 absolute': loading,
-                'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading,
+                'w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute': !loading && !small,
               }"
             >
             </span>
 
-            <span class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
+            <span v-show="!small" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
               <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
                 <p class="opacity-100 mb-2 px-10 font-bold">{{ entity.title[0].value }}</p>
                 <p id="description" class="opacity-100 px-10 overflow-ellipsis break-words">{{ entity.description[0].value }}</p>
                 <base-button :text="t('main.more')" custom-style="ghost-white" :icon-shown="true" :iconLeft="false" custom-icon="arrowRight" />
+
+                <div @click.prevent="copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
             <img v-if="entity.mediafiles && entity.mediafiles.length > 0" v-lazy="entity.mediafiles[0].original_file_location" class="flex w-full rounded-md shadow" @load="rendered" />
@@ -29,13 +31,12 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue'
-import CTAHome from './CTAHome.vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
+import useClipboard from 'vue-clipboard3'
 export default defineComponent({
   name: 'TheMasonry',
   components: {
-    // CTAHome
     BaseButton,
   },
   props: {
@@ -55,7 +56,7 @@ export default defineComponent({
   setup: (props) => {
     const imagesCount = ref<number>(1)
     const temp = ref<Array<any>>([])
-    const hover = ref<String>()
+    const { toClipboard } = useClipboard()
 
     const resizeMasonryItem = (item: any) => {
       let grid = document.getElementsByClassName('masonry')[0],
@@ -102,6 +103,17 @@ export default defineComponent({
       }
     }
 
+    const copyUrl = async (id: String) => {
+      try {
+        var suffix = '/entity/' + id
+        var splitted = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+        var url = splitted + suffix
+        await toClipboard(url)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
     const rendered = () => {
       imagesCount.value++
     }
@@ -110,8 +122,8 @@ export default defineComponent({
 
     return {
       rendered,
-      hover,
       t,
+      copyUrl,
     }
   },
 })
