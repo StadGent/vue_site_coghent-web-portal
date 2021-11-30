@@ -14,9 +14,9 @@
 
             <span v-show="!small" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
               <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
-                <p class="opacity-100 mb-2 px-10 font-bold">{{ entity.title[0].value }}</p>
-                <p id="description" class="opacity-100 px-10 overflow-ellipsis break-words">{{ entity.description[0].value }}</p>
-                <base-button :text="t('main.more')" custom-style="ghost-white" :icon-shown="true" :iconLeft="false" custom-icon="arrowRight" />
+                <p v-if="entity.title" class="opacity-100 mb-2 px-10 font-bold">{{ entity.title[0].value }}</p>
+                <p v-if="entity.description" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">{{ entity.description[0].value }}</p>
+                <base-button :text="t('main.more')" custom-style="ghost-white" :icon-shown="true" :iconLeft="false" custom-icon="arrowRightLine" />
 
                 <div @click.prevent="copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
