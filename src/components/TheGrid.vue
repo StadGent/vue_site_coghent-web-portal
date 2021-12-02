@@ -5,7 +5,7 @@
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div v-show="defaultRelations.length === 0" class="w-8/12 py-6">
-      <base-search v-model="searchQueryForInput" :label="t('main.library')" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
+      <base-search v-model="searchQueryForInput" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
     </div>
     <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
 
