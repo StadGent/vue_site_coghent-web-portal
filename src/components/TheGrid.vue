@@ -4,11 +4,13 @@
       {{ t('main.title') }}
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
-    <div v-show="defaultRelations.length === 0" class="w-full py-6 flex justify-center items-center">
+    <div v-show="defaultRelations.length === 0" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
       <div class="w-8/12">
         <base-search v-model="searchQueryForInput" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
       </div>
-      <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
+      <div class="lg:absolute lg:right-0">
+        <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
+      </div>
     </div>
     <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
 
