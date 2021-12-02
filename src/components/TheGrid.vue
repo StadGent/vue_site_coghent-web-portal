@@ -4,8 +4,11 @@
       {{ t('main.title') }}
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
-    <div v-show="defaultRelations.length === 0" class="w-8/12 py-6">
-      <base-search v-model="searchQueryForInput" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
+    <div v-show="defaultRelations.length === 0" class="w-full py-6 flex justify-center items-center">
+      <div class="w-8/12">
+        <base-search v-model="searchQueryForInput" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
+      </div>
+      <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" :icon-shown="false" :on-click="() => resetQuery()" />
     </div>
     <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
 
@@ -27,7 +30,7 @@ import { Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
 
 export default defineComponent({
   name: 'AssetGrid',
-  components: { BaseSearch, TheMasonry, Filter },
+  components: { BaseSearch, TheMasonry, BaseButton, Filter },
   props: {
     defaultSearchQuery: {
       type: String,
@@ -64,7 +67,7 @@ export default defineComponent({
       return selectedFilters.value
     })
 
-    const { result, loading, fetchMore, onResult } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
+    const { result, loading, fetchMore, onResult, refetch } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
       GetEntitiesDocument,
 
       () => ({
@@ -99,14 +102,22 @@ export default defineComponent({
       })
     )
 
+    const isEndOfResult = (queryResult: GetEntitiesQuery | undefined) => {
+      if (queryResult) {
+        if (queryResult && queryResult.Entities?.results && queryResult.Entities?.results.length < limit) {
+          endOfData.value = true
+        } else {
+          endOfData.value = false
+        }
+      } else {
+        endOfData.value = true
+      }
+    }
+
     onResult((queryResult) => {
       entityData.value = queryResult.data
 
-      if (queryResult.data && queryResult.data.Entities?.results && queryResult.data.Entities?.results.length < limit) {
-        endOfData.value = true
-      } else {
-        endOfData.value = false
-      }
+      isEndOfResult(queryResult.data)
     })
 
     onRelationResult((queryResult) => {
@@ -118,11 +129,29 @@ export default defineComponent({
     })
 
     const getData = () => {
+      if (searchQueryForQuery.value !== searchQueryForInput.value) {
+        if (masonry.value && masonry.value.contructTiles) {
+          masonry.value.contructTiles(limit, true)
+        }
+        selectedFilters.value = []
+        searchQueryForQuery.value = searchQueryForInput.value
+      }
+
+      if (searchQueryForQuery.value === '' && searchQueryForInput.value === '') {
+        resetQuery()
+      }
+    }
+
+    const resetQuery = () => {
       if (masonry.value && masonry.value.contructTiles) {
         masonry.value.contructTiles(limit, true)
       }
       selectedFilters.value = []
-      searchQueryForQuery.value = searchQueryForInput.value
+      if (searchQueryForQuery.value === '') {
+        refetch()
+      } else {
+        searchQueryForQuery.value = ''
+      }
     }
 
     const updatSelectedFilters = (input: string[]) => {
@@ -146,8 +175,11 @@ export default defineComponent({
             endOfData.value = true
             return previousData
           }
+          console.log(fetchMoreResult?.Entities?.results?.length)
+          if (fetchMoreResult?.Entities && fetchMoreResult?.Entities?.results && fetchMoreResult?.Entities?.results?.length < limit) {
+            endOfData.value = true
+          }
           if (previousData.Entities && previousData.Entities.results && fetchMoreResult!.Entities?.results) {
-            endOfData.value = false
             return {
               previousData,
               Entities: {
@@ -178,6 +210,7 @@ export default defineComponent({
       entityData,
       emptySearch,
       masonry,
+      resetQuery,
     }
   },
 })
