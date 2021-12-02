@@ -8,7 +8,7 @@
       <div class="w-8/12">
         <base-search v-model="searchQueryForInput" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
       </div>
-      <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" :icon-shown="false" :on-click="() => resetQuery()" />
+      <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
     </div>
     <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
 
