@@ -22,7 +22,7 @@ export default defineComponent({
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
-    const indexValue = configStore.config.value.vueAppIndex;
+    const indexValue = configStore.config.value.vueAppIndex
 
     const getIndexValue = () => {
       let indexStr = ''

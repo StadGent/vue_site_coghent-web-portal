@@ -5,23 +5,12 @@
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div v-show="defaultRelations.length === 0" class="w-8/12 py-6">
-      <base-search v-model="searchQueryForInput" :label="t('main.library')" :search-label="t('main.search')" @on-click="getData" v-on:keyup.enter="getData" />
+      <base-search v-model="searchQueryForInput" :label="t('main.library')" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
     </div>
-    <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="'Alle werken'" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
-    <div v-show="loading" class="pt-10">
-      <svg class="animate-spin -ml-1 mr-3 h-20 w-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-      </svg>
-    </div>
-    <div v-if="emptySearch">
-      <p v-show="!loading" class="text-center">
-        {{ t('main.empty') }}
-      </p>
-    </div>
-    <div v-if="!emptySearch" class="flex flex-col items-center justify-center">
-      <the-masonry v-if="entityData" v-show="!loading" :small="small" :entities="entityData.Entities" :loading="loading" />
-      <base-button v-show="!loading && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4 text-center" />
+    <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
+
+    <div class="flex w-full flex-col items-center justify-center">
+      <the-masonry ref="masonry" :small="small" :entities="entityData ? entityData.Entities : {}" :loading="loading" :items-each-load="limit" :end-of-data="endOfData" @load-more="loadMore" />
     </div>
   </section>
 </template>
@@ -35,15 +24,14 @@ import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
 import { Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
-import { empty } from '@apollo/client/core'
 
 export default defineComponent({
   name: 'AssetGrid',
-  components: { BaseSearch, TheMasonry, BaseButton, Filter },
+  components: { BaseSearch, TheMasonry, Filter },
   props: {
     defaultSearchQuery: {
       type: String,
-      default: 'Nova',
+      default: '',
       required: false,
     },
     defaultRelations: {
@@ -62,13 +50,14 @@ export default defineComponent({
     const searchQueryForInput = ref<string>('')
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery)
     let _skip: Maybe<Scalars['Int']> = 0
-    const _limit: Maybe<Scalars['Int']> = 20
+    const limit: Maybe<Scalars['Int']> = 25
     const endOfData = ref<Boolean>(false)
     const entityData = ref<GetEntitiesQuery | undefined>()
     const relationData = ref<GetEntitiesQuery | undefined>()
     const emptySearch = ref<Boolean>(false)
+    const masonry = ref<any>(null)
 
-    const getSelectedFilters = computed(() => {
+    const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
         return props.defaultRelations
       }
@@ -79,7 +68,7 @@ export default defineComponent({
       GetEntitiesDocument,
 
       () => ({
-        limit: _limit,
+        limit: limit,
         skip: (_skip = 0),
         searchValue: {
           value: searchQueryForQuery.value,
@@ -96,7 +85,7 @@ export default defineComponent({
     const { result: relationResult, onResult: onRelationResult } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
       GetEntitiesDocument,
       () => ({
-        limit: _limit,
+        limit: limit,
         skip: _skip,
         searchValue: {
           value: searchQueryForQuery.value,
@@ -110,39 +99,44 @@ export default defineComponent({
       })
     )
 
-    onResult(() => {
-      const temp = result.value
-      if (temp?.Entities?.results?.length === 0 || !temp?.Entities?.results) {
+    onResult((queryResult) => {
+      entityData.value = queryResult.data
+
+      if (queryResult.data && queryResult.data.Entities?.results && queryResult.data.Entities?.results.length < limit) {
         endOfData.value = true
-        emptySearch.value = true
       } else {
         endOfData.value = false
-        entityData.value = temp
-        emptySearch.value = false
       }
     })
 
-    onRelationResult(() => {
-      const temp = relationResult.value
-      console.log('relationData', temp)
-      if (temp?.Entities?.relations?.length === 0 || !temp?.Entities?.relations) {
+    onRelationResult((queryResult) => {
+      if ((queryResult.data && queryResult.data.Entities?.relations?.length === 0) || (queryResult.data && !queryResult.data.Entities?.relations)) {
         //do nothing for now
       } else {
-        relationData.value = temp
+        relationData.value = queryResult.data
       }
     })
 
     const getData = () => {
+      if (masonry.value && masonry.value.contructTiles) {
+        masonry.value.contructTiles(limit, true)
+      }
       selectedFilters.value = []
-      searchQueryForQuery.value = searchQueryForInput.value === '' ? props.defaultSearchQuery : searchQueryForInput.value
+      searchQueryForQuery.value = searchQueryForInput.value
     }
 
     const updatSelectedFilters = (input: string[]) => {
+      if (masonry.value && masonry.value.contructTiles) {
+        masonry.value.contructTiles(limit, true)
+      }
       selectedFilters.value = input
     }
 
     const loadMore = () => {
-      _skip = _skip! + _limit
+      if (masonry.value && masonry.value.contructTiles) {
+        masonry.value.contructTiles(limit)
+      }
+      _skip = _skip! + limit
       fetchMore({
         variables: {
           skip: _skip,
@@ -170,6 +164,7 @@ export default defineComponent({
 
     return {
       t,
+      limit,
       getData,
       loading,
       result,
@@ -182,6 +177,7 @@ export default defineComponent({
       endOfData,
       entityData,
       emptySearch,
+      masonry,
     }
   },
 })

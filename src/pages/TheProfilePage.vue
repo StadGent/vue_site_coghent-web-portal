@@ -97,7 +97,7 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const user: User = userStore.user
     const configStore = StoreFactory.get(ConfigStore)
-    const userEditUrl = configStore.config.value.userEditUrl;
+    const userEditUrl = configStore.config.value.userEditUrl
 
     //temp
     const buttonClick = () => {

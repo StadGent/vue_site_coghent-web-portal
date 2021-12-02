@@ -31,21 +31,17 @@ export default defineComponent({
   },
   emits: ['newSelected'],
   setup(props: any, { emit }: SetupContext) {
-    let tags = ref(false)
-
     const toggleFilters = () => {
       emit('newSelected', [])
     }
 
     const addToSelectedTags = (tag: string) => {
-      let selectedTags = props.selected
-      console.log(`Add "${tag}" to filters`)
+      let selectedTags = [...props.selected]
       if (selectedTags.includes(tag, 0)) {
         selectedTags.splice(selectedTags.indexOf(tag), 1)
       } else {
         selectedTags.push(tag)
       }
-
       emit('newSelected', selectedTags)
     }
 

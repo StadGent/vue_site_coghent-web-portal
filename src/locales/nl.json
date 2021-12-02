@@ -15,7 +15,8 @@
   },
   "buttons": {
     "login": "Aanmelden",
-    "storybox": "Verhalenbox"
+    "storybox": "Verhalenbox",
+    "all-works": "Alle werken"
   },
   "details": {
     "discover": "Ontdek ook andere gerelateerde werken",
