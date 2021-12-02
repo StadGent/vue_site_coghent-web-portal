@@ -1,6 +1,6 @@
 <template>
   <!--Details modal-->
-   <base-modal v-model:isShow="openModal" class="z-50">
+  <base-modal v-model:isShow="openIModal" class="z-50">
     <section class="flex flex-col">
       <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
         <section class="bg-background-light lg:min-w-max">
@@ -16,11 +16,14 @@
             </p>
           </div>
           <div v-if="photos" class="flex flex-row lg:flex-col lg:h-96 overflow-x-auto">
-            <img v-for="photo in photos" :key="photo" class="m-3 lg:ml-6 w-96 sm:w-96 lg:min-w-11/12" :src="photo" />
+            <div class="flex">
+              <img v-for="photo in photos" :key="photo" class="m-3 lg:ml-6 w-96 sm:w-96 lg:min-w-11/12" :src="photo" />
+              <creative-commons />
+            </div>
           </div>
         </section>
         <section class="bg-background-medium">
-          <p v-show="result.Entity?.description && result.Entity?.description[0]" class=" ml-8 m-3 mt-6 lg:mr-10 lg:mt-20">
+          <p v-show="result.Entity?.description && result.Entity?.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 lg:mt-20">
             {{ result.Entity?.description[0]?.value }}
           </p>
           <div class="font-medium pb-2">
@@ -57,10 +60,97 @@
     </section>
   </base-modal>
 
+  <!-- CC Modal -->
+
+  <base-modal :isShow="false" class="z-50 transform">
+    <div class="w-full h-44 flex flex-wrap place-content-center px-36 bg-background-light">
+      <h1 class="font-bold text-3xl">Alles wat je wil weten over Creative Commons</h1>
+    </div>
+    <div class="bg-background-medium flex flex-wrap overflow-y-auto">
+      <div class="px-36 space-y-6 mt-12">
+        <div class="space-y-2">
+          <p class="font-bold text-xl">Wat zijn Creative Commons?</p>
+          <p class="text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud voor verdere uitleg over
+            Creative Commons.
+          </p>
+        </div>
+        <div class="space-y-2">
+          <p class="font-bold text-xl">Waarom zijn Creative Commons belangrijk?</p>
+          <p class="text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud voor verdere uitleg over
+            Creative Commons.
+          </p>
+        </div>
+        <div class="space-y-2">
+          <p class="font-bold text-xl">Welke Creative Commons worden gebruikt door CoGhent?</p>
+          <p class="text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud voor verdere uitleg over
+            Creative Commons.
+          </p>
+        </div>
+        <div class="flex flex-row space-x-10 pt-4">
+          <img class="w-48 h-16" src="../assets/publicdomain.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">Public Domain</p>
+            <p class="text-sm">
+              Use this tool if you have identified a work that is free of known copyright restrictions. Creative Commons does not recommend this tool for works that are restricted by copyright laws in
+              one or more jurisdictions.
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-row space-x-10">
+          <img class="w-48 h-16" src="../assets/cc-zero.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">CC0</p>
+            <p class="text-sm">
+              Use this universal tool if you are a holder of copyright or database rights, and you wish to waive all your interests that may exist in your work worldwide. Because copyright laws differ
+              around the world, you may use this tool even though you may not have copyright in your jurisdiction, but want to be sure to eliminate any copyrights you may have in other jurisdictions.
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-row space-x-10">
+          <img class="w-48 h-16" src="../assets/by-nc-nd.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">CC BY-NC-ND (Attribution-NonCommercial-NoDerivs)</p>
+            <p class="text-sm">You are free to share, copy and redistribute the material in any medium or format. The licensor cannot revoke these freedoms as long as you follow the license terms:</p>
+            <p class="text-sm">
+              Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests
+              the licensor endorses you or your use.
+            </p>
+            <p class="text-sm">NonCommercial: You may not use the material for commercial purposes.</p>
+            <p class="text-sm">NoDerivatives: If you remix, transform, or build upon the material, you may not distribute the modified material.</p>
+            <p class="text-sm">No additional restrictions: You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</p>
+          </div>
+        </div>
+        <div class="flex flex-row space-x-10">
+          <img class="w-48 h-12" src="../assets/InCopyright.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">In Copyright</p>
+            <p class="text-sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-row space-x-10 pb-16">
+          <img class="w-48 h-10" src="../assets/InCopyright-rightsholder.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">Unknown Rightsholder</p>
+            <p class="text-sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </base-modal>
+
   <!-- main-->
   <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
-      <the-carousel v-if="photos" :source="photos" />
+      <the-carousel v-if="photos" :source="photos" @opening-ccmodal="openCCModal" />
     </section>
     <CardComponent v-if="result" :large="true" class="mx-4 sm:mx-0">
       <div class="flex flex-col bg-background-medium px-10 py-10">
@@ -93,7 +183,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment, CreativeCommons } from 'coghent-vue-3-component-library'
 import RelationTag from './RelationTag.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
@@ -109,6 +199,7 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
     BaseModal,
+    CreativeCommons,
   },
   setup: () => {
     const id = asString(useRoute().params['entityID'])
@@ -116,18 +207,23 @@ export default defineComponent({
     const selectedImageIndex = ref<number>(0)
     const relations = ref([])
     const photos = ref<string[] | undefined>()
-    const openModal = ref<Boolean>(false)
+    const openIModal = ref<Boolean>(false)
     const types = ref<any[] | undefined>()
     const relationStringArray = ref<string[]>([])
     const relationsLabelArray = ref<string[]>([])
+    const openCModal = ref<Boolean>(false)
 
     const onClick = () => {
       console.log('Click', result.value)
     }
 
     const openInfoModal = () => {
-      openModal.value = true
-      console.log(openModal.value)
+      openIModal.value = true
+    }
+
+    const openCCModal = (show: boolean) => {
+      openCModal.value = show
+      console.log('Opening Cmodal', openCModal.value)
     }
 
     onResult((queryResult: any) => {
@@ -165,11 +261,12 @@ export default defineComponent({
       t,
       photos,
       openInfoModal,
-      openModal,
+      openIModal,
       onClick,
       types,
       relationStringArray,
-      relationsLabelArray
+      relationsLabelArray,
+      openCCModal,
     }
   },
 })
