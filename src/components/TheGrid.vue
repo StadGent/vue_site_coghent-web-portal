@@ -151,6 +151,7 @@ export default defineComponent({
       if (searchQueryForQuery.value === '') {
         refetch()
       } else {
+        searchQueryForInput.value = ''
         searchQueryForQuery.value = ''
       }
     }
