@@ -106,7 +106,7 @@ export default defineComponent({
 
     const isEndOfResult = (queryResult: GetEntitiesQuery | undefined) => {
       if (queryResult) {
-        if (queryResult && queryResult.Entities?.results && queryResult.Entities?.results.length < limit) {
+        if (queryResult && queryResult.Entities?.results && queryResult.Entities?.count && queryResult.Entities?.results.length >= queryResult.Entities?.count) {
           endOfData.value = true
         } else {
           endOfData.value = false
@@ -118,7 +118,6 @@ export default defineComponent({
 
     onResult((queryResult) => {
       entityData.value = queryResult.data
-
       isEndOfResult(queryResult.data)
     })
 
@@ -177,7 +176,6 @@ export default defineComponent({
             endOfData.value = true
             return previousData
           }
-          console.log(fetchMoreResult?.Entities?.results?.length)
           if (fetchMoreResult?.Entities && fetchMoreResult?.Entities?.results && fetchMoreResult?.Entities?.results?.length < limit) {
             endOfData.value = true
           }
