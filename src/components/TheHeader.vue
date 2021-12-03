@@ -61,7 +61,7 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
-    const isHomeActive = ref<Boolean>(route.path === '/home')
+    const isHomeActive = ref<Boolean>(route.path === '/')
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
     const userStore = StoreFactory.get(UserStore)
     const user: User = userStore.user
@@ -69,7 +69,7 @@ export default defineComponent({
     watch(
       () => route.path,
       () => {
-        isHomeActive.value = route.path === '/home'
+        isHomeActive.value = route.path === '/'
         isPavilionActive.value = route.path === '/pavilion'
       }
     )
