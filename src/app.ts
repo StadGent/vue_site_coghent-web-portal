@@ -10,14 +10,12 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
-import VueLazyLoad from 'vue3-lazyload'
 import { createHead } from '@vueuse/head'
-
 
 export default async function (authenticated: boolean = true) {
   const configStore = StoreFactory.get(ConfigStore)
   const app = createSSRApp(App)
-  const head = createHead();
+  const head = createHead()
 
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
@@ -42,7 +40,6 @@ export default async function (authenticated: boolean = true) {
     // .use(auth as any)
     .use(i18n)
     .use(head)
-    .use(VueLazyLoad)
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
     })
