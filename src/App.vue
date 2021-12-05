@@ -4,8 +4,8 @@
     <div class="container">
       <the-header />
       <router-view />
+      <details-modal />
       <creative-modal />
-      <details-modal/>
     </div>
   </div>
 </template>

@@ -19,7 +19,7 @@
               <div class="flex relative">
                 <img class="m-3 lg:ml-6 w-48 md:w-76 lg:w-96 sm:w-96 lg:min-w-11/12" :src="photo.original_file_location" />
 
-                <div class="top-4 right-0 md:right-1 lg:top-5 lg:right-4  absolute z-30 bg-background-light rounded-full cursor-pointer">
+                <div class="top-4 right-0 md:right-1 lg:top-5 lg:right-4 absolute z-30 bg-background-light rounded-full cursor-pointer">
                   <base-button class="absolute right-0 w-0 z-30 transform scale-75 md:scale-90" customStyle="cc-round-black" customIcon="creativeCommonsCC" :iconShown="true" :onClick="openCCModal" />
                 </div>
               </div>
@@ -74,6 +74,7 @@ import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
 import { Entity } from 'coghent-vue-3-component-library/lib/queries'
 import { BaseButton } from 'coghent-vue-3-component-library'
+import { useCCModal } from './CreativeModal.vue'
 
 export type DetailsModalType = {
   state: ModalState
@@ -124,6 +125,7 @@ export default defineComponent({
   setup() {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     const openTab = ref<boolean>(false)
+    const { openCCModal } = useCCModal()
 
     const toggleCCTab = () => {
       openTab.value = !openTab.value
@@ -138,6 +140,7 @@ export default defineComponent({
       openTab,
       entity,
       t,
+      openCCModal
     }
   },
 })
