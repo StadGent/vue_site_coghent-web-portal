@@ -4,6 +4,8 @@
     <div class="container">
       <the-header />
       <router-view />
+      <creative-modal />
+      <details-modal/>
     </div>
   </div>
 </template>
@@ -15,10 +17,12 @@ import TheHeader from '@/components/TheHeader.vue'
 import { useHead } from '@vueuse/head'
 import { ConfigStore } from './stores/ConfigStore'
 import StoreFactory from './stores/StoreFactory'
+import CreativeModal from './components/CreativeModal.vue'
+import DetailsModal from './components/DetailsModal.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader },
+  components: { TheHeader, CreativeModal, DetailsModal },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)

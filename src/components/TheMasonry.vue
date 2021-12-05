@@ -24,7 +24,7 @@
             <the-masonry-image
               :url="
                 entity !== 'placeholder' && entity.mediafiles && entity.mediafiles.length > 0
-                  ? `${iiifUrl}/${entity.mediafiles[0].filename}/${tile.type === 'SingleImage' ? 'full' : 'square'}/,1000/0/default.jpg`
+                  ? `${iiifUrl}iiif/3/${entity.mediafiles[0].filename}/${tile.type === 'SingleImage' ? 'full' : 'square'}/,1000/0/default.jpg`
                   : undefined
               "
               @loaded="rendered"

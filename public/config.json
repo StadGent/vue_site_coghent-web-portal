@@ -3,7 +3,7 @@
   "lazyLoad": "http://localhost:8070/lazy-loading.svg",
   "userEditUrl": "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/",
   "vueAppIndex": false,
-  "iiifLink": "http://localhost:8182/iiif/3",
+  "iiifLink": "http://localhost:8182/",
   "oidc": {
     "baseUrl": "http://localhost:8080/auth/realms/dams",
     "clientId": "coghent-web-portal",
