@@ -1,87 +1,4 @@
 <template>
-  <!--Details modal-->
-  <!-- <base-modal v-model:isShow="openIModal" class="z-50">
-    <section class="flex flex-col">
-      <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
-        <section class="bg-background-light lg:min-w-max">
-          <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
-            {{ result.Entity?.title[0]?.value }}
-          </h1>
-          <div class="m-3 lg:ml-6 lg:mt-6">
-            <p>
-              <strong>{{ t('details.modal.objectNumber') }}</strong> ongekend
-            </p>
-            <p>
-              <strong>{{ t('details.modal.objectName') }}</strong> ongekend
-            </p>
-          </div>
-          <div v-if="photos" class="flex flex-row lg:flex-col lg:h-96 overflow-x-auto">
-            <div class="flex relative">
-              <img v-for="photo in photos" :key="photo" class="m-3 lg:ml-6 w-96 sm:w-96 lg:min-w-11/12" :src="photo" />
-              <div class="top-4 right-2 hidden z-30 bg-background-light mt-2 rounded-full mr-3 cursor-pointer absolute lg:block">
-                <div class="static">
-                  <div v-show="openTab" class="flex bg-background-light inline-block rounded-full items-center w-min shadow px-5 z-20 pr-8">
-                    <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsCC" />
-                    <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsBY" />
-                    <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsNC" />
-                    <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsSA" />
-                    <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 invisible sm:invisible" />
-                  </div>
-                </div>
-                <base-button
-                  class="absolute right-0 w-0 z-30 transform scale-90"
-                  :class="{ [`-mt-10`]: openTab }"
-                  customStyle="cc-round-black"
-                  customIcon="creativeCommonsCC"
-                  :iconShown="true"
-                  :onClick="toggleCCTab"
-                />
-              </div>
-
-              <div class="top-0 right-0 absolute z-30 bg-background-light mt-2 rounded-full mr-3 cursor-pointer lg:hidden">
-                <base-button class="absolute right-0 w-0 z-30 transform scale-90" customStyle="cc-round-black" customIcon="creativeCommonsCC" :iconShown="true" :onClick="openCCModal" />
-              </div>
-            </div>
-          </div>
-        </section>
-        <section class="bg-background-medium">
-          <p v-show="result.Entity?.description && result.Entity?.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 lg:mt-20">
-            {{ result.Entity?.description[0]?.value }}
-          </p>
-          <div class="font-medium pb-2">
-            <relation-tag v-for="relation in result.Entity?.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
-          </div>
-          <h3 class="font-bold text-lg mt-5 ml-8">
-            {{ t('details.modal.characteristics') }}
-          </h3>
-          <ul class="mt-5 flex flex-col gap-3 ml-8">
-            <li v-for="metaData in result.Entity?.metadata" :key="metaData.value" class="w-full inline-block">
-              <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
-            </li>
-          </ul>
-          <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
-            {{ t('details.modal.associations') }}
-          </h3>
-          <div class="mx-5 flex gap-3 ml-8 mb-4">
-            <p v-for="relationLabel in relationsLabelArray" :key="relationLabel" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
-              {{ relationLabel }}
-            </p>
-          </div>
-        </section>
-      </section>
-      <section id="footer" class="flex items-center justify-center bg-background-medium lg:bg-background-light p-2 lg:p-10 mb-3 lg:mb-0">
-        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="link" :icon-shown="true" />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="onClick" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-        <div class="border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
-        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-        <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
-        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
-      </section>
-    </section>
-  </base-modal> -->
-
   <!-- main-->
   <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
@@ -119,7 +36,6 @@ import { computed, defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
-// import RelationTag from './RelationTag.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
@@ -130,12 +46,10 @@ const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 export default defineComponent({
   name: 'EntityDetails',
   components: {
-    // RelationTag,
     TheGrid,
     CardComponent,
     TheCarousel,
     BaseButton,
-    // BaseModal,
   },
   setup: () => {
     const id = asString(useRoute().params['entityID'])
