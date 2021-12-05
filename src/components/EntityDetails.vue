@@ -118,7 +118,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment } from 'coghent-vue-3-component-library'
 // import RelationTag from './RelationTag.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
