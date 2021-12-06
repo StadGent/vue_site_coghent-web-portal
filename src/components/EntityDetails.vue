@@ -87,7 +87,7 @@ export default defineComponent({
       })
       types.value = typeArray
 
-      if (result && result.value.Entity) {
+      if (result.value && result.value.Entity) {
         setEntity(result.value.Entity)
       }
     })
