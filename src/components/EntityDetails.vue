@@ -86,9 +86,10 @@ export default defineComponent({
         }
       })
       types.value = typeArray
-      
-      if(result && result.value.Entity) setEntity(result.value.Entity)
-  
+
+      if (result && result.value.Entity) {
+        setEntity(result.value.Entity)
+      }
     })
 
     const { t } = useI18n()
@@ -103,7 +104,7 @@ export default defineComponent({
       relationStringArray,
       relationsLabelArray,
       openCCModal,
-      openDetailsModal
+      openDetailsModal,
     }
   },
 })
