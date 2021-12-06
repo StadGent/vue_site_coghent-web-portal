@@ -81,7 +81,7 @@ export type DetailsModalType = {
   state: ModalState
 }
 
-const entity = ref<Entity>()
+const entity = ref<any>()
 
 let groupedMetadata: any[] = []
 
@@ -113,7 +113,7 @@ export const useDetailsModal = () => {
 
   const groupMetaData = () => {
     if (entity.value?.metadata) {
-      var grouped = entity.value?.metadata.reduce(function (r, a) {
+      var grouped = entity.value?.metadata.reduce(function (r: any, a : any) {
         if (!a) return
         r[a.key] = r[a.key] || []
         r[a?.key].push(a)
