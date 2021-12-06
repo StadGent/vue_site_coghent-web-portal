@@ -14,7 +14,7 @@
               <strong>{{ t('details.modal.objectName') }}</strong> ongekend
             </p>
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col overflow-x-auto h-max">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col overflow-x-auto lg:overflow-y-auto h-max">
             <div v-for="photo in entity.mediafiles" :key="photo">
               <div class="flex relative">
                 <img class="m-3 lg:ml-6 w-48 md:w-76 lg:w-96 sm:w-96 lg:min-w-11/12" :src="photo.original_file_location" />
@@ -37,8 +37,8 @@
             {{ t('details.modal.characteristics') }}
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
-            <li v-for="metaData in entity.metadata" :key="metaData.value" class="w-full inline-block">
-              <strong class="mr-5">{{ metaData.key }}</strong> {{ metaData.value }}
+            <li v-for="metaType in groupedMetadata" :key="metaType">
+              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
@@ -72,15 +72,18 @@ import { defineComponent, ref, watch } from 'vue'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
-import { Entity } from 'coghent-vue-3-component-library/lib/queries'
+import { Entity, Metadata } from 'coghent-vue-3-component-library/lib/queries'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
+import { Maybe } from 'graphql/jsutils/Maybe'
 
 export type DetailsModalType = {
   state: ModalState
 }
 
 const entity = ref<Entity>()
+
+let groupedMetadata: any[] = []
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -105,7 +108,34 @@ export const useDetailsModal = () => {
 
   const setEntity = (data: Entity) => {
     entity.value = data
-    console.log('Set Entity', entity.value)
+    groupMetaData()
+  }
+
+  const groupMetaData = () => {
+    if (entity.value?.metadata) {
+      var grouped = entity.value?.metadata.reduce(function (r, a) {
+        if (!a) return
+        r[a.key] = r[a.key] || []
+        r[a?.key].push(a)
+        return r
+      }, Object.create(null))
+      let array: any[] = []
+      Object.values(grouped).forEach((fromEntry) => {
+        array.push(fromEntry)
+      })
+      Object.entries(grouped).forEach((entry) => {
+        array.forEach((metaType) => {
+          let groupedMetaString = ''
+          metaType.forEach((metaData: any) => {
+            if (entry[0] === metaData.key) groupedMetaString = groupedMetaString + metaData.value + ', '
+          })
+          if (groupedMetaString != '') {
+            groupedMetaString = groupedMetaString.slice(0, -2)
+            groupedMetadata.push({ key: entry[0], groupedMetaString })
+          }
+        })
+      })
+    }
   }
 
   return {
@@ -140,7 +170,8 @@ export default defineComponent({
       openTab,
       entity,
       t,
-      openCCModal
+      openCCModal,
+      groupedMetadata,
     }
   },
 })

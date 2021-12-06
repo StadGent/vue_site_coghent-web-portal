@@ -66,7 +66,6 @@ export default defineComponent({
     onResult((queryResult: any) => {
       const photosArray: string[] = []
       queryResult.data.Entity?.mediafiles.forEach((value: any) => {
-        console.log(value)
         if (value.original_file_location) {
           photosArray.push(value.original_file_location)
         }
@@ -87,8 +86,6 @@ export default defineComponent({
         }
       })
       types.value = typeArray
-
-      console.log('Photos', photos.value);
       
       setEntity(result.value.Entity)
   
