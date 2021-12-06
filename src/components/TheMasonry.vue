@@ -198,9 +198,10 @@ export default defineComponent({
         () => props.entities.results,
         (value) => {
           if (value) {
-            const filterdValue: Entity[] = value.filter((item: Entity) => {
-              return item.mediafiles && item.mediafiles.length > 0
-            })
+            // const filterdValue: Entity[] = value.filter((item: Entity) => {
+            //   return item.mediafiles && item.mediafiles.length > 0
+            // })
+            const filterdValue: Entity[] = value
             const numberOfResult = filterdValue.length
             let entityIndex = 0
             let lastIndex = 0
