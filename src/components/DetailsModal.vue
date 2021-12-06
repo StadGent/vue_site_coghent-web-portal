@@ -106,7 +106,8 @@ export const useDetailsModal = () => {
     })
   }
 
-  const setEntity = (data: Entity) => {
+  const setEntity = (data: any) => {
+    if(!data) return
     entity.value = data
     groupMetaData()
   }
