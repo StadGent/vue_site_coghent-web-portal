@@ -12,7 +12,13 @@
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
       </div>
     </div>
-    <Filter :loading="loading" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData ? relationData.Entities.relations : []" @new-selected="updatSelectedFilters" />
+    <Filter
+      :loading="loadingRelations"
+      :selected="selectedFilters"
+      :filter-all="t('buttons.all-works')"
+      :filters="relationData ? relationData.Entities.relations : []"
+      @new-selected="updatSelectedFilters"
+    />
 
     <div class="flex w-full flex-col items-center justify-center">
       <the-masonry ref="masonry" :small="small" :entities="entityData ? entityData.Entities : {}" :loading="loading" :items-each-load="limit" :end-of-data="endOfData" @load-more="loadMore" />
@@ -91,7 +97,11 @@ export default defineComponent({
       })
     )
 
-    const { result: relationResult, onResult: onRelationResult } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
+    const {
+      result: relationResult,
+      onResult: onRelationResult,
+      loading: loadingRelations,
+    } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
       GetEntitiesDocument,
       () => ({
         limit: limit,
@@ -213,6 +223,7 @@ export default defineComponent({
       searchQueryForQuery,
       searchQueryForInput,
       relationData,
+      loadingRelations,
       loadMore,
       endOfData,
       entityData,
