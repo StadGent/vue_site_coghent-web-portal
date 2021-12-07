@@ -52,8 +52,7 @@ import useClipboard from 'vue-clipboard3'
 import TheMasonryImage from './TheMasonryImage.vue'
 import { Entity } from 'coghent-vue-3-component-library/lib/queries'
 import { randomizer } from '../helpers'
-import StoreFactory from '@/stores/StoreFactory'
-import { ConfigStore } from '@/stores/ConfigStore'
+import useIIIF from '../composables/useIIIF'
 
 type MasonryImage = 'placeholder' | Entity
 
@@ -114,8 +113,7 @@ export default defineComponent({
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
     const loadMore = () => emit('loadMore')
-    const configStore = StoreFactory.get(ConfigStore)
-    const iiifUrl = configStore.config.value.iiifLink
+    const { generateUrl } = useIIIF()
 
     const tiles: MasonryTileConfig = {
       SingleImage: {
@@ -247,8 +245,8 @@ export default defineComponent({
     }
 
     const getImageUrl = (entity: Entity | 'placeholder', tiletype: keyof MasonryTileConfig): string | undefined => {
-      if (entity !== 'placeholder' && entity.mediafiles && entity.mediafiles.length > 0 && entity.mediafiles[0]) {
-        return `${iiifUrl}iiif/3/${entity.mediafiles[0].filename}/${tiletype === 'SingleImage' ? 'full' : 'square'}/,1000/0/default.jpg`
+      if (entity !== 'placeholder' && entity.mediafiles && entity.mediafiles.length > 0 && entity.mediafiles[0]?.filename) {
+        return generateUrl(entity.mediafiles[0].filename, tiletype === 'SingleImage' ? 'full' : 'square')
       }
       if (entity === 'placeholder') {
         return undefined
@@ -258,7 +256,6 @@ export default defineComponent({
 
     return {
       t,
-      iiifUrl,
       loadMore,
       rendered,
       copyUrl,

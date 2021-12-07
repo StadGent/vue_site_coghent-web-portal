@@ -32,14 +32,15 @@
 </template>
 
 <script lang="ts">
-import {  defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument,  TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
+import useIIIF from '../composables/useIIIF'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
@@ -62,12 +63,14 @@ export default defineComponent({
     const relationsLabelArray = ref<string[]>([])
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
+    const { generateUrl } = useIIIF()
 
     onResult((queryResult: any) => {
       const photosArray: string[] = []
+
       queryResult.data.Entity?.mediafiles.forEach((value: any) => {
-        if (value.original_file_location) {
-          photosArray.push(value.original_file_location)
+        if (value.filename) {
+          photosArray.push(generateUrl(value.filename, 'full'))
         }
       })
       photos.value = photosArray
