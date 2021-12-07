@@ -2,7 +2,7 @@
   <!-- main-->
   <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
-      <the-carousel v-if="photos" :source="photos" @opening-ccmodal="openCCModal" />
+      <the-carousel v-if="photos" :source="photos" :infotext="t('main.info')" @opening-ccmodal="openCCModal" />
     </section>
     <CardComponent v-if="result" :large="true" class="mx-4 sm:mx-0">
       <div class="flex flex-col bg-background-medium px-10 py-10">
@@ -32,10 +32,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import {  defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, GetFullEntitiesDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument,  TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
