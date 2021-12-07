@@ -4,7 +4,7 @@
     <div class="container">
       <the-header />
       <router-view />
-      <details-modal />
+      <details-modal :scroll="true"/>
       <creative-modal />
     </div>
   </div>

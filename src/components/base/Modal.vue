@@ -5,14 +5,14 @@
 
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
       <div
-        class="inline-block align-bottom bg-neutral-0 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:my-8 sm:w-11/12"
+        class="inline-block align-bottom bg-text-red rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:my-8 sm:w-11/12"
         :class="{
           'sm:max-w-4xl': !large,
-          'h-screen-90': large,
+          'h-full': large,
           'overflow-y-scroll': scroll,
         }"
       >
-        <div class="bg-neutral-0 h-full w-full">
+        <div class="bg-neutral-0">
           <slot />
         </div>
       </div>

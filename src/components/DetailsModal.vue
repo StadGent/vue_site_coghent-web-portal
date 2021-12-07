@@ -14,10 +14,10 @@
               <strong>{{ t('details.modal.objectName') }}</strong> ongekend
             </p>
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col overflow-x-auto lg:overflow-y-auto h-max">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 overflow-x-auto lg:overflow-y-auto max-h-96">
             <div v-for="photo in entity.mediafiles" :key="photo">
               <div class="flex relative">
-                <img class="m-3 lg:ml-6 w-48 md:w-76 lg:w-96 sm:w-96 lg:min-w-11/12" :src="photo.original_file_location" />
+                <img class="m-3 mr-2 lg:ml-6 w-48 md:w-76 lg:w-96 sm:w-96 lg:min-w-11/12" :src="photo.original_file_location" />
 
                 <div class="top-4 right-0 md:right-1 lg:top-5 lg:right-4 absolute z-30 bg-background-light rounded-full cursor-pointer">
                   <base-button
@@ -32,7 +32,7 @@
             </div>
           </div>
         </section>
-        <section class="bg-background-medium">
+        <section class="bg-background-medium w-full">
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 lg:mt-20">
             {{ entity.description[0]?.value }}
           </p>
@@ -59,7 +59,7 @@
           </div>
         </section>
       </section>
-      <section id="footer" class="flex items-center justify-center bg-background-medium lg:bg-background-light p-2 lg:p-10 mb-3 lg:mb-0">
+      <section id="footer" class="flex items-center bg-background-light justify-center p-2 lg:p-10 mb-3 lg:mb-0">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
