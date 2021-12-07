@@ -113,7 +113,7 @@ export default defineComponent({
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
     const loadMore = () => emit('loadMore')
-    const { generateUrl } = useIIIF()
+    const { generateUrl, noImageUrl } = useIIIF()
 
     const tiles: MasonryTileConfig = {
       SingleImage: {
@@ -251,7 +251,7 @@ export default defineComponent({
       if (entity === 'placeholder') {
         return undefined
       }
-      return '/no-image.png'
+      return noImageUrl
     }
 
     return {

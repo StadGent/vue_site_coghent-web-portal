@@ -63,7 +63,7 @@ export default defineComponent({
     const relationsLabelArray = ref<string[]>([])
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
-    const { generateUrl } = useIIIF()
+    const { generateUrl, noImageUrl } = useIIIF()
 
     onResult((queryResult: any) => {
       const photosArray: string[] = []
@@ -73,7 +73,7 @@ export default defineComponent({
           photosArray.push(generateUrl(value.filename, 'full'))
         }
       })
-      photos.value = photosArray
+      photos.value = photosArray.length === 0 ? [noImageUrl] : photosArray
 
       queryResult.data.Entity?.relations
         .filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
