@@ -21,14 +21,7 @@
                 <div @click.prevent="copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
-            <the-masonry-image
-              :url="
-                entity !== 'placeholder' && entity.mediafiles && entity.mediafiles.length > 0
-                  ? `${iiifUrl}iiif/3/${entity.mediafiles[0].filename}/${tile.type === 'SingleImage' ? 'full' : 'square'}/,1000/0/default.jpg`
-                  : undefined
-              "
-              @loaded="rendered"
-            />
+            <the-masonry-image :url="getImageUrl(entity, tile.type)" @loaded="rendered" />
           </a>
         </div>
       </div>
@@ -198,8 +191,16 @@ export default defineComponent({
         () => props.entities.results,
         (value) => {
           if (value) {
-            const filterdValue: Entity[] = value.filter((item: Entity) => {
-              return item.mediafiles && item.mediafiles.length > 0
+            const filterdValue: Entity[] = value
+            filterdValue.forEach((item: Entity) => {
+              if (item.mediafiles && item.mediafiles.length > 0) {
+                item.mediafiles = [
+                  {
+                    _id: 'no-image',
+                    filename: '/no-image.png',
+                  },
+                ]
+              }
             })
             const numberOfResult = filterdValue.length
             let entityIndex = 0
@@ -255,14 +256,25 @@ export default defineComponent({
       resizeAllMasonryItems()
     }
 
+    const getImageUrl = (entity: Entity | 'placeholder', tiletype: keyof MasonryTileConfig): string | undefined => {
+      if (entity !== 'placeholder' && entity.mediafiles && entity.mediafiles.length > 0 && entity.mediafiles[0]) {
+        return `${iiifUrl}iiif/3/${entity.mediafiles[0].filename}/${tiletype === 'SingleImage' ? 'full' : 'square'}/,1000/0/default.jpg`
+      }
+      if (entity === 'placeholder') {
+        return undefined
+      }
+      return '/no-image.png'
+    }
+
     return {
       t,
+      iiifUrl,
       loadMore,
       rendered,
       copyUrl,
+      getImageUrl,
       masonryTiles,
       contructTiles,
-      iiifUrl,
     }
   },
 })

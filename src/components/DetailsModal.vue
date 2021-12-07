@@ -1,6 +1,6 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" class="w-9/12 m-auto">
-    <section class="flex flex-col" v-if="entity">
+  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" class="w-9/12 m-auto" @hide-modal="closeDetailsModal">
+    <section v-if="entity" class="flex flex-col">
       <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
         <section class="bg-background-light lg:min-w-max">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
@@ -20,7 +20,13 @@
                 <img class="m-3 lg:ml-6 w-48 md:w-76 lg:w-96 sm:w-96 lg:min-w-11/12" :src="photo.original_file_location" />
 
                 <div class="top-4 right-0 md:right-1 lg:top-5 lg:right-4 absolute z-30 bg-background-light rounded-full cursor-pointer">
-                  <base-button class="absolute right-0 w-0 z-30 transform scale-75 md:scale-90" customStyle="cc-round-black" customIcon="creativeCommonsCC" :iconShown="true" :onClick="openCCModal" />
+                  <base-button
+                    class="absolute right-0 w-0 z-30 transform scale-75 md:scale-90"
+                    custom-style="cc-round-black"
+                    custom-icon="creativeCommonsCC"
+                    :icon-shown="true"
+                    :on-click="openCCModal"
+                  />
                 </div>
               </div>
             </div>
@@ -72,10 +78,8 @@ import { defineComponent, ref, watch } from 'vue'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
-import { Entity, Metadata } from 'coghent-vue-3-component-library/lib/queries'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
-import { Maybe } from 'graphql/jsutils/Maybe'
 
 export type DetailsModalType = {
   state: ModalState
@@ -88,6 +92,8 @@ let groupedMetadata: any[] = []
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
 })
+
+const unMappedString = 'unMapped'
 
 export const useDetailsModal = () => {
   const updateDetailsModal = (DetailsModalInput: DetailsModalType) => {
@@ -107,14 +113,22 @@ export const useDetailsModal = () => {
   }
 
   const setEntity = (data: any) => {
-    if(!data) return
+    if (!data) return
     entity.value = data
     groupMetaData()
   }
 
   const groupMetaData = () => {
     if (entity.value?.metadata) {
-      var grouped = entity.value?.metadata.reduce(function (r: any, a : any) {
+      //Set unMappaed key as keys
+      const metaData = entity.value?.metadata.map((meta: any) => {
+        return {
+          key: meta.key === unMappedString && meta.unMappedKey ? meta.unMappedKey : meta.key,
+          value: meta.value,
+        }
+      })
+
+      var grouped = metaData.reduce(function (r: any, a: any) {
         if (!a) return
         r[a.key] = r[a.key] || []
         r[a?.key].push(a)

@@ -29,6 +29,7 @@ import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
 import { Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
+import useSeed from '../composables/useSeed'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -61,6 +62,7 @@ export default defineComponent({
     const relationData = ref<GetEntitiesQuery | undefined>()
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
+    const { randomValue, refresh: refreshSeed } = useSeed()
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -80,6 +82,8 @@ export default defineComponent({
           isAsc: false,
           key: 'title',
           relation_filter: getSelectedFilters.value,
+          randomization: true,
+          seed: randomValue.value.toString(),
         },
       }),
       () => ({
@@ -97,6 +101,8 @@ export default defineComponent({
           isAsc: false,
           key: 'title',
           relation_filter: props.defaultRelations.length > 0 ? props.defaultRelations : [],
+          randomization: true,
+          seed: randomValue.value.toString(),
         },
       }),
       () => ({
@@ -144,6 +150,7 @@ export default defineComponent({
     }
 
     const resetQuery = () => {
+      refreshSeed()
       if (masonry.value && masonry.value.contructTiles) {
         masonry.value.contructTiles(limit, true)
       }
