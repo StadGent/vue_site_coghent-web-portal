@@ -9,9 +9,6 @@
         items-end
         justify-center
         min-h-screen
-        pt-4
-        px-4
-        pb-20
         text-center
         sm:block sm:p-0
       "
@@ -44,10 +41,8 @@
           'overflow-y-scroll': scroll,
         }"
       >
-        <div class="bg-neutral-0 h-full">
-          <div class="">
+        <div class="bg-neutral-0 h-full w-full">
             <slot />
-          </div>
         </div>
       </div>
     </div>
