@@ -192,16 +192,6 @@ export default defineComponent({
         (value) => {
           if (value) {
             const filterdValue: Entity[] = value
-            filterdValue.forEach((item: Entity) => {
-              if (item.mediafiles && item.mediafiles.length > 0) {
-                item.mediafiles = [
-                  {
-                    _id: 'no-image',
-                    filename: '/no-image.png',
-                  },
-                ]
-              }
-            })
             const numberOfResult = filterdValue.length
             let entityIndex = 0
             let lastIndex = 0
