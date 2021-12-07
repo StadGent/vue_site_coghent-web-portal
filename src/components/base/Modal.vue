@@ -5,7 +5,7 @@
 
       <span class="hidden sm:inline-block sm:align-middle h-screen" aria-hidden="true">&#8203;</span>
       <div
-        class="inline-block align-bottom bg-text-red rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:w-11/12"
+        class="inline-block align-bottom bg-neutral-0 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:w-11/12"
         :class="{
           'sm:max-w-4xl': !large,
           'h-full': large,
