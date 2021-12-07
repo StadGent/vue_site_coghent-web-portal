@@ -1,8 +1,8 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" class="w-9/12 m-auto" @hide-modal="closeDetailsModal">
-    <section v-if="entity" class="flex flex-col">
-      <section class="flex flex-col lg:flex-row pt-10 md:pt-0">
-        <section class="bg-background-light lg:min-w-max">
+  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" class="m-auto " @hide-modal="closeDetailsModal">
+    <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto ">
+      <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
+        <section class="bg-background-light  lg:w-2/5">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ entity.title[0]?.value }}
           </h1>
@@ -14,14 +14,14 @@
               <strong>{{ t('details.modal.objectName') }}</strong> ongekend
             </p>
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 overflow-x-auto lg:overflow-y-auto max-h-96">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 overflow-x-auto lg:overflow-y-auto h-4/5">
             <div v-for="photo in entity.mediafiles" :key="photo">
-              <div class="flex relative">
-                <img class="m-3 mr-2 lg:ml-6 w-48 md:w-76 lg:w-96 sm:w-96 lg:min-w-11/12" :src="photo.original_file_location" />
+              <div class="flex relative w-full h-max">
+                <img class="m-3 mr-2 lg:ml-6 w-11/12" :src="photo.original_file_location" />
 
-                <div class="top-4 right-0 md:right-1 lg:top-5 lg:right-4 absolute z-30 bg-background-light rounded-full cursor-pointer">
+                <div class="top-5 right-4 absolute z-30 bg-background-light rounded-full cursor-pointer">
                   <base-button
-                    class="absolute right-0 w-0 z-30 transform scale-75 md:scale-90"
+                    class="absolute right-0 w-0 z-30 transform scale-75 sm:scale-90"
                     custom-style="cc-round-black"
                     custom-icon="creativeCommonsCC"
                     :icon-shown="true"
@@ -32,8 +32,8 @@
             </div>
           </div>
         </section>
-        <section class="bg-background-medium w-full">
-          <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 lg:mt-20">
+        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-x-auto lg:overflow-y-auto h-full lg:w-3/5">
+          <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
           <div class="font-medium pb-2">
@@ -50,6 +50,8 @@
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
             {{ t('details.modal.associations') }}
           </h3>
+
+
           <div class="mx-5 flex gap-3 ml-8 mb-4">
             <div v-for="relation in entity.relations" :key="relation.key">
               <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
@@ -57,9 +59,10 @@
               </p>
             </div>
           </div>
+          <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center bg-background-light justify-center p-2 lg:p-10 mb-3 lg:mb-0">
+      <section id="footer" class="flex items-center bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
