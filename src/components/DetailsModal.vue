@@ -1,8 +1,8 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" class="m-auto " @hide-modal="closeDetailsModal">
-    <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto ">
+  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" class="m-auto" @hide-modal="closeDetailsModal">
+    <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
-        <section class="bg-background-light  lg:w-2/5">
+        <section class="bg-background-light lg:w-2/5">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ entity.title[0]?.value }}
           </h1>
@@ -19,7 +19,7 @@
               <div class="flex relative w-full h-max">
                 <img class="m-3 mr-2 lg:ml-6 w-11/12" :src="photo.original_file_location" />
 
-                <div class="top-5 right-4 absolute z-30 bg-background-light rounded-full cursor-pointer">
+                <div class="top-5 right-4 absolute z-30 bg-background-light rounded-full cursor-pointer block lg:hidden">
                   <base-button
                     class="absolute right-0 w-0 z-30 transform scale-75 sm:scale-90"
                     custom-style="cc-round-black"
@@ -28,6 +28,27 @@
                     :on-click="openCCModal"
                   />
                 </div>
+
+                <div class="top-5 right-4 hidden z-30 bg-background-light mt-2 rounded-full cursor-pointer absolute lg:block">
+                  <div class="static">
+                    <div v-show="openTab" @click="openCCModal" class="flex bg-background-light inline-block rounded-full items-center w-min shadow px-5 z-20 pr-8">
+                      <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsCC" />
+                      <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsBY" />
+                      <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsNC" />
+                      <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsSA" />
+                      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 invisible sm:invisible" />
+                    </div>
+                  </div>
+                  <base-button
+                    class="absolute right-0 w-0 z-30 transform scale-90"
+                    :class="{ [`-mt-10`]: openTab }"
+                    customStyle="cc-round-black"
+                    customIcon="creativeCommonsCC"
+                    :iconShown="true"
+                    :onClick="toggleCCTab"
+                  />
+                </div>
+
               </div>
             </div>
           </div>
@@ -50,7 +71,6 @@
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
             {{ t('details.modal.associations') }}
           </h3>
-
 
           <div class="mx-5 flex gap-3 ml-8 mb-4">
             <div v-for="relation in entity.relations" :key="relation.key">
@@ -93,7 +113,7 @@ import { defineComponent, ref, watch } from 'vue'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import { Maybe } from 'graphql/jsutils/Maybe'
 import useClipboard from 'vue-clipboard3'
@@ -184,6 +204,7 @@ export default defineComponent({
     Modal,
     RelationTag,
     BaseButton,
+    BaseIcon
   },
   setup() {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
@@ -192,7 +213,7 @@ export default defineComponent({
     const { toClipboard } = useClipboard()
 
     const onClick = () => {
-      console.log('Click!');
+      console.log('Click!')
     }
 
     const toggleCCTab = () => {
@@ -220,7 +241,7 @@ export default defineComponent({
       openCCModal,
       groupedMetadata,
       copyUrl,
-      onClick
+      onClick,
     }
   },
 })
