@@ -18,7 +18,7 @@
                 <p v-if="entity.description && entity.description[0]" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">{{ entity.description[0].value }}</p>
                 <base-button :text="t('main.more')" custom-style="ghost-white" :icon-shown="true" :icon-left="false" custom-icon="arrowRightLine" />
 
-                <div @click.prevent="copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
+                <div @click.prevent="() => copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
             <the-masonry-image :url="getImageUrl(entity, tile.type)" @loaded="rendered" />

@@ -188,6 +188,10 @@ export default defineComponent({
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
 
+    const onClick = () => {
+      console.log('Click!');
+    }
+
     const toggleCCTab = () => {
       openTab.value = !openTab.value
     }
@@ -213,6 +217,7 @@ export default defineComponent({
       openCCModal,
       groupedMetadata,
       copyUrl,
+      onClick
     }
   },
 })
