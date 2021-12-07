@@ -21,7 +21,7 @@
                 <div @click.prevent="() => copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
-            <the-masonry-image :url="getImageUrl(entity, tile.type)" @loaded="rendered" />
+            <LazyLoadImage :url="getImageUrl(entity, tile.type)" @loaded="rendered" />
           </a>
         </div>
       </div>
@@ -46,10 +46,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, LazyLoadImage } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import useClipboard from 'vue-clipboard3'
-import TheMasonryImage from './TheMasonryImage.vue'
 import { Entity } from 'coghent-vue-3-component-library/lib/queries'
 import { randomizer } from '../helpers'
 import useIIIF from '../composables/useIIIF'
@@ -81,7 +80,7 @@ export default defineComponent({
 
   components: {
     BaseButton,
-    TheMasonryImage,
+    LazyLoadImage,
   },
   props: {
     entities: {
