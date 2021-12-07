@@ -12,7 +12,7 @@
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
       </div>
     </div>
-    <Filter v-if="relationData" class="my-5" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData.Entities.relations" @new-selected="updatSelectedFilters" />
+    <Filter :loading="loading" :selected="selectedFilters" :filter-all="t('buttons.all-works')" :filters="relationData ? relationData.Entities.relations : []" @new-selected="updatSelectedFilters" />
 
     <div class="flex w-full flex-col items-center justify-center">
       <the-masonry ref="masonry" :small="small" :entities="entityData ? entityData.Entities : {}" :loading="loading" :items-each-load="limit" :end-of-data="endOfData" @load-more="loadMore" />
