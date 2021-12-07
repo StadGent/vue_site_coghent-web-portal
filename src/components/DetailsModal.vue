@@ -62,12 +62,12 @@
       <section id="footer" class="flex items-center justify-center bg-background-medium lg:bg-background-light p-2 lg:p-10 mb-3 lg:mb-0">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
-          :on-click="copyUrl()"
+          :on-click="() => copyUrl(entity.id)"
           custom-style="secondary-round"
           custom-icon="link"
           :icon-shown="true"
         />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="onClick" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
+        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
         <div class="invisible border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
         <base-button
           class="invisible w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
