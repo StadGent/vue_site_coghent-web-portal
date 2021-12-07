@@ -9,6 +9,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'one-component-per-file': 'off',
     'vue/no-v-model-argument': 'off',
+    'vue/require-default-prop': 0,
   },
   plugins: ['vue'],
 }

@@ -1,6 +1,6 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="CCModalState.state" @hide-modal="closeCCModal" class="w-9/12 m-auto">
-    <div class="w-full h-min flex flex-wrap place-content-center px-12 lg:px-36 sm:px-16 md:px-24 bg-background-light ">
+  <modal :large="true" :scroll="true" :modal-state="CCModalState.state" class="w-9/12 m-auto" @hide-modal="closeCCModal">
+    <div class="w-full h-min flex flex-wrap place-content-center px-12 lg:px-36 sm:px-16 md:px-24 bg-background-light">
       <h1 class="font-bold text-3xl my-7 lg:my-12">Alles wat je wil weten over Creative Commons</h1>
     </div>
     <div class="bg-background-medium flex flex-wrap overflow-y-auto">
@@ -129,7 +129,7 @@ export default defineComponent({
     const { closeCCModal, CCModalState } = useCCModal()
     return {
       closeCCModal,
-      CCModalState
+      CCModalState,
     }
   },
 })
