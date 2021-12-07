@@ -60,14 +60,26 @@
         </section>
       </section>
       <section id="footer" class="flex items-center justify-center bg-background-medium lg:bg-background-light p-2 lg:p-10 mb-3 lg:mb-0">
-        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="link" :icon-shown="true" />
+        <base-button
+          class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
+          :on-click="copyUrl()"
+          custom-style="secondary-round"
+          custom-icon="link"
+          :icon-shown="true"
+        />
         <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="onClick" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-        <div class="border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
-        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-        <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
-        <base-button class="w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+        <div class="invisible border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
+        <base-button
+          class="invisible w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
+          :on-click="onClick"
+          custom-style="secondary-round"
+          custom-icon="edit"
+          :icon-shown="true"
+        />
+        <base-button class="invisible w-max hidden lg:flex" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
+        <div class="invisible border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden lg:inline-block" />
+        <base-button class="invisible w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
+        <base-button class="invisible w-max hidden lg:flex" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
       </section>
     </section>
   </modal>
@@ -80,6 +92,8 @@ import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
+import { Maybe } from 'graphql/jsutils/Maybe'
+import useClipboard from 'vue-clipboard3'
 
 export type DetailsModalType = {
   state: ModalState
@@ -115,6 +129,7 @@ export const useDetailsModal = () => {
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
+    console.log('entity', entity.value)
     groupMetaData()
   }
 
@@ -171,9 +186,19 @@ export default defineComponent({
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     const openTab = ref<boolean>(false)
     const { openCCModal } = useCCModal()
+    const { toClipboard } = useClipboard()
 
     const toggleCCTab = () => {
       openTab.value = !openTab.value
+    }
+
+    const copyUrl = async (id: String) => {
+      try {
+        var url = window.location.href
+        await toClipboard(url)
+      } catch (e) {
+        console.error(e)
+      }
     }
 
     const { t } = useI18n()
@@ -187,6 +212,7 @@ export default defineComponent({
       t,
       openCCModal,
       groupedMetadata,
+      copyUrl,
     }
   },
 })
