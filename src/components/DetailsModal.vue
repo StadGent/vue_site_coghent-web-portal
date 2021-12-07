@@ -25,13 +25,13 @@
                     custom-style="cc-round-black"
                     custom-icon="creativeCommonsCC"
                     :icon-shown="true"
-                    :on-click="openCCModal"
+                    :on-click="openNewCCModal"
                   />
                 </div>
 
                 <div class="top-5 right-4 hidden z-30 bg-background-light mt-2 rounded-full cursor-pointer absolute lg:block">
                   <div class="static">
-                    <div v-show="openTab" @click="openCCModal" class="flex bg-background-light inline-block rounded-full items-center w-min shadow px-5 z-20 pr-8">
+                    <div v-show="openTab" @click="openNewCCModal" class="flex bg-background-light inline-block rounded-full items-center w-min shadow px-5 z-20 pr-8">
                       <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsCC" />
                       <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsBY" />
                       <base-icon class="flex mr-3 -ml-2 stroke-current text-text-dark py-2 stroke-0" icon="creativeCommonsNC" />
@@ -229,6 +229,11 @@ export default defineComponent({
       }
     }
 
+    const openNewCCModal = () => {
+      openCCModal();
+      closeDetailsModal();
+    };
+
     const { t } = useI18n()
 
     return {
@@ -238,7 +243,7 @@ export default defineComponent({
       openTab,
       entity,
       t,
-      openCCModal,
+      openNewCCModal,
       groupedMetadata,
       copyUrl,
       onClick,
