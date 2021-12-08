@@ -15,13 +15,15 @@
             <span v-show="!small && entity.mediafiles && entity.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
               <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
                 <p v-if="entity.title && entity.title[0]" class="opacity-100 mb-2 px-10 font-bold">{{ entity.title[0].value }}</p>
-                <p v-if="entity.description && entity.description[0]" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">{{ entity.description[0].value }}</p>
+                <p v-if="entity.description && entity.description[0] && tile.type === 'SingleImage'" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">
+                  {{ entity.description[0].value }}
+                </p>
                 <base-button :text="t('main.more')" custom-style="ghost-white" :icon-shown="true" :icon-left="false" custom-icon="arrowRightLine" />
 
                 <div @click.prevent="() => copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
-            <LazyLoadImage :url="getImageUrl(entity, tile.type)" @loaded="rendered" />
+            <LazyLoadImage :url="getImageUrl(entity, tile.type)" extra-class="h-full object-cover" @loaded="rendered" />
           </a>
         </div>
       </div>
