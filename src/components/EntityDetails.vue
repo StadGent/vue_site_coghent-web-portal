@@ -23,7 +23,7 @@
       </div>
     </CardComponent>
     <section class="col-span-2">
-      <h2 class="font-bold text-2xl w-full text-center pt-10">
+      <h2 class="font-bold text-2xl w-full text-center pt-10 mb-2">
         {{ t('details.discover') }}
       </h2>
       <the-grid v-if="relationStringArray.length > 0" :small="true" :default-relations="relationStringArray" />

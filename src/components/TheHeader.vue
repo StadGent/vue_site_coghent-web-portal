@@ -52,14 +52,13 @@
 <script lang="ts">
 import { defineComponent, watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton, User } from 'coghent-vue-3-component-library'
+import { User } from 'coghent-vue-3-component-library'
 import { useRoute, useRouter } from 'vue-router'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 
 export default defineComponent({
   name: 'TheHeader',
-  components: { BaseButton },
   setup() {
     const route = useRoute()
     const router = useRouter()

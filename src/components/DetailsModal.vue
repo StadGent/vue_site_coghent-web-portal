@@ -18,8 +18,7 @@
             <div v-for="photo in entity.mediafiles" :key="photo">
               <div class="flex relative w-full h-max">
                 <img class="m-3 mr-2 lg:ml-6 w-11/12" :src="photo.original_file_location" />
-                <copyright-tab class="absolute top-4 right-4 w-full h-full" :MoreInfo="t('main.info')" @openingCcmodal="openNewCCModal"/>
-
+                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
@@ -84,7 +83,7 @@ import { defineComponent, ref, watch } from 'vue'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
-import { BaseButton, CopyrightTab} from 'coghent-vue-3-component-library'
+import { BaseButton, CopyrightTab } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 
@@ -174,7 +173,7 @@ export default defineComponent({
     Modal,
     RelationTag,
     BaseButton,
-    CopyrightTab
+    CopyrightTab,
   },
   setup() {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
@@ -196,9 +195,9 @@ export default defineComponent({
     }
 
     const openNewCCModal = () => {
-      openCCModal();
-      closeDetailsModal();
-    };
+      openCCModal()
+      closeDetailsModal()
+    }
 
     const { t } = useI18n()
 
