@@ -21,11 +21,11 @@
               </filter>
             </defs>
           </svg>
-          <div class="flex flex-col items-center mt-7">
+          <div class="flex flex-col items-center mt-5">
             <h2 class="ml-4 text-lg" :class="{ [`font-bold`]: isHomeActive }">
               {{ t('header.discover') }}
             </h2>
-            <div class="w-2 h-2 sm:ml-0 lg:ml-14 mt-3" :class="{ [`bg-accent-yellow rounded ml-2 md:ml-8 mb-3 sm:mb-0`]: isHomeActive }" />
+            <div class="w-2 h-2 mt-2" :class="{ [`bg-accent-yellow rounded`]: isHomeActive }" />
           </div>
         </router-link>
       </div>
