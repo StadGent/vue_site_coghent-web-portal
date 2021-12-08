@@ -21,28 +21,30 @@
               </filter>
             </defs>
           </svg>
-          <h2 class="ml-4 text-lg" :class="{ [`font-bold`]: isHomeActive }">
-            {{ t('header.discover') }}
-          </h2>
+          <div class="flex flex-col items-center mt-7">
+            <h2 class="ml-4 text-lg" :class="{ [`font-bold`]: isHomeActive }">
+              {{ t('header.discover') }}
+            </h2>
+            <div class="w-2 h-2 sm:ml-0 lg:ml-14 mt-3" :class="{ [`bg-accent-yellow rounded ml-2 md:ml-8 mb-3 sm:mb-0`]: isHomeActive }" />
+          </div>
         </router-link>
-        <div class="w-2 h-2 sm:ml-0 lg:ml-14 mt-3" :class="{ [`bg-accent-yellow rounded ml-2 md:ml-8 mb-3 sm:mb-0`]: isHomeActive }" />
       </div>
-      <div class="flex flex-col items-center pt-3">
+      <!-- <div class="flex flex-col items-center pt-3">
         <router-link to="/pavilion" class="flex items-center invisible">
           <h2 class="text-lg -mt-3 md:-mt-0 lg:mt-0" :class="{ [`font-bold`]: isPavilionActive }">
             {{ t('header.pavilion') }}
           </h2>
         </router-link>
         <div class="w-2 h-2 mt-3" :class="{ [`bg-accent-yellow rounded -ml-5 sm:ml-0 mb-3 sm:mb-0`]: isPavilionActive }" />
-      </div>
+      </div> -->
     </div>
 
-    <div class="flex ml-3 invisible">
+    <!-- <div class="flex ml-3 invisible">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 invisible sm:invisible" />
       <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
       <base-button v-if="userStore.hasUser" :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
       <base-button :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-3 ml-3" />
-    </div>
+    </div> -->
   </div>
   <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
 </template>
@@ -61,15 +63,17 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
-    const isHomeActive = ref<Boolean>(route.path === '/')
+    const checkHome = () => route.path === '/' || route.name === 'singleObject'
+
+    const isHomeActive = ref<Boolean>(checkHome())
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
     const userStore = StoreFactory.get(UserStore)
     const user: User = userStore.user
-
+    console.log(route.name)
     watch(
       () => route.path,
       () => {
-        isHomeActive.value = route.path === '/'
+        isHomeActive.value = checkHome()
         isPavilionActive.value = route.path === '/pavilion'
       }
     )

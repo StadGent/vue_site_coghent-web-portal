@@ -14,7 +14,7 @@ const history = isServer ? createMemoryHistory() : createWebHistory()
 const routes = [
   { path: '/', component: TheGrid },
   { path: '/home', redirect: '/' },
-  { path: '/entity/:entityID', component: EntityDetails },
+  { path: '/entity/:entityID', name: 'singleObject', component: EntityDetails },
   { path: '/pavilion', component: ThePavilion },
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
   { path: '/storybox', component: TheStoryboxPage },
