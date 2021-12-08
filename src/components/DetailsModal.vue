@@ -14,7 +14,7 @@
               <strong>{{ t('details.modal.objectName') }}</strong> ongekend
             </p>
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 overflow-x-auto lg:overflow-y-auto h-4/5">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5">
             <div v-for="photo in entity.mediafiles" :key="photo">
               <div class="flex relative w-full h-max">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 mr-2 lg:ml-6 w-11/12" />
@@ -38,14 +38,6 @@
               <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
               <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
             </li>
-            <li v-for="metaType in groupedMetadata" :key="metaType">
-              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
-              <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
-            </li>
-            <li v-for="metaType in groupedMetadata" :key="metaType">
-              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
-              <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
-            </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
             {{ t('details.modal.associations') }}
@@ -57,21 +49,11 @@
                 {{ relation.label }}
               </p>
             </div>
-            <div v-for="relation in entity.relations" :key="relation.key">
-              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
-                {{ relation.label }}
-              </p>
-            </div>
-            <div v-for="relation in entity.relations" :key="relation.key">
-              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
-                {{ relation.label }}
-              </p>
-            </div>
           </div>
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center z-10 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5">
+      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
