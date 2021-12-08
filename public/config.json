@@ -4,6 +4,7 @@
   "userEditUrl": "http://localhost:8080/auth/admin/master/console/#/realms/dams/users/",
   "vueAppIndex": false,
   "iiifLink": "http://localhost:8182/",
+  "storageLink": "http://localhost:8001/",
   "oidc": {
     "baseUrl": "http://localhost:8080/auth/realms/dams",
     "clientId": "coghent-web-portal",
