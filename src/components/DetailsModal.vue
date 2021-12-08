@@ -34,9 +34,11 @@
             {{ t('details.modal.characteristics') }}
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
-            <li v-for="metaType in groupedMetadata" :key="metaType">
-              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
-              <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
+            <li v-for="metaType in groupedMetadata" :key="metaType" class="grid grid-flow-col-dense auto-cols-fr">
+              <strong class="col-start-1 w-min inline-block">{{ metaType.key }}</strong>
+              <span v-if="metaType.groupedMetaString != ''" class="col-start-2 mr-20">{{ metaType.groupedMetaString }}</span>
+              <span v-if="metaType.groupedMetaString == ''" class="text-text-red col-start-2 mr-20">{{ t('details.modal.unknown') }}</span>
+              <span class="invisible col-start-3 w-0"></span>
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
@@ -62,7 +64,7 @@
           :icon-shown="true"
         />
         <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-        <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden " />
+        <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
         <base-button
           class="hidden w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="onClick"
