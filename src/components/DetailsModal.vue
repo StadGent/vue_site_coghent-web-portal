@@ -27,7 +27,7 @@
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
-          <div class="font-medium pb-2">
+          <div class="font-medium pb-2 flex flex-wrap">
             <relation-tag v-for="relation in entity.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
           </div>
           <h3 class="font-bold text-lg mt-5 ml-8">
@@ -35,18 +35,18 @@
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
             <li v-for="metaType in groupedMetadata" :key="metaType">
-              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
+              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }} <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
             {{ t('details.modal.associations') }}
           </h3>
 
-          <div class="mx-5 flex gap-3 ml-8 mb-4">
+          <div class="mx-5 flex gap-3  mb-4 flex-wrap">
             <div v-for="relation in entity.relations" :key="relation.key">
-              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mr-4 bg-opacity-50">
-                {{ relation.label }}
-              </p>
+                  <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+                    {{ relation.label }}
+                  </p>
             </div>
           </div>
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>

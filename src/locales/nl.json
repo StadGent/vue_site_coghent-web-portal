@@ -30,7 +30,8 @@
       "objectNumber": "Objectnummer",
       "objectName": "Objectnaam",
       "associations": "Associaties",
-      "characteristics": "Kenmerken"
+      "characteristics": "Kenmerken",
+      "unknown": "Onbekend"
     }
   },
   "profile": {
