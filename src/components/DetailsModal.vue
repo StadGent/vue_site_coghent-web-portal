@@ -8,10 +8,10 @@
           </h1>
           <div class="m-3 lg:ml-6 lg:mt-6">
             <p>
-              <strong>{{ t('details.modal.objectNumber') }}</strong> ongekend
+              <strong>{{ t('details.modal.objectNumber') }}</strong> {{ entity.objectNumber[0]?.value ? entity.objectNumber[0]?.value : '' }}
             </p>
             <p>
-              <strong>{{ t('details.modal.objectName') }}</strong> ongekend
+              <strong>{{ t('details.modal.objectName') }}</strong> {{ entity.objectName[0]?.value ? entity.objectName[0]?.value : '' }}
             </p>
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5">
@@ -55,7 +55,7 @@
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5">
+      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5 shadow-2xl">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"

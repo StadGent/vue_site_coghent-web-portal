@@ -86,7 +86,6 @@ export default defineComponent({
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
-          key: 'title',
           relation_filter: getSelectedFilters.value,
           randomization: true,
           seed: randomValue.value.toString(),
@@ -109,7 +108,6 @@ export default defineComponent({
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
-          key: 'title',
           relation_filter: props.defaultRelations.length > 0 ? props.defaultRelations : [],
           randomization: true,
           seed: randomValue.value.toString(),

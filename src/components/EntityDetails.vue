@@ -15,9 +15,7 @@
           </p>
         </div>
         <div class="pt-5 font-medium">
-          <span v-for="metaData in result.Entity?.metadata" v-show="metaData.key === 'type'" :key="metaData.value" class="inline-block px-2 py-2 bg-background-dark mr-4 bg-opacity-50">{{
-            metaData.value
-          }}</span>
+          <span v-for="metaData in types" :key="metaData" class="inline-block px-2 py-2 bg-background-dark mr-4 bg-opacity-50">{{ metaData }}</span>
         </div>
         <base-button class="inline⁻block w-max ml-3 mt-3" :text="t('details.more')" custom-style="ghost-black" custom-icon="info" :icon-shown="true" :on-click="openDetailsModal" />
       </div>
@@ -43,6 +41,8 @@ import { useDetailsModal } from './DetailsModal.vue'
 import useIIIF from '../composables/useIIIF'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
+
+const metaDataInTag: string[] = ['carriedOutBy', 'isTypeOf', 'isIn']
 
 export default defineComponent({
   name: 'EntityDetails',
@@ -84,8 +84,14 @@ export default defineComponent({
 
       const typeArray: any[] = []
       queryResult.data.Entity?.metadata.forEach((value: any) => {
-        if (value.key === 'type') {
+        if (metaDataInTag.includes(value.key)) {
           typeArray.push(value.value)
+        }
+      })
+      console.log(queryResult.data.Entity?.relations)
+      queryResult.data.Entity?.relations.forEach((value: any) => {
+        if (metaDataInTag.includes(value.type)) {
+          typeArray.push(value.label)
         }
       })
       types.value = typeArray

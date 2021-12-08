@@ -9,8 +9,8 @@ const useIIIF = () => {
   const noImageUrl = '/no-image.png'
 
   const generateUrl = (filename: string, format: 'square' | 'full', size: number = 1000) => {
-    // return `${iiifUrl}iiif/3/${filename}/${format}/${size},/0/default.jpg`
-    return `${storageLink}download/${filename}`
+    return `${iiifUrl}iiif/3/${filename}/${format}/${size},/0/default.jpg`
+    // return `${storageLink}download/${filename}`
   }
 
   return {
