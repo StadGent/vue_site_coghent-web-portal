@@ -17,7 +17,7 @@
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 overflow-x-auto lg:overflow-y-auto h-4/5">
             <div v-for="photo in entity.mediafiles" :key="photo">
               <div class="flex relative w-full h-max">
-                <img class="m-3 mr-2 lg:ml-6 w-11/12" :src="photo.original_file_location" />
+                <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 mr-2 lg:ml-6 w-11/12" />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
@@ -35,18 +35,37 @@
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
             <li v-for="metaType in groupedMetadata" :key="metaType">
-              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }} <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
+              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
+              <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
+            </li>
+            <li v-for="metaType in groupedMetadata" :key="metaType">
+              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
+              <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
+            </li>
+            <li v-for="metaType in groupedMetadata" :key="metaType">
+              <strong class="mr-5">{{ metaType.key }}</strong> {{ metaType.groupedMetaString }}
+              <span v-if="metaType.groupedMetaString == ''" class="text-text-red">{{ t('details.modal.unknown') }}</span>
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
             {{ t('details.modal.associations') }}
           </h3>
 
-          <div class="mx-5 flex gap-3  mb-4 flex-wrap">
+          <div class="mx-5 flex gap-3 mb-4 flex-wrap">
             <div v-for="relation in entity.relations" :key="relation.key">
-                  <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
-                    {{ relation.label }}
-                  </p>
+              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+                {{ relation.label }}
+              </p>
+            </div>
+            <div v-for="relation in entity.relations" :key="relation.key">
+              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+                {{ relation.label }}
+              </p>
+            </div>
+            <div v-for="relation in entity.relations" :key="relation.key">
+              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+                {{ relation.label }}
+              </p>
             </div>
           </div>
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
@@ -83,9 +102,10 @@ import { defineComponent, ref, watch } from 'vue'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
-import { BaseButton, CopyrightTab } from 'coghent-vue-3-component-library'
+import { BaseButton, CopyrightTab, LazyLoadImage } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
+import useIIIF from '@/composables/useIIIF'
 
 export type DetailsModalType = {
   state: ModalState
@@ -174,12 +194,14 @@ export default defineComponent({
     RelationTag,
     BaseButton,
     CopyrightTab,
+    LazyLoadImage,
   },
   setup() {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     const openTab = ref<boolean>(false)
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
+    const { generateUrl } = useIIIF()
 
     const onClick = () => {
       console.log('Click!')
@@ -208,9 +230,11 @@ export default defineComponent({
       entity,
       t,
       openNewCCModal,
+      LazyLoadImage,
       groupedMetadata,
       copyUrl,
       onClick,
+      generateUrl,
     }
   },
 })
