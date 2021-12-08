@@ -2,7 +2,7 @@
   <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" class="m-auto" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
-        <section class="bg-background-light lg:w-2/5">
+        <section class="bg-background-light lg:w-2/5 h-full">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ entity.title[0]?.value }}
           </h1>
@@ -52,7 +52,7 @@
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5">
+      <section id="footer" class="flex items-center z-10 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
