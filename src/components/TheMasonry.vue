@@ -246,7 +246,6 @@ export default defineComponent({
     }
 
     const getImageUrl = (entity: Entity | 'placeholder', tiletype: keyof MasonryTileConfig): string | undefined => {
-      console.log(entity)
       if (entity !== 'placeholder' && entity.primary_mediafile) {
         return generateUrl(entity.primary_mediafile, tiletype === 'SingleImage' ? 'full' : 'square')
       }
