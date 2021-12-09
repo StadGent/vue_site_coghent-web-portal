@@ -10,9 +10,9 @@
           }"
         >
           <a v-for="(entity, key2) in tile.mediafiles" :key="key2" class="relative group block" :href="entity.id ? '/entity/' + entity.id : undefined">
-            <span v-show="entity.mediafiles && entity.mediafiles[0] !== 'placeholder'" class="w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute rounded-md"> </span>
+            <span v-show="tile.mediafiles[0] !== 'placeholder'" class="w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute rounded-md"> </span>
 
-            <span v-show="!small && entity.mediafiles && entity.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
+            <span v-show="!small && tile.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
               <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
                 <p v-if="entity.title && entity.title[0]" class="opacity-100 mb-2 px-10 font-bold">{{ entity.title[0].value }}</p>
                 <p v-if="entity.description && entity.description[0] && tile.type === 'SingleImage'" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">
@@ -246,8 +246,9 @@ export default defineComponent({
     }
 
     const getImageUrl = (entity: Entity | 'placeholder', tiletype: keyof MasonryTileConfig): string | undefined => {
-      if (entity !== 'placeholder' && entity.mediafiles && entity.mediafiles.length > 0 && entity.mediafiles[0]?.filename) {
-        return generateUrl(entity.mediafiles[0].filename, tiletype === 'SingleImage' ? 'full' : 'square')
+      console.log(entity)
+      if (entity !== 'placeholder' && entity.primary_mediafile) {
+        return generateUrl(entity.primary_mediafile, tiletype === 'SingleImage' ? 'full' : 'square')
       }
       if (entity === 'placeholder') {
         return undefined
