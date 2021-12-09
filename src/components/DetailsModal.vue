@@ -38,7 +38,6 @@
               <strong class="col-start-1 w-min inline-block">{{ metaType.key }}</strong>
               <span v-if="metaType.groupedMetaString != ''" class="col-start-2 mr-20">{{ metaType.groupedMetaString }}</span>
               <span v-if="metaType.groupedMetaString == ''" class="text-text-red col-start-2 mr-20">{{ t('details.modal.unknown') }}</span>
-              <span class="invisible col-start-3 w-0"></span>
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
