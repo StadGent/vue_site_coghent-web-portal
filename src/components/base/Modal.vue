@@ -1,6 +1,5 @@
 <template>
   <div v-show="modalState === 'show' || modalState === 'loading'" class="fixed z-50 inset-0 w-4/5 h-screen">
-      
     <div class="flex items-end justify-center mt-20 sm:mt-0 text-center sm:block sm:p-0 h-4/5">
       <div class="fixed inset-0 bg-neutral-80 bg-opacity-75 transition-opacity" aria-hidden="true" @click="hideModal"></div>
       <span class="hidden sm:inline-block sm:align-middle h-screen" aria-hidden="true">&#8203;</span>
@@ -13,7 +12,7 @@
           'overflow-y-scroll': scroll,
         }"
       >
-      <base-icon class="absolute top-3 right-3 text-text-black stroke-current fill-current stroke-1 cursor-pointer" @click="hideModal" icon="close"/>
+        <base-icon class="absolute top-3 right-3 text-text-black stroke-current fill-current stroke-1 cursor-pointer" icon="close" @click="hideModal" />
 
         <div class="bg-neutral-0 h-full">
           <div class="h-full">
@@ -27,13 +26,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, toRefs, watch } from 'vue'
-import { BaseIcon} from 'coghent-vue-3-component-library'
+import { BaseIcon } from 'coghent-vue-3-component-library'
 
 export type ModalState = 'show' | 'hide' | 'loading'
 
 export default defineComponent({
   name: 'Modal',
-  components: {  BaseIcon },
+  components: { BaseIcon },
   props: {
     modalState: {
       type: String as PropType<ModalState>,

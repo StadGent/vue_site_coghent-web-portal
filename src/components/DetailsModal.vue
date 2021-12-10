@@ -7,8 +7,8 @@
             {{ entity.title[0]?.value }}
           </h1>
           <div class="m-3 lg:ml-6 lg:mt-6">
-            <base-meta-data :keyWord="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :errorText="t('details.modal.unknown')"/>
-            <base-meta-data :keyWord="t('details.modal.objectName')" :type="entity.objectName[0]?.value" :errorText="t('details.modal.unknown')"/>
+            <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
+            <base-meta-data :key-word="t('details.modal.objectName')" :type="entity.objectName[0]?.value" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5">
             <div v-for="photo in entity.mediafiles" :key="photo">
@@ -31,7 +31,7 @@
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
             <li v-for="metaType in groupedMetadata" :key="metaType">
-              <base-meta-data :keyWord="metaType.key" :type="metaType.groupedMetaString" :errorText="t('details.modal.unknown')"/>
+              <base-meta-data :key-word="metaType.key" :type="metaType.groupedMetaString" :error-text="t('details.modal.unknown')" />
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
@@ -172,7 +172,7 @@ export default defineComponent({
     BaseButton,
     CopyrightTab,
     LazyLoadImage,
-    BaseMetaData
+    BaseMetaData,
   },
   setup() {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()

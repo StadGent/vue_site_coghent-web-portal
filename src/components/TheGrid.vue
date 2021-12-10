@@ -87,8 +87,9 @@ export default defineComponent({
           value: searchQueryForQuery.value,
           isAsc: false,
           relation_filter: getSelectedFilters.value,
-          randomize: true,
+          randomize: getSelectedFilters.value.length > 0 || searchQueryForQuery.value !== '' ? false : true,
           seed: randomValue.value.toString(),
+          has_mediafile: true,
         },
       }),
       () => ({
@@ -109,8 +110,9 @@ export default defineComponent({
           value: searchQueryForQuery.value,
           isAsc: false,
           relation_filter: props.defaultRelations.length > 0 ? props.defaultRelations : [],
-          randomize: true,
+          randomize: props.defaultRelations.length > 0 || searchQueryForQuery.value !== '' ? false : true,
           seed: randomValue.value.toString(),
+          has_mediafile: true,
         },
       }),
       () => ({
