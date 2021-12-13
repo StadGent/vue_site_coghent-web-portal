@@ -1,5 +1,6 @@
 <template>
-  <div v-show="modalState === 'show' || modalState === 'loading'" class="fixed z-50 inset-0 w-4/5 h-screen">
+  <div v-show="modalState === 'show' || modalState === 'loading'" class="fixed z-50 inset-0 m-4 sm:m-4/5 h-screen">
+      
     <div class="flex items-end justify-center mt-20 sm:mt-0 text-center sm:block sm:p-0 h-4/5">
       <div class="fixed inset-0 bg-neutral-80 bg-opacity-75 transition-opacity" aria-hidden="true" @click="hideModal"></div>
       <span class="hidden sm:inline-block sm:align-middle h-screen" aria-hidden="true">&#8203;</span>
