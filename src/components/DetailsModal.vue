@@ -1,8 +1,8 @@
 <template>
   <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
-    <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto">
+    <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
-        <section class="bg-background-light lg:w-2/5 h-auto">
+        <section class="bg-background-light h-auto">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ entity.title[0]?.value }}
           </h1>
@@ -12,14 +12,14 @@
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5">
             <div v-for="photo in entity.mediafiles" :key="photo">
-              <div class="flex relative w-full h-max">
+              <div class="flex relative h-2/3 mb-4">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 mr-2 lg:ml-6 w-11/12" />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
         </section>
-        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-x-auto lg:overflow-y-auto h-auto sm:h-full lg:w-3/5">
+        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-x-auto overflow-y-visible sm:overflow-y-auto h-auto sm:h-full lg:w-3/5">
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
@@ -48,7 +48,7 @@
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5 shadow-2xl">
+      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5 shadow-2xl fixed bottom-0 sm:relative w-full pb-6 sm:pb-0">
         <base-button
           class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
