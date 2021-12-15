@@ -1,5 +1,5 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="CCModalState.state" class="w-9/12 m-auto" @hide-modal="closeCCModal">
+  <modal :large="true" :scroll="true" :modal-state="CCModalState.state" @hide-modal="closeCCModal">
     <div class="w-full h-min flex flex-wrap place-content-center px-12 lg:px-36 sm:px-16 md:px-24 bg-background-light">
       <h1 class="font-bold text-3xl my-7 lg:my-12">{{ t('copyright.title') }}</h1>
     </div>

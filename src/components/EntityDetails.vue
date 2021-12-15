@@ -102,7 +102,6 @@ export default defineComponent({
         setEntity(result.value.Entity)
       }
      }else{
-       console.log(router)
        router.push('/entity/not-found')
      }})
 
