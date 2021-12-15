@@ -1,6 +1,7 @@
 import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
 import TheGrid from './components/TheGrid.vue'
 import EntityDetails from './components/EntityDetails.vue'
+import EntityNotFound from './components/EntityNotFound.vue'
 import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
@@ -15,6 +16,7 @@ const routes = [
   { path: '/', component: TheGrid },
   { path: '/home', redirect: '/' },
   { path: '/entity/:entityID', name: 'singleObject', component: EntityDetails },
+  { path: '/entity/not-found', component: EntityNotFound },
   { path: '/pavilion', component: ThePavilion },
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
   { path: '/storybox', component: TheStoryboxPage },

@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
 import TheGrid from './TheGrid.vue'
@@ -54,6 +54,7 @@ export default defineComponent({
   },
   setup: () => {
     const id = asString(useRoute().params['entityID'])
+    const router = useRouter();
     const { result, onResult } = useQuery(GetEntityByIdDocument, { id })
     const selectedImageIndex = ref<number>(0)
     const relations = ref([])
@@ -66,6 +67,7 @@ export default defineComponent({
     const { generateUrl, noImageUrl } = useIIIF()
 
     onResult((queryResult: any) => {
+      if (!queryResult.error){
       const photosArray: string[] = []
 
       queryResult.data.Entity?.mediafiles.forEach((value: any) => {
@@ -99,7 +101,10 @@ export default defineComponent({
       if (result.value && result.value.Entity) {
         setEntity(result.value.Entity)
       }
-    })
+     }else{
+       console.log(router)
+       router.push('/entity/not-found')
+     }})
 
     const { t } = useI18n()
 
