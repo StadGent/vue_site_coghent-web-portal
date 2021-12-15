@@ -3,10 +3,10 @@ import { ref } from 'vue'
 const useSeed = () => {
   const generator = () => Math.random()
 
-  const randomValue = ref<number>(generator())
+  const randomValue = ref<string>(generator().toString())
 
   const refresh = () => {
-    randomValue.value = generator()
+    randomValue.value = generator().toString()
   }
 
   return {
