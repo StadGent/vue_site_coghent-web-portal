@@ -1,6 +1,6 @@
 <template>
   <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
-    <section v-if="entity" class="flex flex-col w-full h-full overflow-y-auto pb-12 sm:pb-0">
+    <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
         <section class="bg-background-light h-auto">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
@@ -10,9 +10,9 @@
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="entity.objectName[0]?.value" :error-text="t('details.modal.unknown')" />
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="photo in entity.mediafiles" :key="photo">
-              <div class="flex relative h-2/3 mb-4">
+              <div class="flex relative mb-4 w-60">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 mr-2 lg:ml-6 w-11/12" />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" @openingCcmodal="openNewCCModal" />
               </div>
@@ -217,3 +217,14 @@ export default defineComponent({
   },
 })
 </script>
+
+<style>
+.no-scrollbar{
+   -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
+.no-scrollbar::-webkit-scrollbar{
+   display: none;
+}
+</style>
