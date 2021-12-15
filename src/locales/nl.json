@@ -18,7 +18,7 @@
     "login": "Aanmelden",
     "storybox": "Verhalenbox",
     "all-works": "Alle werken",
-    "surprise": "Laat je verassen"
+    "surprise": "Laat je verrassen"
   },
   "details": {
     "discover": "Ontdek ook andere gerelateerde werken",
@@ -49,29 +49,29 @@
     "delete-button": "Account verwijderen",
     "logout": "Afmelden"
   },
-  "copyright":{
-    "title" : "Alles wat je wilt weten over de rechtenstatussen",
+  "copyright": {
+    "title": "Alles wat je wilt weten over de rechtenstatussen",
     "whatAreCC": "Wat zijn Creative Commons?",
-    "whatAreCCText": "Creative Commons zijn licenties die door de rechthebbenden worden toegekend aan het werk. Deze licenties geven een helder kader wat betreft het hergebruik van de digitale reproducties. Men kan de digitale reproducties hergebruiken zonder toestemming van de rechthebbende(n), mits toepassing van de voorwaarden verbonden aan de toegekende Creative Commons licentie.", 
+    "whatAreCCText": "Creative Commons zijn licenties die door de rechthebbenden worden toegekend aan het werk. Deze licenties geven een helder kader wat betreft het hergebruik van de digitale reproducties. Men kan de digitale reproducties hergebruiken zonder toestemming van de rechthebbende(n), mits toepassing van de voorwaarden verbonden aan de toegekende Creative Commons licentie.",
     "whatAreRS": "Wat zijn Rights Statements?",
     "whatAreRSText": "Rights Statements zijn rechtenverklaringen die de rechtenstatus van een werk aangeven. Deze kunnen toegekend worden door rechthebbenden maar ook door niet-rechthebbenden. Als je een digitale reproductie met een Rights Statement wilt hergebruiken, is het de verantwoordelijkheid van de hergebruiker om na te gaan of er (bijkomende) toestemming van de rechthebbende(n) nodig is.",
     "whatRSUsed": "Welke rechtenstatussen worden gebruikt door CoGhent?",
     "whatRSUsedText": "Binnen CoGhent worden zowel Creative Commons licenties als Rights Statements gebruikt. Welke rechtenstatussen gebruikt worden en wat de voorwaarden zijn wat betreft hergebruik van de digitale reproducties, kan je hieronder terugvinden.",
-    "whatRSUsedTextLink1" : "Meer informatie over Creative Commons vind je op",
-    "whatRSUsedTextLink2" : "Meer informatie over Rights Statements vind je op",
-    "PDM" : "Public Domain Mark 1.0",
+    "whatRSUsedTextLink1": "Meer informatie over Creative Commons vind je op",
+    "whatRSUsedTextLink2": "Meer informatie over Rights Statements vind je op",
+    "PDM": "Public Domain Mark 1.0",
     "PDMText": "Er rusten geen rechten op het werk en er zijn geen voorwaarden wat betreft hergebruik. Het werk mag gekopieerd, veranderd, verspreid en uitgevoerd worden, zelfs voor commerciële doeleinden.",
-    "CC0" : "CC0",
+    "CC0": "CC0",
     "CC0Text": "De rechthebbende ziet af van zijn rechten en kent het werk toe aan het publiek domein. Er rusten geen rechten op het werk. Er zijn geen voorwaarden wat betreft hergebruik. Het werk mag gekopieerd, veranderd, verspreid en uitgevoerd worden, zelfs voor commerciële doeleinden.",
-    "CC-BY-NC" : "CC-BY-NC",
+    "CC-BY-NC": "CC-BY-NC",
     "CC-BY-NCText": "De rechthebbende heeft de licentie toegekend. Er rusten rechten op het werk. Het werk mag verspreid en veranderd worden, op voorwaarde dat de naam van de rechthebbende vermeld wordt en het enkel voor niet-commerciële doeleinden gebruikt wordt.",
-    "CC-BY-NC-ND" : "CC-BY-NC-ND",
-    "CC-BY-NC-NDText" : "De rechthebbende heeft de licentie toegekend. Er rusten rechten op het werk. Het werk mag gekopieerd en verspreid worden in de originele vorm, op voorwaarde dat de naam van de rechthebbende vermeld wordt en het enkel voor niet-commerciële doeleinden gebruikt wordt. Het werk mag niet aangepast worden en er mogen geen afgeleiden gemaakt worden.",
-    "InCopyright" : "In Copyright",
-    "InCopyrightText" : "De rechthebbende heeft de rechtenverklaring toegekend. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Wil je het werk hergebruiken, dan moet je toestemming vragen aan de rechthebbende.",
-    "InCopyrightCommercial" : "In Copyright - non-commercial use permitted",
-    "InCopyrightCommercialText" : "De rechthebbende heeft de rechtenverklaring toegekend. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Wil je het werk hergebruiken voor niet-commerciële doeleinden, dan moet je toestemming vragen aan de rechthebbende.",
-    "InCopyrightUnknown" : "In Copyright - unknown rightsholder",
-    "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing. " 
+    "CC-BY-NC-ND": "CC-BY-NC-ND",
+    "CC-BY-NC-NDText": "De rechthebbende heeft de licentie toegekend. Er rusten rechten op het werk. Het werk mag gekopieerd en verspreid worden in de originele vorm, op voorwaarde dat de naam van de rechthebbende vermeld wordt en het enkel voor niet-commerciële doeleinden gebruikt wordt. Het werk mag niet aangepast worden en er mogen geen afgeleiden gemaakt worden.",
+    "InCopyright": "In Copyright",
+    "InCopyrightText": "De rechthebbende heeft de rechtenverklaring toegekend. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Wil je het werk hergebruiken, dan moet je toestemming vragen aan de rechthebbende.",
+    "InCopyrightCommercial": "In Copyright - non-commercial use permitted",
+    "InCopyrightCommercialText": "De rechthebbende heeft de rechtenverklaring toegekend. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Wil je het werk hergebruiken voor niet-commerciële doeleinden, dan moet je toestemming vragen aan de rechthebbende.",
+    "InCopyrightUnknown": "In Copyright - unknown rightsholder",
+    "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing. "
   }
 }
