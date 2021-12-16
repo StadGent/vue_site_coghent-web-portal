@@ -31,7 +31,12 @@
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
             <li v-for="metaType in groupedMetadata" :key="metaType">
-              <base-meta-data :key-word="metaType.key" :type="metaType.groupedMetaString" :error-text="t('details.modal.unknown')" />
+              <base-meta-data v-if='metaType.value !== "nested"' :key-word="!metaType.label || metaType.label === '' ? metaType.key+'*': metaType.label" :type="metaType.value" :error-text="t('details.modal.unknown')" />
+              <div v-else class="mt-2"><strong class="col-start-1 w-min inline-block">{{ !metaType.label || metaType.label === '' ? metaType.key+'*': metaType.label }}</strong>
+                <li class='ml-5' v-for="metaType2 in metaType.nestedMetaData" :key="metaType2">
+                  <base-meta-data v-if='metaType2.value !== "nested"' :key-word="!metaType2.label || metaType2.label === '' ? metaType2.key+'*': metaType2.label" :type="metaType2.value" :error-text="t('details.modal.unknown')" />
+                </li>
+              </div>
             </li>
           </ul>
           <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
@@ -125,35 +130,37 @@ export const useDetailsModal = () => {
   const groupMetaData = () => {
     if (entity.value?.metadata) {
       //Set unMappaed key as keys
-      const metaData = entity.value?.metadata.map((meta: any) => {
-        return {
-          key: meta.key === unMappedString && meta.unMappedKey ? meta.unMappedKey : meta.key,
-          value: meta.value,
-        }
-      })
-
-      var grouped = metaData.reduce(function (r: any, a: any) {
-        if (!a) return
-        r[a.key] = r[a.key] || []
-        r[a?.key].push(a)
-        return r
-      }, Object.create(null))
-      let array: any[] = []
-      Object.values(grouped).forEach((fromEntry) => {
-        array.push(fromEntry)
-      })
-      Object.entries(grouped).forEach((entry) => {
-        array.forEach((metaType) => {
-          let groupedMetaString = ''
-          metaType.forEach((metaData: any) => {
-            if (entry[0] === metaData.key) groupedMetaString = groupedMetaString + metaData.value + ', '
-          })
-          if (groupedMetaString != '') {
-            groupedMetaString = groupedMetaString.slice(0, -2)
-            groupedMetadata.push({ key: entry[0], groupedMetaString })
-          }
+      const metaData = entity.value?.metadata.forEach((meta: any) => {
+          groupedMetadata.push({
+            key: meta.key === unMappedString && meta.unMappedKey ? meta.unMappedKey : meta.key,
+            value: meta.value,
+            label: meta.label,
+            nestedMetaData: meta.nestedMetaData ? meta.nestedMetaData : undefined
         })
       })
+
+      // var grouped = metaData.reduce(function (r: any, a: any) {
+      //   if (!a) return
+      //   r[a.key] = r[a.key] || []
+      //   r[a?.key].push(a)
+      //   return r
+      // }, Object.create(null))
+      // let array: any[] = []
+      // Object.values(grouped).forEach((fromEntry) => {
+      //   array.push(fromEntry)
+      // })
+      // Object.entries(grouped).forEach((entry) => {
+      //   array.forEach((metaType) => {
+      //     let groupedMetaString = ''
+      //     metaType.forEach((metaData: any) => {
+      //       if (entry[0] === metaData.key) groupedMetaString = groupedMetaString + metaData.value + ', '
+      //     })
+      //     if (groupedMetaString != '') {
+      //       groupedMetaString = groupedMetaString.slice(0, -2)
+      //       groupedMetadata.push({ key: entry[0], groupedMetaString, label: metaData.label })
+      //     }
+      //   })
+      // })
     }
   }
 
