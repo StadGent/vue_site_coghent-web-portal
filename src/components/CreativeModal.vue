@@ -44,6 +44,13 @@
           </div>
         </div>
         <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
+          <img class="w-48 h-16" src="../assets/by-nc.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">{{ t('copyright.CC-BY-NC') }}</p>
+            <p class="text-sm">{{ t('copyright.CC-BY-NCText') }}</p>
+          </div>
+        </div>
+        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
           <img class="w-48 h-16" src="../assets/by-nc-nd.png" />
           <div class="flex flex-col space-y-3">
             <p class="font-bold">{{ t('copyright.CC-BY-NC-ND') }}</p>
@@ -56,6 +63,15 @@
             <p class="font-bold">{{ t('copyright.InCopyright') }}</p>
             <p class="text-sm">
               {{ t('copyright.InCopyrightText') }}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
+          <img class="w-48 h-12" src="../assets/InCopyright-NonCommercial.png" />
+          <div class="flex flex-col space-y-3">
+            <p class="font-bold">{{ t('copyright.InCopyrightNonCommercial') }}</p>
+            <p class="text-sm">
+              {{ t('copyright.InCopyrightNonCommercialText') }}
             </p>
           </div>
         </div>
