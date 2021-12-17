@@ -54,10 +54,8 @@ export default defineComponent({
   },
   setup: () => {
     const id = asString(useRoute().params['entityID'])
-    const router = useRouter();
+    const router = useRouter()
     const { result, onResult } = useQuery(GetEntityByIdDocument, { id })
-    const selectedImageIndex = ref<number>(0)
-    const relations = ref([])
     const photos = ref<string[] | undefined>()
     const types = ref<any[] | undefined>()
     const relationStringArray = ref<string[]>([])
@@ -67,55 +65,52 @@ export default defineComponent({
     const { generateUrl, noImageUrl } = useIIIF()
 
     onResult((queryResult: any) => {
-      if (!queryResult.error){
-      const photosArray: string[] = []
+      if (!queryResult.error) {
+        const photosArray: string[] = []
 
-      queryResult.data.Entity?.mediafiles.forEach((value: any) => {
-        if (value.filename) {
-          photosArray.push(generateUrl(value.filename, 'full'))
-        }
-      })
-      photos.value = photosArray.length === 0 ? [noImageUrl] : photosArray
-
-      queryResult.data.Entity?.relations
-        .filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
-        .forEach((relation: any) => {
-          relationStringArray.value.push(relation.key)
-          relation.label && relationsLabelArray.value.push(relation.label)
+        queryResult.data.Entity?.mediafiles.forEach((value: any) => {
+          if (value.filename) {
+            photosArray.push(generateUrl(value.filename, 'full'))
+          }
         })
+        photos.value = photosArray.length === 0 ? [noImageUrl] : photosArray
 
-      const typeArray: any[] = []
-      queryResult.data.Entity?.metadata.forEach((value: any) => {
-        if (metaDataInTag.includes(value.key)) {
-          typeArray.push(value.value)
-        }
-      })
-      console.log(queryResult.data.Entity?.relations)
-      queryResult.data.Entity?.relations.forEach((value: any) => {
-        if (metaDataInTag.includes(value.type)) {
-          typeArray.push(value.label)
-        }
-      })
-      types.value = typeArray
+        queryResult.data.Entity?.relations
+          .filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
+          .forEach((relation: any) => {
+            relationStringArray.value.push(relation.key)
+            relation.label && relationsLabelArray.value.push(relation.label)
+          })
 
-      if (result.value && result.value.Entity) {
-        setEntity(result.value.Entity)
+        const typeArray: any[] = []
+        // queryResult.data.Entity?.metadata.forEach((value: any) => {
+        //   if (metaDataInTag.includes(value.key)) {
+        //     typeArray.push(value.value)
+        //   }
+        // })
+        queryResult.data.Entity?.relations.forEach((value: any) => {
+          if (metaDataInTag.includes(value.type)) {
+            typeArray.push(value.value)
+          }
+        })
+        types.value = typeArray
+
+        if (result.value && result.value.Entity) {
+          setEntity({ ...result.value.Entity, types: typeArray })
+        }
+      } else {
+        router.push('/entity/not-found')
       }
-     }else{
-       router.push('/entity/not-found')
-     }})
+    })
 
     const { t } = useI18n()
 
     return {
       result,
-      selectedImageIndex,
-      relations,
       t,
       photos,
       types,
       relationStringArray,
-      relationsLabelArray,
       openCCModal,
       openDetailsModal,
     }

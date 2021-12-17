@@ -30,11 +30,18 @@
             {{ t('details.modal.characteristics') }}
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
-            <li v-for="metaType in groupedMetadata" :key="metaType">
-              <base-meta-data v-if='metaType.value !== "nested"' :key-word="!metaType.label || metaType.label === '' ? metaType.key+'*': metaType.label" :type="metaType.value" :error-text="t('details.modal.unknown')" />
-              <div v-else class="mt-2"><strong class="col-start-1 w-min inline-block">{{ !metaType.label || metaType.label === '' ? metaType.key+'*': metaType.label }}</strong>
-                <li class='ml-5' v-for="metaType2 in metaType.nestedMetaData" :key="metaType2">
-                  <base-meta-data v-if='metaType2.value !== "nested"' :key-word="!metaType2.label || metaType2.label === '' ? metaType2.key+'*': metaType2.label" :type="metaType2.value" :error-text="t('details.modal.unknown')" />
+            <li v-for="metaType in entity.metadataCollection" :key="metaType">
+              <base-meta-data v-if="!metaType.nested" :key-word="metaType.label" :type="concatMetadatValues(metaType.data)" :error-text="t('details.modal.unknown')" />
+              <div v-if="metaType.nested" class="mt-2">
+                <strong class="col-start-1 w-min inline-block">{{ metaType.label }}</strong>
+                <li v-for="dataItem in metaType.data" :key="dataItem.value" class="ml-5 mb-5">
+                  <base-meta-data
+                    v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection"
+                    :key="index"
+                    :key-word="metaData.label"
+                    :type="concatMetadatValues(metaData.data)"
+                    :error-text="t('details.modal.unknown')"
+                  />
                 </li>
               </div>
             </li>
@@ -44,9 +51,9 @@
           </h3>
 
           <div class="mx-5 flex gap-3 mb-4 flex-wrap">
-            <div v-for="relation in entity.relations" :key="relation.key">
-              <p v-if="relation.label" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
-                {{ relation.label }}
+            <div v-for="relation in entity.types" :key="relation.key">
+              <p class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+                {{ relation }}
               </p>
             </div>
           </div>
@@ -88,6 +95,7 @@ import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData } from 'coghent-v
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
+import { Metadata } from 'coghent-vue-3-component-library/lib/queries'
 
 export type DetailsModalType = {
   state: ModalState
@@ -95,13 +103,9 @@ export type DetailsModalType = {
 
 const entity = ref<any>()
 
-let groupedMetadata: any[] = []
-
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
 })
-
-const unMappedString = 'unMapped'
 
 export const useDetailsModal = () => {
   const updateDetailsModal = (DetailsModalInput: DetailsModalType) => {
@@ -124,44 +128,6 @@ export const useDetailsModal = () => {
     if (!data) return
     entity.value = data
     console.log('entity', entity.value)
-    groupMetaData()
-  }
-
-  const groupMetaData = () => {
-    if (entity.value?.metadata) {
-      //Set unMappaed key as keys
-      const metaData = entity.value?.metadata.forEach((meta: any) => {
-          groupedMetadata.push({
-            key: meta.key === unMappedString && meta.unMappedKey ? meta.unMappedKey : meta.key,
-            value: meta.value,
-            label: meta.label,
-            nestedMetaData: meta.nestedMetaData ? meta.nestedMetaData : undefined
-        })
-      })
-
-      // var grouped = metaData.reduce(function (r: any, a: any) {
-      //   if (!a) return
-      //   r[a.key] = r[a.key] || []
-      //   r[a?.key].push(a)
-      //   return r
-      // }, Object.create(null))
-      // let array: any[] = []
-      // Object.values(grouped).forEach((fromEntry) => {
-      //   array.push(fromEntry)
-      // })
-      // Object.entries(grouped).forEach((entry) => {
-      //   array.forEach((metaType) => {
-      //     let groupedMetaString = ''
-      //     metaType.forEach((metaData: any) => {
-      //       if (entry[0] === metaData.key) groupedMetaString = groupedMetaString + metaData.value + ', '
-      //     })
-      //     if (groupedMetaString != '') {
-      //       groupedMetaString = groupedMetaString.slice(0, -2)
-      //       groupedMetadata.push({ key: entry[0], groupedMetaString, label: metaData.label })
-      //     }
-      //   })
-      // })
-    }
   }
 
   return {
@@ -183,7 +149,6 @@ export default defineComponent({
   },
   setup() {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
-    const openTab = ref<boolean>(false)
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
     const { generateUrl } = useIIIF()
@@ -206,17 +171,29 @@ export default defineComponent({
       closeDetailsModal()
     }
 
+    const concatMetadatValues = (input: Metadata[]): string => {
+      let concatString: string = ''
+      input.forEach((meta: Metadata) => {
+        if (concatString === '') {
+          concatString = meta.value
+        } else {
+          concatString = `${concatString}, ${meta.value}`
+        }
+      })
+
+      return concatString
+    }
+
     const { t } = useI18n()
 
     return {
+      concatMetadatValues,
       closeDetailsModal,
       DetailsModalState,
-      openTab,
       entity,
       t,
       openNewCCModal,
       LazyLoadImage,
-      groupedMetadata,
       copyUrl,
       onClick,
       generateUrl,
@@ -226,12 +203,12 @@ export default defineComponent({
 </script>
 
 <style>
-.no-scrollbar{
-   -ms-overflow-style: none;
-    scrollbar-width: none; 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.no-scrollbar::-webkit-scrollbar{
-   display: none;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 </style>

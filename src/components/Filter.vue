@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading && filters.length > 0" class="flex flex-wrap flex-row w-full justify-center mb-5">
     <FilterTag :is-selected="selected.length === 0" :filter="filterAll" :icon="'check'" @click="toggleFilters" />
-    <FilterTag v-for="tag in filtersWithLabel" :key="tag" :is-selected="isTagSelected(tag.key)" :filter="tag.label" :icon="'check'" @click="addToSelectedTags(tag.key)" />
+    <FilterTag v-for="tag in filtersWithLabel" :key="tag" :is-selected="isTagSelected(tag.key)" :filter="tag.value" :icon="'check'" @click="addToSelectedTags(tag.key)" />
   </div>
   <div v-if="loading" class="flex flex-wrap flex-row w-full justify-center mb-5">
     <FilterTag v-for="index in 5" :key="index" filter="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" :icon="'check'" />
@@ -54,7 +54,7 @@ export default defineComponent({
     }
 
     const filtersWithLabel = computed(() => {
-      return props.filters.filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
+      return props.filters.filter((filter: FullRelationFragment) => filter.value && filter.value !== '')
     })
 
     const isTagSelected = (tag: string): boolean => {
