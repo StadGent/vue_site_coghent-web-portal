@@ -90,7 +90,7 @@ export default defineComponent({
         // })
         queryResult.data.Entity?.relations.forEach((value: any) => {
           if (metaDataInTag.includes(value.type)) {
-            typeArray.push(value.value)
+            value.value && typeArray.push(value.value)
           }
         })
         types.value = typeArray

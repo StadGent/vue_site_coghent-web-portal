@@ -90,7 +90,7 @@ export default defineComponent({
           randomize: getSelectedFilters.value.length > 0 || searchQueryForQuery.value !== '' ? false : true,
           // seed: randomValue.value,
           key: 'title',
-          has_mediafile: false,
+          has_mediafile: true,
         },
       }),
       () => ({
@@ -114,7 +114,7 @@ export default defineComponent({
           randomize: props.defaultRelations.length > 0 || searchQueryForQuery.value !== '' ? false : true,
           // seed: randomValue.value,
           key: 'title',
-          has_mediafile: false,
+          has_mediafile: true,
         },
       }),
       () => ({

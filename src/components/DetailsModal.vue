@@ -23,9 +23,9 @@
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
-          <div class="font-medium pb-2 flex flex-wrap">
-            <relation-tag v-for="relation in entity.relations" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
-          </div>
+          <!-- <div class="font-medium pb-2 flex flex-wrap">
+            <relation-tag v-for="relation in entity.relations.filter((relation: any) => relation.key)" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
+          </div> -->
           <h3 class="font-bold text-lg mt-5 ml-8">
             {{ t('details.modal.characteristics') }}
           </h3>
@@ -51,8 +51,8 @@
           </h3>
 
           <div class="mx-5 flex gap-3 mb-4 flex-wrap">
-            <div v-for="relation in entity.types" :key="relation.key">
-              <p class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+            <div v-for="(relation, index) in entity.types" :key="index">
+              <p v-if="relation" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
                 {{ relation }}
               </p>
             </div>
@@ -141,7 +141,6 @@ export const useDetailsModal = () => {
 export default defineComponent({
   components: {
     Modal,
-    RelationTag,
     BaseButton,
     CopyrightTab,
     LazyLoadImage,
