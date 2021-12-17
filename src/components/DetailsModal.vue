@@ -175,7 +175,7 @@ export default defineComponent({
       let concatString: string = ''
       input.forEach((meta: Metadata) => {
         if (concatString === '') {
-          concatString = meta.value
+          concatString = meta.value ? meta.value : t('details.modal.unknown')
         } else {
           concatString = `${concatString}, ${meta.value}`
         }
