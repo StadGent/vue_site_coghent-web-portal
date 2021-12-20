@@ -38,7 +38,7 @@
                   <base-meta-data
                     v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection"
                     :key="index"
-                    :key-word="t(`${metaType.label}`)"
+                    :key-word="t(`${metaData.label}`)"
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
                   />
