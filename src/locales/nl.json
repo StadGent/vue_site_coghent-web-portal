@@ -73,5 +73,6 @@
     "InCopyrightNonCommercialText": "De rechthebbende heeft de rechtenverklaring toegekend. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Wil je het werk hergebruiken voor niet-commerciële doeleinden, dan moet je toestemming vragen aan de rechthebbende.",
     "InCopyrightUnknown": "In Copyright - unknown rightsholder",
     "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing."
-  }
+  },
+  "MaterieelDing.beheerder": "beheerder"
 }
