@@ -2,7 +2,7 @@
   <!-- main-->
   <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
-      <the-carousel v-if="photos" :source="photos" :infotext="t('main.info')" @opening-ccmodal="openCCModal" @currentCarouselPicture="onCurrentCarouselPicture"/>
+      <the-carousel v-if="photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" @opening-ccmodal="openCCModal"/>
     </section>
     <CardComponent v-if="result" :large="true" class="mx-4 sm:mx-0">
       <div class="flex flex-col bg-background-medium px-10 py-10">
@@ -52,17 +52,14 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
   },
-  methods: {
-    onCurrentCarouselPicture(index: number){
-      this.selectedImageIndex = index
-    }
-  },
   setup: () => {
     const id = asString(useRoute().params['entityID'])
     const router = useRouter()
     const { result, onResult } = useQuery(GetEntityByIdDocument, { id })
     const selectedImageIndex = ref<Number>(0)
+    const selectedImageMetaData = ref<any | undefined>()
     const photos = ref<string[] | undefined>()
+    const mediaFiles = ref<any | undefined>()
     const types = ref<any[] | undefined>()
     const relationStringArray = ref<string[]>([])
     const relationsLabelArray = ref<string[]>([])
@@ -74,12 +71,16 @@ export default defineComponent({
       if (!queryResult.error) {
         const photosArray: string[] = []
 
+        mediaFiles.value = queryResult.data.Entity?.mediafiles
+        console.log(mediaFiles.value)
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {
           if (value.filename) {
             photosArray.push(generateUrl(value.filename, 'full'))
           }
         })
         photos.value = photosArray.length === 0 ? [noImageUrl] : photosArray
+
+        // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex]
 
         queryResult.data.Entity?.relations
           .filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
@@ -119,7 +120,9 @@ export default defineComponent({
       relationStringArray,
       openCCModal,
       openDetailsModal,
-      selectedImageIndex
+      selectedImageIndex,
+      selectedImageMetaData,
+      mediaFiles,
     }
   },
 })
