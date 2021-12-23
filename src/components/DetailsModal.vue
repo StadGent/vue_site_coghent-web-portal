@@ -11,10 +11,11 @@
             <base-meta-data :key-word="t('details.modal.objectName')" :type="entity.objectName[0]?.value" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
-            <div v-for="photo in entity.mediafiles" :key="photo">
+            <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60">
+                <p>{{mediafiles}}</p>
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 mr-2 lg:ml-6 w-11/12" />
-                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" @openingCcmodal="openNewCCModal" />
+                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selectedIndex="index" :mediafiles="mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
@@ -139,6 +140,11 @@ export const useDetailsModal = () => {
 }
 
 export default defineComponent({
+  props: {
+    mediafiles: {
+      type: Array
+    } 
+  },
   components: {
     Modal,
     BaseButton,
@@ -146,7 +152,7 @@ export default defineComponent({
     LazyLoadImage,
     BaseMetaData,
   },
-  setup() {
+  setup(props) {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
@@ -155,6 +161,9 @@ export default defineComponent({
     const onClick = () => {
       console.log('Click!')
     }
+
+    console.log('hey')
+    console.log(props.mediafiles)
 
     const copyUrl = async (id: String) => {
       try {

@@ -17,7 +17,7 @@
         <div class="pt-5 font-medium">
           <span v-for="metaData in types" :key="metaData" class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50">{{ metaData }}</span>
         </div>
-        <base-button class="inline⁻block w-max ml-3 mt-3" :text="t('details.more')" custom-style="ghost-black" custom-icon="info" :icon-shown="true" :on-click="openDetailsModal" />
+        <base-button v-if="photos" class="inline⁻block w-max ml-3 mt-3" :text="t('details.more')" custom-style="ghost-black" :mediafiles="mediaFiles" custom-icon="info" :icon-shown="true" :on-click="openDetailsModal" />
       </div>
     </CardComponent>
     <section class="col-span-2">
