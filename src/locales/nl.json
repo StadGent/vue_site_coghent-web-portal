@@ -8,7 +8,8 @@
     "load": "Meer laden",
     "empty": "Zoekopdracht gaf geen resultaten",
     "more": "Lees meer",
-    "info": "Meer info >"
+    "info": "Meer info >",
+    "notfound": "Dit asset kon niet gevonden worden"
   },
   "header": {
     "discover": "Ontdek de collectie",
