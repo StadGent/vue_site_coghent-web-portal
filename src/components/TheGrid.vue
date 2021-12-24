@@ -1,10 +1,10 @@
 <template>
   <section class="flex flex-col items-center">
-    <h1 v-show="defaultRelations.length === 0" class="md:text-5xl sm:text-4xl text-3xl font-bold w-8/12 text-center py-10 block leading-normal">
+    <h1 v-show="defaultRelations.length === 0 && !noHeader" class="md:text-5xl sm:text-4xl text-3xl font-bold w-8/12 text-center py-10 block leading-normal">
       {{ t('main.title') }}
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
-    <div v-show="defaultRelations.length === 0" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
+    <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
       <div class="w-8/12">
         <base-search v-model="searchQueryForInput" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
       </div>
@@ -55,6 +55,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    noHeader: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup: (props) => {
     const { t } = useI18n()

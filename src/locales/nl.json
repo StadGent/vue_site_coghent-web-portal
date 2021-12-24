@@ -8,8 +8,7 @@
     "load": "Meer laden",
     "empty": "Zoekopdracht gaf geen resultaten",
     "more": "Lees meer",
-    "info": "Meer info >",
-    "notfound": "Dit asset kon niet gevonden worden"
+    "info": "Meer info >"
   },
   "header": {
     "discover": "Ontdek de collectie",
@@ -33,6 +32,12 @@
       "associations": "Associaties",
       "characteristics": "Kenmerken",
       "unknown": "Onbekend"
+    },
+    "notFound": {
+      "title": "Dit asset kon ",
+      "not": "niet ",
+      "found": "gevonden worden",
+      "other": "Misschien was je op zoek naar één van deze werken"
     }
   },
   "profile": {
