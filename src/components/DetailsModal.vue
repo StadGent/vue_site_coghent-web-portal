@@ -13,14 +13,13 @@
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60">
-                <p>{{mediafiles}}</p>
-                <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 mr-2 lg:ml-6 w-11/12" />
-                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selectedIndex="index" :mediafiles="mediafiles" @openingCcmodal="openNewCCModal" />
+                <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 lg:ml-6 w-full" />
+                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selectedIndex="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
         </section>
-        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-x-auto overflow-y-visible sm:overflow-y-auto h-auto sm:h-full lg:w-3/5">
+        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-x-auto overflow-y-visible sm:overflow-y-auto h-auto sm:h-full lg:w-2/3">
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
@@ -140,11 +139,6 @@ export const useDetailsModal = () => {
 }
 
 export default defineComponent({
-  props: {
-    mediafiles: {
-      type: Array
-    } 
-  },
   components: {
     Modal,
     BaseButton,
@@ -161,9 +155,6 @@ export default defineComponent({
     const onClick = () => {
       console.log('Click!')
     }
-
-    console.log('hey')
-    console.log(props.mediafiles)
 
     const copyUrl = async (id: String) => {
       try {
