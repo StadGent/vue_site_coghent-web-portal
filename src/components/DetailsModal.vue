@@ -2,7 +2,7 @@
   <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
-        <section class="bg-background-light h-auto">
+        <section class="bg-background-light h-auto lg:w-1/3">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ entity.title[0]?.value }}
           </h1>
@@ -12,8 +12,8 @@
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
-              <div class="flex relative mb-4 w-60">
-                <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-3 lg:ml-6 w-full" />
+              <div class="flex relative mb-4 w-60 sm:w-auto">
+                <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-6 sm:w-full" />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selectedIndex="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
