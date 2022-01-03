@@ -41,6 +41,7 @@
                     :key-word="t(`${metaData.label}`)"
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
+                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goToCreatorDetails(dataItem.nestedMetaData.id) : null"
                   />
                 </li>
               </div>
@@ -88,6 +89,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+import {useRouter} from 'vue-router'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
@@ -146,11 +148,19 @@ export default defineComponent({
     LazyLoadImage,
     BaseMetaData,
   },
+    methods: {
+    goToCreatorDetails(id: String){
+      this.closeDetailsModal()
+      this.router.push("/creator/" + id)
+    }
+
+  },
   setup(props) {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
     const { generateUrl } = useIIIF()
+    const router = useRouter()
 
     const onClick = () => {
       console.log('Click!')
@@ -196,6 +206,7 @@ export default defineComponent({
       copyUrl,
       onClick,
       generateUrl,
+      router
     }
   },
 })
