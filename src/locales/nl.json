@@ -40,6 +40,9 @@
       "other": "Misschien was je op zoek naar één van deze werken"
     }
   },
+  "creator": {
+    "goBack": "Terug naar"
+  },
   "profile": {
     "greeting": "Hoi!",
     "details": "Account details",
