@@ -14,7 +14,7 @@
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-6 sm:w-full" />
-                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selectedIndex="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
+                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@
                     :key-word="t(`${metaData.label}`)"
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
-                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goToCreatorDetails(dataItem.nestedMetaData.id) : null"
+                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goToCreatorDetails(getCreatorId(metaData)) : null"
                   />
                 </li>
               </div>
@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import Modal, { ModalState } from './base/Modal.vue'
@@ -97,7 +97,7 @@ import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData } from 'coghent-v
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
-import { Metadata } from 'coghent-vue-3-component-library/lib/queries'
+import { Metadata, RelationType } from 'coghent-vue-3-component-library/lib/queries'
 
 export type DetailsModalType = {
   state: ModalState
@@ -148,12 +148,18 @@ export default defineComponent({
     LazyLoadImage,
     BaseMetaData,
   },
-    methods: {
-    goToCreatorDetails(id: String){
+  methods: {
+    goToCreatorDetails(id: String) {
       this.closeDetailsModal()
-      this.router.push("/creator/" + id)
+      this.router.push({path: '/creator/' + id, query: {fromPage: entity.value.title[0]?.value}})
+    },
+    getCreatorId(){
+      const metadata: Array<any> = entity.value.metadataCollection
+      const productionData: Array<any> = metadata.find(data => data.label == 'MaterieelDing.productie').data
+      const productionDataRelations: Array<any> = productionData.find(data => data.label =='MaterieelDing.productie').nestedMetaData.relations
+      const creatorId: string = productionDataRelations.find(relation => relation.label == "vervaardiger").key.split('/')[1]
+      return creatorId
     }
-
   },
   setup(props) {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
@@ -206,7 +212,7 @@ export default defineComponent({
       copyUrl,
       onClick,
       generateUrl,
-      router
+      router,
     }
   },
 })

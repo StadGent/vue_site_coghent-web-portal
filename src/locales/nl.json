@@ -41,7 +41,12 @@
     }
   },
   "creator": {
-    "goBack": "Terug naar"
+    "goBack": "Terug naar",
+    "moreWorks": "Meer van",
+    "date_of_birth": "Geboortedatum",
+    "place_of_bearth": "Geboorteplaats",
+    "date_of_death": "Sterfdatum",
+    "place_of_death": "Sterfplaats"
   },
   "profile": {
     "greeting": "Hoi!",
