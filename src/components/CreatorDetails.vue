@@ -9,10 +9,13 @@
         <h1 class="md:text-5xl sm:text-4xl text-3xl font-bold w-full py-10 block leading-normal">{{person.fullName}}</h1>
       </section>
       <div class="w-screen">
-          <base-meta-data-tab :tab-names="tabs" />
+          <base-meta-data-tab :tab-names="tabs" :hidden="true"/>
         </div>
-      <section>
+      <section v-if="info">
         <base-meta-data v-for="(info, index) in person.extraInfo" :key="index" :key-word="t('creator.' + info.key)" :type="info.value" :error-text="t('details.modal.unknown')" class="w-full" />
+      </section>
+      <section v-else>
+        <p>{{t('creator.noMetadata')}}</p>
       </section>
     </div>
     <div class="w-full justify-center items-center">
@@ -63,7 +66,7 @@ export default defineComponent({
     const route = useRoute()
     const metadata = ref<Metadata[]>()
     const person = ref<Person>()
-        const relationStringArray = ref<string[]>([])
+    const relationStringArray = ref<string[]>([])
     const relationsLabelArray = ref<string[]>([])
     const tabs: Array<string> = ['Design Museum Gent', 'STAM', 'Industriemuseum']
 
@@ -84,14 +87,13 @@ export default defineComponent({
         const tempMetadata: Array<Metadata> = queryResult.data.Entity?.metadata
         metadata.value = tempMetadata.filter(item => item.value != '')
         person.value = {
-          fullName: getNameFromMetadata('fullName'),
+          fullName: getNameFromMetadata('fullname'),
           extraInfo:metadata.value
         }
         
         queryResult.data.Entity?.relations
           .forEach((relation: any) => {
             relationStringArray.value.push(relation.key)
-            console.log(relation.key)
             relation.label && relationsLabelArray.value.push(relation.label)
           })
         

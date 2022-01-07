@@ -43,10 +43,10 @@
   "creator": {
     "goBack": "Terug naar",
     "moreWorks": "Meer van",
-    "date_of_birth": "Geboortedatum",
-    "place_of_bearth": "Geboorteplaats",
-    "date_of_death": "Sterfdatum",
-    "place_of_death": "Sterfplaats"
+    "firstname": "voornaam",
+    "lastname": "achternaam",
+    "nationality": "nationaliteit",
+    "noMetadata": "Geen details gevonden over deze maker"
   },
   "profile": {
     "greeting": "Hoi!",
