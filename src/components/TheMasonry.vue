@@ -9,7 +9,7 @@
             'grid grid-cols-2': (tile.type === 'TwoImages') | (tile.type === 'FourImages'),
           }"
         >
-          <a v-for="(entity, key2) in tile.mediafiles" :key="key2" class="relative group block" :href="entity.id ? '/entity/' + entity.id : undefined">
+          <a v-for="(entity, key2) in tile.mediafiles" :key="key2" class="relative group block bg-background-medium" :href="entity.id ? '/entity/' + entity.id : undefined">
             <span v-show="tile.mediafiles[0] !== 'placeholder'" class="w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute rounded-md"> </span>
 
             <span v-show="!small && tile.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
@@ -23,7 +23,7 @@
                 <div @click.prevent="() => copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
-            <LazyLoadImage :url="getImageUrl(entity, tile.type)" extra-class="h-full object-cover" @loaded="rendered" />
+            <LazyLoadImage :url="getImageUrl(entity, tile.type)" extra-class="h-full object-contain" @loaded="rendered" />
           </a>
         </div>
       </div>
@@ -247,7 +247,7 @@ export default defineComponent({
 
     const getImageUrl = (entity: Entity | 'placeholder', tiletype: keyof MasonryTileConfig): string | undefined => {
       if (entity !== 'placeholder' && entity.primary_mediafile) {
-        return generateUrl(entity.primary_mediafile, tiletype === 'SingleImage' ? 'full' : 'square')
+        return generateUrl(entity.primary_mediafile, tiletype === 'SingleImage' ? 'full' : 'full')
       }
       if (entity === 'placeholder') {
         return undefined
