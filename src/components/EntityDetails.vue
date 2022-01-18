@@ -2,7 +2,7 @@
   <!-- main-->
   <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
-      <the-carousel v-if="photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" @opening-ccmodal="openCCModal"/>
+      <the-carousel v-if="photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" @opening-ccmodal="openCCModal" />
     </section>
     <CardComponent v-if="result" :large="true" class="mx-4 sm:mx-0">
       <div class="flex flex-col bg-background-medium px-10 py-10">
@@ -42,6 +42,11 @@ import useIIIF from '../composables/useIIIF'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
+type ImageSource = {
+  imageUrl: string
+  infoJson: string
+}
+
 const metaDataInTag: string[] = ['carriedOutBy', 'isTypeOf', 'isIn']
 
 export default defineComponent({
@@ -58,27 +63,30 @@ export default defineComponent({
     const { result, onResult } = useQuery(GetEntityByIdDocument, { id })
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
-    const photos = ref<string[] | undefined>()
+    const photos = ref<ImageSource[] | undefined>()
     const mediaFiles = ref<any | undefined>()
     const types = ref<any[] | undefined>()
     const relationStringArray = ref<string[]>([])
     const relationsLabelArray = ref<string[]>([])
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
-    const { generateUrl, noImageUrl } = useIIIF()
+    const { generateUrl, generateInfoUrl, noImageUrl } = useIIIF()
 
     onResult((queryResult: any) => {
       if (!queryResult.error) {
-        const photosArray: string[] = []
+        const photosArray: ImageSource[] = []
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
         console.log(mediaFiles.value)
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {
           if (value.filename) {
-            photosArray.push(generateUrl(value.filename, 'full'))
+            photosArray.push({
+              imageUrl: generateUrl(value.filename, 'full'),
+              infoJson: generateInfoUrl(value.filename),
+            })
           }
         })
-        photos.value = photosArray.length === 0 ? [noImageUrl] : photosArray
+        photos.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl }] : photosArray
 
         // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex]
 

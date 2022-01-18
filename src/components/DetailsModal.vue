@@ -148,19 +148,6 @@ export default defineComponent({
     LazyLoadImage,
     BaseMetaData,
   },
-  methods: {
-    goToCreatorDetails(id: String) {
-      this.closeDetailsModal()
-      this.router.push({path: '/creator/' + id, query: {fromPage: entity.value.title[0]?.value}})
-    },
-    getCreatorId(){
-      const metadata: Array<any> = entity.value.metadataCollection
-      const productionData: Array<any> = metadata.find(data => data.label == 'MaterieelDing.productie').data
-      const productionDataRelations: Array<any> = productionData.find(data => data.label =='MaterieelDing.productie').nestedMetaData.relations
-      const creatorId: string = productionDataRelations.find(relation => relation.label == "vervaardiger").key.split('/')[1]
-      return creatorId
-    }
-  },
   setup(props) {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     const { openCCModal } = useCCModal()
@@ -214,6 +201,19 @@ export default defineComponent({
       generateUrl,
       router,
     }
+  },
+  methods: {
+    goToCreatorDetails(id: String) {
+      this.closeDetailsModal()
+      this.router.push({ path: '/creator/' + id, query: { fromPage: entity.value.title[0]?.value } })
+    },
+    getCreatorId() {
+      const metadata: Array<any> = entity.value.metadataCollection
+      const productionData: Array<any> = metadata.find((data) => data.label == 'MaterieelDing.productie').data
+      const productionDataRelations: Array<any> = productionData.find((data) => data.label == 'MaterieelDing.productie').nestedMetaData.relations
+      const creatorId: string = productionDataRelations.find((relation) => relation.label == 'vervaardiger').key.split('/')[1]
+      return creatorId
+    },
   },
 })
 </script>

@@ -13,9 +13,14 @@ const useIIIF = () => {
     // return `${storageLink}download/${filename}`
   }
 
+  const generateInfoUrl = (filename: string) => {
+    return `${iiifUrl}/iiif/3/${filename}/info.json`
+  }
+
   return {
     noImageUrl,
     generateUrl,
+    generateInfoUrl,
   }
 }
 
