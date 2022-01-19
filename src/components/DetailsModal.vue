@@ -35,7 +35,16 @@
               <div v-if="metaType.nested" class="mt-2">
                 <strong class="col-start-1 w-min inline-block" v-html="t(`${metaType.label}`)" />
                 <li v-for="dataItem in metaType.data" :key="dataItem.value" class="ml-5" :class="dataItem.nestedMetaData.metadataCollection.length === 0 ? 'mb-1' : 'mb-5'">
-                  <strong class="col-start-1 font-semibold inline-block" v-html="t(`${dataItem.value}`)" />
+                  <strong
+                    v-if="metaType.label !== dataItem.value && dataItem.nestedMetaData.metadataCollection.length === 0"
+                    class="col-start-1 font-semibold inline-block"
+                    v-html="t(`${dataItem.value}`)"
+                  />
+                  <strong
+                    v-if="dataItem.nestedMetaData.metadataCollection.length !== 0 && dataItem.nestedMetaData.description && dataItem.nestedMetaData.description[0]"
+                    class="col-start-1 font-semibold inline-block"
+                    >{{ dataItem.nestedMetaData.description[0].value ? dataItem.nestedMetaData.description[0].value : '' }}</strong
+                  >
                   <base-meta-data
                     v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection"
                     :key="index"
