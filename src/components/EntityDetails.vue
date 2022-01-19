@@ -47,7 +47,18 @@ type ImageSource = {
   infoJson: string
 }
 
-const metaDataInTag: string[] = ['carriedOutBy', 'isTypeOf', 'isIn']
+const metaDataInLabel: string[] = [
+  'objectnaam',
+  'object_category',
+  'MensgemaaktObject.draagt',
+  'Entiteit.maaktDeelUitVan',
+  'MaterieelDing.productie',
+  'MensgemaaktObject.maaktDeelUitVan',
+  'MaterieelDing.bestaatUit',
+  'MaterieelDing.isOvergedragenBijVerwerving',
+  'Entiteit.classificatie',
+  'Entiteit.wordtNaarVerwezenDoor',
+]
 
 export default defineComponent({
   name: 'EntityDetails',
@@ -104,7 +115,7 @@ export default defineComponent({
         //   }
         // })
         queryResult.data.Entity?.relations.forEach((value: any) => {
-          if (metaDataInTag.includes(value.type)) {
+          if (!metaDataInLabel.includes(value.label)) {
             value.value && typeArray.push(value.value)
           }
         })
