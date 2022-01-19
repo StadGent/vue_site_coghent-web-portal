@@ -14,7 +14,7 @@
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-6 sm:w-full" />
-                <copyright-tab class="absolute top-4 right-4 w-full h-full" :more-info="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
+                <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
