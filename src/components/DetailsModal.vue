@@ -34,10 +34,12 @@
               <base-meta-data v-if="!metaType.nested" :key-word="t(`${metaType.label}`)" :type="concatMetadatValues(metaType.data)" :error-text="t('details.modal.unknown')" />
               <div v-if="metaType.nested" class="mt-2">
                 <strong class="col-start-1 w-min inline-block" v-html="t(`${metaType.label}`)" />
-                <li v-for="dataItem in metaType.data" :key="dataItem.value" class="ml-5 mb-5">
+                <li v-for="dataItem in metaType.data" :key="dataItem.value" class="ml-5" :class="dataItem.nestedMetaData.metadataCollection.length === 0 ? 'mb-1' : 'mb-5'">
+                  <strong class="col-start-1 font-semibold inline-block" v-html="t(`${dataItem.value}`)" />
                   <base-meta-data
                     v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection"
                     :key="index"
+                    :strong-label="false"
                     :key-word="t(`${metaData.label}`)"
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
