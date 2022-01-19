@@ -15,9 +15,23 @@
           </p>
         </div>
         <div class="pt-5 font-medium">
-          <span v-for="metaData in types" :key="metaData" class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50">{{ metaData }}</span>
+          <a
+            v-for="metaData in types"
+            :key="metaData.id"
+            class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50 cursor-pointer hover:underline"
+            :href="metaData.id ? '/relation/' + metaData.id.replace('entities/', '') : undefined"
+            >{{ metaData.label }}</a
+          >
         </div>
-        <base-button v-if="photos" class="inline⁻block w-max ml-3 mt-3" :text="t('details.more')" custom-style="ghost-black" custom-icon="info" :icon-shown="true" :on-click="openDetailsModal" />
+        <base-button
+          v-if="photos"
+          class="inline⁻block w-max ml-3 mt-3 hover:underline"
+          :text="t('details.more')"
+          custom-style="ghost-black"
+          custom-icon="info"
+          :icon-shown="true"
+          :on-click="openDetailsModal"
+        />
       </div>
     </CardComponent>
     <section class="col-span-2">
@@ -116,7 +130,7 @@ export default defineComponent({
         // })
         queryResult.data.Entity?.relations.forEach((value: any) => {
           if (!metaDataInLabel.includes(value.label)) {
-            value.value && typeArray.push(value.value)
+            value.value && typeArray.push({ label: value.value, id: value.key })
           }
         })
         types.value = typeArray
@@ -142,6 +156,7 @@ export default defineComponent({
       selectedImageIndex,
       selectedImageMetaData,
       mediaFiles,
+      router,
     }
   },
 })

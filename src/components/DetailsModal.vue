@@ -65,7 +65,7 @@
           <div class="mx-5 flex gap-3 mb-4 flex-wrap">
             <div v-for="(relation, index) in entity.types" :key="index">
               <p v-if="relation" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
-                {{ relation }}
+                {{ relation.label }}
               </p>
             </div>
           </div>

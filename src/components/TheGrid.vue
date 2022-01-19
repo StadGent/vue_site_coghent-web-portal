@@ -13,6 +13,7 @@
       </div>
     </div>
     <Filter
+      v-if="!noFilters"
       :loading="loadingRelations"
       :selected="selectedFilters"
       :filter-all="t('buttons.all-works')"
@@ -58,7 +59,11 @@ export default defineComponent({
     noHeader: {
       type: Boolean,
       default: false,
-    }
+    },
+    noFilters: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup: (props) => {
     const { t } = useI18n()
