@@ -10,7 +10,7 @@
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="entity.objectName[0]?.value" :error-text="t('details.modal.unknown')" />
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col px-5 pr-7 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-6 sm:w-full" />
