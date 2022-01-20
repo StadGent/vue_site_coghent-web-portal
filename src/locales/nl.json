@@ -43,9 +43,13 @@
   "creator": {
     "goBack": "Terug naar",
     "moreWorks": "Meer van",
-    "firstname": "voornaam",
-    "lastname": "achternaam",
-    "nationality": "nationaliteit",
+    "firstname": "Voornaam",
+    "lastname": "Achternaam",
+    "nationality": "Nationaliteit",
+    "death_datum": "Sterfdatum",
+    "death_plaats": "Sterfplaats",
+    "birth_datum": "Geboortedatum",
+    "birth_plaats": "Geboorteplaats",
     "noMetadata": "Geen details gevonden over deze maker"
   },
   "profile": {

@@ -11,7 +11,7 @@
       <div class="w-screen">
           <base-meta-data-tab :tab-names="tabs" :hidden="true"/>
         </div>
-      <section v-if="info">
+      <section v-if="person.extraInfo">
         <base-meta-data v-for="(info, index) in person.extraInfo" :key="index" :key-word="t('creator.' + info.key)" :type="info.value" :error-text="t('details.modal.unknown')" class="w-full" />
       </section>
       <section v-else>
@@ -35,7 +35,7 @@ import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetCreatorByIdDocument, BaseButton, BaseMetaData, BaseMetaDataTab, FullRelationFragment } from 'coghent-vue-3-component-library'
+import { GetCreatorByIdDocument, GetEntityByIdDocument, BaseButton, BaseMetaData, BaseMetaDataTab, FullRelationFragment } from 'coghent-vue-3-component-library'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
@@ -62,13 +62,14 @@ export default defineComponent({
     const { t } = useI18n()
     const id = asString(useRoute().params['creatorID'])
     const { result, onResult } = useQuery(GetCreatorByIdDocument, { id })
+    const { result: additionalMetaDataResult, onResult: onAdditionalMetaDataResult, refetch: additionalMetaDataRefetch } = useQuery(GetEntityByIdDocument, { id: '' })
     const router = useRouter()
     const route = useRoute()
     const metadata = ref<Metadata[]>()
     const person = ref<Person>()
     const relationStringArray = ref<string[]>([])
-    const relationsLabelArray = ref<string[]>([])
     const tabs: Array<string> = ['Design Museum Gent', 'STAM', 'Industriemuseum']
+    const additionalInfoIds: Array<string> = []
 
     const goToPreviousPage = () => {
       router.back()
@@ -80,6 +81,18 @@ export default defineComponent({
         metadata.value = metadata.value.filter(element => element != foundItem)
         return foundItem?.value
       }
+    }
+
+    const createObjectFromAdditionalData = (entity: any): Array<Metadata> => {
+      const objects: Array<Metadata> = []
+      entity.metadataCollection.forEach((collection: any) => {
+        const dataObject: Metadata = {
+        key: entity.type + '_' + collection.label,
+        value: collection.data[0].value,
+      }
+        objects.push(dataObject)
+      });
+      return objects
     }
 
     onResult((queryResult: any) => {
@@ -94,14 +107,42 @@ export default defineComponent({
         queryResult.data.Entity?.relations
           .forEach((relation: any) => {
             relationStringArray.value.push(relation.key)
-            relation.label && relationsLabelArray.value.push(relation.label)
+            if (relation.label == "heeftGeboorte" || relation.label == "heeftOverlijden"){
+              additionalInfoIds.push(relation.key)
+            }
           })
+          
+        if(additionalInfoIds){
+          additionalInfoIds.forEach(url => {
+            const id = url.replace('entities/', '')
+            additionalMetaDataRefetch({id})
+          });
+        }
         
       }
       else{
           router.push('/entity/not-found')
       }
     })
+
+  onAdditionalMetaDataResult((queryResult) => {
+    if (queryResult.data?.Entity){
+      const entity = queryResult.data.Entity
+      const infoArray: Array<Metadata> = createObjectFromAdditionalData(entity)
+
+      infoArray.forEach((info: Metadata) => {
+        if (person.value?.extraInfo){
+          person.value?.extraInfo.push(info)
+        }
+        else{
+          person.value = {
+          extraInfo:metadata.value
+        }
+        }
+      })
+    }
+  })
+
     return {
       t,
       tabs,
@@ -109,7 +150,7 @@ export default defineComponent({
       route,
       person,
       result,
-      relationStringArray
+      relationStringArray,
     }
   },
 })
