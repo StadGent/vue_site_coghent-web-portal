@@ -22,9 +22,9 @@
       <img src="" class="w-auto" />
     </div>
   </div>
-  <div class="flex flex-col w-full px-3">
+  <div class="flex flex-col w-full px-3" v-show="relationStringArray">
   <h2 class="md:text-5xl sm:text-4xl text-3xl font-bold w-full text-center py-10 block leading-normal">{{t('creator.moreWorks') + ' ' + person.fullName}}</h2>
-<the-grid :small="true" :no-header="true" class="sm:mt-24" :defaultRelations="relationStringArray"/>
+<the-grid :small="true" :no-header="true" class="sm:mt-24" :defaultRelations="relationStringArray" :noFilters="true"/>
   </div>
 </div>
 </template>
@@ -106,7 +106,9 @@ export default defineComponent({
         
         queryResult.data.Entity?.relations
           .forEach((relation: any) => {
-            relationStringArray.value.push(relation.key)
+            if (relation.label == 'vervaardiger'){
+              relationStringArray.value.push(relation.key)
+            }
             if (relation.label == "heeftGeboorte" || relation.label == "heeftOverlijden"){
               additionalInfoIds.push(relation.key)
             }

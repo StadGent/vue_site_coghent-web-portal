@@ -52,6 +52,7 @@
                     :key-word="t(`${metaData.label}`)"
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
+                    :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
                     @click="t(`${metaData.label}`) == 'vervaardiger' ? goToCreatorDetails(getCreatorId(metaData)) : null"
                   />
                 </li>
@@ -99,7 +100,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
@@ -140,6 +141,7 @@ export const useDetailsModal = () => {
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
+    entity.value.metadataCollection = entity.value.metadataCollection.filter((collection:any) => collection.label != 'vervaardiger')
     console.log('entity', entity.value)
   }
 
@@ -148,6 +150,7 @@ export const useDetailsModal = () => {
     openDetailsModal,
     DetailsModalState,
     setEntity,
+    entity
   }
 }
 
