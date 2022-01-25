@@ -19,7 +19,7 @@
             v-for="metaData in types"
             :key="metaData.id"
             class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50 cursor-pointer hover:underline"
-            :href="metaData.id && metaData.relation == 'vervaardiger' ? '/creator/' + metaData.id.replace('entities/', '') : metaData.id ?  '/relation/' + metaData.id.replace('entities/', '') : undefined"
+            :href="metaData.id && metaData.relation == 'vervaardiger' ? '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.Entity?.title[0]?.value : metaData.id ?  '/relation/' + metaData.id.replace('entities/', '') : undefined"
             >{{ metaData.label }}</a
           >
         </div>
