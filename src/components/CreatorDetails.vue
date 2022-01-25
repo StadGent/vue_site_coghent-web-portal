@@ -11,7 +11,7 @@
       <div class="w-screen">
           <base-meta-data-tab :tab-names="tabs" :hidden="true"/>
         </div>
-      <section v-if="person.extraInfo">
+      <section v-if="person.extraInfo.length">
         <base-meta-data v-for="(info, index) in person.extraInfo" :key="index" :key-word="t('creator.' + info.key)" :type="info.value" :error-text="t('details.modal.unknown')" class="w-full" />
       </section>
       <section v-else>
@@ -22,9 +22,9 @@
       <img src="" class="w-auto" />
     </div>
   </div>
-  <div class="flex flex-col w-full px-3" v-show="relationStringArray.length">
+  <div class="flex flex-col w-full px-3">
   <h2 class="md:text-5xl sm:text-4xl text-3xl font-bold w-full text-center py-10 block leading-normal">{{t('creator.moreWorks') + ' ' + person.fullName}}</h2>
-<the-grid :small="true" :no-header="true" class="sm:mt-24" :defaultRelations="relationStringArray" :noFilters="true"/>
+<the-grid :small="true" :no-header="true" class="sm:mt-24" :defaultRelations="['entities/' + id]" :noFilters="true"/>
   </div>
 </div>
 </template>
@@ -67,7 +67,6 @@ export default defineComponent({
     const route = useRoute()
     const metadata = ref<Metadata[]>()
     const person = ref<Person>()
-    const relationStringArray = ref<string[]>([])
     const tabs: Array<string> = ['Design Museum Gent', 'STAM', 'Industriemuseum']
     const additionalInfoIds: Array<string> = []
 
@@ -106,9 +105,6 @@ export default defineComponent({
         
         queryResult.data.Entity?.relations
           .forEach((relation: any) => {
-            if (relation.label == 'vervaardiger'){
-              relationStringArray.value.push(relation.key)
-            }
             if (relation.label == "heeftGeboorte" || relation.label == "heeftOverlijden"){
               additionalInfoIds.push(relation.key)
             }
@@ -152,7 +148,7 @@ export default defineComponent({
       route,
       person,
       result,
-      relationStringArray,
+      id
     }
   },
 })
