@@ -1,5 +1,5 @@
 <template>
-  <div v-if="result" class="w-full overflow-x-hidden">
+  <div v-if="result" class="w-full">
     <div class="grid sm:grid-cols-2 sm:gap-3 h-auto w-full px-3">
       <div class="pb-0 sm:pb-24">
         <section>

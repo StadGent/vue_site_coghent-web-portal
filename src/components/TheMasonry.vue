@@ -216,7 +216,7 @@ export default defineComponent({
                 }
               }
             })
-            masonryTiles.value.splice(lastIndex, masonryTiles.value.length)
+            masonryTiles.value.splice(lastIndex + 1, masonryTiles.value.length)
           }
         },
         { immediate: true }
