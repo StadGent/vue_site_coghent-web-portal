@@ -107,7 +107,7 @@ export default defineComponent({
         queryResult.data.Entity?.relations
           .forEach((relation: any) => {
             if (relation.label == 'vervaardiger'){
-              console.log('hoooo')
+              relationStringArray.value.push(relation.key)
             }
             if (relation.label == "heeftGeboorte" || relation.label == "heeftOverlijden"){
               additionalInfoIds.push(relation.key)
