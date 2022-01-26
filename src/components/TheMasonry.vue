@@ -1,5 +1,10 @@
 <template>
   <div class="w-full">
+    <div class="mb-1.5">
+      <span v-show="entities.count" class="font-light"
+        >{{ t('main.results') }}<strong class="font-light ml-1">{{ entities.count }}</strong></span
+      >
+    </div>
     <div :class="['masonry mx-5 sm:mx-0', { big: !small }]">
       <div v-for="(tile, key) in masonryTiles" :key="key" class="card">
         <div

@@ -8,7 +8,8 @@
     "load": "Meer laden",
     "empty": "Zoekopdracht gaf geen resultaten",
     "more": "Lees meer",
-    "info": "Meer info >"
+    "info": "Meer info >",
+    "results": "Aantal resultaten:"
   },
   "header": {
     "discover": "Ontdek de collectie",
@@ -94,7 +95,7 @@
   },
   "MaterieelDing.beheerder": "instelling",
   //herkomst
-  "MaterieelDing.isOvergedragenBijVerwerving": "herkomst", 
+  "MaterieelDing.isOvergedragenBijVerwerving": "herkomst",
   "Verwerving.overgedragenAan": "overdracht aan",
   "verwerving.plaats": "plaats van verwerving",
   "verwerving.methode": "verwervingsmethode",
@@ -102,9 +103,9 @@
   "Periode.einde": "einde periode",
   //prductie
   "MaterieelDing.productie": "productie",
-  "Gebeurtenis.tijd": "productiedatum", 
-  "vervaardiging.plaats": "plaats van vervaardiging", 
-  "vervaardiger.rol": "rol", 
+  "Gebeurtenis.tijd": "productiedatum",
+  "vervaardiging.plaats": "plaats van vervaardiging",
+  "vervaardiger.rol": "rol",
   //tentoonstelling
   "Entiteit.maaktDeelUitVan": "tentoonstellingen" //  gebruiktBijActiviteit mag hier als key dan wegvallen.
 }
