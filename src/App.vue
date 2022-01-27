@@ -6,6 +6,7 @@
       <router-view />
       <details-modal :scroll="false" />
       <creative-modal />
+      <disclaimer-pop-up />
     </div>
   </div>
 </template>
@@ -19,10 +20,11 @@ import { ConfigStore } from './stores/ConfigStore'
 import StoreFactory from './stores/StoreFactory'
 import CreativeModal from './components/CreativeModal.vue'
 import DetailsModal from './components/DetailsModal.vue'
+import DisclaimerPopUp from './components/DisclaimerPopUp.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal },
+  components: { TheHeader, CreativeModal, DetailsModal, DisclaimerPopUp },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
