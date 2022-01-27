@@ -1,5 +1,5 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="CCModalState.state" @hide-modal="closeCCModal">
+  <base-modal :large="true" :scroll="true" :modal-state="CCModalState.state" @hide-modal="closeCCModal">
     <div class="w-full h-min flex flex-wrap place-content-center px-12 lg:px-36 sm:px-16 md:px-24 bg-background-light">
       <h1 class="font-bold text-3xl my-7 lg:my-12">{{ t('copyright.title') }}</h1>
     </div>
@@ -86,12 +86,12 @@
         </div>
       </div>
     </div>
-  </modal>
+  </base-modal>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import Modal, { ModalState } from './base/Modal.vue'
+import { BaseModal, ModalState } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 
 export type CCModalType = {
@@ -128,7 +128,7 @@ export const useCCModal = () => {
 
 export default defineComponent({
   components: {
-    Modal,
+    BaseModal,
   },
   setup() {
     const { closeCCModal, CCModalState } = useCCModal()

@@ -53,7 +53,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, BaseModal, FullRelationFragment } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment, ImageSource } from 'coghent-vue-3-component-library'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
@@ -61,12 +61,6 @@ import { useDetailsModal } from './DetailsModal.vue'
 import useIIIF from '../composables/useIIIF'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
-
-type ImageSource = {
-  imageUrl: string
-  infoJson: string
-  fallBackUrl: string
-}
 
 const metaDataInLabel: string[] = [
   'objectnaam',

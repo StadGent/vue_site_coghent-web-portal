@@ -1,5 +1,5 @@
 <template>
-  <modal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
+  <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
         <section class="bg-background-light h-auto lg:w-1/3">
@@ -96,7 +96,7 @@
         <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
       </section>
     </section>
-  </modal>
+  </BaseModal>
 </template>
 
 <script lang="ts">
@@ -104,8 +104,7 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
-import Modal, { ModalState } from './base/Modal.vue'
-import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData } from 'coghent-vue-3-component-library'
+import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, ModalState, BaseModal } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
@@ -141,7 +140,7 @@ export const useDetailsModal = () => {
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
-    entity.value.metadataCollection = entity.value.metadataCollection.filter((collection:any) => collection.label != 'vervaardiger')
+    entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
     console.log('entity', entity.value)
   }
 
@@ -150,13 +149,13 @@ export const useDetailsModal = () => {
     openDetailsModal,
     DetailsModalState,
     setEntity,
-    entity
+    entity,
   }
 }
 
 export default defineComponent({
   components: {
-    Modal,
+    BaseModal,
     BaseButton,
     CopyrightTab,
     LazyLoadImage,
