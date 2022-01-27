@@ -28,7 +28,7 @@
                 <div @click.prevent="() => copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
-            <LazyLoadImage :url="getImageUrl(entity, tile.type)" extra-class="h-full object-contain" @loaded="rendered" />
+            <LazyLoadImage :url="getImageUrl(entity, tile.type)" :fall-back-url="getFallBackImageUrl(entity, tile.type)" extra-class="h-full object-contain" @loaded="rendered" />
           </a>
         </div>
       </div>
@@ -260,6 +260,16 @@ export default defineComponent({
       return noImageUrl
     }
 
+    const getFallBackImageUrl = (entity: Entity | 'placeholder', tiletype: keyof MasonryTileConfig): string | undefined => {
+      if (entity !== 'placeholder' && entity.primary_mediafile) {
+        return generateUrl(entity.primary_mediafile, tiletype === 'SingleImage' ? 'full' : 'full', 'max')
+      }
+      if (entity === 'placeholder') {
+        return undefined
+      }
+      return noImageUrl
+    }
+
     return {
       t,
       loadMore,
@@ -268,6 +278,7 @@ export default defineComponent({
       getImageUrl,
       masonryTiles,
       contructTiles,
+      getFallBackImageUrl,
     }
   },
 })

@@ -19,7 +19,13 @@
             v-for="metaData in types"
             :key="metaData.id"
             class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50 cursor-pointer hover:underline"
-            :href="metaData.id && metaData.relation == 'vervaardiger' ? '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.Entity?.title[0]?.value : metaData.id ?  '/relation/' + metaData.id.replace('entities/', '') : undefined"
+            :href="
+              metaData.id && metaData.relation == 'vervaardiger'
+                ? '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.Entity?.title[0]?.value
+                : metaData.id
+                ? '/relation/' + metaData.id.replace('entities/', '')
+                : undefined
+            "
             >{{ metaData.label }}</a
           >
         </div>
@@ -59,6 +65,7 @@ const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 type ImageSource = {
   imageUrl: string
   infoJson: string
+  fallBackUrl: string
 }
 
 const metaDataInLabel: string[] = [
@@ -108,10 +115,11 @@ export default defineComponent({
             photosArray.push({
               imageUrl: generateUrl(value.filename, 'full'),
               infoJson: generateInfoUrl(value.filename),
+              fallBackUrl: generateUrl(value.filename, 'full', 'max'),
             })
           }
         })
-        photos.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl }] : photosArray
+        photos.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl, fallBackUrl: noImageUrl }] : photosArray
 
         // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex]
 
@@ -130,7 +138,7 @@ export default defineComponent({
         // })
         queryResult.data.Entity?.relations.forEach((value: any) => {
           if (!metaDataInLabel.includes(value.label)) {
-            value.value && typeArray.push({ label: value.value, id: value.key , relation: value.label})
+            value.value && typeArray.push({ label: value.value, id: value.key, relation: value.label })
           }
         })
         types.value = typeArray
