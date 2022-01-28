@@ -1,5 +1,35 @@
 <template>
-  <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
+<!--Fullscreen modal-->
+  <base-modal v-if="DetailsModalState.state == 'show'" :showHeader="true" v-model:isShow="openIIIFModal" class="z-50">
+    <section class="h-large flex relative w-full">
+      <a
+        @click="closeFullscreenModal"
+        class="
+          right-2
+          top-2
+          absolute
+          bg-neutral-0
+          cursor-pointer
+          hover:bg-accent-yellow
+          ml-2
+          mr-2
+          p-2
+          rounded-full
+          shadow-xl
+          text-accent-purple
+          z-50
+          hover:text-neutral-0
+        "
+      >
+        <base-icon
+          icon="close"
+          class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2"
+        />
+      </a>
+      <IIIFViewer :imageUrl="IIIfImageUrl" />
+    </section>
+  </base-modal>
+   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
         <section class="bg-background-light h-auto lg:w-1/3">
@@ -14,6 +44,13 @@
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-6 sm:w-full" />
+                <base-button
+                  class="w-0 absolute z-20 top-4 left-4 mt-3 ml-3"
+                  customStyle="secondary-round"
+                  customIcon="fullscreen"
+                  :iconShown="true"
+                  :onClick="openFullscreenModal"
+                />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
@@ -103,7 +140,8 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, ModalState, BaseModal } from 'coghent-vue-3-component-library'
+import Modal, { ModalState } from './base/Modal.vue'
+import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseIcon, IIIFViewer } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
@@ -158,9 +196,14 @@ export default defineComponent({
     CopyrightTab,
     LazyLoadImage,
     BaseMetaData,
+    BaseModal,
+    BaseIcon,
+    IIIFViewer
   },
   setup(props) {
-    const { closeDetailsModal, DetailsModalState } = useDetailsModal()
+    const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
+    const openIIIFModal = ref<boolean>(false)
+    let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
     const { generateUrl } = useIIIF()
@@ -175,6 +218,14 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
       }
+    }
+
+    const openFullscreenModal = () => {
+      openIIIFModal.value = true
+    }
+
+    const closeFullscreenModal = () => {
+      openIIIFModal.value = false
     }
 
     const openNewCCModal = () => {
@@ -234,6 +285,10 @@ export default defineComponent({
       onClick,
       generateUrl,
       router,
+      openFullscreenModal,
+      closeFullscreenModal,
+      openIIIFModal,
+      IIIfImageUrl
     }
   },
   methods: {
