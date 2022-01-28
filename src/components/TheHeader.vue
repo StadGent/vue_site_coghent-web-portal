@@ -68,7 +68,7 @@ export default defineComponent({
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
     const userStore = StoreFactory.get(UserStore)
     const user: User = userStore.user
-    console.log(route.name)
+
     watch(
       () => route.path,
       () => {
@@ -89,12 +89,8 @@ export default defineComponent({
       router.push('/storybox')
     }
 
-    const buttonClick = () => {
-      console.log('click')
-    }
-
     const { t } = useI18n()
-    return { t, buttonClick, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user }
+    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user }
   },
 })
 </script>

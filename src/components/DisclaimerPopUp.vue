@@ -106,7 +106,6 @@ export default defineComponent({
     const cookie = getCookie('disclaimer')
 
     if (!cookie) {
-      console.log('no cookie')
       smallDisclaimerModal()
     }
 

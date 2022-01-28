@@ -22,9 +22,7 @@ export default defineComponent({
     BaseIcon,
   },
   setup() {
-    const goToPavilion = () => {
-      console.log('Clicked')
-    }
+    const goToPavilion = () => {}
     const { t } = useI18n()
     return {
       t,

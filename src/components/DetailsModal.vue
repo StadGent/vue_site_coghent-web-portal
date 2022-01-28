@@ -8,7 +8,7 @@
           </h1>
           <div class="m-3 lg:ml-6 lg:mt-6">
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
-            <base-meta-data :key-word="t('details.modal.objectName')" :type="entity.objectName[0]?.value" :error-text="t('details.modal.unknown')" />
+            <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
@@ -102,7 +102,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import RelationTag from './RelationTag.vue'
 import { useI18n } from 'vue-i18n'
 import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, ModalState, BaseModal } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
@@ -141,7 +140,6 @@ export const useDetailsModal = () => {
     if (!data) return
     entity.value = data
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
-    console.log('entity', entity.value)
   }
 
   return {
@@ -168,9 +166,7 @@ export default defineComponent({
     const { generateUrl } = useIIIF()
     const router = useRouter()
 
-    const onClick = () => {
-      console.log('Click!')
-    }
+    const onClick = () => {}
 
     const copyUrl = async (id: String) => {
       try {
@@ -201,7 +197,32 @@ export default defineComponent({
 
     const { t } = useI18n()
 
+    const getObjectName = (metadataCollection: any[]) => {
+      const objectNameArray: string[] = []
+      try {
+        metadataCollection.forEach((metadata) => {
+          if (metadata.label === 'Entiteit.classificatie') {
+            metadata.data.forEach((metadata2: any) => {
+              metadata2.nestedMetaData.metadataCollection.forEach((element: any) => {
+                if (element.label === 'objectnaam') {
+                  element.data.forEach((element2: any) => {
+                    objectNameArray.push(element2.value)
+                  })
+                }
+              })
+            })
+          }
+        })
+
+        return [...new Set(objectNameArray)].join(',')
+      } catch (error) {
+        return 'onbekend'
+      }
+    }
+
     return {
+      getObjectName,
+
       concatMetadatValues,
       closeDetailsModal,
       DetailsModalState,

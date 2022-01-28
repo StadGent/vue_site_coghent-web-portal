@@ -100,9 +100,7 @@ export default defineComponent({
     const userEditUrl = configStore.config.value.userEditUrl
 
     //temp
-    const buttonClick = () => {
-      console.log('click')
-    }
+    const buttonClick = () => {}
 
     const getEditPage = () => {
       const editRoute = userEditUrl + userStore.user.value.id

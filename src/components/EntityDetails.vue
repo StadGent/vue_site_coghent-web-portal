@@ -103,7 +103,6 @@ export default defineComponent({
         const photosArray: ImageSource[] = []
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
-        console.log(mediaFiles.value)
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {
           if (value.filename) {
             photosArray.push({
