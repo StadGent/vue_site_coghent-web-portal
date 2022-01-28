@@ -196,7 +196,6 @@ export default defineComponent({
     CopyrightTab,
     LazyLoadImage,
     BaseMetaData,
-    BaseModal,
     BaseIcon,
     IIIFViewer
   },
