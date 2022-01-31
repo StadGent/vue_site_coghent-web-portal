@@ -1,20 +1,21 @@
 <template>
   <!-- main-->
-  <div v-if="result" class="sm:grid sm:grid-cols-2 mt-20 flex-col">
+  <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
-      <the-carousel v-if="photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" @opening-ccmodal="openCCModal" />
+      <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
+      <the-carousel v-if="!loading && photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" @opening-ccmodal="openCCModal" />
     </section>
-    <CardComponent v-if="result" :large="true" class="mx-4 sm:mx-0">
-      <div class="flex flex-col bg-background-medium px-10 py-10">
-        <h1 class="text-lg font-bold">
+    <CardComponent :large="true" class="mx-4 sm:mx-0">
+      <div class="flex flex-col bg-background-medium px-10 py-10" :class="{ [`animate-pulse h-80`]: loading }">
+        <h1 v-if="result" class="text-lg font-bold">
           {{ result.Entity?.title[0]?.value }}
         </h1>
-        <div class="pt-5 font-light">
+        <div v-if="result" class="pt-5 font-light">
           <p v-show="result.Entity?.description && result.Entity?.description[0]">
             {{ result.Entity?.description[0]?.value }}
           </p>
         </div>
-        <div class="pt-5 font-medium">
+        <div v-if="result" class="pt-5 font-medium">
           <a
             v-for="metaData in types"
             :key="metaData.id"
@@ -40,7 +41,7 @@
         />
       </div>
     </CardComponent>
-    <section class="col-span-2">
+    <section v-if="result" class="col-span-2">
       <h2 class="font-bold text-2xl w-full text-center pt-10 mb-2">
         {{ t('details.discover') }}
       </h2>
@@ -86,7 +87,7 @@ export default defineComponent({
   setup: () => {
     const id = asString(useRoute().params['entityID'])
     const router = useRouter()
-    const { result, onResult } = useQuery(GetEntityByIdDocument, { id })
+    const { result, onResult, loading } = useQuery(GetEntityByIdDocument, { id })
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
     const photos = ref<ImageSource[] | undefined>()
@@ -158,6 +159,7 @@ export default defineComponent({
       selectedImageMetaData,
       mediaFiles,
       router,
+      loading,
     }
   },
 })
