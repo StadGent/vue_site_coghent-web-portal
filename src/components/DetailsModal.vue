@@ -1,6 +1,6 @@
 <template>
 <!--IIIF modal-->
-  <base-modal v-if="DetailsModalState.state == 'show'" :showHeader="true" v-model:isShow="openIIIFModal" class="z-50">
+  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" @hide-modal="closeFullscreenModal" customStyles="z-50">
     <section class="h-large flex relative w-full">
       <a
         @click="closeFullscreenModal"
@@ -28,9 +28,9 @@
       </a>
       <IIIFViewer :imageUrl="IIIfImageUrl" />
     </section>
-  </base-modal>
+  </BaseModal>
   <!--Details modal-->
-   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
+   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
     <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-5/6">
         <section class="bg-background-light h-auto lg:w-1/3">
@@ -50,7 +50,7 @@
                   customStyle="secondary-round"
                   customIcon="fullscreen"
                   :iconShown="true"
-                  :onClick="openFullscreenModal"
+                  @click="openIIIFModal(generateUrl(photo.filename, 'full'))"
                 />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
@@ -141,7 +141,7 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import Modal, { ModalState } from './base/Modal.vue'
+import { ModalState } from './base/Modal.vue'
 import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseIcon, IIIFViewer } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
@@ -152,11 +152,42 @@ export type DetailsModalType = {
   state: ModalState
 }
 
+export type FullscreenModalType = {
+  state: ModalState
+}
+
 const entity = ref<any>()
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
 })
+
+const FullscreenModalState = ref<DetailsModalType>({
+  state: 'hide',
+})
+
+export const useFullscreenModal = () => {
+  const updateFullscreenModal = (FullscreenModalInput: FullscreenModalType) => {
+    FullscreenModalState.value = FullscreenModalInput
+  }
+
+  const closeFullscreenModal = () => {
+      updateFullscreenModal({
+      state: 'hide',
+    })
+    }
+
+    const openFullscreenModal = () => {
+       updateFullscreenModal({
+      state: 'show',
+    })
+    }
+    return {
+      closeFullscreenModal,
+      openFullscreenModal,
+      FullscreenModalState,
+    }
+}
 
 export const useDetailsModal = () => {
   const updateDetailsModal = (DetailsModalInput: DetailsModalType) => {
@@ -202,7 +233,7 @@ export default defineComponent({
   },
   setup(props) {
     const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
-    const openIIIFModal = ref<boolean>(false)
+    const { closeFullscreenModal, FullscreenModalState, openFullscreenModal } = useFullscreenModal()
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
@@ -218,14 +249,6 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
       }
-    }
-
-    const openFullscreenModal = () => {
-      openIIIFModal.value = true
-    }
-
-    const closeFullscreenModal = () => {
-      openIIIFModal.value = false
     }
 
     const openNewCCModal = () => {
@@ -280,7 +303,9 @@ export default defineComponent({
 
     return {
       getObjectName,
-
+      FullscreenModalState,
+      openFullscreenModal,
+      closeFullscreenModal,
       concatMetadatValues,
       closeDetailsModal,
       DetailsModalState,
@@ -292,9 +317,6 @@ export default defineComponent({
       onClick,
       generateUrl,
       router,
-      openFullscreenModal,
-      closeFullscreenModal,
-      openIIIFModal,
       IIIfImageUrl
     }
   },
@@ -310,6 +332,10 @@ export default defineComponent({
       const creatorId: string = productionDataRelations.find((relation) => relation.label == 'vervaardiger').key.split('/')[1]
       return creatorId
     },
+    openIIIFModal(url: string){
+      this.IIIfImageUrl = url
+      this.openFullscreenModal()
+    }
   },
 })
 </script>
