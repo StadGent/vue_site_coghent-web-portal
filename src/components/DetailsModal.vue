@@ -233,13 +233,20 @@ export default defineComponent({
       closeDetailsModal()
     }
 
+    const replaceDotsWithOnbekend = (_string: string) => {
+      let returnValue = _string
+      if (_string == '..') returnValue = t('details.modal.unknown')
+      return returnValue
+    }
+
     const concatMetadatValues = (input: Metadata[]): string => {
       let concatString: string = ''
       input.forEach((meta: Metadata) => {
         if (concatString === '') {
           concatString = meta.value ? meta.value : t('details.modal.unknown')
+          concatString = replaceDotsWithOnbekend(concatString);
         } else {
-          concatString = `${concatString}, ${meta.value}`
+          concatString = `${concatString}, ${replaceDotsWithOnbekend(meta.value as string)}`
         }
       })
 
