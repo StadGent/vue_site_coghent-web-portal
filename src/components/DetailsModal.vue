@@ -1,5 +1,5 @@
 <template>
-<!--Fullscreen modal-->
+<!--IIIF modal-->
   <base-modal v-if="DetailsModalState.state == 'show'" :showHeader="true" v-model:isShow="openIIIFModal" class="z-50">
     <section class="h-large flex relative w-full">
       <a
@@ -29,9 +29,10 @@
       <IIIFViewer :imageUrl="IIIfImageUrl" />
     </section>
   </base-modal>
+  <!--Details modal-->
    <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
-      <section class="flex flex-col lg:flex-row h-10/12 sm:h-4/5">
+      <section class="flex flex-col lg:flex-row h-10/12 sm:h-5/6">
         <section class="bg-background-light h-auto lg:w-1/3">
           <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
             {{ entity.title[0]?.value }}
@@ -56,7 +57,7 @@
             </div>
           </div>
         </section>
-        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-x-auto overflow-y-visible sm:overflow-y-auto h-auto sm:h-full lg:w-2/3">
+        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-y-visible lg:overflow-y-auto h-auto lg:h-full lg:w-2/3 pb-12 lg:pb-0">
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
@@ -110,9 +111,9 @@
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/12 sm:h-1/5 shadow-2xl fixed bottom-0 sm:relative w-full pb-6 sm:pb-0">
+      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/6 shadow-2xl fixed bottom-0 w-full lg:pb-6">
         <base-button
-          class="w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
+          class="w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
           custom-style="secondary-round"
           custom-icon="link"
@@ -121,7 +122,7 @@
         <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
         <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
         <base-button
-          class="hidden w-12 h-12 pl-6 mt-3 ml-3 stroke-current text-text-black inline-block lg:hidden"
+          class="hidden w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="onClick"
           custom-style="secondary-round"
           custom-icon="edit"

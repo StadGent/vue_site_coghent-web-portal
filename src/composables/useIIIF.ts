@@ -14,7 +14,7 @@ const useIIIF = () => {
   }
 
   const generateInfoUrl = (filename: string) => {
-    return `${iiifUrl}/iiif/3/${filename}/info.json`
+    return `${iiifUrl}iiif/3/${filename}/info.json`
   }
 
   return {
