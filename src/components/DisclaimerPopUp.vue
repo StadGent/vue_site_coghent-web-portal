@@ -72,7 +72,7 @@ export const useDisclaimerModal = () => {
     updateDisclaimerModal({
       state: 'hide',
     })
-    setCookie('disclaimer', 'seen', { expires: 7 })
+    // setCookie('disclaimer', 'seen', { expires: 7 })
   }
 
   const openDisclaimerModal = () => {
