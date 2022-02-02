@@ -146,7 +146,7 @@ import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseI
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
-import { Metadata, RelationType } from 'coghent-vue-3-component-library/lib/queries'
+import { Metadata, Relation, RelationType } from 'coghent-vue-3-component-library/lib/queries'
 
 export type DetailsModalType = {
   state: ModalState
@@ -210,6 +210,55 @@ export const useDetailsModal = () => {
     if (!data) return
     entity.value = data
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
+    entity.value = checkForMatchingChildRelations(data as NestedDataObject)
+  }
+
+  type NestedDataObject = {
+    description: []
+    id: string
+    mediafiles: []
+    metadataCollection: Array<MetadataCollectionObject>
+    objectNumber: []
+    relations: Array<Relation>
+    title: []
+    type: string
+    types: []
+    __typename: string
+  }
+
+  type MetadataCollectionObject = {
+    data: Array<ParentMetadataObject>
+    label: string
+    nested: boolean
+    __typename: string
+  }
+
+  type ParentMetadataObject = {
+    label: string
+    nestedMetaData: NestedDataObject
+    unMappedKey: null | string
+    value: string
+    __typename: string
+  }
+
+  const checkForMatchingChildRelations = (_data: NestedDataObject) => {
+    let myData = {} as NestedDataObject
+    Object.assign(myData, _data)
+    const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
+    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollectionObject>
+    for (const _metadataCollection of myMetadataCollection) {
+      if (_metadataCollection.nested) {
+        for (const _dataObject of _metadataCollection.data) {
+          _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
+            if (parentLables.includes(_item.label)) {
+              _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item))
+            }
+          })
+        }
+      }
+    }
+    myData.metadataCollection = myMetadataCollection
+    return myData
   }
 
   return {
