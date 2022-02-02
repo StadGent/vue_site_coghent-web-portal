@@ -307,7 +307,7 @@ export default defineComponent({
 
     const replaceDotsWithOnbekend = (_string: string) => {
       let returnValue = _string
-      if (_string == '..') returnValue = t('details.modal.unknown')
+      if (_string == '..') returnValue = 'onbekend'
       return returnValue
     }
 
