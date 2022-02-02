@@ -138,7 +138,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
@@ -146,7 +146,7 @@ import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseI
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
-import { Metadata, Relation, RelationType } from 'coghent-vue-3-component-library/lib/queries'
+import { Metadata, MetadataCollection, Relation, RelationType } from 'coghent-vue-3-component-library/lib/queries'
 
 export type DetailsModalType = {
   state: ModalState
@@ -156,7 +156,8 @@ export type FullscreenModalType = {
   state: ModalState
 }
 
-const entity = ref<any>()
+const entity = ref<any>();
+let originalMetadata: Array<MetadataCollection> =[];
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -209,8 +210,12 @@ export const useDetailsModal = () => {
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
+    Object.assign(originalMetadata,entity.value.metadataCollection);
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
-    entity.value = checkForMatchingChildRelations(data as NestedDataObject)
+    entity.value = checkForMatchingChildRelations(entity.value as NestedDataObject)
+    entity.value = removeObjectNaamFromMetadataValue(entity.value as NestedDataObject)
+    console.log('metadata', originalMetadata)
+    console.log('entity.value.metadataCollection', entity.value.metadataCollection)
   }
 
   type NestedDataObject = {
@@ -259,6 +264,21 @@ export const useDetailsModal = () => {
     }
     myData.metadataCollection = myMetadataCollection
     return myData
+  }
+
+  const removeObjectNaamFromMetadataValue = (_data: NestedDataObject) => {
+    let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollectionObject>;
+    let filteredMetadataForClassificatie = myMetadata.filter(_meta => _meta.label == 'Entiteit.classificatie');
+    if(filteredMetadataForClassificatie.length > 0 && filteredMetadataForClassificatie[0].nested){
+      for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data){
+        const filterdClassificatieMetadata = _classificatieMetadata.nestedMetaData.metadataCollection.filter(_item => _item.label == 'objectnaam');
+        if(filterdClassificatieMetadata.length > 0){
+          filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata));
+        }
+      }
+    }
+    _data.metadataCollection = myMetadata;
+    return _data;
   }
 
   return {
