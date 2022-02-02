@@ -50,7 +50,7 @@
                   customStyle="secondary-round"
                   customIcon="fullscreen"
                   :iconShown="true"
-                  @click="openIIIFModal(generateUrl(photo.filename, 'full'))"
+                  @click="openIIIFModal(generateInfoUrl(photo.filename, 'full'))"
                 />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
@@ -286,7 +286,7 @@ export default defineComponent({
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
-    const { generateUrl } = useIIIF()
+    const { generateUrl, generateInfoUrl } = useIIIF()
     const router = useRouter()
 
     const onClick = () => {}
@@ -365,6 +365,7 @@ export default defineComponent({
       copyUrl,
       onClick,
       generateUrl,
+      generateInfoUrl,
       router,
       IIIfImageUrl
     }
