@@ -40,6 +40,7 @@
           <div class="m-3 lg:ml-6 lg:mt-6">
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
+            <base-meta-data :key-word="t('details.modal.collectieNaam')" :type="getCollectionName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
@@ -384,6 +385,16 @@ export default defineComponent({
     return myMetadata
   }
 
+  const getCollectionName = (_metadataCollection: Array<MetadataCollectionObject>) => {
+    console.log({_metadataCollection})
+    let name = 'onbekend'
+    const collection = _metadataCollection.filter(_collection => _collection.label == 'MaterieelDing.beheerder');
+    if(collection.length > 0){
+      name = collection[0].data[0].value
+    }
+    return name;
+  }
+
     return {
       getObjectName,
       FullscreenModalState,
@@ -403,6 +414,7 @@ export default defineComponent({
       router,
       IIIfImageUrl,
       filterAllData,
+      getCollectionName,
     }
   },
   methods: {
