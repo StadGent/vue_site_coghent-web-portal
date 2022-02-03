@@ -106,6 +106,7 @@
   //identificatie
   "Entiteit.classificatie": "type object",
   "MaterieelDing.beheerder": "instelling",
+  "MaterieelDing.bestaatUit": "Onderdelen",
   //herkomst
   "MaterieelDing.isOvergedragenBijVerwerving": "herkomst",
   "Verwerving.overgedragenAan": "overdracht aan",
