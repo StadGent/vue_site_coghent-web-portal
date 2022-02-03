@@ -156,8 +156,37 @@ export type FullscreenModalType = {
   state: ModalState
 }
 
+type NestedDataObject = {
+  description: []
+  id: string
+  mediafiles: []
+  metadataCollection: Array<MetadataCollectionObject>
+  objectNumber: []
+  relations: Array<Relation>
+  title: []
+  type: string
+  types: []
+  __typename: string
+}
+
+type MetadataCollectionObject = {
+  data: Array<ParentMetadataObject>
+  label: string
+  nested: boolean
+  __typename: string
+}
+
+type ParentMetadataObject = {
+  label: string
+  nestedMetaData: NestedDataObject
+  unMappedKey: null | string
+  value: string
+  __typename: string
+}
+
 const entity = ref<any>();
-let originalMetadata: Array<MetadataCollection> =[];
+const objectName = ref<string>();
+const originalMetadata = ref<NestedDataObject>();
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -210,40 +239,20 @@ export const useDetailsModal = () => {
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
-    Object.assign(originalMetadata,entity.value.metadataCollection);
+    // TODO:
+    // Object.assign(originalMetadata,entity.value.metadataCollection);
+    // console.log({originalMetadata})
+    // objectName.value = getObjectName(entity.value.metadataCollection as any[])
+    // console.log({objectName})
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
-    entity.value = checkForMatchingChildRelations(entity.value as NestedDataObject)
-    entity.value = removeObjectNaamFromMetadataValue(entity.value as NestedDataObject)
-    console.log('metadata', originalMetadata)
-    console.log('entity.value.metadataCollection', entity.value.metadataCollection)
+    entity.value = filterAllData(entity.value as NestedDataObject)
   }
 
-  type NestedDataObject = {
-    description: []
-    id: string
-    mediafiles: []
-    metadataCollection: Array<MetadataCollectionObject>
-    objectNumber: []
-    relations: Array<Relation>
-    title: []
-    type: string
-    types: []
-    __typename: string
-  }
-
-  type MetadataCollectionObject = {
-    data: Array<ParentMetadataObject>
-    label: string
-    nested: boolean
-    __typename: string
-  }
-
-  type ParentMetadataObject = {
-    label: string
-    nestedMetaData: NestedDataObject
-    unMappedKey: null | string
-    value: string
-    __typename: string
+  const filterAllData = (_entity: NestedDataObject) => {
+    _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
+    _entity = removeObjectNaamFromMetadataValue(_entity as NestedDataObject)
+    _entity.metadataCollection = removeParentsWihthoutData(_entity.metadataCollection as Array<MetadataCollectionObject>)
+    return _entity
   }
 
   const checkForMatchingChildRelations = (_data: NestedDataObject) => {
@@ -280,6 +289,44 @@ export const useDetailsModal = () => {
     _data.metadataCollection = myMetadata;
     return _data;
   }
+
+  const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollectionObject>) => {
+    let myMetadata: Array<MetadataCollectionObject> = [];
+    Object.assign(myMetadata, _metadataCollection)
+    for(const _collection of myMetadata){
+      if(_collection.nested){
+        if(_collection.data.length == 0){
+          myMetadata.splice(myMetadata.indexOf(_collection),1)
+        }
+      }
+    }
+    return myMetadata
+  }
+
+//FIXME:
+  const getObjectName = (metadataCollection: any[]) => {
+      console.log({metadataCollection})
+      const objectNameArray: string[] = []
+      try {
+        metadataCollection.forEach((metadata) => {
+          if (metadata.label === 'Entiteit.classificatie') {
+            metadata.data.forEach((metadata2: any) => {
+              metadata2.nestedMetaData.metadataCollection.forEach((element: any) => {
+                if (element.label === 'objectnaam') {
+                  element.data.forEach((element2: any) => {
+                    objectNameArray.push(element2.value)
+                  })
+                }
+              })
+            })
+          }
+        })
+
+        return [...new Set(objectNameArray)].join(',')
+      } catch (error) {
+        return 'onbekend'
+      }
+    }
 
   return {
     closeDetailsModal,
