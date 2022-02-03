@@ -40,7 +40,7 @@
           <div class="m-3 lg:ml-6 lg:mt-6">
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
-            <base-meta-data :key-word="t('details.modal.collectieNaam')" :type="getCollectionName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
+            <base-meta-data :key-word="t('details.modal.collectieNaam')" :type="getCollectionName(entity).name" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
@@ -166,8 +166,14 @@ type NestedDataObject = {
   relations: Array<Relation>
   title: []
   type: string
-  types: []
+  types: Array<TypeObject>
   __typename: string
+}
+
+type TypeObject = {
+  label: string
+  id: string
+  relation: string
 }
 
 type MetadataCollectionObject = {
@@ -347,7 +353,7 @@ export default defineComponent({
         for (const _dataObject of _metadataCollection.data) {
           _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
             if (parentLables.includes(_item.label)) {
-              _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item))
+              _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item),1)
             }
           })
         }
@@ -364,7 +370,7 @@ export default defineComponent({
       for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data){
         const filterdClassificatieMetadata = _classificatieMetadata.nestedMetaData.metadataCollection.filter(_item => _item.label == 'objectnaam')
         if(filterdClassificatieMetadata.length > 0){
-          filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata))
+          filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata),1)
         }
       }
     }
@@ -385,14 +391,20 @@ export default defineComponent({
     return myMetadata
   }
 
-  const getCollectionName = (_metadataCollection: Array<MetadataCollectionObject>) => {
-    console.log({_metadataCollection})
+  const getCollectionName = (_entity: NestedDataObject) => {
     let name = 'onbekend'
-    const collection = _metadataCollection.filter(_collection => _collection.label == 'MaterieelDing.beheerder');
+    let relation = ''
+    let link = ''
+    const collection = _entity.metadataCollection.filter(_collection => _collection.label == 'MaterieelDing.beheerder');
     if(collection.length > 0){
       name = collection[0].data[0].value
+      relation = collection[0].data[0].label
     }
-    return name;
+    const relationType = _entity.types.filter(_type => _type.label == name && _type.relation == relation);
+    if(relationType.length > 0){
+      link = relationType[0].id.replace('entities/', '');
+    }
+    return {name: name, link: link};
   }
 
     return {
