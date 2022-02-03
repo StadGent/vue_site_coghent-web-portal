@@ -68,7 +68,7 @@
             {{ t('details.modal.characteristics') }}
           </h3>
           <ul class="mt-5 flex flex-col gap-3 ml-8">
-            <li v-for="metaType in entity.metadataCollection" :key="metaType">
+            <li v-for="metaType in filterAllData(entity).metadataCollection" :key="metaType">
               <base-meta-data v-if="!metaType.nested" :key-word="t(`${metaType.label}`)" :type="concatMetadatValues(metaType.data)" :error-text="t('details.modal.unknown')" />
               <div v-if="metaType.nested" class="mt-2">
                 <strong class="col-start-1 w-min inline-block" v-html="t(`${metaType.label}`)" />
@@ -138,7 +138,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { defineComponent, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
@@ -146,7 +146,7 @@ import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseI
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
-import { Metadata, MetadataCollection, Relation, RelationType } from 'coghent-vue-3-component-library/lib/queries'
+import { Metadata, Relation } from 'coghent-vue-3-component-library/lib/queries'
 
 export type DetailsModalType = {
   state: ModalState
@@ -185,8 +185,6 @@ type ParentMetadataObject = {
 }
 
 const entity = ref<any>();
-const objectName = ref<string>();
-const originalMetadata = ref<NestedDataObject>();
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -239,94 +237,8 @@ export const useDetailsModal = () => {
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
-    // TODO:
-    // Object.assign(originalMetadata,entity.value.metadataCollection);
-    // console.log({originalMetadata})
-    // objectName.value = getObjectName(entity.value.metadataCollection as any[])
-    // console.log({objectName})
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
-    entity.value = filterAllData(entity.value as NestedDataObject)
   }
-
-  const filterAllData = (_entity: NestedDataObject) => {
-    _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
-    _entity = removeObjectNaamFromMetadataValue(_entity as NestedDataObject)
-    _entity.metadataCollection = removeParentsWihthoutData(_entity.metadataCollection as Array<MetadataCollectionObject>)
-    return _entity
-  }
-
-  const checkForMatchingChildRelations = (_data: NestedDataObject) => {
-    let myData = {} as NestedDataObject
-    Object.assign(myData, _data)
-    const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollectionObject>
-    for (const _metadataCollection of myMetadataCollection) {
-      if (_metadataCollection.nested) {
-        for (const _dataObject of _metadataCollection.data) {
-          _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
-            if (parentLables.includes(_item.label)) {
-              _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item))
-            }
-          })
-        }
-      }
-    }
-    myData.metadataCollection = myMetadataCollection
-    return myData
-  }
-
-  const removeObjectNaamFromMetadataValue = (_data: NestedDataObject) => {
-    let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollectionObject>;
-    let filteredMetadataForClassificatie = myMetadata.filter(_meta => _meta.label == 'Entiteit.classificatie');
-    if(filteredMetadataForClassificatie.length > 0 && filteredMetadataForClassificatie[0].nested){
-      for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data){
-        const filterdClassificatieMetadata = _classificatieMetadata.nestedMetaData.metadataCollection.filter(_item => _item.label == 'objectnaam');
-        if(filterdClassificatieMetadata.length > 0){
-          filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata));
-        }
-      }
-    }
-    _data.metadataCollection = myMetadata;
-    return _data;
-  }
-
-  const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollectionObject>) => {
-    let myMetadata: Array<MetadataCollectionObject> = [];
-    Object.assign(myMetadata, _metadataCollection)
-    for(const _collection of myMetadata){
-      if(_collection.nested){
-        if(_collection.data.length == 0){
-          myMetadata.splice(myMetadata.indexOf(_collection),1)
-        }
-      }
-    }
-    return myMetadata
-  }
-
-//FIXME:
-  const getObjectName = (metadataCollection: any[]) => {
-      console.log({metadataCollection})
-      const objectNameArray: string[] = []
-      try {
-        metadataCollection.forEach((metadata) => {
-          if (metadata.label === 'Entiteit.classificatie') {
-            metadata.data.forEach((metadata2: any) => {
-              metadata2.nestedMetaData.metadataCollection.forEach((element: any) => {
-                if (element.label === 'objectnaam') {
-                  element.data.forEach((element2: any) => {
-                    objectNameArray.push(element2.value)
-                  })
-                }
-              })
-            })
-          }
-        })
-
-        return [...new Set(objectNameArray)].join(',')
-      } catch (error) {
-        return 'onbekend'
-      }
-    }
 
   return {
     closeDetailsModal,
@@ -417,6 +329,61 @@ export default defineComponent({
       }
     }
 
+    const filterAllData = (_entity: NestedDataObject) => {
+    _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
+    _entity = removeObjectNaamFromMetadataValue(_entity as NestedDataObject)
+    _entity.metadataCollection = removeParentsWihthoutData(_entity.metadataCollection as Array<MetadataCollectionObject>)
+    return _entity
+  }
+
+  const checkForMatchingChildRelations = (_data: NestedDataObject) => {
+    let myData = {} as NestedDataObject
+    Object.assign(myData, _data)
+    const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
+    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollectionObject>
+    for (const _metadataCollection of myMetadataCollection) {
+      if (_metadataCollection.nested) {
+        for (const _dataObject of _metadataCollection.data) {
+          _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
+            if (parentLables.includes(_item.label)) {
+              _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item))
+            }
+          })
+        }
+      }
+    }
+    myData.metadataCollection = myMetadataCollection
+    return myData
+  }
+
+  const removeObjectNaamFromMetadataValue = (_data: NestedDataObject) => {
+    let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollectionObject>
+    let filteredMetadataForClassificatie = myMetadata.filter(_meta => _meta.label == 'Entiteit.classificatie')
+    if(filteredMetadataForClassificatie.length > 0 && filteredMetadataForClassificatie[0].nested){
+      for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data){
+        const filterdClassificatieMetadata = _classificatieMetadata.nestedMetaData.metadataCollection.filter(_item => _item.label == 'objectnaam')
+        if(filterdClassificatieMetadata.length > 0){
+          filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata))
+        }
+      }
+    }
+    _data.metadataCollection = myMetadata
+    return _data;
+  }
+
+  const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollectionObject>) => {
+    let myMetadata: Array<MetadataCollectionObject> = []
+    Object.assign(myMetadata, _metadataCollection)
+    for(const _collection of myMetadata){
+      if(_collection.nested){
+        if(_collection.data.length == 0){
+          myMetadata.splice(myMetadata.indexOf(_collection),1)
+        }
+      }
+    }
+    return myMetadata
+  }
+
     return {
       getObjectName,
       FullscreenModalState,
@@ -434,7 +401,8 @@ export default defineComponent({
       generateUrl,
       generateInfoUrl,
       router,
-      IIIfImageUrl
+      IIIfImageUrl,
+      filterAllData,
     }
   },
   methods: {
