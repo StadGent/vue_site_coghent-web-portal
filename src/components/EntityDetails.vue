@@ -21,7 +21,7 @@
         </div>
         <div v-if="result" class="pt-5 font-medium">
           <a
-            v-for="metaData in types"
+            v-for="metaData in filterDuplicateTypes(types)"
             :key="metaData.id"
             class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50 cursor-pointer hover:underline"
             :href="
@@ -64,6 +64,13 @@ import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
 import useIIIF from '../composables/useIIIF'
+import { Relation } from 'coghent-vue-3-component-library/lib/queries'
+
+type TypeObject = {
+      id: string,
+      label:string,
+      relation: string;
+}
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
@@ -149,6 +156,21 @@ export default defineComponent({
       }
     })
 
+    const filterDuplicateTypes = (_relations: Array<TypeObject>) => {
+      let myRelations: Array<TypeObject> = [];
+      Object.assign(myRelations,_relations)
+      for(const relation of myRelations){
+        const items = myRelations.filter(_relation => _relation.id == relation.id);
+        if(items.length > 1){
+          const duplicateWithSameValue = items.filter(_item => _item.label == relation.label);
+          if(duplicateWithSameValue.length > 1){
+            myRelations.splice(myRelations.indexOf(relation),1);
+          }
+        }
+      }
+      return myRelations
+    }
+
     const { t } = useI18n()
 
     return {
@@ -164,6 +186,7 @@ export default defineComponent({
       mediaFiles,
       router,
       loading,
+      filterDuplicateTypes,
     }
   },
 })
