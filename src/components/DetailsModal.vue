@@ -68,7 +68,7 @@
           <h3 class="font-bold text-lg mt-5 ml-8">
             {{ t('details.modal.characteristics') }}
           </h3>
-          <ul class="mt-5 flex flex-col gap-3 ml-8">
+          <ul class="mt-5 flex flex-col gap-2 ml-8">
             <li v-for="metaType in filterAllData(entity).metadataCollection" :key="metaType">
               <base-meta-data v-if="!metaType.nested" :key-word="t(`${metaType.label}`)" :type="concatMetadatValues(metaType.data)" :error-text="t('details.modal.unknown')" />
               <div v-if="metaType.nested" class="mt-2">
@@ -340,6 +340,7 @@ export default defineComponent({
     _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
     _entity = removeObjectNaamFromMetadataValue(_entity as NestedDataObject)
     _entity.metadataCollection = removeParentsWihthoutData(_entity.metadataCollection as Array<MetadataCollectionObject>)
+    _entity.metadataCollection = removeIrrelevantParents(_entity.metadataCollection as Array<MetadataCollectionObject>)
     return _entity
   }
 
@@ -389,6 +390,13 @@ export default defineComponent({
       }
     }
     return myMetadata
+  }
+
+  const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollectionObject>) => {
+    const irrelevantLabels = ['vervaardiging.plaats']
+    let myMetadata: Array<MetadataCollectionObject> = []
+    Object.assign(myMetadata, _metadataCollection)
+    return myMetadata.filter(_collection => !irrelevantLabels.includes(_collection.label))
   }
 
   const getCollectionName = (_entity: NestedDataObject) => {
