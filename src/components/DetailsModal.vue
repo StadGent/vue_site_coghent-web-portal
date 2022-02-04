@@ -112,9 +112,9 @@
 
           <div class="mx-5 flex gap-3 mb-4 flex-wrap">
             <div v-for="(relation, index) in entity.types" :key="index">
-              <p v-if="relation" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50">
+              <a v-if="relation" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50 cursor-pointer hover:underline" :key="relation.id" @click="`${goToRelation(relation.id.replace('entities/',''))}`">
                 {{ relation.label }}
-              </p>
+              </a>
             </div>
           </div>
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
@@ -352,7 +352,6 @@ export default defineComponent({
     entity = checkForMatchingParentRelations(entity as NestedDataObject)
     entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
     entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollectionObject>)
-    console.log(entity)
     return entity
   }
 
@@ -473,8 +472,8 @@ export default defineComponent({
   },
   methods: {
     goToRelation(id: string) {
-      this.closeDetailsModal()
       window.location.href = `${window.location.origin}/relation/${id}`
+      this.closeDetailsModal()
     },
     goToCreatorDetails(id: String) {
       this.closeDetailsModal()
