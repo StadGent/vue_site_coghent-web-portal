@@ -40,7 +40,8 @@
           <div class="m-3 lg:ml-6 lg:mt-6">
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
-            <base-meta-data :key-word="t('details.modal.collectieNaam')" :type="getCollectionName(entity).name" :error-text="t('details.modal.unknown')" />
+            <base-meta-data :key-word="t('details.modal.instellingNaam')" :type="getName(entity,'MaterieelDing.beheerder').name" :error-text="t('details.modal.unknown')" />
+            <base-meta-data :key-word="t('details.modal.collectieNaam')" :type="getName(entity,'Collectie.naam').name" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
@@ -393,17 +394,17 @@ export default defineComponent({
   }
 
   const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollectionObject>) => {
-    const irrelevantLabels = ['vervaardiging.plaats']
+    const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam']
     let myMetadata: Array<MetadataCollectionObject> = []
     Object.assign(myMetadata, _metadataCollection)
     return myMetadata.filter(_collection => !irrelevantLabels.includes(_collection.label))
   }
 
-  const getCollectionName = (_entity: NestedDataObject) => {
+  const getName = (_entity: NestedDataObject, _label: string) => {
     let name = 'onbekend'
     let relation = ''
     let link = ''
-    const collection = _entity.metadataCollection.filter(_collection => _collection.label == 'MaterieelDing.beheerder');
+    const collection = _entity.metadataCollection.filter(_collection => _collection.label == _label);
     if(collection.length > 0){
       name = collection[0].data[0].value
       relation = collection[0].data[0].label
@@ -434,7 +435,7 @@ export default defineComponent({
       router,
       IIIfImageUrl,
       filterAllData,
-      getCollectionName,
+      getName,
     }
   },
   methods: {
