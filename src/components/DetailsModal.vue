@@ -338,7 +338,8 @@ export default defineComponent({
     }
 
     const filterAllData = (_entity: NestedDataObject) => {
-    _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
+    // _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
+    _entity = checkForMatchingParentRelations(_entity as NestedDataObject)
     _entity = removeObjectNaamFromMetadataValue(_entity as NestedDataObject)
     _entity.metadataCollection = removeParentsWihthoutData(_entity.metadataCollection as Array<MetadataCollectionObject>)
     _entity.metadataCollection = removeIrrelevantParents(_entity.metadataCollection as Array<MetadataCollectionObject>)
@@ -356,6 +357,29 @@ export default defineComponent({
           _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
             if (parentLables.includes(_item.label)) {
               _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item),1)
+            }
+          })
+        }
+      }
+    }
+    myData.metadataCollection = myMetadataCollection
+    return myData
+  }
+
+  const checkForMatchingParentRelations = (_data: NestedDataObject) => {
+    let myData = {} as NestedDataObject
+    Object.assign(myData, _data)
+    const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
+    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollectionObject>
+    for (const _metadataCollection of myMetadataCollection) {
+      if (_metadataCollection.nested) {
+        for (const _dataObject of _metadataCollection.data) {
+          _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
+            if (parentLables.includes(_item.label)) {
+              const filteredMetadataWithChildLabel = myMetadataCollection.filter(_meta => _meta.label == _item.label)
+              if(filteredMetadataWithChildLabel.length > 0 ){
+                myMetadataCollection.splice(myMetadataCollection.indexOf(filteredMetadataWithChildLabel[0]),1)
+              }              
             }
           })
         }
