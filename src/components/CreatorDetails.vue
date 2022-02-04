@@ -4,7 +4,7 @@
     <div v-if="person" class="pb-0 sm:pb-24">
       <section>
         <div>
-          <base-button class="inline⁻block w-full" :text="t('creator.goBack')+ ' ' + route.query.fromPage" custom-style="details-black" custom-icon="arrowLeftLine" :icon-shown="true" @click="goToPreviousPage" />
+          <base-button v-if="route.query.fromPage" class="inline⁻block w-full" :text="t('creator.goBack')+ ' ' + route.query.fromPage" custom-style="details-black" custom-icon="arrowLeftLine" :icon-shown="true" @click="goToPreviousPage" />
         </div>
         <h1 class="md:text-5xl sm:text-4xl text-3xl font-bold w-full py-10 block leading-normal">{{person.fullName}}</h1>
       </section>
@@ -71,7 +71,7 @@ export default defineComponent({
     const additionalInfoIds: Array<string> = []
 
     const goToPreviousPage = () => {
-      router.back()
+      history.back()
     }
 
     const getNameFromMetadata = (key: string) => {

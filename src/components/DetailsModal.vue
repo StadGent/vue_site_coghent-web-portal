@@ -477,7 +477,7 @@ export default defineComponent({
     },
     goToCreatorDetails(id: String) {
       this.closeDetailsModal()
-      this.router.push({ path: '/creator/' + id, query: { fromPage: entity.value.title[0]?.value } })
+      window.location.href = `${window.location.origin}/creator/${id}?fromPage=${entity.value.title[0]?.value}`
     },
     getCreatorId() {
       const metadata: Array<any> = entity.value.metadataCollection
