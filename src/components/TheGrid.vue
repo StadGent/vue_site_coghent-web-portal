@@ -124,6 +124,7 @@ export default defineComponent({
           // seed: randomValue.value,
           key: 'title',
           has_mediafile: true,
+          skip_relations: false,
         },
       }),
       () => ({
