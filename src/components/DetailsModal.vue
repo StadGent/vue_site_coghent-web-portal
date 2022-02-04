@@ -40,8 +40,15 @@
           <div class="m-3 lg:ml-6 lg:mt-6">
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
+            <base-meta-data 
+            v-if="getName(entity,'Collectie.naam').name != 'onbekend'"
+            :key-word="t('details.modal.collectieNaam')" 
+            :type="getName(entity,'Collectie.naam').name" 
+            :error-text="t('details.modal.unknown')"
+            :clickable="true"
+            @click="goToRelation(getName(entity,'Collectie.naam').id)"
+            />
             <base-meta-data :key-word="t('details.modal.instellingNaam')" :type="getName(entity,'MaterieelDing.beheerder').name" :error-text="t('details.modal.unknown')" />
-            <base-meta-data :key-word="t('details.modal.collectieNaam')" :type="getName(entity,'Collectie.naam').name" :error-text="t('details.modal.unknown')" />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
@@ -337,13 +344,16 @@ export default defineComponent({
       }
     }
 
-    const filterAllData = (_entity: NestedDataObject) => {
-    // _entity = checkForMatchingChildRelations(_entity as NestedDataObject)
-    _entity = checkForMatchingParentRelations(_entity as NestedDataObject)
-    _entity = removeObjectNaamFromMetadataValue(_entity as NestedDataObject)
-    _entity.metadataCollection = removeParentsWihthoutData(_entity.metadataCollection as Array<MetadataCollectionObject>)
-    _entity.metadataCollection = removeIrrelevantParents(_entity.metadataCollection as Array<MetadataCollectionObject>)
-    return _entity
+  const filterAllData = (_entity: NestedDataObject) => {
+    let entity ={} as NestedDataObject;
+    Object.assign(entity, _entity)
+    const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
+    entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollectionObject>, irrelevantLabels)
+    entity = checkForMatchingParentRelations(entity as NestedDataObject)
+    entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
+    entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollectionObject>)
+    console.log(entity)
+    return entity
   }
 
   const checkForMatchingChildRelations = (_data: NestedDataObject) => {
@@ -417,17 +427,16 @@ export default defineComponent({
     return myMetadata
   }
 
-  const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollectionObject>) => {
-    const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam']
+  const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollectionObject>, _irrelevantLabels: Array<string>) => {
     let myMetadata: Array<MetadataCollectionObject> = []
     Object.assign(myMetadata, _metadataCollection)
-    return myMetadata.filter(_collection => !irrelevantLabels.includes(_collection.label))
+    return myMetadata.filter(_collection => !_irrelevantLabels.includes(_collection.label))
   }
 
   const getName = (_entity: NestedDataObject, _label: string) => {
     let name = 'onbekend'
     let relation = ''
-    let link = ''
+    let id = ''
     const collection = _entity.metadataCollection.filter(_collection => _collection.label == _label);
     if(collection.length > 0){
       name = collection[0].data[0].value
@@ -435,9 +444,9 @@ export default defineComponent({
     }
     const relationType = _entity.types.filter(_type => _type.label == name && _type.relation == relation);
     if(relationType.length > 0){
-      link = relationType[0].id.replace('entities/', '');
+      id = relationType[0].id.replace('entities/', '');
     }
-    return {name: name, link: link};
+    return {name: name, id: id};
   }
 
     return {
@@ -463,6 +472,10 @@ export default defineComponent({
     }
   },
   methods: {
+    goToRelation(id: string) {
+      this.closeDetailsModal()
+      window.location.href = `${window.location.origin}/relation/${id}`
+    },
     goToCreatorDetails(id: String) {
       this.closeDetailsModal()
       this.router.push({ path: '/creator/' + id, query: { fromPage: entity.value.title[0]?.value } })
