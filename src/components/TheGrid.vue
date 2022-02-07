@@ -64,6 +64,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    noRelations: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup: (props) => {
     const { t } = useI18n()
@@ -100,6 +104,7 @@ export default defineComponent({
           // seed: randomValue.value,
           key: 'title',
           has_mediafile: true,
+          skip_relations: props.noRelations ? props.noRelations : false
         },
       }),
       () => ({
