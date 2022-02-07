@@ -120,7 +120,7 @@ export default defineComponent({
       GetEntitiesDocument,
       () => ({
         limit: limit,
-        skip: _skip,
+        skip: (_skip = props.noRelations  ? 1 : 0),
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
