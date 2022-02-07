@@ -14,7 +14,7 @@
     </div>
     <Filter
       v-if="!noFilters"
-      :loading="loadingRelations"
+      :loading="loading"
       :selected="selectedFilters"
       :filter-all="t('buttons.all-works')"
       :filters="relationData ? relationData.Entities.relations : []"
@@ -112,30 +112,6 @@ export default defineComponent({
       })
     )
 
-    const {
-      result: relationResult,
-      onResult: onRelationResult,
-      loading: loadingRelations,
-    } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
-      GetEntitiesDocument,
-      () => ({
-        limit: limit,
-        skip: (_skip = props.noRelations  ? 1 : 0),
-        searchValue: {
-          value: searchQueryForQuery.value,
-          isAsc: false,
-          relation_filter: props.defaultRelations.length > 0 ? props.defaultRelations : [],
-          randomize: props.defaultRelations.length > 0 || searchQueryForQuery.value !== '' ? false : true,
-          // seed: randomValue.value,
-          key: 'title',
-          has_mediafile: true,
-        },
-      }),
-      () => ({
-        prefetch: false,
-      })
-    )
-
     const isEndOfResult = (queryResult: GetEntitiesQuery | undefined) => {
       if (queryResult) {
         if (queryResult && queryResult.Entities?.results && queryResult.Entities?.count && queryResult.Entities?.results.length >= queryResult.Entities?.count) {
@@ -150,15 +126,8 @@ export default defineComponent({
 
     onResult((queryResult) => {
       entityData.value = queryResult.data
+      relationData.value = queryResult.data
       isEndOfResult(queryResult.data)
-    })
-
-    onRelationResult((queryResult) => {
-      if ((queryResult.data && queryResult.data.Entities?.relations?.length === 0) || (queryResult.data && !queryResult.data.Entities?.relations)) {
-        //do nothing for now
-      } else {
-        relationData.value = queryResult.data
-      }
     })
 
     const getData = () => {
@@ -239,7 +208,6 @@ export default defineComponent({
       searchQueryForQuery,
       searchQueryForInput,
       relationData,
-      loadingRelations,
       loadMore,
       endOfData,
       entityData,
