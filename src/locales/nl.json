@@ -124,8 +124,8 @@
   "Entiteit.maaktDeelUitVan": "tentoonstellingen", 
   "gebruiktBijActiviteit":"tentoonstelling",
   //Associaties
-  "MengemaaktObject.draag": "Associaties", 
-  "associate.onderwerp": "geassocieerd onderwerp", 
+  "MensgemaaktObject.draagt": "Associaties", 
+  "associatie.onderwerp": "geassocieerd onderwerp", 
   "associatie.periode": "geassocieerde periode", 
   //Iconografie
   "inhoud.onderwerp": "afgebeeld onderwerp", 
