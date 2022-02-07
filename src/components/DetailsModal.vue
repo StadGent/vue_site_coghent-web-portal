@@ -48,7 +48,14 @@
             :clickable="true"
             @click="goToRelation(getName(entity,'Collectie.naam').id)"
             />
-            <base-meta-data :key-word="t('details.modal.instellingNaam')" :type="getName(entity,'MaterieelDing.beheerder').name" :error-text="t('details.modal.unknown')" />
+            <base-meta-data 
+            v-if="getName(entity,'MaterieelDing.beheerder').name != 'onbekend'"
+            :key-word="t('details.modal.instellingNaam')" 
+            :type="getName(entity,'MaterieelDing.beheerder').name" 
+            :error-text="t('details.modal.unknown')"
+            :clickable="true"
+            @click="goToRelation(getName(entity,'MaterieelDing.beheerder').id)"
+            />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
@@ -352,6 +359,7 @@ export default defineComponent({
     entity = checkForMatchingParentRelations(entity as NestedDataObject)
     entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
     entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollectionObject>)
+    console.log({entity})
     return entity
   }
 
