@@ -2,7 +2,7 @@
   <div class="flex justify-between flex-wrap sm:flex-nowrap mt-12 md:mt-0">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
-        <router-link to="/home" class="flex items-center sm:ml-0 ml-3">
+        <router-link to="/home" class="flex items-center sm:ml-0 ml-3 group">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" fill="#FDC20B" />
             <g filter="url(#filter0_i)">
@@ -22,16 +22,16 @@
             </defs>
           </svg>
           <div class="flex flex-col items-center mt-5 ml-2">
-            <h2 class="md:text-lg text-center" :class="{ [`font-bold`]: isHomeActive }">
+            <h2 class="md:text-lg text-center group-hover:underline" :class="{ [`font-bold`]: isHomeActive }">
               {{ t('header.discover') }}
             </h2>
             <div class="w-2 h-2 mt-2" :class="{ [`bg-accent-yellow rounded`]: isHomeActive }" />
           </div>
         </router-link>
       </div>
-      <div class="flex flex-col items-center pt-8 md:pt-5">
+      <div class="group flex flex-col items-center pt-8 md:pt-5">
         <a target="_blank" href="https://www.collectie.gent/over-het-project" class="flex items-center">
-          <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center">
+          <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
             {{ t('header.about') }}
           </h2>
         </a>
