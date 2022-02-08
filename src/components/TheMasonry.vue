@@ -33,14 +33,14 @@
         </div>
       </div>
     </div>
-    <div v-if="masonryTiles.length === 0">
+    <div v-if="entities.count === 0">
       <p v-show="!loading" class="text-center">
         {{ t('main.empty') }}
       </p>
     </div>
     <div class="flex justify-center">
       <base-button
-        v-show="!loading && masonryTiles.length !== 0 && !endOfData"
+        v-show="!loading && entities.count !== 0 && !endOfData"
         :text="t('main.load')"
         :on-click="loadMore"
         custom-style="ghost-black"
