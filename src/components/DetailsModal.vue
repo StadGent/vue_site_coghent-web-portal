@@ -162,7 +162,7 @@ import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseI
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
-import { Metadata, Relation } from 'coghent-vue-3-component-library/lib/queries'
+import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 
 export type DetailsModalType = {
   state: ModalState
@@ -176,7 +176,7 @@ type NestedDataObject = {
   description: []
   id: string
   mediafiles: []
-  metadataCollection: Array<MetadataCollectionObject>
+  metadataCollection: Array<MetadataCollection>
   objectNumber: []
   relations: Array<Relation>
   title: []
@@ -189,21 +189,6 @@ type TypeObject = {
   label: string
   id: string
   relation: string
-}
-
-type MetadataCollectionObject = {
-  data: Array<ParentMetadataObject>
-  label: string
-  nested: boolean
-  __typename: string
-}
-
-type ParentMetadataObject = {
-  label: string
-  nestedMetaData: NestedDataObject
-  unMappedKey: null | string
-  value: string
-  __typename: string
 }
 
 const entity = ref<any>();
@@ -355,10 +340,10 @@ export default defineComponent({
     let entity ={} as NestedDataObject;
     Object.assign(entity, _entity)
     const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
-    entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollectionObject>, irrelevantLabels)
+    entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollection>, irrelevantLabels)
     entity = checkForMatchingParentRelations(entity as NestedDataObject)
     entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
-    entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollectionObject>)
+    entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollection>)
     console.log({entity})
     return entity
   }
@@ -367,13 +352,13 @@ export default defineComponent({
     let myData = {} as NestedDataObject
     Object.assign(myData, _data)
     const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollectionObject>
+    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
     for (const _metadataCollection of myMetadataCollection) {
-      if (_metadataCollection.nested) {
+      if (_metadataCollection.nested && _metadataCollection.data) {
         for (const _dataObject of _metadataCollection.data) {
-          _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
-            if (parentLables.includes(_item.label)) {
-              _dataObject.nestedMetaData.metadataCollection.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item),1)
+          _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
+            if (_item && parentLables.includes(_item.label)) {
+              _dataObject?.nestedMetaData?.metadataCollection?.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item),1)
             }
           })
         }
@@ -387,12 +372,12 @@ export default defineComponent({
     let myData = {} as NestedDataObject
     Object.assign(myData, _data)
     const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollectionObject>
+    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
     for (const _metadataCollection of myMetadataCollection) {
-      if (_metadataCollection.nested) {
+      if (_metadataCollection.nested && _metadataCollection.data) {
         for (const _dataObject of _metadataCollection.data) {
-          _dataObject.nestedMetaData.metadataCollection.forEach((_item) => {
-            if (parentLables.includes(_item.label)) {
+          _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
+            if (_item && parentLables.includes(_item.label)) {
               const filteredMetadataWithChildLabel = myMetadataCollection.filter(_meta => _meta.label == _item.label)
               if(filteredMetadataWithChildLabel.length > 0 ){
                 myMetadataCollection.splice(myMetadataCollection.indexOf(filteredMetadataWithChildLabel[0]),1)
@@ -407,12 +392,12 @@ export default defineComponent({
   }
 
   const removeObjectNaamFromMetadataValue = (_data: NestedDataObject) => {
-    let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollectionObject>
+    let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollection>
     let filteredMetadataForClassificatie = myMetadata.filter(_meta => _meta.label == 'Entiteit.classificatie')
-    if(filteredMetadataForClassificatie.length > 0 && filteredMetadataForClassificatie[0].nested){
+    if(filteredMetadataForClassificatie && filteredMetadataForClassificatie[0].data && filteredMetadataForClassificatie[0].nested){
       for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data){
-        const filterdClassificatieMetadata = _classificatieMetadata.nestedMetaData.metadataCollection.filter(_item => _item.label == 'objectnaam')
-        if(filterdClassificatieMetadata.length > 0){
+        const filterdClassificatieMetadata = _classificatieMetadata?.nestedMetaData?.metadataCollection?.filter(_item => _item?.label == 'objectnaam')
+        if(filterdClassificatieMetadata && filterdClassificatieMetadata.length > 0){
           filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata),1)
         }
       }
@@ -421,12 +406,12 @@ export default defineComponent({
     return _data;
   }
 
-  const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollectionObject>) => {
-    let myMetadata: Array<MetadataCollectionObject> = []
+  const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollection>) => {
+    let myMetadata: Array<MetadataCollection> = []
     Object.assign(myMetadata, _metadataCollection)
     for(const _collection of myMetadata){
       if(_collection.nested){
-        if(_collection.data.length == 0){
+        if(_collection.data?.length == 0){
           myMetadata.splice(myMetadata.indexOf(_collection),1)
         }
       }
@@ -434,8 +419,8 @@ export default defineComponent({
     return myMetadata
   }
 
-  const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollectionObject>, _irrelevantLabels: Array<string>) => {
-    let myMetadata: Array<MetadataCollectionObject> = []
+  const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollection>, _irrelevantLabels: Array<string>) => {
+    let myMetadata: Array<MetadataCollection> = []
     Object.assign(myMetadata, _metadataCollection)
     return myMetadata.filter(_collection => !_irrelevantLabels.includes(_collection.label))
   }
@@ -445,9 +430,9 @@ export default defineComponent({
     let relation = ''
     let id = ''
     const collection = _entity.metadataCollection.filter(_collection => _collection.label == _label);
-    if(collection.length > 0){
-      name = collection[0].data[0].value
-      relation = collection[0].data[0].label
+    if(collection && collection[0]){
+      name = collection[0].data?.[0]?.value as string
+      relation = collection[0].data?.[0]?.label as string
     }
     const relationType = _entity.types.filter(_type => _type.label == name && _type.relation == relation);
     if(relationType.length > 0){
