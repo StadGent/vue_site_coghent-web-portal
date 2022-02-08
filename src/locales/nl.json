@@ -15,6 +15,11 @@
     "discover": "Ontdek de collectie",
     "pavilion": "Het paviljoen"
   },
+  "footer": {
+    "eu-info": "Dit project wordt mee gefinancierd door het Europees Fonds voor Regionale Ontwikkeling via het initiatief Urban Innovative Actions (UIA)",
+    "cookie-policy": "cookie policy",
+    "privacy-policy": "privacy policy"
+  },
   "buttons": {
     "login": "Aanmelden",
     "storybox": "Verhalenbox",
@@ -122,13 +127,13 @@
   "vervaardiging.plaats": "plaats van vervaardiging",
   "vervaardiger.rol": "rol",
   //Tentoonstellingen
-  "Entiteit.maaktDeelUitVan": "tentoonstellingen", 
-  "gebruiktBijActiviteit":"tentoonstelling",
+  "Entiteit.maaktDeelUitVan": "tentoonstellingen",
+  "gebruiktBijActiviteit": "tentoonstelling",
   //Associaties
-  "MensgemaaktObject.draagt": "Associaties", 
-  "associatie.onderwerp": "geassocieerd onderwerp", 
-  "associatie.periode": "geassocieerde periode", 
+  "MensgemaaktObject.draagt": "Associaties",
+  "associatie.onderwerp": "geassocieerd onderwerp",
+  "associatie.periode": "geassocieerde periode",
   //Iconografie
-  "inhoud.onderwerp": "afgebeeld onderwerp", 
+  "inhoud.onderwerp": "afgebeeld onderwerp",
   "inhoud.persoon.naam": "afgebeeld persoon"
 }

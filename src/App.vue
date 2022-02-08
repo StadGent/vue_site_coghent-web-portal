@@ -1,14 +1,15 @@
 <template>
   <div id="modals" />
-  <div class="bg-background-light font-body py-6 min-h-screen flex flex-col items-center overflow-x-hidden">
-    <div class="container">
+  <div class="bg-background-light font-body pt-6 flex flex-col items-center overflow-x-hidden">
+    <div class="container min-h-screen">
       <the-header />
       <router-view />
       <details-modal :scroll="false" />
       <creative-modal />
-      <disclaimer-button/>
+      <disclaimer-button />
       <disclaimer-pop-up />
     </div>
+    <the-footer />
   </div>
 </template>
 
@@ -23,10 +24,11 @@ import CreativeModal from './components/CreativeModal.vue'
 import DetailsModal from './components/DetailsModal.vue'
 import DisclaimerPopUp from './components/DisclaimerPopUp.vue'
 import DisclaimerButton from './components/DisclaimerButton.vue'
+import TheFooter from './components/TheFooter.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, DisclaimerPopUp, DisclaimerButton },
+  components: { TheHeader, CreativeModal, DetailsModal, DisclaimerPopUp, DisclaimerButton, TheFooter },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
