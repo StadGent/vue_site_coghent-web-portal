@@ -14,7 +14,6 @@
     </div>
     <Filter
       v-if="!noFilters"
-      :loading="loading"
       :selected="selectedFilters"
       :filter-all="t('buttons.all-works')"
       :filters="relationData ? relationData.Entities.relations : []"
@@ -28,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, ref, reactive, PropType, computed, toRaw } from 'vue'
+import { defineComponent, watch, ref, reactive, PropType, computed, toRaw, onMounted } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
@@ -126,7 +125,9 @@ export default defineComponent({
 
     onResult((queryResult) => {
       entityData.value = queryResult.data
-      relationData.value = queryResult.data
+      if (!relationData.value){
+        relationData.value = queryResult.data
+      }
       isEndOfResult(queryResult.data)
     })
 
