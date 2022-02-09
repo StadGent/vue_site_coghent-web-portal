@@ -6,7 +6,7 @@
     </h1>
     <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
       <div class="w-8/12">
-        <base-search v-model="searchQueryForInput" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
+        <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
       </div>
       <div class="lg:absolute lg:right-0">
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
@@ -67,7 +67,7 @@ export default defineComponent({
     noRelations: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup: (props) => {
     const { t } = useI18n()
@@ -101,10 +101,10 @@ export default defineComponent({
           isAsc: false,
           relation_filter: getSelectedFilters.value,
           randomize: getSelectedFilters.value.length > 0 || searchQueryForQuery.value !== '' ? false : true,
-          // seed: randomValue.value,
+          seed: randomValue.value,
           key: 'title',
           has_mediafile: true,
-          skip_relations: props.noRelations ? props.noRelations : false
+          skip_relations: props.noRelations ? props.noRelations : false,
         },
       }),
       () => ({
