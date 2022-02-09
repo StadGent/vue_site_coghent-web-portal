@@ -15,6 +15,7 @@
     <Filter
       v-if="!noFilters"
       :selected="selectedFilters"
+      :loading="loading"
       :filter-all="t('buttons.all-works')"
       :filters="relationData ? relationData.Entities.relations : []"
       @new-selected="updatSelectedFilters"
@@ -125,9 +126,7 @@ export default defineComponent({
 
     onResult((queryResult) => {
       entityData.value = queryResult.data
-      if (!relationData.value){
-        relationData.value = queryResult.data
-      }
+      relationData.value = queryResult.data
       isEndOfResult(queryResult.data)
     })
 
