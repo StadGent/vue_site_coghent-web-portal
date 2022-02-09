@@ -5,7 +5,7 @@
         >{{ t('main.results') }}<strong class="font-light ml-1">{{ entities.count }}</strong></span
       >
     </div>
-    <div :class="['masonry mx-5 sm:mx-0', { big: !small }]">
+    <div v-if="entities.count !== 0" :class="['masonry mx-5 sm:mx-0', { big: !small }]">
       <div v-for="(tile, key) in masonryTiles" :key="key" class="card">
         <div
           id="card-content"
@@ -28,7 +28,14 @@
                 <div @click.prevent="() => copyUrl(entity.id)"><base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" /></div>
               </div>
             </span>
-            <LazyLoadImage :url="getImageUrl(entity, tile.type)" :fall-back-url="getFallBackImageUrl(entity, tile.type)" extra-class="h-full object-contain" @loaded="rendered" />
+            <LazyLoadImage
+              :url="getImageUrl(entity, tile.type)"
+              :width="entity.primary_mediafile_info ? entity.primary_mediafile_info.width : undefined"
+              :height="entity.primary_mediafile_info ? entity.primary_mediafile_info.height : undefined"
+              :fall-back-url="getFallBackImageUrl(entity, tile.type)"
+              extra-class="h-full object-contain"
+              @loaded="rendered"
+            />
           </a>
         </div>
       </div>
@@ -39,14 +46,7 @@
       </p>
     </div>
     <div class="flex justify-center">
-      <base-button
-        v-show="!loading && entities.count !== 0 && !endOfData"
-        :text="t('main.load')"
-        :on-click="loadMore"
-        custom-style="ghost-black"
-        :icon-shown="false"
-        class="px-2 m-4 text-center"
-      />
+      <base-button v-show="!loading && entities.count !== 0 && !endOfData" :text="t('main.load')" :on-click="loadMore" custom-style="ghost-black" :icon-shown="false" class="px-2 m-4 text-center" />
     </div>
   </div>
 </template>
@@ -120,6 +120,7 @@ export default defineComponent({
     const { toClipboard } = useClipboard()
     const loadMore = () => emit('loadMore')
     const { generateUrl, noImageUrl } = useIIIF()
+    const renderCount = ref<number>(0)
 
     const tiles: MasonryTileConfig = {
       SingleImage: {
@@ -243,6 +244,15 @@ export default defineComponent({
         await toClipboard(url)
       } catch (e) {
         console.error(e)
+      }
+    }
+
+    const checkForOverflow = () => {
+      const element = document.getElementsByClassName('masonry')[0] as HTMLElement
+
+      if (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth) {
+        console.log('overflowing masonry')
+        resizeAllMasonryItems()
       }
     }
 
