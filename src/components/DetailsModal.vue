@@ -1,36 +1,18 @@
 <template>
-<!--IIIF modal-->
+  <!--IIIF modal-->
   <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" @hide-modal="closeFullscreenModal" customStyles="z-50">
     <section class="h-large flex relative w-full">
       <a
         @click="closeFullscreenModal"
-        class="
-          right-2
-          top-2
-          absolute
-          bg-neutral-0
-          cursor-pointer
-          hover:bg-accent-yellow
-          ml-2
-          mr-2
-          p-2
-          rounded-full
-          shadow-xl
-          text-accent-purple
-          z-50
-          hover:text-neutral-0
-        "
+        class="right-2 top-2 absolute bg-neutral-0 cursor-pointer hover:bg-accent-yellow ml-2 mr-2 p-2 rounded-full shadow-xl text-accent-purple z-50 hover:text-neutral-0"
       >
-        <base-icon
-          icon="close"
-          class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2"
-        />
+        <base-icon icon="close" class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2" />
       </a>
       <IIIFViewer :imageUrl="IIIfImageUrl" />
     </section>
   </BaseModal>
   <!--Details modal-->
-   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
+  <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
     <section v-if="entity" class="flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
       <section class="flex flex-col lg:flex-row h-10/12 sm:h-5/6">
         <section class="bg-background-light h-auto lg:w-1/3">
@@ -40,21 +22,21 @@
           <div class="m-3 lg:ml-6 lg:mt-6">
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
-            <base-meta-data 
-            v-if="getName(entity,'Collectie.naam').name != 'onbekend'"
-            :key-word="t('details.modal.collectieNaam')" 
-            :type="getName(entity,'Collectie.naam').name" 
-            :error-text="t('details.modal.unknown')"
-            :clickable="true"
-            @click="goToRelation(getName(entity,'Collectie.naam').id)"
+            <base-meta-data
+              v-if="getName(entity, 'Collectie.naam').name != 'onbekend'"
+              :key-word="t('details.modal.collectieNaam')"
+              :type="getName(entity, 'Collectie.naam').name"
+              :error-text="t('details.modal.unknown')"
+              :clickable="true"
+              @click="goToRelation(getName(entity, 'Collectie.naam').id)"
             />
-            <base-meta-data 
-            v-if="getName(entity,'MaterieelDing.beheerder').name != 'onbekend'"
-            :key-word="t('details.modal.instellingNaam')" 
-            :type="getName(entity,'MaterieelDing.beheerder').name" 
-            :error-text="t('details.modal.unknown')"
-            :clickable="true"
-            @click="goToRelation(getName(entity,'MaterieelDing.beheerder').id)"
+            <base-meta-data
+              v-if="getName(entity, 'MaterieelDing.beheerder').name != 'onbekend'"
+              :key-word="t('details.modal.instellingNaam')"
+              :type="getName(entity, 'MaterieelDing.beheerder').name"
+              :error-text="t('details.modal.unknown')"
+              :clickable="true"
+              @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id)"
             />
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
@@ -119,7 +101,12 @@
 
           <div class="mx-5 flex gap-3 mb-4 flex-wrap">
             <div v-for="(relation, index) in entity.types" :key="index">
-              <a v-if="relation" class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50 cursor-pointer hover:underline" :key="relation.id" @click="`${goToRelation(relation.id.replace('entities/',''))}`">
+              <a
+                v-if="relation"
+                class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50 cursor-pointer hover:underline"
+                :key="relation.id"
+                @click=";`${goToRelation(relation.id.replace('entities/', ''))}`"
+              >
                 {{ relation.label }}
               </a>
             </div>
@@ -154,7 +141,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref} from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
@@ -191,7 +178,7 @@ type TypeObject = {
   relation: string
 }
 
-const entity = ref<any>();
+const entity = ref<any>()
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -207,21 +194,21 @@ export const useFullscreenModal = () => {
   }
 
   const closeFullscreenModal = () => {
-      updateFullscreenModal({
+    updateFullscreenModal({
       state: 'hide',
     })
-    }
+  }
 
-    const openFullscreenModal = () => {
-       updateFullscreenModal({
+  const openFullscreenModal = () => {
+    updateFullscreenModal({
       state: 'show',
     })
-    }
-    return {
-      closeFullscreenModal,
-      openFullscreenModal,
-      FullscreenModalState,
-    }
+  }
+  return {
+    closeFullscreenModal,
+    openFullscreenModal,
+    FullscreenModalState,
+  }
 }
 
 export const useDetailsModal = () => {
@@ -264,7 +251,7 @@ export default defineComponent({
     LazyLoadImage,
     BaseMetaData,
     BaseIcon,
-    IIIFViewer
+    IIIFViewer,
   },
   setup(props) {
     const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
@@ -302,7 +289,7 @@ export default defineComponent({
       input.forEach((meta: Metadata) => {
         if (concatString === '') {
           concatString = meta.value ? meta.value : t('details.modal.unknown')
-          concatString = replaceDotsWithOnbekend(concatString);
+          concatString = replaceDotsWithOnbekend(concatString)
         } else {
           concatString = `${concatString}, ${replaceDotsWithOnbekend(meta.value as string)}`
         }
@@ -336,110 +323,141 @@ export default defineComponent({
       }
     }
 
-  const filterAllData = (_entity: NestedDataObject) => {
-    let entity ={} as NestedDataObject;
-    Object.assign(entity, _entity)
-    const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
-    entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollection>, irrelevantLabels)
-    entity = checkForMatchingParentRelations(entity as NestedDataObject)
-    entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
-    entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollection>)
-    console.log({entity})
-    return entity
-  }
+    const filterAllData = (_entity: NestedDataObject) => {
+      let entity = {} as NestedDataObject
+      Object.assign(entity, _entity)
+      const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
+      const labelsToPutDataOnRelationDown = ['Entiteit.wordtNaarVerwezenDoor', 'Entiteit.classificatie']
+      entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollection>, irrelevantLabels)
+      entity = checkForMatchingParentRelations(entity as NestedDataObject)
+      entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
+      entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollection>)
+      setMetadataCollectionOneDown(entity.metadataCollection as Array<MetadataCollection>, labelsToPutDataOnRelationDown[0]) as Array<MetadataCollection>
+      console.log({ entity })
+      return entity
+    }
 
-  const checkForMatchingChildRelations = (_data: NestedDataObject) => {
-    let myData = {} as NestedDataObject
-    Object.assign(myData, _data)
-    const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
-    for (const _metadataCollection of myMetadataCollection) {
-      if (_metadataCollection.nested && _metadataCollection.data) {
-        for (const _dataObject of _metadataCollection.data) {
-          _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
-            if (_item && parentLables.includes(_item.label)) {
-              _dataObject?.nestedMetaData?.metadataCollection?.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item),1)
-            }
-          })
+    const getFirstMetadataCollectionData = (_metadataCollection: MetadataCollection) => {
+      if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
+        let _metadataCollectionFirstLevel = _metadataCollection.data[0].nestedMetaData?.metadataCollection
+        return _metadataCollectionFirstLevel
+      }else return null
+    }
+
+    const getFirstMetadataCollectionLabel = (_metadataCollection: MetadataCollection) => {
+      if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
+        console.log('first metadata collectionlabel', _metadataCollection)
+        return _metadataCollection.data[0].value as string
+      }else return ''
+    }
+
+    const setMetadataCollectionOneDown = (_metadataCollection: Array<MetadataCollection>, _label: string) => {
+      const filtered = _metadataCollection.filter((_collectie) => _collectie.label == _label)[0];
+      const firstLevel = getFirstMetadataCollectionData(filtered);
+      if(firstLevel && firstLevel[0]){
+        let itemIs =_metadataCollection[_metadataCollection.indexOf(filtered)]
+        itemIs.label = getFirstMetadataCollectionLabel(firstLevel[0]);
+        if(itemIs.data && itemIs.data[0] && itemIs.data[0].nestedMetaData){
+          itemIs.data[0].nestedMetaData.metadataCollection = getFirstMetadataCollectionData(firstLevel[0] as MetadataCollection) as Array<MetadataCollection>;
+          _metadataCollection[_metadataCollection.indexOf(filtered)] = itemIs;
         }
+        console.log({itemIs});
+        return _metadataCollection
       }
     }
-    myData.metadataCollection = myMetadataCollection
-    return myData
-  }
 
-  const checkForMatchingParentRelations = (_data: NestedDataObject) => {
-    let myData = {} as NestedDataObject
-    Object.assign(myData, _data)
-    const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-    let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
-    for (const _metadataCollection of myMetadataCollection) {
-      if (_metadataCollection.nested && _metadataCollection.data) {
-        for (const _dataObject of _metadataCollection.data) {
-          _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
-            if (_item && parentLables.includes(_item.label)) {
-              const filteredMetadataWithChildLabel = myMetadataCollection.filter(_meta => _meta.label == _item.label)
-              if(filteredMetadataWithChildLabel.length > 0 ){
-                myMetadataCollection.splice(myMetadataCollection.indexOf(filteredMetadataWithChildLabel[0]),1)
-              }              
-            }
-          })
+    const checkForMatchingChildRelations = (_data: NestedDataObject) => {
+      let myData = {} as NestedDataObject
+      Object.assign(myData, _data)
+      const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
+      let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
+      for (const _metadataCollection of myMetadataCollection) {
+        if (_metadataCollection.nested && _metadataCollection.data) {
+          for (const _dataObject of _metadataCollection.data) {
+            _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
+              if (_item && parentLables.includes(_item.label)) {
+                _dataObject?.nestedMetaData?.metadataCollection?.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item), 1)
+              }
+            })
+          }
         }
       }
+      myData.metadataCollection = myMetadataCollection
+      return myData
     }
-    myData.metadataCollection = myMetadataCollection
-    return myData
-  }
 
-  const removeObjectNaamFromMetadataValue = (_data: NestedDataObject) => {
-    let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollection>
-    let filteredMetadataForClassificatie = myMetadata.filter(_meta => _meta.label == 'Entiteit.classificatie')
-    if(filteredMetadataForClassificatie && filteredMetadataForClassificatie[0].data && filteredMetadataForClassificatie[0].nested){
-      for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data){
-        const filterdClassificatieMetadata = _classificatieMetadata?.nestedMetaData?.metadataCollection?.filter(_item => _item?.label == 'objectnaam')
-        if(filterdClassificatieMetadata && filterdClassificatieMetadata.length > 0){
-          filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata),1)
+    const checkForMatchingParentRelations = (_data: NestedDataObject) => {
+      let myData = {} as NestedDataObject
+      Object.assign(myData, _data)
+      const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
+      let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
+      for (const _metadataCollection of myMetadataCollection) {
+        if (_metadataCollection.nested && _metadataCollection.data) {
+          for (const _dataObject of _metadataCollection.data) {
+            _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
+              if (_item && parentLables.includes(_item.label)) {
+                const filteredMetadataWithChildLabel = myMetadataCollection.filter((_meta) => _meta.label == _item.label)
+                if (filteredMetadataWithChildLabel.length > 0) {
+                  myMetadataCollection.splice(myMetadataCollection.indexOf(filteredMetadataWithChildLabel[0]), 1)
+                }
+              }
+            })
+          }
         }
       }
+      myData.metadataCollection = myMetadataCollection
+      return myData
     }
-    _data.metadataCollection = myMetadata
-    return _data;
-  }
 
-  const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollection>) => {
-    let myMetadata: Array<MetadataCollection> = []
-    Object.assign(myMetadata, _metadataCollection)
-    for(const _collection of myMetadata){
-      if(_collection.nested){
-        if(_collection.data?.length == 0){
-          myMetadata.splice(myMetadata.indexOf(_collection),1)
+    const removeObjectNaamFromMetadataValue = (_data: NestedDataObject) => {
+      let myMetadata = JSON.parse(JSON.stringify(_data.metadataCollection)) as Array<MetadataCollection>
+      let filteredMetadataForClassificatie = myMetadata.filter((_meta) => _meta.label == 'Entiteit.classificatie')
+      if (filteredMetadataForClassificatie && filteredMetadataForClassificatie[0].data && filteredMetadataForClassificatie[0].nested) {
+        for (const _classificatieMetadata of filteredMetadataForClassificatie[0].data) {
+          const filterdClassificatieMetadata = _classificatieMetadata?.nestedMetaData?.metadataCollection?.filter((_item) => _item?.label == 'objectnaam')
+          if (filterdClassificatieMetadata && filterdClassificatieMetadata.length > 0) {
+            filteredMetadataForClassificatie[0].data.splice(filteredMetadataForClassificatie[0].data.indexOf(_classificatieMetadata), 1)
+          }
         }
       }
+      _data.metadataCollection = myMetadata
+      return _data
     }
-    return myMetadata
-  }
 
-  const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollection>, _irrelevantLabels: Array<string>) => {
-    let myMetadata: Array<MetadataCollection> = []
-    Object.assign(myMetadata, _metadataCollection)
-    return myMetadata.filter(_collection => !_irrelevantLabels.includes(_collection.label))
-  }
+    const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollection>) => {
+      let myMetadata: Array<MetadataCollection> = []
+      Object.assign(myMetadata, _metadataCollection)
+      for (const _collection of myMetadata) {
+        if (_collection.nested) {
+          if (_collection.data?.length == 0) {
+            myMetadata.splice(myMetadata.indexOf(_collection), 1)
+          }
+        }
+      }
+      return myMetadata
+    }
 
-  const getName = (_entity: NestedDataObject, _label: string) => {
-    let name = 'onbekend'
-    let relation = ''
-    let id = ''
-    const collection = _entity.metadataCollection.filter(_collection => _collection.label == _label);
-    if(collection && collection[0]){
-      name = collection[0].data?.[0]?.value as string
-      relation = collection[0].data?.[0]?.label as string
+    const removeIrrelevantParents = (_metadataCollection: Array<MetadataCollection>, _irrelevantLabels: Array<string>) => {
+      let myMetadata: Array<MetadataCollection> = []
+      Object.assign(myMetadata, _metadataCollection)
+      return myMetadata.filter((_collection) => !_irrelevantLabels.includes(_collection.label))
     }
-    const relationType = _entity.types.filter(_type => _type.label == name && _type.relation == relation);
-    if(relationType.length > 0){
-      id = relationType[0].id.replace('entities/', '');
+
+    const getName = (_entity: NestedDataObject, _label: string) => {
+      let name = 'onbekend'
+      let relation = ''
+      let id = ''
+      const collection = _entity.metadataCollection.filter((_collection) => _collection.label == _label)
+      if (collection && collection[0]) {
+        name = collection[0].data?.[0]?.value as string
+        relation = collection[0].data?.[0]?.label as string
+      }
+      const relationType = _entity.types.filter((_type) => _type.label == name && _type.relation == relation)
+      if (relationType.length > 0) {
+        id = relationType[0].id.replace('entities/', '')
+      }
+      return { name: name, id: id }
     }
-    return {name: name, id: id};
-  }
 
     return {
       getObjectName,
@@ -479,10 +497,10 @@ export default defineComponent({
       const creatorId: string = productionDataRelations.find((relation) => relation.label == 'vervaardiger').key.split('/')[1]
       return creatorId
     },
-    openIIIFModal(url: string){
+    openIIIFModal(url: string) {
       this.IIIfImageUrl = url
       this.openFullscreenModal()
-    }
+    },
   },
 })
 </script>
