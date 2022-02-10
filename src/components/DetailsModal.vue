@@ -327,13 +327,12 @@ export default defineComponent({
       let entity = {} as NestedDataObject
       Object.assign(entity, _entity)
       const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
-      const labelsToPutDataOnRelationDown = ['Entiteit.wordtNaarVerwezenDoor', 'Entiteit.classificatie']
+      const labelsToPutDataOnRelationDown = ['Entiteit.wordtNaarVerwezenDoor']
       entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollection>, irrelevantLabels)
       entity = checkForMatchingParentRelations(entity as NestedDataObject)
       entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
       entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollection>)
-      setMetadataCollectionOneDown(entity.metadataCollection as Array<MetadataCollection>, labelsToPutDataOnRelationDown[0]) as Array<MetadataCollection>
-      console.log({ entity })
+      setMetadataCollectionOneDownFor(entity.metadataCollection as Array<MetadataCollection>, labelsToPutDataOnRelationDown)
       return entity
     }
 
@@ -346,9 +345,14 @@ export default defineComponent({
 
     const getFirstMetadataCollectionLabel = (_metadataCollection: MetadataCollection) => {
       if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
-        console.log('first metadata collectionlabel', _metadataCollection)
         return _metadataCollection.data[0].value as string
       }else return ''
+    }
+
+    const setMetadataCollectionOneDownFor = (_metadataCollection: Array<MetadataCollection>, _labels: Array<string>) => {
+      for(const label of _labels){
+        setMetadataCollectionOneDown(_metadataCollection, label);
+      }
     }
 
     const setMetadataCollectionOneDown = (_metadataCollection: Array<MetadataCollection>, _label: string) => {
@@ -361,7 +365,6 @@ export default defineComponent({
           itemIs.data[0].nestedMetaData.metadataCollection = getFirstMetadataCollectionData(firstLevel[0] as MetadataCollection) as Array<MetadataCollection>;
           _metadataCollection[_metadataCollection.indexOf(filtered)] = itemIs;
         }
-        console.log({itemIs});
         return _metadataCollection
       }
     }
