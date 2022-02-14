@@ -112,29 +112,36 @@
     "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing."
   },
   //identificatie
-  "Entiteit.classificatie": "type object",
+  "Entiteit.classificatie": "Type object",
   "MaterieelDing.beheerder": "instelling",
   "MaterieelDing.bestaatUit": "Onderdelen",
+  "object_category": "objectcategorie",
+  "Classificatie.toegekendType": "maakt deel uit van",
+
   //herkomst
-  "MaterieelDing.isOvergedragenBijVerwerving": "herkomst",
+  "MaterieelDing.isOvergedragenBijVerwerving": "Herkomst",
   "Verwerving.overgedragenAan": "overdracht aan",
   "verwerving.plaats": "plaats van verwerving",
   "verwerving.methode": "verwervingsmethode",
   "Periode.begin": "begin periode",
   "Periode.einde": "einde periode",
+  //creatie: 
+  "ConceptueelDing.heeftCreatie": "Ontworpen door",
   //productie
-  "MaterieelDing.productie": "productie",
+  "MaterieelDing.productie": "Vervaardigd door",
   "Gebeurtenis.tijd": "productiedatum",
   "vervaardiging.plaats": "plaats van vervaardiging",
   "vervaardiger.rol": "rol",
   //Tentoonstellingen
-  "Entiteit.maaktDeelUitVan": "tentoonstellingen",
+  "Entiteit.maaktDeelUitVan": "Tentoonstellingen",
   "gebruiktBijActiviteit": "tentoonstelling",
   //Associaties
   "MensgemaaktObject.draagt": "Associaties",
   "associatie.onderwerp": "geassocieerd onderwerp",
   "associatie.periode": "geassocieerde periode",
+  "associatie.persoon": "geassocieerde persoon/instelling",
   //Iconografie
   "inhoud.onderwerp": "afgebeeld onderwerp",
-  "inhoud.persoon.naam": "afgebeeld persoon"
+  "inhoud.persoon.naam": "afgebeeld persoon/instelling", 
+  "inhoud.onderwerp.eigennaam": "afgebeeld onderwerp"
 }
