@@ -326,109 +326,15 @@ export default defineComponent({
 
     const filterAllData = (_entity: NestedDataObject) => {
       let entity = {} as NestedDataObject
-      entity = _entity
+      Object.assign(entity,_entity)
       const parentLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
-      _entity.metadataCollection = useFilter().removeParentCollections(entity.metadataCollection as Array<MetadataCollection>, parentLabels)
-      _entity = useFilter().removeChildByLabel(_entity, 'Entiteit.classificatie', 'objectnaam')
-      _entity = useFilter().removeChildByLabel(_entity, 'inhoud.persoon.naam', 'achternaam')
-      _entity = useFilter().removeParentsWithoutMetadata(_entity)
-      _entity = useFilter().removeParentsWithoutData(_entity)
-      
-      // const labelsToPutDataOnRelationDown = ['Entiteit.wordtNaarVerwezenDoor']
-      // entity = checkForMatchingParentRelations(entity as NestedDataObject)
-      // _entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollection>)
-      // setMetadataCollectionOneDownFor(entity.metadataCollection as Array<MetadataCollection>, labelsToPutDataOnRelationDown)
-
-      return _entity
-    }
-
-    const getFirstMetadataCollectionData = (_metadataCollection: MetadataCollection) => {
-      if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
-        let _metadataCollectionFirstLevel = _metadataCollection.data[0].nestedMetaData?.metadataCollection
-        return _metadataCollectionFirstLevel
-      } else return null
-    }
-
-    const getFirstMetadataCollectionLabel = (_metadataCollection: MetadataCollection) => {
-      if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
-        return _metadataCollection.data[0].value as string
-      } else return ''
-    }
-
-    const setMetadataCollectionOneDownFor = (_metadataCollection: Array<MetadataCollection>, _labels: Array<string>) => {
-      for (const label of _labels) {
-        setMetadataCollectionOneDown(_metadataCollection, label)
-      }
-    }
-
-    const setMetadataCollectionOneDown = (_metadataCollection: Array<MetadataCollection>, _label: string) => {
-      const filtered = _metadataCollection.filter((_collectie) => _collectie.label == _label)[0]
-      const firstLevel = getFirstMetadataCollectionData(filtered)
-      if (firstLevel && firstLevel[0]) {
-        let itemIs = _metadataCollection[_metadataCollection.indexOf(filtered)]
-        itemIs.label = getFirstMetadataCollectionLabel(firstLevel[0])
-        if (itemIs.data && itemIs.data[0] && itemIs.data[0].nestedMetaData) {
-          itemIs.data[0].nestedMetaData.metadataCollection = getFirstMetadataCollectionData(firstLevel[0] as MetadataCollection) as Array<MetadataCollection>
-          _metadataCollection[_metadataCollection.indexOf(filtered)] = itemIs
-        }
-        return _metadataCollection
-      }
-    }
-
-    const checkForMatchingChildRelations = (_data: NestedDataObject) => {
-      let myData = {} as NestedDataObject
-      Object.assign(myData, _data)
-      const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-      let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
-      for (const _metadataCollection of myMetadataCollection) {
-        if (_metadataCollection.nested && _metadataCollection.data) {
-          for (const _dataObject of _metadataCollection.data) {
-            _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
-              if (_item && parentLables.includes(_item.label)) {
-                _dataObject?.nestedMetaData?.metadataCollection?.splice(_dataObject.nestedMetaData.metadataCollection.indexOf(_item), 1)
-              }
-            })
-          }
-        }
-      }
-      myData.metadataCollection = myMetadataCollection
-      return myData
-    }
-
-    const checkForMatchingParentRelations = (_data: NestedDataObject) => {
-      let myData = {} as NestedDataObject
-      Object.assign(myData, _data)
-      const parentLables = _data.metadataCollection.map((_meta) => _meta.label)
-      let myMetadataCollection = JSON.parse(JSON.stringify(myData.metadataCollection)) as Array<MetadataCollection>
-      for (const _metadataCollection of myMetadataCollection) {
-        if (_metadataCollection.nested && _metadataCollection.data) {
-          for (const _dataObject of _metadataCollection.data) {
-            _dataObject?.nestedMetaData?.metadataCollection?.forEach((_item) => {
-              if (_item && parentLables.includes(_item.label)) {
-                const filteredMetadataWithChildLabel = myMetadataCollection.filter((_meta) => _meta.label == _item.label)
-                if (filteredMetadataWithChildLabel.length > 0) {
-                  myMetadataCollection.splice(myMetadataCollection.indexOf(filteredMetadataWithChildLabel[0]), 1)
-                }
-              }
-            })
-          }
-        }
-      }
-      myData.metadataCollection = myMetadataCollection
-      return myData
-    }
-
-    const removeParentsWihthoutData = (_metadataCollection: Array<MetadataCollection>) => {
-      let myMetadata: Array<MetadataCollection> = []
-      Object.assign(myMetadata, _metadataCollection)
-      for (const _collection of myMetadata) {
-        if (_collection.nested) {
-          if (_collection.data?.length == 0) {
-            myMetadata.splice(myMetadata.indexOf(_collection), 1)
-          }
-        }
-      }
-      return myMetadata
+      entity = useFilter().setMetadataToOneRelationDown(entity, 'Entiteit.wordtNaarVerwezenDoor')
+      entity.metadataCollection = useFilter().removeParentCollections(entity.metadataCollection as Array<MetadataCollection>, parentLabels)
+      entity = useFilter().removeChildByLabel(entity, 'Entiteit.classificatie', 'objectnaam')
+      entity = useFilter().removeChildByLabel(entity, 'inhoud.persoon.naam', 'achternaam')
+      entity = useFilter().removeParentsWithoutMetadata(entity)
+      entity = useFilter().removeParentsWithoutData(entity)
+      return entity
     }
 
     const getName = (_entity: NestedDataObject, _label: string) => {
