@@ -21,6 +21,7 @@ type TypeObject = {
 
 const useFilter = (): {
   removeChildByLabel: (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => NestedDataObject;
+  removeParentCollections: (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => Array<MetadataCollection>
 } => {
 
   const removeChildByLabel = (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => {
@@ -48,7 +49,13 @@ const useFilter = (): {
     return entity
   };
 
-  return { removeChildByLabel }
+  const removeParentCollections = (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => {
+    const myMetadata: Array<MetadataCollection> = []
+    Object.assign(myMetadata, _metadataCollection)
+    return myMetadata.filter((_collection) => !_parentLabels.includes(_collection.label))
+  }
+
+  return { removeChildByLabel, removeParentCollections }
 };
 
 export default useFilter;
