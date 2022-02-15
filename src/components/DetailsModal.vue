@@ -150,6 +150,7 @@ import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useIIIF from '@/composables/useIIIF'
 import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
+import useFilter from '@/composables/useFilter'
 
 export type DetailsModalType = {
   state: ModalState
@@ -325,7 +326,6 @@ export default defineComponent({
 
     const filterAllData = (_entity: NestedDataObject) => {
       let entity = {} as NestedDataObject
-      Object.assign(entity, _entity)
       const irrelevantLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
       const labelsToPutDataOnRelationDown = ['Entiteit.wordtNaarVerwezenDoor']
       entity.metadataCollection = removeIrrelevantParents(entity.metadataCollection as Array<MetadataCollection>, irrelevantLabels)
@@ -333,6 +333,7 @@ export default defineComponent({
       entity = removeObjectNaamFromMetadataValue(entity as NestedDataObject)
       entity.metadataCollection = removeParentsWihthoutData(entity.metadataCollection as Array<MetadataCollection>)
       setMetadataCollectionOneDownFor(entity.metadataCollection as Array<MetadataCollection>, labelsToPutDataOnRelationDown)
+      entity = useFilter().removeChildByLabel(entity, 'inhoud.persoon.naam', 'achternaam')
       return entity
     }
 
@@ -340,30 +341,30 @@ export default defineComponent({
       if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
         let _metadataCollectionFirstLevel = _metadataCollection.data[0].nestedMetaData?.metadataCollection
         return _metadataCollectionFirstLevel
-      }else return null
+      } else return null
     }
 
     const getFirstMetadataCollectionLabel = (_metadataCollection: MetadataCollection) => {
       if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
         return _metadataCollection.data[0].value as string
-      }else return ''
+      } else return ''
     }
 
     const setMetadataCollectionOneDownFor = (_metadataCollection: Array<MetadataCollection>, _labels: Array<string>) => {
-      for(const label of _labels){
-        setMetadataCollectionOneDown(_metadataCollection, label);
+      for (const label of _labels) {
+        setMetadataCollectionOneDown(_metadataCollection, label)
       }
     }
 
     const setMetadataCollectionOneDown = (_metadataCollection: Array<MetadataCollection>, _label: string) => {
-      const filtered = _metadataCollection.filter((_collectie) => _collectie.label == _label)[0];
-      const firstLevel = getFirstMetadataCollectionData(filtered);
-      if(firstLevel && firstLevel[0]){
-        let itemIs =_metadataCollection[_metadataCollection.indexOf(filtered)]
-        itemIs.label = getFirstMetadataCollectionLabel(firstLevel[0]);
-        if(itemIs.data && itemIs.data[0] && itemIs.data[0].nestedMetaData){
-          itemIs.data[0].nestedMetaData.metadataCollection = getFirstMetadataCollectionData(firstLevel[0] as MetadataCollection) as Array<MetadataCollection>;
-          _metadataCollection[_metadataCollection.indexOf(filtered)] = itemIs;
+      const filtered = _metadataCollection.filter((_collectie) => _collectie.label == _label)[0]
+      const firstLevel = getFirstMetadataCollectionData(filtered)
+      if (firstLevel && firstLevel[0]) {
+        let itemIs = _metadataCollection[_metadataCollection.indexOf(filtered)]
+        itemIs.label = getFirstMetadataCollectionLabel(firstLevel[0])
+        if (itemIs.data && itemIs.data[0] && itemIs.data[0].nestedMetaData) {
+          itemIs.data[0].nestedMetaData.metadataCollection = getFirstMetadataCollectionData(firstLevel[0] as MetadataCollection) as Array<MetadataCollection>
+          _metadataCollection[_metadataCollection.indexOf(filtered)] = itemIs
         }
         return _metadataCollection
       }
