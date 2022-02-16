@@ -62,7 +62,7 @@
           <!-- <div class="font-medium pb-2 flex flex-wrap">
             <relation-tag v-for="relation in entity.relations.filter((relation: any) => relation.key)" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
           </div> -->
-          <div class="mt-5 flex flex-col gap-2 mx-8 border-solid border-4 border-background-light px-4 py-2">
+          <div v-if="collectieNaam" class="mt-5 flex flex-col gap-2 mx-8 bg-background-light px-4 py-2">
             <strong class="col-start-1 w-min inline-block" v-html="t(`${collectieNaam.label}`)" />
             <a
               v-if="collectieNaam.nestedMetaData.title.length != 0"

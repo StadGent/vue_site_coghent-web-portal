@@ -27,11 +27,11 @@ const useFilter = (): {
   removeParentsWithoutData: (_entity: NestedDataObject) => NestedDataObject
   setMetadataToOneRelationDown: (_entity: NestedDataObject, _label: string) => NestedDataObject
   filterOutDuplicateCollections: (_entity: NestedDataObject) => NestedDataObject
-  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => Metadata
+  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => Metadata | undefined
 } => {
 
   const getParentCollectionByName = (_entity: NestedDataObject, _label: string) => {
-    let collection = {} as Metadata
+    let collection = {} as Metadata | undefined
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
       const filtered = entity.metadataCollection.filter(_collection => _collection.label == _label)
@@ -44,7 +44,7 @@ const useFilter = (): {
             }
           })
         }
-      }
+      }else collection = undefined
     }
     return collection
   }
