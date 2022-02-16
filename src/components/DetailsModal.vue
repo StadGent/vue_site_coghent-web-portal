@@ -62,6 +62,19 @@
           <!-- <div class="font-medium pb-2 flex flex-wrap">
             <relation-tag v-for="relation in entity.relations.filter((relation: any) => relation.key)" :id="relation.key" :key="relation.value" class="bg-tag-neutral" />
           </div> -->
+          <div class="mt-5 flex flex-col gap-2 mx-8 border-solid border-4 border-background-light px-4 py-2">
+            <strong class="col-start-1 w-min inline-block" v-html="t(`${collectieNaam.label}`)" />
+            <a
+              v-if="collectieNaam.nestedMetaData.title.length != 0"
+              class="col-start-1 font-semibold inline-block hover:underline cursor-pointer"
+              v-html="t(`${collectieNaam.nestedMetaData.title[0].value}`)"
+              @click="goToRelation(collectieNaam.nestedMetaData.id)"
+            />
+            <p v-if="collectieNaam.nestedMetaData.description && collectieNaam.nestedMetaData.description.length != 0" class="col-start-1 inline-block mt-2 mb-4">
+              {{ collectieNaam.nestedMetaData.description[0].value }}
+            </p>
+          </div>
+
           <h3 class="font-bold text-lg mt-5 ml-8">
             {{ t('details.modal.characteristics') }}
           </h3>
@@ -76,11 +89,12 @@
                     class="col-start-1 font-semibold inline-block"
                     v-html="t(`${dataItem.value}`)"
                   />
-                  <strong
+                  <p
                     v-if="dataItem.nestedMetaData.metadataCollection.length !== 0 && dataItem.nestedMetaData.description && dataItem.nestedMetaData.description[0]"
-                    class="col-start-1 font-semibold inline-block"
-                    >{{ dataItem.nestedMetaData.description[0].value ? dataItem.nestedMetaData.description[0].value : '' }}</strong
+                    class="col-start-1 inline-block mt-2 mb-4"
                   >
+                    {{ dataItem.nestedMetaData.description[0].value ? dataItem.nestedMetaData.description[0].value : '' }}
+                  </p>
                   <base-meta-data
                     v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection"
                     :key="index"
@@ -180,6 +194,7 @@ type TypeObject = {
 }
 
 const entity = ref<any>()
+const collectieNaam = ref<any>()
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -233,6 +248,9 @@ export const useDetailsModal = () => {
     if (!data) return
     entity.value = data
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
+    console.log('entity ', entity.value)
+    collectieNaam.value = useFilter().getParentCollectionByName(entity.value, 'Collectie.naam')
+    console.log('collectie.naam', collectieNaam.value)
   }
 
   return {
@@ -241,6 +259,7 @@ export const useDetailsModal = () => {
     DetailsModalState,
     setEntity,
     entity,
+    collectieNaam,
   }
 }
 
@@ -326,10 +345,14 @@ export default defineComponent({
 
     const filterAllData = (_entity: NestedDataObject) => {
       let entity = {} as NestedDataObject
-      Object.assign(entity,_entity)
+      Object.assign(entity, _entity)
       const parentLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
       entity = useFilter().setMetadataToOneRelationDown(entity, 'Entiteit.wordtNaarVerwezenDoor')
       entity.metadataCollection = useFilter().removeParentCollections(entity.metadataCollection as Array<MetadataCollection>, parentLabels)
+      entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'MaterieelDing.beheerder')
+      entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'Entiteit.classificatie')
+      entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'GecureerdeCollectie.bestaatUit')
+      entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'MensgemaaktObject.draagt')
       entity = useFilter().removeChildByLabel(entity, 'Entiteit.classificatie', 'objectnaam')
       entity = useFilter().removeChildByLabel(entity, 'inhoud.persoon.naam', 'achternaam')
       entity = useFilter().removeParentsWithoutData(entity)
@@ -372,6 +395,7 @@ export default defineComponent({
       IIIfImageUrl,
       filterAllData,
       getName,
+      collectieNaam,
     }
   },
   methods: {

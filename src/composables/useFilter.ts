@@ -1,5 +1,5 @@
 import { EntityStore } from '@apollo/client/cache';
-import { MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries';
+import { Entity, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries';
 
 export type NestedDataObject = {
   description: []
@@ -27,7 +27,27 @@ const useFilter = (): {
   removeParentsWithoutData: (_entity: NestedDataObject) => NestedDataObject
   setMetadataToOneRelationDown: (_entity: NestedDataObject, _label: string) => NestedDataObject
   filterOutDuplicateCollections: (_entity: NestedDataObject) => NestedDataObject
+  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => Metadata
 } => {
+
+  const getParentCollectionByName = (_entity: NestedDataObject, _label: string) => {
+    let collection = {} as Metadata
+    const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
+    if (entity.metadataCollection) {
+      const filtered = entity.metadataCollection.filter(_collection => _collection.label == _label)
+      if (filtered && filtered.length != 0) {
+        console.log({ filtered })
+        if (filtered.length == 1) {
+          filtered[0].data?.forEach(_data => {
+            if (_data?.nestedMetaData?.title.length != 0) {
+              collection = _data as Metadata
+            }
+          })
+        }
+      }
+    }
+    return collection
+  }
 
   const removeChildByLabel = (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
@@ -129,9 +149,9 @@ const useFilter = (): {
         for (const _data of _collection.data) {
           if (_data?.nestedMetaData?.metadataCollection?.length != 0) {
             const filteredMetadata = _data?.nestedMetaData?.metadataCollection?.filter(_metadata => parentLabels.includes(_metadata?.label as string))
-            if(filteredMetadata && filteredMetadata.length != 0){
-              for(const _filtered of filteredMetadata){
-                removeParentCollections(entity.metadataCollection,[_filtered?.label as string])
+            if (filteredMetadata && filteredMetadata.length != 0) {
+              for (const _filtered of filteredMetadata) {
+                removeParentCollections(entity.metadataCollection, [_filtered?.label as string])
               }
             }
           }
@@ -147,7 +167,8 @@ const useFilter = (): {
     removeParentsWithoutMetadata,
     removeParentsWithoutData,
     setMetadataToOneRelationDown,
-    filterOutDuplicateCollections
+    filterOutDuplicateCollections,
+    getParentCollectionByName,
   }
 };
 

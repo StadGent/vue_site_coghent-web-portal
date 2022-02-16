@@ -111,13 +111,15 @@
     "InCopyrightUnknown": "In Copyright - unknown rightsholder",
     "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing."
   },
+  //collectie
+  "Collectie.naam": "Dossier",
+
   //identificatie
   "Entiteit.classificatie": "Type object",
   "MaterieelDing.beheerder": "instelling",
   "MaterieelDing.bestaatUit": "Onderdelen",
   "object_category": "objectcategorie",
   "Classificatie.toegekendType": "maakt deel uit van",
-
   //herkomst
   "MaterieelDing.isOvergedragenBijVerwerving": "Herkomst",
   "Verwerving.overgedragenAan": "overdracht aan",
