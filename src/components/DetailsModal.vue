@@ -23,12 +23,12 @@
             <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
             <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
             <base-meta-data
-              v-if="getName(entity, 'Collectie.naam').name != 'onbekend'"
+              v-if="collectieNaam && collectieNaam.nestedMetaData && collectieNaam.nestedMetaData.title.length != 0"
               :key-word="t('details.modal.collectieNaam')"
-              :type="getName(entity, 'Collectie.naam').name"
+              :type="collectieNaam.nestedMetaData.title[0].value"
               :error-text="t('details.modal.unknown')"
               :clickable="true"
-              @click="goToRelation(getName(entity, 'Collectie.naam').id)"
+              @click="goToRelation(collectieNaam.nestedMetaData.id)"
             />
             <base-meta-data
               v-if="getName(entity, 'MaterieelDing.beheerder').name != 'onbekend'"
@@ -130,27 +130,21 @@
       </section>
     </section>
     <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/6 shadow-2xl sticky bottom-0 w-full lg:pb-6">
-        <base-button
-          class="w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
-          :on-click="() => copyUrl(entity.id)"
-          custom-style="secondary-round"
-          custom-icon="link"
-          :icon-shown="true"
-        />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-        <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-        <base-button
-          class="hidden w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
-          :on-click="onClick"
-          custom-style="secondary-round"
-          custom-icon="edit"
-          :icon-shown="true"
-        />
-        <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-        <div class="hidden border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-        <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-        <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
-      </section>
+      <base-button
+        class="w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
+        :on-click="() => copyUrl(entity.id)"
+        custom-style="secondary-round"
+        custom-icon="link"
+        :icon-shown="true"
+      />
+      <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
+      <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
+      <base-button class="hidden w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
+      <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
+      <div class="hidden border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden" />
+      <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
+      <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+    </section>
   </BaseModal>
 </template>
 
