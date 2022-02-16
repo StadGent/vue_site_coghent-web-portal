@@ -39,7 +39,7 @@
               @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id)"
             />
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto lg:overflow-y-auto h-4/5 no-scrollbar">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pr-6 pb-5 overflow-x-auto h-4/5 no-scrollbar">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="m-6 sm:w-full" />
@@ -55,7 +55,7 @@
             </div>
           </div>
         </section>
-        <section class="flex flex-col flex-grow bg-background-medium w-full overflow-y-visible lg:overflow-y-auto h-auto lg:h-full lg:w-2/3 pb-12 lg:pb-0">
+        <section class="flex flex-col flex-grow bg-background-medium w-full h-auto lg:h-full lg:w-2/3 pb-12 lg:pb-0">
           <p v-show="entity.description && entity.description[0]" class="ml-8 m-3 mt-6 lg:mr-10 xl:mt-20">
             {{ entity.description[0]?.value }}
           </p>
@@ -114,7 +114,8 @@
           <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span>
         </section>
       </section>
-      <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/6 shadow-2xl fixed bottom-0 w-full lg:pb-6">
+    </section>
+    <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 h-1/6 shadow-2xl sticky bottom-0 w-full lg:pb-6">
         <base-button
           class="w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
           :on-click="() => copyUrl(entity.id)"
@@ -136,7 +137,6 @@
         <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
         <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
       </section>
-    </section>
   </BaseModal>
 </template>
 
