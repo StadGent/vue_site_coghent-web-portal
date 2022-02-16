@@ -26,6 +26,7 @@ const useFilter = (): {
   removeParentsWithoutMetadata: (_entity: NestedDataObject) => NestedDataObject
   removeParentsWithoutData: (_entity: NestedDataObject) => NestedDataObject
   setMetadataToOneRelationDown: (_entity: NestedDataObject, _label: string) => NestedDataObject
+  filterOutDuplicateCollections: (_entity: NestedDataObject) => NestedDataObject
 } => {
 
   const removeChildByLabel = (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => {
@@ -119,12 +120,34 @@ const useFilter = (): {
     return entity
   }
 
+  //TODO:
+  const filterOutDuplicateCollections = (_entity: NestedDataObject) => {
+    const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
+    const parentLabels = entity.metadataCollection.map(_collection => _collection.label)
+    for (const _collection of entity.metadataCollection) {
+      if (_collection.nested && _collection.data) {
+        for (const _data of _collection.data) {
+          if (_data?.nestedMetaData?.metadataCollection?.length != 0) {
+            const filteredMetadata = _data?.nestedMetaData?.metadataCollection?.filter(_metadata => parentLabels.includes(_metadata?.label as string))
+            if(filteredMetadata && filteredMetadata.length != 0){
+              for(const _filtered of filteredMetadata){
+                removeParentCollections(entity.metadataCollection,[_filtered?.label as string])
+              }
+            }
+          }
+        }
+      }
+    }
+    return entity
+  }
+
   return {
     removeChildByLabel,
     removeParentCollections,
     removeParentsWithoutMetadata,
     removeParentsWithoutData,
-    setMetadataToOneRelationDown
+    setMetadataToOneRelationDown,
+    filterOutDuplicateCollections
   }
 };
 
