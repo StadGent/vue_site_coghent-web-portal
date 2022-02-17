@@ -27,16 +27,63 @@ const useFilter = (): {
   removeParentsWithoutData: (_entity: NestedDataObject) => NestedDataObject
   setMetadataToOneRelationDown: (_entity: NestedDataObject, _label: string) => NestedDataObject
   filterOutDuplicateCollections: (_entity: NestedDataObject) => NestedDataObject
-  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => Metadata | undefined
+  getParentCollectionByNameIfTitle: (_entity: NestedDataObject, _label: string) => Metadata | undefined
+  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => MetadataCollection | undefined
+  getDataOfCollection: (_entity: NestedDataObject, _parentLabel: string) => Array<MetadataCollection>
+  getMetadataCollectionByLabel: (_metadataCollections: Array<MetadataCollection>, _label: string) => Array<Metadata>
 } => {
 
+  const getDataOfCollection = (_entity: NestedDataObject, _parentLabel: string) => {
+    const objectNaamData: Array<MetadataCollection> = []
+    const collection = getParentCollectionByName(_entity, _parentLabel)
+    if(collection && collection.nested && collection.data && collection.data.length != 0){
+      for (const _data of collection.data){
+        if(_data && _data?.nestedMetaData && _data?.nestedMetaData.metadataCollection && _data?.nestedMetaData.metadataCollection?.length != 0){
+          for(const _meta of _data?.nestedMetaData.metadataCollection){
+            objectNaamData.push(_meta as MetadataCollection)
+          }
+        }
+      }
+    }
+    return objectNaamData
+  }
+
+  const getMetadataCollectionByLabel = (_metadataCollections: Array<MetadataCollection>, _label: string) => {
+    const metadataForLabel: Array<Metadata> = []
+    if(_metadataCollections.length != 0){
+      for (const _collection of _metadataCollections){
+        if(_collection.nested && _collection.nested && _collection.data && _collection.data.length != 0){
+          for(const _data of _collection.data){
+            if(_data?.label == _label){
+              metadataForLabel.push(_data)
+            }
+          }
+        }
+      }
+    }
+    return metadataForLabel
+  }
+
   const getParentCollectionByName = (_entity: NestedDataObject, _label: string) => {
+    let collection = {} as MetadataCollection | undefined
+    const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
+    if (entity.metadataCollection) {
+      const filtered = entity.metadataCollection.filter(_collection => _collection.label == _label)
+      if (filtered && filtered.length != 0) {
+        if (filtered.length == 1) {
+          collection = filtered[0]
+        }
+      }else collection = undefined
+    }
+    return collection
+  }
+
+  const getParentCollectionByNameIfTitle = (_entity: NestedDataObject, _label: string) => {
     let collection = {} as Metadata | undefined
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
       const filtered = entity.metadataCollection.filter(_collection => _collection.label == _label)
       if (filtered && filtered.length != 0) {
-        console.log({ filtered })
         if (filtered.length == 1) {
           filtered[0].data?.forEach(_data => {
             if (_data?.nestedMetaData?.title.length != 0) {
@@ -162,12 +209,15 @@ const useFilter = (): {
   }
 
   return {
+    getMetadataCollectionByLabel,
+    getDataOfCollection,
     removeChildByLabel,
     removeParentCollections,
     removeParentsWithoutMetadata,
     removeParentsWithoutData,
     setMetadataToOneRelationDown,
     filterOutDuplicateCollections,
+    getParentCollectionByNameIfTitle,
     getParentCollectionByName,
   }
 };

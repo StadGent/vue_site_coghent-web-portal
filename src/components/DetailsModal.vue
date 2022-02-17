@@ -14,7 +14,7 @@
   <!--Details modal-->
   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
     <section v-if="entity" class="bg-background-medium flex flex-col overflow-y-auto pb-12 sm:pb-0 h-10/12">
-      <section class="flex flex-col lg:flex-row  sm:h-5/6">
+      <section class="flex flex-col lg:flex-row sm:h-5/6">
         <section class="flex flex-col bg-background-light h-auto lg:w-1/3 px-4">
           <div>
             <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
@@ -29,7 +29,7 @@
                 :type="collectieNaam.nestedMetaData.title[0].value"
                 :error-text="t('details.modal.unknown')"
                 :clickable="true"
-                @click="goToRelation(collectieNaam.nestedMetaData.id)"
+                @click="goToRelation(collectieNaam.nestedMetaData.id, collectieNaam.nestedMetaData.id != '')"
               />
               <base-meta-data
                 v-if="getName(entity, 'MaterieelDing.beheerder').name != 'onbekend'"
@@ -37,7 +37,7 @@
                 :type="getName(entity, 'MaterieelDing.beheerder').name"
                 :error-text="t('details.modal.unknown')"
                 :clickable="true"
-                @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id)"
+                @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id,getName(entity, 'MaterieelDing.beheerder').id != '')"
               />
             </div>
           </div>
@@ -120,9 +120,12 @@
               <div v-for="(relation, index) in entity.types" :key="index">
                 <a
                   v-if="relation"
-                  class="flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-pointer hover:underline"
+                  :class="{
+                    'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-pointer hover:underline': relation.relation != '',
+                    'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-not-allowed': relation.relation == '',
+                  }"
                   :key="relation.id"
-                  @click=";`${goToRelation(relation.id.replace('entities/', ''))}`"
+                  @click="goToRelation(relation.id.replace('entities/', ''),relation.relation!=''?true:false)"
                 >
                   {{ relation.label }}
                 </a>
@@ -242,13 +245,31 @@ export const useDetailsModal = () => {
     })
   }
 
+  const createTypesFromMetadata = (_metadata: Array<Metadata>) => {
+    const newTypes: Array<TypeObject> = []
+    if (_metadata.length != 0) {
+      for (const _meta of _metadata) {
+        if (_meta.nestedMetaData) {
+          newTypes.push({
+            id: _meta.nestedMetaData.id,
+            label: _meta.value,
+            relation: '',
+          } as TypeObject)
+        }
+      }
+    }
+    return newTypes
+  }
+
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
-    console.log('entity ', entity.value)
-    collectieNaam.value = useFilter().getParentCollectionByName(entity.value, 'Collectie.naam')
-    console.log('collectie.naam', collectieNaam.value)
+    collectieNaam.value = useFilter().getParentCollectionByNameIfTitle(entity.value, 'Collectie.naam')
+    const objectNameData = useFilter().getDataOfCollection(entity.value, 'Entiteit.classificatie')
+    const objectNamesData = useFilter().getMetadataCollectionByLabel(objectNameData, 'objectnaam')
+    const newTypes = createTypesFromMetadata(objectNamesData)
+    entity.value.types = entity.value.types.concat(newTypes)
   }
 
   return {
@@ -397,9 +418,11 @@ export default defineComponent({
     }
   },
   methods: {
-    goToRelation(id: string) {
-      window.location.href = `${window.location.origin}/relation/${id}`
-      this.closeDetailsModal()
+    goToRelation(id: string, _pushRoute: boolean) {
+      if (_pushRoute) {
+        window.location.href = `${window.location.origin}/relation/${id}`
+        this.closeDetailsModal()
+      }
     },
     goToCreatorDetails(id: String) {
       this.closeDetailsModal()
