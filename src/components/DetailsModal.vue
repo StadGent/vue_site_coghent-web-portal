@@ -13,8 +13,8 @@
   </BaseModal>
   <!--Details modal-->
   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
-    <section v-if="entity" class="bg-background-medium flex flex-col h-full overflow-y-auto pb-12 sm:pb-0">
-      <section class="flex flex-col lg:flex-row h-10/12 sm:h-5/6">
+    <section v-if="entity" class="bg-background-medium flex flex-col overflow-y-auto pb-12 sm:pb-0 h-10/12">
+      <section class="flex flex-col lg:flex-row  sm:h-5/6">
         <section class="flex flex-col bg-background-light h-auto lg:w-1/3 px-4">
           <div>
             <h1 class="text-2xl font-black my-2 text-center lg:text-left lg:ml-6 mt-6">
