@@ -13,7 +13,7 @@
   </BaseModal>
   <!--Details modal-->
   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
-    <section v-if="entity" class="bg-background-medium flex flex-col overflow-y-auto pb-12 sm:pb-0 h-10/12">
+    <section v-if="entity" class="bg-background-medium flex flex-col overflow-y-auto sm:pb-0 h-10/12">
       <section class="flex flex-col lg:flex-row sm:h-5/6">
         <section class="flex flex-col bg-background-light h-auto lg:w-1/3 px-4">
           <div>
@@ -41,7 +41,7 @@
               />
             </div>
           </div>
-          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-4/5 no-scrollbar">
+          <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-3/6 overflow-y-auto">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="my-6 sm:w-full" />
