@@ -120,7 +120,7 @@
               <div v-for="(relation, index) in entity.types" :key="index">
                 <a
                   v-if="relation"
-                  class="px-2 py-2 bg-tag-neutral mb-2 -mr-1 bg-opacity-50 cursor-pointer hover:underline"
+                  class="flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-pointer hover:underline"
                   :key="relation.id"
                   @click=";`${goToRelation(relation.id.replace('entities/', ''))}`"
                 >
