@@ -70,7 +70,7 @@
               v-if="collectieNaam.nestedMetaData.title.length != 0"
               class="col-start-1 font-semibold inline-block hover:underline cursor-pointer"
               v-html="t(`${collectieNaam.nestedMetaData.title[0].value}`)"
-              @click="goToRelation(collectieNaam.nestedMetaData.id)"
+              @click="goToRelation(collectieNaam.nestedMetaData.id, collectieNaam.nestedMetaData.id != '')"
             />
             <p v-if="collectieNaam.nestedMetaData.description && collectieNaam.nestedMetaData.description.length != 0" class="col-start-1 inline-block mt-2 mb-4">
               {{ collectieNaam.nestedMetaData.description[0].value }}
