@@ -21,6 +21,7 @@ type TypeObject = {
 }
 
 const useFilter = (): {
+  getRelation: (_entity: NestedDataObject, _label: string, _value: string) => Relation | undefined
   removeChildByLabel: (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => NestedDataObject;
   removeParentCollections: (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => Array<MetadataCollection>
   removeParentsWithoutMetadata: (_entity: NestedDataObject) => NestedDataObject
@@ -34,10 +35,18 @@ const useFilter = (): {
   getMetadataCollectionByLabel: (_metadataCollections: Array<MetadataCollection>, _label: string) => Array<Metadata>
 } => {
 
+  const getRelation = (_entity: NestedDataObject, _label: string, _value: string) => {
+    for(const relation of _entity.relations){
+      if(relation.label == _label && relation.value == _value){
+        return relation
+      }else null
+    }
+  }
+
   const getObjectNames = (_objectnameData: Array<Metadata>) => {
     const objectNames: Array<string> = []
-    for(const _meta of _objectnameData){
-      if(_meta.value){
+    for (const _meta of _objectnameData) {
+      if (_meta.value) {
         objectNames.push(_meta.value)
       }
     }
@@ -47,10 +56,10 @@ const useFilter = (): {
   const getDataOfCollection = (_entity: NestedDataObject, _parentLabel: string) => {
     const objectNaamData: Array<MetadataCollection> = []
     const collection = getParentCollectionByName(_entity, _parentLabel)
-    if(collection && collection.nested && collection.data && collection.data.length != 0){
-      for (const _data of collection.data){
-        if(_data && _data?.nestedMetaData && _data?.nestedMetaData.metadataCollection && _data?.nestedMetaData.metadataCollection?.length != 0){
-          for(const _meta of _data?.nestedMetaData.metadataCollection){
+    if (collection && collection.nested && collection.data && collection.data.length != 0) {
+      for (const _data of collection.data) {
+        if (_data && _data?.nestedMetaData && _data?.nestedMetaData.metadataCollection && _data?.nestedMetaData.metadataCollection?.length != 0) {
+          for (const _meta of _data?.nestedMetaData.metadataCollection) {
             objectNaamData.push(_meta as MetadataCollection)
           }
         }
@@ -61,11 +70,11 @@ const useFilter = (): {
 
   const getMetadataCollectionByLabel = (_metadataCollections: Array<MetadataCollection>, _label: string) => {
     const metadataForLabel: Array<Metadata> = []
-    if(_metadataCollections.length != 0){
-      for (const _collection of _metadataCollections){
-        if(_collection.nested && _collection.nested && _collection.data && _collection.data.length != 0){
-          for(const _data of _collection.data){
-            if(_data?.label == _label){
+    if (_metadataCollections.length != 0) {
+      for (const _collection of _metadataCollections) {
+        if (_collection.nested && _collection.nested && _collection.data && _collection.data.length != 0) {
+          for (const _data of _collection.data) {
+            if (_data?.label == _label) {
               metadataForLabel.push(_data)
             }
           }
@@ -84,7 +93,7 @@ const useFilter = (): {
         if (filtered.length == 1) {
           collection = filtered[0]
         }
-      }else collection = undefined
+      } else collection = undefined
     }
     return collection
   }
@@ -102,7 +111,7 @@ const useFilter = (): {
             }
           })
         }
-      }else collection = undefined
+      } else collection = undefined
     }
     return collection
   }
@@ -220,6 +229,7 @@ const useFilter = (): {
   }
 
   return {
+    getRelation,
     getMetadataCollectionByLabel,
     getObjectNames,
     getDataOfCollection,

@@ -23,9 +23,9 @@
             <div class="m-3 lg:ml-6 lg:mt-6">
               <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
               <div class="grid grid-cols-2" v-if="objectNames.length != 0">
-                <p class="font-bold">{{t('details.modal.objectName')}}</p>
+                <p class="font-bold">{{ t('details.modal.objectName') }}</p>
                 <ul>
-                  <li v-for="item in objectNames" :key="item">{{item}}</li>
+                  <li v-for="item in objectNames" :key="item">{{ item }}</li>
                 </ul>
               </div>
               <base-meta-data
@@ -42,7 +42,7 @@
                 :type="getName(entity, 'MaterieelDing.beheerder').name"
                 :error-text="t('details.modal.unknown')"
                 :clickable="true"
-                @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id,getName(entity, 'MaterieelDing.beheerder').id != '')"
+                @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id, getName(entity, 'MaterieelDing.beheerder').id != '')"
               />
             </div>
           </div>
@@ -110,7 +110,7 @@
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
                     :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
-                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goToCreatorDetails(getCreatorId(metaData)) : null"
+                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goTo(metaData.label,concatMetadatValues(metaData.data)) : null"
                   />
                 </li>
               </div>
@@ -130,7 +130,13 @@
                     'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-not-allowed': relation.relation == '',
                   }"
                   :key="relation.id"
-                  @click="goToRelation(relation.id.replace('entities/', ''),relation.relation!=''?true:false)"
+                  :href="
+                    relation.id && relation.relation == 'vervaardiger'
+                      ? '/creator/' + relation.id.replace('entities/', '') + '?fromPage=' + entity.title[0]?.value
+                      : relation.id
+                      ? '/relation/' + relation.id.replace('entities/', '')
+                      : undefined
+                  "
                 >
                   {{ relation.label }}
                 </a>
@@ -275,7 +281,6 @@ export const useDetailsModal = () => {
     const objectNameData = useFilter().getDataOfCollection(entity.value, 'Entiteit.classificatie')
     const objectNamesData = useFilter().getMetadataCollectionByLabel(objectNameData, 'objectnaam')
     objectNames.value = useFilter().getObjectNames(objectNamesData)
-    console.log({objectNames})
     const newTypes = createTypesFromMetadata(objectNamesData)
     entity.value.types = entity.value.types.concat(newTypes)
   }
@@ -428,6 +433,18 @@ export default defineComponent({
     }
   },
   methods: {
+    goTo(_label: string, _value: string) {
+      const relation = useFilter().getRelation(entity.value, _label, _value)
+      if (relation) {
+        const id = relation.key.replace('entities/', '')
+        if (relation.label == 'vervaardiger') {
+          window.location.href = `${window.location.origin}/creator/${id}?fromPage=${entity.value.title[0]?.value}`
+        } else {
+          window.location.href = `${window.location.origin}/relation/${id}`
+        }
+        this.closeDetailsModal()
+      }
+    },
     goToRelation(id: string, _pushRoute: boolean) {
       if (_pushRoute) {
         window.location.href = `${window.location.origin}/relation/${id}`
