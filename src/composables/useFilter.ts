@@ -30,8 +30,19 @@ const useFilter = (): {
   getParentCollectionByNameIfTitle: (_entity: NestedDataObject, _label: string) => Metadata | undefined
   getParentCollectionByName: (_entity: NestedDataObject, _label: string) => MetadataCollection | undefined
   getDataOfCollection: (_entity: NestedDataObject, _parentLabel: string) => Array<MetadataCollection>
+  getObjectNames: (_objectnameData: Array<Metadata>) => Array<string>
   getMetadataCollectionByLabel: (_metadataCollections: Array<MetadataCollection>, _label: string) => Array<Metadata>
 } => {
+
+  const getObjectNames = (_objectnameData: Array<Metadata>) => {
+    const objectNames: Array<string> = []
+    for(const _meta of _objectnameData){
+      if(_meta.value){
+        objectNames.push(_meta.value)
+      }
+    }
+    return objectNames
+  }
 
   const getDataOfCollection = (_entity: NestedDataObject, _parentLabel: string) => {
     const objectNaamData: Array<MetadataCollection> = []
@@ -210,6 +221,7 @@ const useFilter = (): {
 
   return {
     getMetadataCollectionByLabel,
+    getObjectNames,
     getDataOfCollection,
     removeChildByLabel,
     removeParentCollections,

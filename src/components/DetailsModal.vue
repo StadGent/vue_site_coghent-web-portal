@@ -22,7 +22,12 @@
             </h1>
             <div class="m-3 lg:ml-6 lg:mt-6">
               <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
-              <base-meta-data :key-word="t('details.modal.objectName')" :type="getObjectName(entity.metadataCollection)" :error-text="t('details.modal.unknown')" />
+              <div class="grid grid-cols-2" v-if="objectNames.length != 0">
+                <p class="font-bold">{{t('details.modal.objectName')}}</p>
+                <ul>
+                  <li v-for="item in objectNames" :key="item">{{item}}</li>
+                </ul>
+              </div>
               <base-meta-data
                 v-if="collectieNaam && collectieNaam.nestedMetaData && collectieNaam.nestedMetaData.title.length != 0"
                 :key-word="t('details.modal.collectieNaam')"
@@ -196,6 +201,7 @@ type TypeObject = {
 
 const entity = ref<any>()
 const collectieNaam = ref<any>()
+const objectNames = ref<any>([])
 
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
@@ -268,6 +274,8 @@ export const useDetailsModal = () => {
     collectieNaam.value = useFilter().getParentCollectionByNameIfTitle(entity.value, 'Collectie.naam')
     const objectNameData = useFilter().getDataOfCollection(entity.value, 'Entiteit.classificatie')
     const objectNamesData = useFilter().getMetadataCollectionByLabel(objectNameData, 'objectnaam')
+    objectNames.value = useFilter().getObjectNames(objectNamesData)
+    console.log({objectNames})
     const newTypes = createTypesFromMetadata(objectNamesData)
     entity.value.types = entity.value.types.concat(newTypes)
   }
@@ -279,6 +287,7 @@ export const useDetailsModal = () => {
     setEntity,
     entity,
     collectieNaam,
+    objectNames,
   }
 }
 
@@ -415,6 +424,7 @@ export default defineComponent({
       filterAllData,
       getName,
       collectieNaam,
+      objectNames,
     }
   },
   methods: {
