@@ -21,6 +21,7 @@ type TypeObject = {
 }
 
 const useFilter = (): {
+  removeMetadataCollectionFromNestedMetadata: (_entity: NestedDataObject, _parentLabel: string) => NestedDataObject
   getRelation: (_entity: NestedDataObject, _label: string, _value: string) => Relation | undefined
   removeChildByLabel: (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => NestedDataObject;
   removeParentCollections: (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => Array<MetadataCollection>
@@ -35,11 +36,26 @@ const useFilter = (): {
   getMetadataCollectionByLabel: (_metadataCollections: Array<MetadataCollection>, _label: string) => Array<Metadata>
 } => {
 
+  const removeMetadataCollectionFromNestedMetadata = (_entity: NestedDataObject, _parentLabel: string) => {
+    const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
+    const metadata = useFilter().getMetadataCollectionByLabel(entity.metadataCollection, _parentLabel)
+    for (const _meta of metadata) {
+      if (_meta.nestedMetaData) {
+        _meta.nestedMetaData.metadataCollection = []
+      }
+    }
+    const matches = entity.metadataCollection.filter(_collection => _collection.label == _parentLabel)
+    if(matches.length == 0){
+      matches[0].data = metadata
+    }
+    return entity
+  }
+
   const getRelation = (_entity: NestedDataObject, _label: string, _value: string) => {
-    for(const relation of _entity.relations){
-      if(relation.label == _label && relation.value == _value){
+    for (const relation of _entity.relations) {
+      if (relation.label == _label && relation.value == _value) {
         return relation
-      }else null
+      } else null
     }
   }
 
@@ -229,6 +245,7 @@ const useFilter = (): {
   }
 
   return {
+    removeMetadataCollectionFromNestedMetadata,
     getRelation,
     getMetadataCollectionByLabel,
     getObjectNames,

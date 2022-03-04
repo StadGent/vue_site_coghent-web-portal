@@ -389,6 +389,7 @@ export default defineComponent({
       entity = useFilter().removeChildByLabel(entity, 'Entiteit.classificatie', 'objectnaam')
       entity = useFilter().removeChildByLabel(entity, 'inhoud.persoon.naam', 'achternaam')
       entity = useFilter().removeParentsWithoutData(entity)
+      entity = useFilter().removeMetadataCollectionFromNestedMetadata(entity, 'inhoud.persoon.naam')
       return entity
     }
 
