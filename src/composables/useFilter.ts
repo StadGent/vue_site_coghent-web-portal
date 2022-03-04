@@ -39,14 +39,16 @@ const useFilter = (): {
   const removeMetadataCollectionFromNestedMetadata = (_entity: NestedDataObject, _parentLabel: string) => {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     const metadata = useFilter().getMetadataCollectionByLabel(entity.metadataCollection, _parentLabel)
-    for (const _meta of metadata) {
-      if (_meta.nestedMetaData) {
-        _meta.nestedMetaData.metadataCollection = []
+    if(metadata.length > 0){
+      for (const _meta of metadata) {
+        if (_meta.nestedMetaData) {
+          _meta.nestedMetaData.metadataCollection = []
+        }
       }
-    }
-    const matches = entity.metadataCollection.filter(_collection => _collection.label == _parentLabel)
-    if(matches.length == 0){
-      matches[0].data = metadata
+      const matches = entity.metadataCollection.filter(_collection => _collection.label == _parentLabel)
+      if(matches.length == 0){
+        matches[0].data = metadata
+      }
     }
     return entity
   }
