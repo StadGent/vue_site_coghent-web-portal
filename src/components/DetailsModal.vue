@@ -265,7 +265,7 @@ export const useDetailsModal = () => {
           newTypes.push({
             id: _meta.nestedMetaData.id,
             label: _meta.value,
-            relation: '',
+            relation: _meta.__typename,
           } as TypeObject)
         }
       }
