@@ -11,6 +11,9 @@ import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
 import { ConfigStore } from './stores/ConfigStore'
 import { createHead } from '@vueuse/head'
+import { useIIIF } from 'coghent-vue-3-component-library'
+
+export let iiif: any 
 
 export default async function (authenticated: boolean = true) {
   const configStore = StoreFactory.get(ConfigStore)
@@ -23,6 +26,9 @@ export default async function (authenticated: boolean = true) {
   // if (authenticated) {
   //   auth = new OpenIdConnectClient(config.oidc)
   // }
+
+  iiif = useIIIF(configStore.config.value.iiifLink)
+
   const router = createRouter()
 
   const apolloClient = new ApolloClient({

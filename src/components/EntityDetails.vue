@@ -63,8 +63,7 @@ import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
-import useIIIF from '../composables/useIIIF'
-import { Relation } from 'coghent-vue-3-component-library/lib/queries'
+import { iiif } from '@/app'
 
 type TypeObject = {
       id: string,
@@ -108,7 +107,7 @@ export default defineComponent({
     const relationsLabelArray = ref<string[]>([])
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
-    const { generateUrl, generateInfoUrl, noImageUrl } = useIIIF()
+    const { generateUrl, generateInfoUrl, noImageUrl } = iiif
 
     onResult((queryResult: any) => {
       if (!queryResult.error) {

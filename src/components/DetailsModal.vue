@@ -174,9 +174,9 @@ import { ModalState } from './base/Modal.vue'
 import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseIcon, IIIFViewer } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
-import useIIIF from '@/composables/useIIIF'
 import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
+import { iiif } from '@/app'
 
 export type DetailsModalType = {
   state: ModalState
@@ -312,7 +312,7 @@ export default defineComponent({
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
-    const { generateUrl, generateInfoUrl } = useIIIF()
+    const { generateUrl, generateInfoUrl } = iiif
     const router = useRouter()
 
     const onClick = () => {}

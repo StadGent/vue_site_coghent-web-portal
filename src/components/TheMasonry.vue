@@ -58,7 +58,7 @@ import { useI18n } from 'vue-i18n'
 import useClipboard from 'vue-clipboard3'
 import { Entity } from 'coghent-vue-3-component-library/lib/queries'
 import { randomizer } from '../helpers'
-import useIIIF from '../composables/useIIIF'
+import { iiif } from '@/app'
 
 type MasonryImage = 'placeholder' | Entity
 
@@ -119,7 +119,7 @@ export default defineComponent({
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
     const loadMore = () => emit('loadMore')
-    const { generateUrl, noImageUrl } = useIIIF()
+    const { generateUrl, noImageUrl } = iiif
     const renderCount = ref<number>(0)
 
     const tiles: MasonryTileConfig = {
