@@ -22,7 +22,17 @@
     />
 
     <div class="flex w-full flex-col items-center justify-center">
-      <the-masonry ref="masonry" :small="small" :entities="entityData ? entityData.Entities : {}" :loading="loading" :items-each-load="limit" :end-of-data="endOfData" @load-more="loadMore" />
+      <the-masonry
+        ref="masonry"
+        :small="small"
+        :entities="entityData ? entityData.Entities : {}"
+        :loading="loading"
+        :items-each-load="limit"
+        :end-of-data="endOfData"
+        @load-more="loadMore"
+        :generateUrl="generateUrl"
+        :noImageUrl="noImageUrl"
+      />
     </div>
   </section>
 </template>
@@ -30,13 +40,13 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, PropType, computed, toRaw, onMounted } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton } from 'coghent-vue-3-component-library'
+import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton, TheMasonry } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
-import TheMasonry from './TheMasonry.vue'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
 import { Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
 import useSeed from '../composables/useSeed'
+import useIIIF from '@/composables/useIIIF'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -82,6 +92,7 @@ export default defineComponent({
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
     const { randomValue, refresh: refreshSeed } = useSeed()
+    const { generateUrl, noImageUrl } = useIIIF()
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -214,6 +225,8 @@ export default defineComponent({
       emptySearch,
       masonry,
       resetQuery,
+      generateUrl,
+      noImageUrl,
     }
   },
 })

@@ -213,7 +213,7 @@ const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
 })
 
-const FullscreenModalState = ref<DetailsModalType>({
+const FullscreenModalState = ref<FullscreenModalType>({
   state: 'hide',
 })
 
