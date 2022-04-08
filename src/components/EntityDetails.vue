@@ -66,9 +66,9 @@ import { useDetailsModal } from './DetailsModal.vue'
 import { iiif } from '@/app'
 
 type TypeObject = {
-      id: string,
-      label:string,
-      relation: string;
+  id: string
+  label: string
+  relation: string
 }
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
@@ -115,11 +115,11 @@ export default defineComponent({
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {
-          if (value.filename) {
+          if (value.transcode_filename || value.filename) {
             photosArray.push({
-              imageUrl: generateUrl(value.filename, 'full'),
-              infoJson: generateInfoUrl(value.filename),
-              fallBackUrl: generateUrl(value.filename, 'full', 'max'),
+              imageUrl: generateUrl(value.transcode_filename || value.filename, 'full'),
+              infoJson: generateInfoUrl(value.transcode_filename || value.filename),
+              fallBackUrl: generateUrl(value.transcode_filename || value.filename, 'full', 'max'),
             })
           }
         })
@@ -156,14 +156,14 @@ export default defineComponent({
     })
 
     const filterDuplicateTypes = (_relations: Array<TypeObject>) => {
-      let myRelations: Array<TypeObject> = [];
-      Object.assign(myRelations,_relations)
-      for(const relation of myRelations){
-        const items = myRelations.filter(_relation => _relation.id == relation.id);
-        if(items.length > 1){
-          const duplicateWithSameValue = items.filter(_item => _item.label == relation.label);
-          if(duplicateWithSameValue.length > 1){
-            myRelations.splice(myRelations.indexOf(relation),1);
+      let myRelations: Array<TypeObject> = []
+      Object.assign(myRelations, _relations)
+      for (const relation of myRelations) {
+        const items = myRelations.filter((_relation) => _relation.id == relation.id)
+        if (items.length > 1) {
+          const duplicateWithSameValue = items.filter((_item) => _item.label == relation.label)
+          if (duplicateWithSameValue.length > 1) {
+            myRelations.splice(myRelations.indexOf(relation), 1)
           }
         }
       }
