@@ -22,6 +22,7 @@ const routes = [
   { path: '/entity/not-found', component: EntityNotFound },
   { path: '/creator/:creatorID', component: CreatorDetails },
   { path: '/relation/:relationID', component: RelationDetail },
+  { path: '/visit/:visitCode', redirect: '/', component: TheGrid },
   { path: '/pavilion', component: ThePavilion },
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
   { path: '/storybox', component: TheStoryboxPage },
