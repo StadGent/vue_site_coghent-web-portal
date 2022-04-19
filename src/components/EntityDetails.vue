@@ -21,10 +21,11 @@
           </p>
         </div>
         <div v-if="result" class="pt-5 font-medium">
-          <a
+          <div
             v-for="metaData in filterDuplicateTypes(types)"
             :key="metaData.id"
             class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50 cursor-pointer hover:underline"
+            @click="goToRelation(metaData)"
             :href="
               metaData.id && metaData.relation == 'vervaardiger'
                 ? '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.Entity?.title[0]?.value
@@ -32,8 +33,9 @@
                 ? '/relation/' + metaData.id.replace('entities/', '')
                 : undefined
             "
-            >{{ metaData.label }}</a
           >
+            {{ metaData.label }}
+          </div>
         </div>
         <base-button
           v-if="photos"
@@ -185,6 +187,18 @@ export default defineComponent({
       return myRelations
     }
 
+    const goToRelation = (metaData: any) => {
+      let routerLink: string = ''
+      if (metaData.id && metaData.relation == 'vervaardiger') {
+        routerLink = '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.value?.Entity?.title[0]?.value
+      } else {
+        routerLink = '/relation/' + metaData.id.replace('entities/', '')
+      }
+      if (routerLink) {
+        router.push({ path: routerLink, query: route.query })
+      }
+    }
+
     const { t } = useI18n()
 
     return {
@@ -201,6 +215,7 @@ export default defineComponent({
       router,
       loading,
       filterDuplicateTypes,
+      goToRelation,
     }
   },
 })

@@ -2,7 +2,7 @@
   <div class="flex justify-between flex-wrap sm:flex-nowrap mt-12 md:mt-0">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
-        <router-link to="/home" class="flex items-center sm:ml-0 ml-3 group">
+        <router-link :to="{ path: '/home', query: route.query }" class="flex items-center sm:ml-0 ml-3 group">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" fill="#FDC20B" />
             <g filter="url(#filter0_i)">
@@ -89,7 +89,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user }
+    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route }
   },
 })
 </script>
