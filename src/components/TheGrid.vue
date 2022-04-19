@@ -4,7 +4,7 @@
       {{ t('main.title') }}
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
-    <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
+    <div v-show="defaultRelations.length === 0 && !noHeader && !route.query.touch" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
       <div class="w-8/12">
         <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
       </div>
@@ -49,7 +49,7 @@ import { Entity, Maybe, Scalars } from 'coghent-vue-3-component-library/lib/quer
 import useSeed from '../composables/useSeed'
 import useIIIF from '@/composables/useIIIF'
 import { useHistory } from './BreadCrumbs.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -85,6 +85,7 @@ export default defineComponent({
   setup: (props) => {
     const { t } = useI18n()
     const router = useRouter()
+    const route = useRoute()
     const selectedFilters = ref<string[]>([])
     const searchQueryForInput = ref<string>('')
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery)
@@ -217,8 +218,10 @@ export default defineComponent({
       if (!router.currentRoute.value.params.entityID) {
         clearHistory()
       }
-      router.push('/entity/' + entity.object_id)
+      router.push({ path: '/entity/' + entity.object_id, query: route.query })
     }
+
+    console.log(route.query.touch)
 
     return {
       t,
@@ -240,6 +243,7 @@ export default defineComponent({
       generateUrl,
       noImageUrl,
       goToDetailsPage,
+      route,
     }
   },
 })

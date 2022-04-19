@@ -143,7 +143,7 @@ export default defineComponent({
           })
         }
       } else {
-        router.push('/entity/not-found')
+        router.push({ path: '/entity/not-found', query: route.query })
       }
     })
 

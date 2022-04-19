@@ -77,15 +77,15 @@ export default defineComponent({
     )
 
     const goToLoginPage = () => {
-      router.push('/login')
+      router.push({ path: '/login', query: route.query })
     }
 
     const goToProfilePage = () => {
-      router.push('/profile')
+      router.push({ path: '/profile', query: route.query })
     }
 
     const goToVerhalenBox = () => {
-      router.push('/storybox')
+      router.push({ path: '/storybox', query: route.query })
     }
 
     const { t } = useI18n()

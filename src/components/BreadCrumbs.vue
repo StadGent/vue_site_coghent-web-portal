@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { BaseIcon } from 'coghent-vue-3-component-library'
 
 export type HistoryPage = {
@@ -30,6 +30,7 @@ const currentPage = ref<HistoryPage>()
 
 export const useHistory = () => {
   const router = useRouter()
+  const route = useRoute()
 
   const setAllPagesInactive = () => {
     history.value.forEach((historyPage: HistoryPage) => {
@@ -54,12 +55,12 @@ export const useHistory = () => {
   const navigateToHistoryPage = (action: string) => {
     if (currentPage.value) {
       const pageIndex: number = history.value.indexOf(currentPage.value)
-      router.push(history.value[action == 'forward' ? pageIndex + 1 : pageIndex - 1].url)
+      router.push({ path: history.value[action == 'forward' ? pageIndex + 1 : pageIndex - 1].url, query: route.query })
     }
   }
 
   const navigateToPageByUrl = (page: HistoryPage) => {
-    router.push(page.url)
+    router.push({ path: page.url, query: route.query })
   }
 
   const clearHistory = () => {
@@ -77,10 +78,11 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const route = useRoute()
     const { history, navigateToHistoryPage, navigateToPageByUrl } = useHistory()
 
     const goToHomePage = () => {
-      router.push('/')
+      router.push({ path: '/', query: route.query })
     }
 
     return {

@@ -166,7 +166,7 @@ export default defineComponent({
           addPageToHistory(result.value.Entity.title[0]?.value ? result.value.Entity.title[0].value : 'unknown entity', router.currentRoute.value.fullPath)
         }
       } else {
-        router.push('/entity/not-found')
+        router.push({ path: '/entity/not-found', query: route.query })
       }
     })
 
