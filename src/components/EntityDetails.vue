@@ -1,5 +1,6 @@
 <template>
   <!-- main-->
+  <bread-crumbs class="mx-4 sm:mx-0" />
   <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
       <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
@@ -59,6 +60,7 @@ import { defineComponent, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment, ImageSource } from 'coghent-vue-3-component-library'
+import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
@@ -93,11 +95,13 @@ export default defineComponent({
     CardComponent,
     TheCarousel,
     BaseButton,
+    BreadCrumbs,
   },
   setup: () => {
-    const id = asString(useRoute().params['entityID'])
+    const id = ref<string>(asString(useRoute().params['entityID']))
     const router = useRouter()
-    const { result, onResult, loading } = useQuery(GetEntityByIdDocument, { id })
+    const route = useRoute()
+    const { result, onResult, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
     const photos = ref<ImageSource[] | undefined>()
@@ -108,6 +112,16 @@ export default defineComponent({
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
+    const { addPageToHistory } = useHistory()
+
+    watch(
+      () => router.currentRoute.value.params,
+      (params) => {
+        if (params.entityID) {
+          refetch({ id: asString(params.entityID) })
+        }
+      }
+    )
 
     onResult((queryResult: any) => {
       if (!queryResult.error) {
@@ -149,6 +163,7 @@ export default defineComponent({
 
         if (result.value && result.value.Entity) {
           setEntity({ ...result.value.Entity, types: typeArray })
+          addPageToHistory(result.value.Entity.title[0]?.value ? result.value.Entity.title[0].value : 'unknown entity', router.currentRoute.value.fullPath)
         }
       } else {
         router.push('/entity/not-found')

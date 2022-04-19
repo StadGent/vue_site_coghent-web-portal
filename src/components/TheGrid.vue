@@ -32,6 +32,7 @@
         @load-more="loadMore"
         :generateUrl="generateUrl"
         :noImageUrl="noImageUrl"
+        @navigateWithRouter="goToDetailsPage"
       />
     </div>
   </section>
@@ -44,9 +45,11 @@ import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVari
 import 'coghent-vue-3-component-library/lib/index.css'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
-import { Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
+import { Entity, Maybe, Scalars } from 'coghent-vue-3-component-library/lib/queries'
 import useSeed from '../composables/useSeed'
 import useIIIF from '@/composables/useIIIF'
+import { useHistory } from './BreadCrumbs.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -81,6 +84,7 @@ export default defineComponent({
   },
   setup: (props) => {
     const { t } = useI18n()
+    const router = useRouter()
     const selectedFilters = ref<string[]>([])
     const searchQueryForInput = ref<string>('')
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery)
@@ -93,6 +97,7 @@ export default defineComponent({
     const masonry = ref<any>(null)
     const { randomValue, refresh: refreshSeed } = useSeed()
     const { generateUrl, noImageUrl } = useIIIF()
+    const { clearHistory } = useHistory()
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -208,6 +213,13 @@ export default defineComponent({
       })
     }
 
+    const goToDetailsPage = (entity: Entity) => {
+      if (!router.currentRoute.value.params.entityID) {
+        clearHistory()
+      }
+      router.push('/entity/' + entity.object_id)
+    }
+
     return {
       t,
       limit,
@@ -227,6 +239,7 @@ export default defineComponent({
       resetQuery,
       generateUrl,
       noImageUrl,
+      goToDetailsPage,
     }
   },
 })
