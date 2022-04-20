@@ -8,7 +8,7 @@
       >
         <base-icon icon="close" class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2" />
       </a>
-      <IIIFViewer :imageUrl="IIIfImageUrl" />
+      <IIIFViewer :canGoFullscreen="route.query.touch ? false : true" :imageUrl="IIIfImageUrl" />
     </section>
   </BaseModal>
   <!--Details modal-->
@@ -110,7 +110,7 @@
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
                     :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
-                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goTo(metaData.label,concatMetadatValues(metaData.data)) : null"
+                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goTo(metaData.label, concatMetadatValues(metaData.data)) : null"
                   />
                 </li>
               </div>
@@ -168,7 +168,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
 import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseIcon, IIIFViewer } from 'coghent-vue-3-component-library'
@@ -314,6 +314,7 @@ export default defineComponent({
     const { toClipboard } = useClipboard()
     const { generateUrl, generateInfoUrl } = iiif
     const router = useRouter()
+    const route = useRoute()
 
     const onClick = () => {}
 
@@ -431,6 +432,7 @@ export default defineComponent({
       getName,
       collectieNaam,
       objectNames,
+      route,
     }
   },
   methods: {
