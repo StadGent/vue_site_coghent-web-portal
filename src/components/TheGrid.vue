@@ -31,6 +31,7 @@
         :end-of-data="endOfData"
         :generate-url="generateUrl"
         :no-image-url="noImageUrl"
+        :hasCustomImageOverlay="route.query.touch ? true : false"
         @load-more="loadMore"
         @navigateWithRouter="goToDetailsPage"
       />
