@@ -30,7 +30,14 @@ const routes = [
 ]
 
 export default function (/*auth: any*/) {
-  const router = createRouter({ routes, history: createWebHistory(process.env.BASE_URL) })
+  const router = createRouter({
+    routes,
+    history: createWebHistory(process.env.BASE_URL),
+    scrollBehavior(to, from, savedPosition) {
+      // always scroll to top
+      return { top: 0 }
+    },
+  })
   // if (auth) {
   //   router.beforeEach(async (to, _from, next) => {
   //     if (!to.matched.some((route) => route.meta.requiresAuth)) {
