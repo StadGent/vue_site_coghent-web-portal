@@ -8,7 +8,7 @@
       >
         <base-icon icon="close" class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2" />
       </a>
-      <IIIFViewer :canGoFullscreen="route.query.touch ? false : true" :imageUrl="IIIfImageUrl" />
+      <IIIFViewer :canGoFullScreen="route.query.touch ? false : true" :imageUrl="IIIfImageUrl" />
     </section>
   </BaseModal>
   <!--Details modal-->
