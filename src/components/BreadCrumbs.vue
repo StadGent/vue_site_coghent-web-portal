@@ -1,12 +1,16 @@
 <template>
   <div class="flex">
-    <section class="flex bg-background-medium w-min">
-      <div @click="goToHomePage"><base-icon icon="home" class="p-2 purple cursor-pointer" /></div>
+    <section class="flex items-center bg-background-medium w-min">
+      <div @click="goToHomePage"><base-icon icon="home" class="p-2 purple cursor-pointer align-center" /></div>
       <div @click="navigateToHistoryPage('backward')"><base-icon icon="arrowLeft" class="p-2 purple cursor-pointer" /></div>
       <div @click="navigateToHistoryPage('forward')"><base-icon icon="arrowRight" class="p-2 purple cursor-pointer" /></div>
     </section>
     <section class="flex">
-      <div v-for="(page, index) in history" :key="index" class="flex items-center cursor-pointer">
+      <div v-if="history.length > 10" class="flex items-center">
+        <base-icon icon="arrowRightLine" class="p-2 black" />
+        <h4 class="text-text-black">...</h4>
+      </div>
+      <div v-for="(page, index) in history.slice(-10)" :key="index" class="flex items-center cursor-pointer">
         <base-icon icon="arrowRightLine" class="p-2 black" />
         <h4 @click="navigateToPageByUrl(page)" :class="page.active ? 'text-text-black' : 'text-accent-purple'">{{ page.name }}</h4>
       </div>
