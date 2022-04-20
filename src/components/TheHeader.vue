@@ -29,7 +29,7 @@
           </div>
         </router-link>
       </div>
-      <div class="group flex flex-col items-center pt-8 md:pt-5">
+      <div v-if="!route.query.touch" class="group flex flex-col items-center pt-8 md:pt-5">
         <a target="_blank" href="https://www.collectie.gent/over-het-project" class="flex items-center">
           <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
             {{ t('header.about') }}
