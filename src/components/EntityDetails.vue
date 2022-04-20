@@ -4,7 +4,7 @@
   <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
       <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
-      <the-carousel v-if="!loading && photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" @opening-ccmodal="openCCModal" :isTouch="route.query.touch ? true : false" />
+      <the-carousel v-if="!loading && photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" :is-touch="route.query.touch ? true : false" @opening-ccmodal="openCCModal" />
     </section>
     <CardComponent :large="true" class="mx-4 sm:mx-0">
       <div class="flex bg-background-medium px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center`]: loading, [`flex-col`]: !loading }">
@@ -25,7 +25,6 @@
             v-for="metaData in filterDuplicateTypes(types)"
             :key="metaData.id"
             class="inline-block px-2 py-2 bg-background-dark mr-4 mb-4 bg-opacity-50 cursor-pointer hover:underline"
-            @click="goToRelation(metaData)"
             :href="
               metaData.id && metaData.relation == 'vervaardiger'
                 ? '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.Entity?.title[0]?.value
@@ -33,6 +32,7 @@
                 ? '/relation/' + metaData.id.replace('entities/', '')
                 : undefined
             "
+            @click="goToRelation(metaData)"
           >
             {{ metaData.label }}
           </div>
@@ -52,7 +52,7 @@
       <h2 class="font-bold text-2xl w-full text-center pt-10 mb-2">
         {{ t('details.discover') }}
       </h2>
-      <the-grid v-if="relationStringArray.length > 0" :small="true" :default-relations="relationStringArray" />
+      <the-grid v-if="relationStringArray.length > 0" :small="route.query.touch ? false : true" :default-relations="relationStringArray" />
     </section>
   </div>
 </template>
