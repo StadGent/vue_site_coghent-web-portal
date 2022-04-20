@@ -4,11 +4,11 @@
       {{ t('main.title') }}
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
-    <div v-show="defaultRelations.length === 0 && !noHeader && !route.query.touch" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
-      <div class="w-8/12">
+    <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
+      <div v-show="!route.query.touch" class="w-8/12">
         <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
       </div>
-      <div class="lg:absolute lg:right-0">
+      <div class=" " :class="route.query.touch ? 'transform scale-150' : 'lg:absolute lg:right-0'">
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
       </div>
     </div>
@@ -29,9 +29,9 @@
         :loading="loading"
         :items-each-load="limit"
         :end-of-data="endOfData"
+        :generate-url="generateUrl"
+        :no-image-url="noImageUrl"
         @load-more="loadMore"
-        :generateUrl="generateUrl"
-        :noImageUrl="noImageUrl"
         @navigateWithRouter="goToDetailsPage"
       />
     </div>
