@@ -114,7 +114,7 @@ export default defineComponent({
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
-    const { addPageToHistory } = useHistory()
+    const { addPageToHistory, history } = useHistory()
 
     watch(
       () => router.currentRoute.value.params,
@@ -190,8 +190,10 @@ export default defineComponent({
     const goToRelation = (metaData: any) => {
       let routerLink: string = ''
       if (metaData.id && metaData.relation == 'vervaardiger') {
-        routerLink = '/creator/' + metaData.id.replace('entities/', '') + '?fromPage=' + result.value?.Entity?.title[0]?.value
+        routerLink = '/creator/' + metaData.id.replace('entities/', '')
+        route.query.fromPage = history.value[history.value.length - 1].name
       } else {
+        history.value[history.value.length - 1]
         routerLink = '/relation/' + metaData.id.replace('entities/', '')
       }
       if (routerLink) {
