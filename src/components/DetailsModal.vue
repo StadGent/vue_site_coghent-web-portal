@@ -110,7 +110,7 @@
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
                     :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
-                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goTo(metaData.label, concatMetadatValues(metaData.data)) : null"
+                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goToRelation(metaData) : null"
                   />
                 </li>
               </div>
@@ -123,23 +123,17 @@
 
             <div class="mx-5 flex gap-3 mb-4 flex-wrap">
               <div v-for="(relation, index) in entity.types" :key="index">
-                <a
+                <div
                   v-if="relation"
                   :class="{
                     'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-pointer hover:underline': relation.relation != '',
                     'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-not-allowed': relation.relation == '',
                   }"
                   :key="relation.id"
-                  :href="
-                    relation.id && relation.relation == 'vervaardiger'
-                      ? '/creator/' + relation.id.replace('entities/', '') + '?fromPage=' + entity.title[0]?.value
-                      : relation.id
-                      ? '/relation/' + relation.id.replace('entities/', '')
-                      : undefined
-                  "
+                  @click="goToRelation(relation)"
                 >
                   {{ relation.label }}
-                </a>
+                </div>
               </div>
             </div>
           </div>
@@ -177,6 +171,7 @@ import useClipboard from 'vue-clipboard3'
 import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import { iiif } from '@/app'
+import { useHistory } from './BreadCrumbs.vue'
 
 export type DetailsModalType = {
   state: ModalState
@@ -315,8 +310,7 @@ export default defineComponent({
     const { generateUrl, generateInfoUrl } = iiif
     const router = useRouter()
     const route = useRoute()
-
-    const onClick = () => {}
+    const { history } = useHistory()
 
     const copyUrl = async (id: String) => {
       try {
@@ -410,6 +404,20 @@ export default defineComponent({
       return { name: name, id: id }
     }
 
+    const goToRelation = (metaData: any) => {
+      closeDetailsModal()
+      let routerLink: string = ''
+      if (metaData.id && metaData.relation == 'vervaardiger') {
+        routerLink = '/creator/' + metaData.id.replace('entities/', '')
+      } else {
+        history.value[history.value.length - 1]
+        routerLink = '/relation/' + metaData.id.replace('entities/', '')
+      }
+      if (routerLink) {
+        router.push({ path: routerLink, query: route.query })
+      }
+    }
+
     return {
       getObjectName,
       FullscreenModalState,
@@ -423,7 +431,6 @@ export default defineComponent({
       openNewCCModal,
       LazyLoadImage,
       copyUrl,
-      onClick,
       generateUrl,
       generateInfoUrl,
       router,
@@ -433,6 +440,7 @@ export default defineComponent({
       collectieNaam,
       objectNames,
       route,
+      goToRelation,
     }
   },
   methods: {
@@ -447,16 +455,6 @@ export default defineComponent({
         }
         this.closeDetailsModal()
       }
-    },
-    goToRelation(id: string, _pushRoute: boolean) {
-      if (_pushRoute) {
-        window.location.href = `${window.location.origin}/relation/${id}`
-        this.closeDetailsModal()
-      }
-    },
-    goToCreatorDetails(id: String) {
-      this.closeDetailsModal()
-      window.location.href = `${window.location.origin}/creator/${id}?fromPage=${entity.value.title[0]?.value}`
     },
     getCreatorId() {
       const metadata: Array<any> = entity.value.metadataCollection
