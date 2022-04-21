@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import TheHeader from '@/components/TheHeader.vue'
 import { useHead } from '@vueuse/head'
@@ -33,6 +34,12 @@ export default defineComponent({
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
     const indexValue = configStore.config.value.vueAppIndex
+    const route = useRoute()
+
+    if (route.query.touch) {
+      // Disable rightclick if touchmode
+      document.addEventListener('contextmenu', (event) => event.preventDefault())
+    }
 
     const getIndexValue = () => {
       let indexStr = ''
