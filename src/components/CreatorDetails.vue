@@ -5,9 +5,9 @@
         <section>
           <div>
             <base-button
-              v-if="route.query.fromPage"
+              v-if="currentPage"
               class="inline⁻block w-full"
-              :text="t('creator.goBack') + ' ' + route.query.fromPage"
+              :text="t('creator.goBack') + ' ' + currentPage.name"
               custom-style="details-black"
               custom-icon="arrowLeftLine"
               :icon-shown="true"
@@ -45,6 +45,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import { GetCreatorByIdDocument, GetEntityByIdDocument, BaseButton, BaseMetaData, BaseMetaDataTab, FullRelationFragment } from 'coghent-vue-3-component-library'
 import { Relation, Entity } from 'coghent-vue-3-component-library/lib/queries'
+import { useHistory } from './BreadCrumbs.vue'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
@@ -78,9 +79,12 @@ export default defineComponent({
     const person = ref<Person>()
     const tabs: Array<string> = ['Design Museum Gent', 'STAM', 'Industriemuseum']
     const additionalInfoIds: Array<string> = []
+    const { currentPage } = useHistory()
+
+    console.log({ currentPage })
 
     const goToPreviousPage = () => {
-      history.back()
+      router.go(-1)
     }
 
     const getNameFromMetadata = (key: string) => {
@@ -170,6 +174,7 @@ export default defineComponent({
       person,
       result,
       id,
+      currentPage,
     }
   },
 })
