@@ -9,7 +9,7 @@
       <div v-if="history.length >= 10" class="flex items-center">
         <h4 class="p-2 text-text-black">...</h4>
       </div>
-      <div v-for="(page, index) in history.slice(-10)" :key="index" class="flex items-center cursor-pointer">
+      <div v-for="(page, index) in history.slice(currentPageIndex - 10)" :key="index" class="flex items-center cursor-pointer">
         <base-icon icon="arrowRightLine" class="p-2 black" />
         <h4 @click="navigateToPageByUrl(page)" :class="page.active ? 'text-text-black' : 'text-accent-purple'">{{ page.name }}</h4>
       </div>
@@ -30,6 +30,7 @@ export type HistoryPage = {
 
 const history = ref<HistoryPage[]>([])
 const currentPage = ref<HistoryPage>()
+const currentPageIndex = ref<number>()
 
 export const useHistory = () => {
   const router = useRouter()
@@ -47,11 +48,13 @@ export const useHistory = () => {
       setAllPagesInactive()
       existsInHistory.active = true
       currentPage.value = existsInHistory
+      currentPageIndex.value = history.value.indexOf(existsInHistory)
     } else {
       setAllPagesInactive()
       const page = { name: pageName, url, active: true }
       history.value.push(page)
       currentPage.value = page
+      currentPageIndex.value = history.value.indexOf(page)
     }
   }
 
@@ -69,9 +72,10 @@ export const useHistory = () => {
   const clearHistory = () => {
     history.value = []
     currentPage.value = undefined
+    currentPageIndex.value = undefined
   }
 
-  return { addPageToHistory, navigateToHistoryPage, navigateToPageByUrl, clearHistory, history }
+  return { addPageToHistory, navigateToHistoryPage, navigateToPageByUrl, clearHistory, history, currentPage, currentPageIndex }
 }
 
 export default defineComponent({
@@ -82,7 +86,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const route = useRoute()
-    const { history, navigateToHistoryPage, navigateToPageByUrl } = useHistory()
+    const { history, currentPage, currentPageIndex, navigateToHistoryPage, navigateToPageByUrl } = useHistory()
 
     const goToHomePage = () => {
       router.push({ path: '/', query: route.query })
@@ -90,6 +94,8 @@ export default defineComponent({
 
     return {
       history,
+      currentPage,
+      currentPageIndex,
       goToHomePage,
       navigateToHistoryPage,
       navigateToPageByUrl,
