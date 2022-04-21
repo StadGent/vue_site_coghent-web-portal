@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment, ImageSource } from 'coghent-vue-3-component-library'
@@ -117,13 +117,20 @@ export default defineComponent({
     const { addPageToHistory, history } = useHistory()
 
     watch(
-      () => router.currentRoute.value.params,
-      (params) => {
-        if (params.entityID) {
-          refetch({ id: asString(params.entityID) })
+      () => route.fullPath,
+      () => {
+        if (route.params.entityID) {
+          refetch({ id: asString(route.params.entityID) })
         }
-      }
+      },
+      { immediate: true }
     )
+
+    onMounted(() => {
+      if (route.params.entityID) {
+        refetch({ id: asString(route.params.entityID) })
+      }
+    })
 
     onResult((queryResult: any) => {
       if (!queryResult.error) {
@@ -191,7 +198,6 @@ export default defineComponent({
       let routerLink: string = ''
       if (metaData.id && metaData.relation == 'vervaardiger') {
         routerLink = '/creator/' + metaData.id.replace('entities/', '')
-        route.query.fromPage = history.value[history.value.length - 1].name
       } else {
         history.value[history.value.length - 1]
         routerLink = '/relation/' + metaData.id.replace('entities/', '')
