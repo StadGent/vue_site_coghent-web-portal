@@ -100,7 +100,7 @@ export default defineComponent({
     const { randomValue, refresh: refreshSeed } = useSeed()
     const { generateUrl, noImageUrl } = useIIIF()
     const { clearHistory } = useHistory()
-    const frameList: string[] = [
+    let frameList: string[] = [
       'entities/df39c7c0-7be2-4ba3-935a-fdaa04443d00',
       'entities/a408b8f5-3517-46e9-8572-25b4e1a7cb12',
       'entities/28db711b-8f0a-41bb-85b3-06449d51eae6',
@@ -193,7 +193,20 @@ export default defineComponent({
       }
       selectedFilters.value = []
       if (searchQueryForQuery.value === '') {
-        refetch()
+        refetch({
+          limit: limit,
+          skip: (_skip = 0),
+          searchValue: {
+            value: searchQueryForQuery.value,
+            isAsc: false,
+            relation_filter: [],
+            randomize: getSelectedFilters.value.length > 0 || searchQueryForQuery.value !== '' ? false : true,
+            seed: randomValue.value,
+            key: 'title',
+            has_mediafile: true,
+            skip_relations: props.noRelations ? props.noRelations : false,
+          },
+        })
       } else {
         searchQueryForInput.value = ''
         searchQueryForQuery.value = ''
