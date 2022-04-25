@@ -42,13 +42,14 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, PropType, computed, toRaw, onMounted } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton, TheMasonry, GetActiveBoxDocument } from 'coghent-vue-3-component-library'
+import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton, TheMasonry } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
 import { Entity, Maybe, Relation, Scalars, Story } from 'coghent-vue-3-component-library/lib/queries'
 import useSeed from '../composables/useSeed'
 import useIIIF from '@/composables/useIIIF'
+import { useActiveBox } from '@/composables/useActiveBox'
 import { useHistory } from './BreadCrumbs.vue'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -102,6 +103,7 @@ export default defineComponent({
     const { clearHistory } = useHistory()
     const frameList = ref<string[]>([])
     const queryEnabled = ref<boolean>(true)
+    const { getActiveBox, activeBox } = useActiveBox()
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -115,23 +117,18 @@ export default defineComponent({
     onMounted(() => {
       if (route.query.touch) {
         queryEnabled.value = false
-        const { result: activeBoxResult, loading: loadingActiveBoxResult } = useQuery(GetActiveBoxDocument)
-
-        watch(
-          () => activeBoxResult.value,
-          (boxResult) => {
-            if (boxResult?.ActiveBox.results) {
-              const frameIds: string[] = []
-              boxResult.ActiveBox.results.forEach((story: any) => {
-                const storyFrameIds: string[] = story.frames.map((frame: Entity) => 'entities/' + frame.id)
-                frameIds.push(...storyFrameIds)
-              })
-              frameList.value.push(...frameIds)
-              queryEnabled.value = true
-              refetch()
-            }
+        getActiveBox().then((result) => {
+          const frameIds: string[] = []
+          if (result) {
+            result.forEach((story: any) => {
+              const storyFrameIds: string[] = story.frames.map((frame: Entity) => 'entities/' + frame.id)
+              frameIds.push(...storyFrameIds)
+            })
+            frameList.value.push(...frameIds)
+            queryEnabled.value = true
+            refetch()
           }
-        )
+        })
       }
     })
 
