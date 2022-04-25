@@ -101,6 +101,7 @@ export default defineComponent({
     const { generateUrl, noImageUrl } = useIIIF()
     const { clearHistory } = useHistory()
     const frameList = ref<string[]>([])
+    const queryEnabled = ref<boolean>(true)
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -112,6 +113,7 @@ export default defineComponent({
     })
 
     if (route.query.touch) {
+      queryEnabled.value = false
       const { result: activeBoxResult, loading: loadingActiveBoxResult } = useQuery(GetActiveBoxDocument)
 
       watch(
@@ -124,6 +126,7 @@ export default defineComponent({
               frameIds.push(...storyFrameIds)
             })
             frameList.value.push(...frameIds)
+            queryEnabled.value = true
             refetch()
           }
         }
@@ -135,7 +138,7 @@ export default defineComponent({
 
       () => ({
         limit: limit,
-        skip: _skip,
+        skip: (_skip = 1),
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
@@ -149,6 +152,7 @@ export default defineComponent({
       }),
       () => ({
         prefetch: false,
+        enabled: queryEnabled.value,
       })
     )
 
