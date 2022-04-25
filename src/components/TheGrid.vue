@@ -112,33 +112,35 @@ export default defineComponent({
       return selectedFilters.value
     })
 
-    if (route.query.touch) {
-      queryEnabled.value = false
-      const { result: activeBoxResult, loading: loadingActiveBoxResult } = useQuery(GetActiveBoxDocument)
+    onMounted(() => {
+      if (route.query.touch) {
+        queryEnabled.value = false
+        const { result: activeBoxResult, loading: loadingActiveBoxResult } = useQuery(GetActiveBoxDocument)
 
-      watch(
-        () => activeBoxResult.value,
-        (boxResult) => {
-          if (boxResult?.ActiveBox.results) {
-            const frameIds: string[] = []
-            boxResult.ActiveBox.results.forEach((story: any) => {
-              const storyFrameIds: string[] = story.frames.map((frame: Entity) => 'entities/' + frame.id)
-              frameIds.push(...storyFrameIds)
-            })
-            frameList.value.push(...frameIds)
-            queryEnabled.value = true
-            refetch()
+        watch(
+          () => activeBoxResult.value,
+          (boxResult) => {
+            if (boxResult?.ActiveBox.results) {
+              const frameIds: string[] = []
+              boxResult.ActiveBox.results.forEach((story: any) => {
+                const storyFrameIds: string[] = story.frames.map((frame: Entity) => 'entities/' + frame.id)
+                frameIds.push(...storyFrameIds)
+              })
+              frameList.value.push(...frameIds)
+              queryEnabled.value = true
+              refetch()
+            }
           }
-        }
-      )
-    }
+        )
+      }
+    })
 
     const { result, loading, fetchMore, onResult, refetch } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
       GetEntitiesDocument,
 
       () => ({
         limit: limit,
-        skip: (_skip = 1),
+        skip: (_skip = 0),
         searchValue: {
           value: searchQueryForQuery.value,
           isAsc: false,
