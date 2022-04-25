@@ -1,18 +1,18 @@
 <template>
   <!--IIIF modal-->
-  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" @hide-modal="closeFullscreenModal" customStyles="z-50">
+  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" custom-styles="z-50" @hide-modal="closeFullscreenModal">
     <section class="h-large flex relative w-full">
       <a
-        @click="closeFullscreenModal"
         class="right-2 top-2 absolute bg-neutral-0 cursor-pointer hover:bg-accent-yellow ml-2 mr-2 p-2 rounded-full shadow-xl text-accent-purple z-50 hover:text-neutral-0"
+        @click="closeFullscreenModal"
       >
         <base-icon icon="close" class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2" />
       </a>
-      <IIIFViewer :canGoFullScreen="route.query.touch ? false : true" :imageUrl="IIIfImageUrl" />
+      <IIIFViewer :can-go-full-screen="route.query.touch ? false : true" :image-url="IIIfImageUrl" />
     </section>
   </BaseModal>
   <!--Details modal-->
-  <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" @hide-modal="closeDetailsModal" customStyles="z-40">
+  <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" custom-styles="z-40" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="bg-background-medium flex flex-col overflow-y-auto sm:pb-0 h-10/12">
       <section class="flex flex-col lg:flex-row sm:h-5/6">
         <section class="flex flex-col bg-background-light h-auto lg:w-1/3 px-4">
@@ -22,7 +22,7 @@
             </h1>
             <div class="m-3 lg:ml-6 lg:mt-6">
               <base-meta-data :key-word="t('details.modal.objectNumber')" :type="entity.objectNumber[0]?.value" :error-text="t('details.modal.unknown')" />
-              <div class="grid grid-cols-2" v-if="objectNames.length != 0">
+              <div v-if="objectNames.length != 0" class="grid grid-cols-2">
                 <p class="font-bold">{{ t('details.modal.objectName') }}</p>
                 <ul>
                   <li v-for="item in objectNames" :key="item">{{ item }}</li>
@@ -52,9 +52,9 @@
                 <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="my-6 sm:w-full" />
                 <base-button
                   class="w-0 absolute z-20 top-4 left-4 mt-3 ml-3"
-                  customStyle="secondary-round"
-                  customIcon="fullscreen"
-                  :iconShown="true"
+                  custom-style="secondary-round"
+                  custom-icon="fullscreen"
+                  :icon-shown="true"
                   @click="openIIIFModal(generateInfoUrl(photo.filename, 'full'))"
                 />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
@@ -74,8 +74,8 @@
             <a
               v-if="collectieNaam.nestedMetaData.title.length != 0"
               class="col-start-1 font-semibold inline-block hover:underline cursor-pointer"
-              v-html="t(`${collectieNaam.nestedMetaData.title[0].value}`)"
               @click="goToRelation(collectieNaam.nestedMetaData.id, collectieNaam.nestedMetaData.id != '')"
+              v-html="t(`${collectieNaam.nestedMetaData.title[0].value}`)"
             />
             <p v-if="collectieNaam.nestedMetaData.description && collectieNaam.nestedMetaData.description.length != 0" class="col-start-1 inline-block mt-2 mb-4">
               {{ collectieNaam.nestedMetaData.description[0].value }}
@@ -125,11 +125,11 @@
               <div v-for="(relation, index) in entity.types" :key="index">
                 <div
                   v-if="relation"
+                  :key="relation.id"
                   :class="{
                     'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-pointer hover:underline': relation.relation != '',
                     'flex flex-row flex-wrap px-2 py-2 bg-tag-neutral mb-1 mr-1 bg-opacity-50 cursor-not-allowed': relation.relation == '',
                   }"
-                  :key="relation.id"
                   @click="goToRelation(relation)"
                 >
                   {{ relation.label }}
@@ -141,7 +141,7 @@
         </section>
       </section>
     </section>
-    <section id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 shadow-2xl sticky bottom-0 w-full lg:pb-6">
+    <section v-show="!route.query.touch" id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 shadow-2xl sticky bottom-0 w-full lg:pb-6">
       <base-button
         class="w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
         :on-click="() => copyUrl(entity.id)"
