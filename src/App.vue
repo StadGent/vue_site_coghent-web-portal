@@ -6,7 +6,7 @@
       <router-view />
       <details-modal :scroll="false" />
       <creative-modal />
-      <disclaimer-button />
+      <disclaimer-button v-if="!route.query.touch" />
       <disclaimer-pop-up />
     </div>
     <the-footer />
@@ -62,6 +62,7 @@ export default defineComponent({
 
     return {
       t,
+      route,
     }
   },
 })
