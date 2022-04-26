@@ -7,7 +7,7 @@
       <details-modal :scroll="false" />
       <creative-modal />
       <disclaimer-button v-if="!route.query.touch" />
-      <disclaimer-pop-up />
+      <disclaimer-pop-up v-if="!route.query.touch" />
     </div>
     <the-footer />
   </div>
