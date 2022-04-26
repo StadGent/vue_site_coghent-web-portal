@@ -4,7 +4,7 @@
   <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
       <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
-      <the-carousel v-if="!loading && photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" :is-touch="route.query.touch ? true : false" @opening-ccmodal="openCCModal" />
+      <the-carousel v-if="!loading && photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" :isTouch="route.query.touch ? true : false" @opening-ccmodal="openCCModal" />
     </section>
     <CardComponent :large="true" class="mx-4 sm:mx-0">
       <div class="flex bg-background-medium px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center`]: loading, [`flex-col`]: !loading }">
