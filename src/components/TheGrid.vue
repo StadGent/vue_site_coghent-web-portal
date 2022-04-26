@@ -108,7 +108,7 @@ export default defineComponent({
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
         return props.defaultRelations
-      } else if (route.query.touch) {
+      } else if (route.query.touch && !selectedFilters.value.length) {
         return frameList.value
       }
       return selectedFilters.value
