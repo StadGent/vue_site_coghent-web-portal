@@ -11,7 +11,7 @@
             {{ t('footer.eu-info') }}
           </div>
         </div>
-        <ul class="mt-5 flex justify-center">
+        <ul v-if="!route.query.touch" class="mt-5 flex justify-center">
           <li>
             <a href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline mr-4 font-light"> {{ t('footer.cookie-policy') }}</a>
           </li>
@@ -30,6 +30,7 @@
 import { defineComponent } from 'vue'
 import { CardComponent } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'TheFooter',
@@ -38,9 +39,11 @@ export default defineComponent({
   },
   setup() {
     const { t } = useI18n()
+    const route = useRoute()
 
     return {
       t,
+      route,
     }
   },
 })
