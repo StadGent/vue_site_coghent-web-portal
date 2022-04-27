@@ -54,7 +54,7 @@
 import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment, ImageSource } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment, ImageSource, getFileNameByMimeType } from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
@@ -131,12 +131,18 @@ export default defineComponent({
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {
-          if (value.transcode_filename || value.filename) {
-            photosArray.push({
-              imageUrl: generateUrl(value.transcode_filename || value.filename, 'full'),
-              infoJson: generateInfoUrl(value.transcode_filename || value.filename),
-              fallBackUrl: generateUrl(value.transcode_filename || value.filename, 'full', 'max'),
-            })
+          if (value) {
+            const filename: string | undefined = getFileNameByMimeType(value)
+            if (filename) {
+              const isLink: boolean = filename?.includes('https://')
+              if (filename) {
+                photosArray.push({
+                  imageUrl: isLink ? filename : generateUrl(filename, 'full'),
+                  infoJson: generateInfoUrl(filename),
+                  fallBackUrl: isLink ? filename : generateUrl(filename, 'full', 'max'),
+                })
+              }
+            }
           }
         })
         photos.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl, fallBackUrl: noImageUrl }] : photosArray
