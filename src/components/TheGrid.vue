@@ -92,9 +92,9 @@ export default defineComponent({
     const searchQueryForInput = ref<string>('')
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery)
     let _skip: Maybe<Scalars['Int']> = 0
-    const limit: Maybe<Scalars['Int']> = 25
+    const limit: Maybe<Scalars['Int']> = route.query.touch ? 50 : 25
     const endOfData = ref<Boolean>(false)
-    const entityData = ref<GetEntitiesQuery | { results: Entity[] } | undefined>()
+    const entityData = ref<GetEntitiesQuery | undefined>()
     const relationData = ref<GetEntitiesQuery | undefined>()
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
@@ -210,6 +210,7 @@ export default defineComponent({
     }
 
     const loadMore = () => {
+      let newTiles = []
       if (masonry.value && masonry.value.contructTiles) {
         masonry.value.contructTiles(limit)
       }
