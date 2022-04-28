@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -80,8 +80,6 @@ export default defineComponent({
     const tabs: Array<string> = ['Design Museum Gent', 'STAM', 'Industriemuseum']
     const additionalInfoIds: Array<string> = []
     const { currentPage } = useHistory()
-
-    console.log({ currentPage })
 
     const goToPreviousPage = () => {
       router.go(-1)
@@ -165,6 +163,15 @@ export default defineComponent({
         })
       }
     })
+
+    watch(
+      () => metadata?.value?.length,
+      () => {
+        if (metadata?.value?.length == additionalInfoIds.length) {
+          metadata.value = metadata.value.sort()
+        }
+      }
+    )
 
     return {
       t,
