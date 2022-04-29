@@ -110,7 +110,7 @@
                     :type="concatMetadatValues(metaData.data)"
                     :error-text="t('details.modal.unknown')"
                     :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
-                    @click="t(`${metaData.label}`) == 'vervaardiger' ? goToRelation(metaData) : null"
+                    @click="goToMetaData(metaData.label, concatMetadatValues(metaData.data))"
                   />
                 </li>
               </div>
@@ -404,17 +404,26 @@ export default defineComponent({
       return { name: name, id: id }
     }
 
+    const createLink = (linkId: string, label: string): string => {
+      const pageName: 'creator' | 'relation' = label == 'vervaardiger' ? 'creator' : 'relation'
+      let link = pageName && linkId ? `/${pageName}/${linkId}` : ''
+      return link
+    }
+
     const goToRelation = (metaData: any) => {
       closeDetailsModal()
-      let routerLink: string = ''
-      if (metaData.id && metaData.relation == 'vervaardiger') {
-        routerLink = '/creator/' + metaData.id.replace('entities/', '')
-      } else {
-        history.value[history.value.length - 1]
-        routerLink = '/relation/' + metaData.id.replace('entities/', '')
-      }
-      if (routerLink) {
+      const id = metaData.id.replace('entities/', '')
+      let routerLink: string = createLink(id, metaData.relation)
+      router.push({ path: routerLink, query: route.query })
+    }
+
+    const goToMetaData = (_label: string, _value: string) => {
+      const relation = useFilter().getRelation(entity.value, _label, _value)
+      if (relation) {
+        const id = relation.key.replace('entities/', '')
+        const routerLink: string = createLink(id, _label)
         router.push({ path: routerLink, query: route.query })
+        closeDetailsModal()
       }
     }
 
@@ -436,6 +445,7 @@ export default defineComponent({
       router,
       IIIfImageUrl,
       filterAllData,
+      goToMetaData,
       getName,
       collectieNaam,
       objectNames,
@@ -444,18 +454,6 @@ export default defineComponent({
     }
   },
   methods: {
-    goTo(_label: string, _value: string) {
-      const relation = useFilter().getRelation(entity.value, _label, _value)
-      if (relation) {
-        const id = relation.key.replace('entities/', '')
-        if (relation.label == 'vervaardiger') {
-          window.location.href = `${window.location.origin}/creator/${id}?fromPage=${entity.value.title[0]?.value}`
-        } else {
-          window.location.href = `${window.location.origin}/relation/${id}`
-        }
-        this.closeDetailsModal()
-      }
-    },
     getCreatorId() {
       const metadata: Array<any> = entity.value.metadataCollection
       const productionData: Array<any> = metadata.find((data) => data.label == 'MaterieelDing.productie').data
