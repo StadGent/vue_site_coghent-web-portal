@@ -102,16 +102,18 @@
                   >
                     {{ dataItem.nestedMetaData.description[0].value ? dataItem.nestedMetaData.description[0].value : '' }}
                   </p>
-                  <base-meta-data
-                    v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection"
-                    :key="index"
-                    :strong-label="false"
-                    :key-word="t(`${metaData.label}`)"
-                    :type="concatMetadatValues(metaData.data)"
-                    :error-text="t('details.modal.unknown')"
-                    :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
-                    @click="goToMetaData(metaData.label, concatMetadatValues(metaData.data))"
-                  />
+                  <div v-for="(metaData, index) in dataItem.nestedMetaData.metadataCollection" :key="index">
+                    <base-meta-data
+                      v-for="(data, dataIndex) in metaData.data"
+                      :key="dataIndex"
+                      :strong-label="false"
+                      :key-word="t(`${metaData.label}`)"
+                      :type="data.value"
+                      :error-text="t('details.modal.unknown')"
+                      :clickable="t(`${metaData.label}`) == 'vervaardiger' ? true : false"
+                      @click="goToMetaData(metaData.label, data.value)"
+                    />
+                  </div>
                 </li>
               </div>
             </li>
@@ -418,6 +420,7 @@ export default defineComponent({
     }
 
     const goToMetaData = (_label: string, _value: string) => {
+      console.log(_value)
       const relation = useFilter().getRelation(entity.value, _label, _value)
       if (relation) {
         const id = relation.key.replace('entities/', '')
