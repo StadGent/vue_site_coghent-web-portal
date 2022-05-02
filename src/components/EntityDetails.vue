@@ -45,7 +45,7 @@
       <h2 class="font-bold text-2xl w-full text-center pt-10 mb-2">
         {{ t('details.discover') }}
       </h2>
-      <the-grid v-if="relationStringArray.length > 0" :small="route.query.touch ? false : true" :default-relations="relationStringArray" />
+      <the-grid v-if="relatedItemIds.length > 0" :small="route.query.touch ? false : true" :default-relations="relatedItemIds" />
     </section>
   </div>
 </template>
@@ -102,8 +102,7 @@ export default defineComponent({
     const photos = ref<ImageSource[] | undefined>()
     const mediaFiles = ref<any | undefined>()
     const types = ref<any[] | undefined>()
-    const relationStringArray = ref<string[]>([])
-    const relationsLabelArray = ref<string[]>([])
+    const relatedItemIds = ref<string[]>([])
     const { openCCModal } = useCCModal()
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
@@ -149,13 +148,6 @@ export default defineComponent({
 
         // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex]
 
-        queryResult.data.Entity?.relations
-          .filter((filter: FullRelationFragment) => filter.label && filter.label !== '')
-          .forEach((relation: any) => {
-            relationStringArray.value.push(relation.key)
-            relation.label && relationsLabelArray.value.push(relation.label)
-          })
-
         const typeArray: any[] = []
         // queryResult.data.Entity?.metadata.forEach((value: any) => {
         //   if (metaDataInTag.includes(value.key)) {
@@ -168,6 +160,7 @@ export default defineComponent({
           }
         })
         types.value = typeArray
+        relatedItemIds.value = filterDuplicateTypes(typeArray).map((type: any) => type.id)
 
         if (result.value && result.value.Entity) {
           setEntity({ ...result.value.Entity, types: typeArray })
@@ -213,7 +206,6 @@ export default defineComponent({
       t,
       photos,
       types,
-      relationStringArray,
       openCCModal,
       openDetailsModal,
       selectedImageIndex,
@@ -224,6 +216,7 @@ export default defineComponent({
       route,
       filterDuplicateTypes,
       goToRelation,
+      relatedItemIds,
     }
   },
 })
