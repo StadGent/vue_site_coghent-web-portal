@@ -41,11 +41,11 @@
         />
       </div>
     </CardComponent>
-    <section v-if="result" class="col-span-2">
+    <section v-if="relatedItemIds.length > 0" class="col-span-2">
       <h2 class="font-bold text-2xl w-full text-center pt-10 mb-2">
         {{ t('details.discover') }}
       </h2>
-      <the-grid v-if="relatedItemIds.length > 0" :small="route.query.touch ? false : true" :default-relations="relatedItemIds" />
+      <the-grid :small="route.query.touch ? false : true" :default-relations="relatedItemIds" />
     </section>
   </div>
 </template>
