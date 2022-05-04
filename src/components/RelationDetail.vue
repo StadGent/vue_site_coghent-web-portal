@@ -4,6 +4,7 @@
       <div class="pb-0 sm:pb-24">
         <section>
           <h1 class="md:text-5xl sm:text-4xl text-3xl font-bold w-full py-10 block leading-normal">{{ result.Entity?.title[0]?.value }}</h1>
+          <p v-if="result.Entity.description.length" class="md:text-lg sm:text-md text-sm w-full block leading-normal pb-10 md:pb-0">{{ result.Entity.description[0].value }}</p>
         </section>
       </div>
     </div>
