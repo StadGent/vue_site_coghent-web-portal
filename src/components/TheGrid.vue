@@ -129,6 +129,8 @@ export default defineComponent({
             refetch()
           }
         })
+      } else {
+        refetch()
       }
     })
 
@@ -143,7 +145,7 @@ export default defineComponent({
           isAsc: false,
           relation_filter: getSelectedFilters.value,
           randomize: getSelectedFilters.value.length > 0 || searchQueryForQuery.value !== '' ? false : true,
-          seed: randomValue.value,
+          // seed: randomValue.value,
           key: 'title',
           has_mediafile: true,
           skip_relations: props.noRelations ? props.noRelations : false,
@@ -248,8 +250,6 @@ export default defineComponent({
       }
       router.push({ path: '/entity/' + entity.object_id, query: route.query })
     }
-
-    console.log(route.query.touch)
 
     return {
       t,
