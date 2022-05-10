@@ -167,8 +167,14 @@ export default defineComponent({
     watch(
       () => metadata?.value?.length,
       () => {
-        if (metadata?.value?.length == additionalInfoIds.length) {
-          metadata.value = metadata.value.sort()
+        if (metadata?.value) {
+          let ordering: any = {}
+          const sortOrder = ['firstname', 'lastname', 'birth_datum', 'birth_plaats', 'death_datum', 'death_plaats']
+          for (let i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i
+
+          metadata.value.sort(function (a: Metadata, b: Metadata) {
+            return ordering[a.key] - ordering[b.key]
+          })
         }
       }
     )
