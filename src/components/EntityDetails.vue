@@ -71,7 +71,6 @@ type TypeObject = {
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
 
 const metaDataInLabel: string[] = [
-  'objectnaam',
   'object_category',
   'MensgemaaktObject.draagt',
   'Entiteit.maaktDeelUitVan',
