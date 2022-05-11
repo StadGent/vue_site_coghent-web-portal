@@ -34,7 +34,7 @@
                 :type="collectieNaam.nestedMetaData.title[0].value"
                 :error-text="t('details.modal.unknown')"
                 :clickable="true"
-                @click="goToRelation(collectieNaam.nestedMetaData.id, collectieNaam.nestedMetaData.id != '')"
+                @click="goToRelation(collectieNaam.nestedMetaData)"
               />
               <base-meta-data
                 v-if="getName(entity, 'MaterieelDing.beheerder').name != 'onbekend'"
@@ -42,7 +42,7 @@
                 :type="getName(entity, 'MaterieelDing.beheerder').name"
                 :error-text="t('details.modal.unknown')"
                 :clickable="true"
-                @click="goToRelation(getName(entity, 'MaterieelDing.beheerder').id, getName(entity, 'MaterieelDing.beheerder').id != '')"
+                @click="goToMetaData('MaterieelDing.beheerder', getName(entity, 'MaterieelDing.beheerder').name)"
               />
             </div>
           </div>
@@ -74,7 +74,7 @@
             <a
               v-if="collectieNaam.nestedMetaData.title.length != 0"
               class="col-start-1 font-semibold inline-block hover:underline cursor-pointer"
-              @click="goToRelation(collectieNaam.nestedMetaData.id, collectieNaam.nestedMetaData.id != '')"
+              @click="goToRelation(collectieNaam.nestedMetaData)"
               v-html="t(`${collectieNaam.nestedMetaData.title[0].value}`)"
             />
             <p v-if="collectieNaam.nestedMetaData.description && collectieNaam.nestedMetaData.description.length != 0" class="col-start-1 inline-block mt-2 mb-4">
@@ -413,6 +413,7 @@ export default defineComponent({
     }
 
     const goToRelation = (metaData: any) => {
+      console.log(metaData)
       closeDetailsModal()
       const id = metaData.id.replace('entities/', '')
       let routerLink: string = createLink(id, metaData.relation)
@@ -420,7 +421,6 @@ export default defineComponent({
     }
 
     const goToMetaData = (_label: string, _value: string) => {
-      console.log(_value)
       const relation = useFilter().getRelation(entity.value, _label, _value)
       if (relation) {
         const id = relation.key.replace('entities/', '')
@@ -430,11 +430,16 @@ export default defineComponent({
       }
     }
 
+    const logThis = (thingToLog: any) => {
+      console.log(thingToLog)
+    }
+
     return {
       getObjectName,
       FullscreenModalState,
       openFullscreenModal,
       closeFullscreenModal,
+      logThis,
       concatMetadatValues,
       closeDetailsModal,
       DetailsModalState,
