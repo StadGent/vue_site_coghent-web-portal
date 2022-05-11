@@ -413,7 +413,6 @@ export default defineComponent({
     }
 
     const goToRelation = (metaData: any) => {
-      console.log(metaData)
       closeDetailsModal()
       const id = metaData.id.replace('entities/', '')
       let routerLink: string = createLink(id, metaData.relation)
@@ -430,16 +429,11 @@ export default defineComponent({
       }
     }
 
-    const logThis = (thingToLog: any) => {
-      console.log(thingToLog)
-    }
-
     return {
       getObjectName,
       FullscreenModalState,
       openFullscreenModal,
       closeFullscreenModal,
-      logThis,
       concatMetadatValues,
       closeDetailsModal,
       DetailsModalState,
