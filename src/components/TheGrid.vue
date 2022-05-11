@@ -31,10 +31,30 @@
         :end-of-data="endOfData"
         :generate-url="generateUrl"
         :no-image-url="noImageUrl"
-        :noCopy="route.query.touch ? true : false"
         @load-more="loadMore"
-        @navigateWithRouter="goToDetailsPage"
-      />
+      >
+        <template #tile="{ entity, tile, small }">
+          <router-link :to="{ path: '/entity/' + entity.id, query: route.query }" class="absolute top-0 left-0 z-50 h-full w-full">
+            <span v-show="tile.mediafiles[0] !== 'placeholder'" class="w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute rounded-md"> </span>
+
+            <span v-show="!small && tile.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
+                <p v-if="entity.title && entity.title[0]" class="opacity-100 mb-2 px-10 font-bold">
+                  {{ entity.title[0].value }}
+                </p>
+                <p v-if="entity.description && entity.description[0] && tile.type === 'SingleImage'" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">
+                  {{ entity.description[0].value }}
+                </p>
+                <base-button text="Lees meer" custom-style="ghost-white" :icon-shown="true" :icon-left="false" custom-icon="arrowRightLine" />
+
+                <div v-if="!route.query.touch" @click.prevent="() => copyUrl(entity.id)">
+                  <base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" />
+                </div>
+              </div>
+            </span>
+          </router-link>
+        </template>
+      </the-masonry>
     </div>
   </section>
 </template>
@@ -52,6 +72,7 @@ import useIIIF from '@/composables/useIIIF'
 import { useActiveBox } from '@/composables/useActiveBox'
 import { useHistory } from './BreadCrumbs.vue'
 import { useRouter, useRoute } from 'vue-router'
+import useClipboard from 'vue-clipboard3'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -104,6 +125,7 @@ export default defineComponent({
     const frameList = ref<string[]>([])
     const queryEnabled = ref<boolean>(true)
     const { getActiveBox, activeBox } = useActiveBox()
+    const { toClipboard } = useClipboard()
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -244,6 +266,17 @@ export default defineComponent({
       })
     }
 
+    const copyUrl = async (id: string) => {
+      try {
+        var suffix = '/entity/' + id
+        var splitted = window.location.href.substring(0, window.location.href.lastIndexOf('/'))
+        var url = splitted + suffix
+        await toClipboard(url)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
     const goToDetailsPage = (entity: Entity) => {
       if (!router.currentRoute.value.params.entityID) {
         clearHistory()
@@ -272,6 +305,7 @@ export default defineComponent({
       noImageUrl,
       goToDetailsPage,
       route,
+      copyUrl,
     }
   },
 })
