@@ -49,13 +49,13 @@
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-3/6 overflow-y-auto">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
-                <LazyLoadImage :url="generateUrl(photo.filename, 'full')" extra-class="my-6 sm:w-full" />
+                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" extra-class="my-6 sm:w-full" />
                 <base-button
                   class="w-0 absolute z-20 top-4 left-4 mt-3 ml-3"
                   custom-style="secondary-round"
                   custom-icon="fullscreen"
                   :icon-shown="true"
-                  @click="openIIIFModal(generateInfoUrl(photo.filename, 'full'))"
+                  @click="openIIIFModal(generateInfoUrl(photo.transcode_filename || photo.filename, 'full'))"
                 />
                 <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
