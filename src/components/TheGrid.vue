@@ -37,13 +37,13 @@
           <router-link :to="{ path: '/entity/' + entity.object_id, query: route.query }" @click="!route.params.entityID ? clearHistory() : undefined" class="absolute top-0 left-0 z-50 h-full w-full">
             <span v-show="tile.mediafiles[0] !== 'placeholder'" class="w-full bg-text-dark h-full left-0 top-0 group-hover:opacity-50 opacity-0 absolute rounded-md"> </span>
 
-            <span v-show="!small && tile.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full left-0 top-0 group-hover:opacity-100 opacity-0">
-              <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white">
+            <span v-show="!small && tile.mediafiles[0] !== 'placeholder'" class="absolute w-full h-full max-h-full left-0 top-0 group-hover:opacity-100 opacity-0 overflow-hidden">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center text-text-white break-words">
                 <p v-if="entity.title && entity.title[0]" class="opacity-100 mb-2 px-10 font-bold">
                   {{ entity.title[0].value }}
                 </p>
-                <p v-if="entity.description && entity.description[0] && tile.type === 'SingleImage'" id="description" class="opacity-100 px-10 overflow-ellipsis break-words">
-                  {{ entity.description[0].value }}
+                <p v-if="entity.description && entity.description[0] && tile.type === 'SingleImage'" id="description" class="opacity-100 px-10">
+                  {{ entity.description[0].value.length > 100 ? entity.description[0].value.substring(0, 100) + '...' : entity.description[0].value }}
                 </p>
                 <base-button text="Lees meer" custom-style="ghost-white" :icon-shown="true" :icon-left="false" custom-icon="arrowRightLine" />
 
