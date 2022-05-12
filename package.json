@@ -18,7 +18,7 @@
     "@vue/server-renderer": "^3.1.5",
     "@vueuse/head": "^0.6.0",
     "axios": "^0.21.1",
-    "coghent-vue-3-component-library": "^0.1.62",
+    "coghent-vue-3-component-library": "^0.1.63",
     "core-js": "^3.16.2",
     "crocks": "^0.2.3",
     "fork-ts-checker-webpack-plugin-v5": "npm:fork-ts-checker-webpack-plugin@^5.2.1",
