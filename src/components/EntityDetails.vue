@@ -124,7 +124,7 @@ export default defineComponent({
     })
 
     onResult((queryResult: any) => {
-      if (!queryResult.error) {
+      if (queryResult.data.Entity) {
         const photosArray: ImageSource[] = []
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
@@ -159,7 +159,9 @@ export default defineComponent({
           }
         })
         types.value = typeArray
-        relatedItemIds.value = filterDuplicateTypes(typeArray).map((type: any) => type.id)
+        console.log(types.value)
+        const typeArrayForRelatedAssets = typeArray.filter((type: any) => type.relation != 'MaterieelDing.beheerder')
+        relatedItemIds.value = filterDuplicateTypes(typeArrayForRelatedAssets).map((type: any) => type.id)
 
         if (result.value && result.value.Entity) {
           setEntity({ ...result.value.Entity, types: typeArray })
