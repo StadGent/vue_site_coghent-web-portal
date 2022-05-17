@@ -76,7 +76,7 @@ export default defineComponent({
 
     const deleteAsset = async (_asset: typeof Entity) => {
       console.log('Delete asset:', _asset)
-      useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
+      await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
       const updatedAssets = await getRelationEntities()
       emit(`assets`, updatedAssets)
     }

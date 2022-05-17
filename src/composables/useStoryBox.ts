@@ -16,7 +16,6 @@ const useStoryBox = (): {
   getAssetsFromBasket: () => Promise<Array<typeof Relation>>
   getRelationEntities: () => Promise<Array<typeof Entity>>
 } => {
-  const apolloProvider = provideApolloClient(apolloClient);
   const { boxVisiter, getByCode, addAssetToBoxVisiter, getRelationsByType }: typeof UseBoxVisiter = useBoxVisiter(apolloClient)
 
   const userStore = StoreFactory.get(UserStore)
@@ -53,22 +52,21 @@ const useStoryBox = (): {
     if (boxVisiter.value != null) {
       assetRelations = await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket) as Array<typeof Relation>
     }
-    // return ['asd', 'saasd', 'weqweqwe', 'asd', 'saasd', 'weqweqwe','asd', 'saasd', 'weqweqwe', 'asd', 'saasd', 'weqweqwe']
     return assetRelations
   }
 
   const getRelationEntities = async () => {
+    console.log({ apolloClient })
     let assets: Array<typeof Entity> = []
-    const { fetchMore } = apolloProvider(() =>
+    const { fetchMore } = provideApolloClient(apolloClient)(() =>
       useQuery(RelationsAsEntitiesDocument, {
-        id: '50886609',
+        id: '31099546',
       })
     );
     const response = await fetchMore({
-      variables: { id: '50886609' },
-    });
+      variables: { id: '31099546' },
+    })?.catch(error => console.error(`Couldn't get the relation entities`, error))
     assets = response?.data.RelationsAsEntities
-
     return assets
   }
 

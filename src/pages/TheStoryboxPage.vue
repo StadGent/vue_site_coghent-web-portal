@@ -84,13 +84,6 @@ export default defineComponent({
     })
     const description = ref('')
 
-    watch(
-      () => closeWindow,
-      (closewindowVal) => {
-        console.log(closewindowVal)
-      }
-    )
-
     const close = () => {
       closeWindow.value = 'hide'
       router.push('/')
