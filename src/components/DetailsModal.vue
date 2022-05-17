@@ -143,21 +143,48 @@
         </section>
       </section>
     </section>
-    <section v-show="!route.query.touch" id="footer" class="flex items-center z-50 bg-background-light justify-center p-2 lg:p-10 shadow-2xl sticky bottom-0 w-full lg:pb-6">
-      <base-button
-        class="w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden"
-        :on-click="() => copyUrl(entity.id)"
-        custom-style="secondary-round"
-        custom-icon="link"
-        :icon-shown="true"
-      />
-      <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-      <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-      <base-button class="hidden w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
-      <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-      <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6" />
-      <base-button class=" w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-      <base-button class="w-max " :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+    <section id="footer" class="flex items-stretch z-50 bg-background-light justify-center p-2 lg:p-10 shadow-2xl sticky bottom-0 w-full lg:pb-6">
+      <div class="mx-3 align-center">
+        <base-button
+          class="w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden"
+          :on-click="() => copyUrl(entity.id)"
+          custom-style="secondary-round"
+          custom-icon="link"
+          :icon-shown="true"
+        />
+        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
+        <div v-if="userStore.hasUser" class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
+        <base-button
+          v-if="userStore.hasUser"
+          class="hidden w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden"
+          :on-click="onClick"
+          custom-style="secondary-round"
+          custom-icon="edit"
+          :icon-shown="true"
+        />
+        <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
+        <div class="hidden border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden" />
+        <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
+        <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+      </div>
+      <div v-if="userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
+      <div v-if="userStore.hasUser" class="mx-3 align-center">
+        <base-button
+          :text="t('buttons.addToStorybox')"
+          custom-style="ghost-purple"
+          :on-click="() => addAssetToVisiter(entity.id)"
+          :icon-shown="true"
+          custom-icon="storybox"
+          class="px-2 hidden lg:flex"
+        />
+        <base-button
+          custom-style="secondary-round"
+          :on-click="() => addAssetToVisiter(entity.id)"
+          :icon-shown="true"
+          custom-icon="storybox"
+          class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden"
+        />
+      </div>
     </section>
   </BaseModal>
 </template>
@@ -174,6 +201,8 @@ import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-
 import useFilter from '@/composables/useFilter'
 import useStoryBox from '@/composables/useStoryBox'
 import { iiif } from '@/app'
+import StoreFactory from '@/stores/StoreFactory'
+import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
 
 export type DetailsModalType = {
@@ -315,6 +344,10 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const { history } = useHistory()
+    const userStore = StoreFactory.get(UserStore)
+
+
+    const onClick = () => {}
 
     const copyUrl = async (id: String) => {
       console.log('copyurl', id)
@@ -455,7 +488,8 @@ export default defineComponent({
       collectieNaam,
       objectNames,
       route,
-      goToRelation,
+      addAssetToVisiter,
+      userStore,
     }
   },
   methods: {
