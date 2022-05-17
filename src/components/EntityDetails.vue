@@ -159,7 +159,6 @@ export default defineComponent({
           }
         })
         types.value = typeArray
-        console.log(types.value)
         const typeArrayForRelatedAssets = typeArray.filter((type: any) => type.relation != 'MaterieelDing.beheerder')
         relatedItemIds.value = filterDuplicateTypes(typeArrayForRelatedAssets).map((type: any) => type.id)
 
