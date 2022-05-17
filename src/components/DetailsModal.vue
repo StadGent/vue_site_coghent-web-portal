@@ -155,15 +155,15 @@
       <div class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
       <base-button class="hidden w-12 h-12 pl-6 ml-3 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
       <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-      <div class="hidden border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-      <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-      <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+      <div class="border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6" />
+      <base-button class=" w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
+      <base-button class="w-max " :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
     </section>
   </BaseModal>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
@@ -172,6 +172,7 @@ import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
+import useStoryBox from '@/composables/useStoryBox'
 import { iiif } from '@/app'
 import { useHistory } from './BreadCrumbs.vue'
 
@@ -304,6 +305,7 @@ export default defineComponent({
     IIIFViewer,
   },
   setup(props) {
+    const { addAssetToVisiter } = useStoryBox()
     const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
     const { closeFullscreenModal, FullscreenModalState, openFullscreenModal } = useFullscreenModal()
     let IIIfImageUrl: string = ''
@@ -315,6 +317,7 @@ export default defineComponent({
     const { history } = useHistory()
 
     const copyUrl = async (id: String) => {
+      console.log('copyurl', id)
       try {
         var url = window.location.href
         await toClipboard(url)

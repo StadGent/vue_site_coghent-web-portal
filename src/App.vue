@@ -29,7 +29,7 @@ import TheFooter from './components/TheFooter.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, DisclaimerPopUp, DisclaimerButton, TheFooter },
+  components: { TheHeader, CreativeModal, DetailsModal, TheFooter },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)

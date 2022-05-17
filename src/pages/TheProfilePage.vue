@@ -18,7 +18,7 @@
           </p>
         </router-link>
       </div>
-      <base-button :text="t('profile.logout')" :on-click="buttonClick" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
+      <base-button :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
     </div>
     <div class="flex-1 xl:ml-48 sm:ml-24 p-8">
       <p class="mt-5 font-bold">
@@ -80,12 +80,12 @@
   </section>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
-import { GetMeDocument, User } from 'coghent-vue-3-component-library'
+import { User } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
 import { ConfigStore } from '../stores/ConfigStore'
 import StoreFactory from '../stores/StoreFactory'
@@ -95,7 +95,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const userStore = StoreFactory.get(UserStore)
-    const user: User = userStore.user
+    const user: typeof User = userStore.user
     const configStore = StoreFactory.get(ConfigStore)
     const userEditUrl = configStore.config.value.userEditUrl
 
@@ -107,6 +107,19 @@ export default defineComponent({
       return editRoute
     }
 
+    const logout = async () => {
+      console.log(`STEP 1 | WEB LOGOUT `)
+      fetch('/api/logout')
+        .then(async (response) => {
+          userStore.setUser({} as typeof User)
+          console.log(`STEP 1 | WEB LOGOUT | user set to none`)
+          router.push('/')
+          console.log(`STEP 1 | WEB LOGOUT | going back to home page /`)
+
+        })
+        .catch((error) => console.log(`WEB | Couldn't logout`, error))
+    }
+
     const { t } = useI18n()
 
     return {
@@ -115,6 +128,7 @@ export default defineComponent({
       user,
       getEditPage,
       t,
+      logout,
     }
   },
 })

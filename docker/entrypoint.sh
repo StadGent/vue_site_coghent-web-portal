@@ -3,5 +3,8 @@
 set -e
 
 echo "Starting frontend"
+echo "Link libraries"
 npm link ./coghent-vue-3-component-library &&
-exec npm run serve
+npm link ./session-vue-3-oidc-library
+# exec npm run serve
+tail -f /dev/null

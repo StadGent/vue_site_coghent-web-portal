@@ -95,7 +95,7 @@ import { BaseModal, ModalState } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 
 export type CCModalType = {
-  state: ModalState
+  state: typeof ModalState
 }
 
 const CCModalState = ref<CCModalType>({

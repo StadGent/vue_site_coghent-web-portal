@@ -24,6 +24,7 @@
   "buttons": {
     "login": "Aanmelden",
     "storybox": "Verhalenbox",
+    "addToStorybox": "Aan mijn verhalenbox toevoegen",
     "all-works": "Alle werken",
     "surprise": "Laat je verrassen"
   },
@@ -112,9 +113,34 @@
     "InCopyrightUnknown": "In Copyright - unknown rightsholder",
     "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing."
   },
+  "storybox": {
+    "title": "Jouw verhalenbox",
+    "assets": {
+      "title": "Geselecteerde werken",
+      "selectedAssetsInfo": "Versleep de foto’s om de volgorde te veranderen waarin ze te zien zullen zijn. Dit kan van belang zijn voor het verhaal dat je vertelt. Aan de hand van de cijfers kan je ook in de teskt verwijzen naar een bepaald werk.",
+      "addMore": "Voeg nog meer werken toe aan je verhaal!",
+      "search": "Zelf een werk toevoegen",
+      "collection": "Zoeken in de collectie"
+    },
+    "story": {
+      "title": "Mijn verhaal",
+      "storyPlaceholder": "Type hier jou verhaal..",
+      "close": "Sluiten",
+      "next": "Volgende",
+      "end": "Verhaal afronden"
+    },
+    "step2": {
+      "title": "Rond je verhaal af in twee stappen:",
+      "storyTitle": "Geef een titel aan je verhaal",
+      "storyLanguage": "Kies de taal waarin je verhaal geschreven is:"
+    },
+    "step3": {
+      "thankyou": "Bedankt om je verhaal met ons te delen!",
+      "status": "Bedankt om je verhaal met ons te delen! We hebben je verhaal goed ontvangen en kijken alles eventjes na. Je kan de status opvolgen in je account bij Mijn verhalen. Het zou kunnen dat we nog contact met je opnemen als we extra informatie nodig hebben."
+    }
+  },
   //collectie
   "Collectie.naam": "Dossier",
-
   //identificatie
   "Entiteit.classificatie": "Type object",
   "MaterieelDing.beheerder": "instelling",
@@ -145,6 +171,6 @@
   "associatie.persoon": "geassocieerde persoon/instelling",
   //Iconografie
   "inhoud.onderwerp": "afgebeeld onderwerp",
-  "inhoud.persoon.naam": "afgebeeld persoon/instelling", 
+  "inhoud.persoon.naam": "afgebeeld persoon/instelling",
   "inhoud.onderwerp.eigennaam": "afgebeeld onderwerp"
 }

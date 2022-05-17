@@ -7,22 +7,16 @@ export class UserStore extends BaseStore {
 
   loading: boolean = false
 
-  user = ref<any>({
-    id: '',
-    email: '',
-    family_name: '',
-    given_name: '',
-    name: '',
-    preferred_username: '',
-  })
+  user = ref<typeof User>({} as typeof User)
 
   get hasUser(): boolean {
     return !!this.user.value.id
   }
 
-  setUser(user: User): void {
+  setUser(user: typeof User): void {
     this.user.value = user
     this.loading = false
+    console.log('the set user', this.user)
   }
 
   /*initUser(): Promise<void> {

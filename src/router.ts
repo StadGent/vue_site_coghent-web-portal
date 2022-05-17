@@ -9,6 +9,11 @@ import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
+import { watch } from 'vue'
+import { router, useSessionAuth } from './app'
+import { OpenIdConnectClient } from 'session-vue-3-oidc-library/lib'
+import { UserStore } from './stores/UserStore'
+import StoreFactory from './stores/StoreFactory'
 
 const isServer = typeof window === 'undefined'
 
@@ -29,7 +34,7 @@ const routes = [
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
 ]
 
-export default function (/*auth: any*/) {
+export default function (auth: any) {
   const router = createRouter({
     routes,
     history: createWebHistory(process.env.BASE_URL),
@@ -38,14 +43,20 @@ export default function (/*auth: any*/) {
       return { top: 0 }
     },
   })
-  // if (auth) {
-  //   router.beforeEach(async (to, _from, next) => {
-  //     if (!to.matched.some((route) => route.meta.requiresAuth)) {
-  //       console.log('next')
-  //       return next()
-  //     }
-  //     await auth.assertIsAuthenticated(to.fullPath, next)
-  //   })
-  // }
+  if (auth) {
+    router.beforeEach(async (to, _from, next) => {
+      if (to.query.code || to.query.session_state) {
+        to.query = {}
+      }
+
+      if (!to.matched.some((route) => route.meta.requiresAuth)) {
+        return next()
+      }
+      await auth.assertIsAuthenticated(to.fullPath, next)
+
+      console.log(`session`, useSessionAuth)
+
+    })
+  }
   return router
 }

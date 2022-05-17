@@ -115,8 +115,8 @@ export default defineComponent({
     let _skip: Maybe<Scalars['Int']> = 0
     const limit: Maybe<Scalars['Int']> = route.query.touch ? 50 : 25
     const endOfData = ref<Boolean>(false)
-    const entityData = ref<GetEntitiesQuery | undefined>()
-    const relationData = ref<GetEntitiesQuery | undefined>()
+    const entityData = ref<typeof GetEntitiesQuery | undefined>()
+    const relationData = ref<typeof GetEntitiesQuery | undefined>()
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
     const { randomValue, refresh: refreshSeed } = useSeed()
@@ -156,7 +156,7 @@ export default defineComponent({
       }
     })
 
-    const { result, loading, fetchMore, onResult, refetch } = useQuery<GetEntitiesQuery, GetEntitiesQueryVariables>(
+    const { result, loading, fetchMore, onResult, refetch } = useQuery<typeof GetEntitiesQuery, typeof GetEntitiesQueryVariables>(
       GetEntitiesDocument,
 
       () => ({
@@ -179,7 +179,7 @@ export default defineComponent({
       })
     )
 
-    const isEndOfResult = (queryResult: GetEntitiesQuery | undefined) => {
+    const isEndOfResult = (queryResult: typeof GetEntitiesQuery | undefined) => {
       if (queryResult) {
         if (queryResult && queryResult.Entities?.results && queryResult.Entities?.count && queryResult.Entities?.results.length >= queryResult.Entities?.count) {
           endOfData.value = true

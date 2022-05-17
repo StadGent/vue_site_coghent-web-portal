@@ -98,7 +98,7 @@ export default defineComponent({
     const { result, onResult, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
-    const photos = ref<ImageSource[] | undefined>()
+    const photos = ref<typeof ImageSource[] | undefined>()
     const mediaFiles = ref<any | undefined>()
     const types = ref<any[] | undefined>()
     const relatedItemIds = ref<string[]>([])

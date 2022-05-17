@@ -22,12 +22,12 @@ export default defineComponent({
       required: false,
     },
     filters: {
-      type: Array as PropType<FullRelationFragment[]>,
+      type: Array as PropType<typeof FullRelationFragment[]>,
       default: () => [],
       required: false,
     },
     selected: {
-      type: Array as PropType<FullRelationFragment[]>,
+      type: Array as PropType<typeof FullRelationFragment[]>,
       default: () => [],
       required: false,
     },
@@ -54,7 +54,7 @@ export default defineComponent({
     }
 
     const filtersWithLabel = computed(() => {
-      return props.filters.filter((filter: FullRelationFragment) => filter.value && filter.value !== '')
+      return props.filters.filter((filter: typeof FullRelationFragment) => filter.value && filter.value !== '')
     })
 
     const isTagSelected = (tag: string): boolean => {
