@@ -12,14 +12,7 @@
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
       </div>
     </div>
-    <Filter
-      v-if="!noFilters"
-      :selected="selectedFilters"
-      :loading="loading"
-      :filter-all="t('buttons.all-works')"
-      :filters="relationData ? relationData.Entities.relations : []"
-      @new-selected="updateSelectedFilters"
-    />
+ <Filter v-if="!noFilters" :selected="selectedFilters" :loading="loading" :filter-all="t('buttons.all-works')" :filters="relationData" @new-selected="updatSelectedFilters" />
 
     <div v-if="entityData" class="flex w-full flex-col items-center justify-center">
       <the-masonry
@@ -117,7 +110,7 @@ export default defineComponent({
     const endOfData = ref<Boolean>(false)
     const useAndFilter = ref<Boolean>(false)
     const entityData = ref<typeof GetEntitiesQuery | undefined>()
-    const relationData = ref<typeof GetEntitiesQuery | undefined>()
+    const relationData = ref<Relation[] | undefined>([])
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
     const { randomValue, refresh: refreshSeed } = useSeed()
@@ -195,7 +188,10 @@ export default defineComponent({
 
     onResult((queryResult) => {
       entityData.value = queryResult.data
-      relationData.value = queryResult.data
+      relationData.value = !router.currentRoute.value.params.entityID
+        ? queryResult.data.Entities.relations
+        : queryResult.data.Entities.relations.filter((relation: Relation) => relation.type != 'isIn')
+      console.log(relationData)
       isEndOfResult(queryResult.data)
     })
 
