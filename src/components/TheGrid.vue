@@ -18,7 +18,7 @@
       :loading="loading"
       :filter-all="t('buttons.all-works')"
       :filters="relationData ? relationData.Entities.relations : []"
-      @new-selected="updatSelectedFilters"
+      @new-selected="updateSelectedFilters"
     />
 
     <div v-if="entityData" class="flex w-full flex-col items-center justify-center">
@@ -171,6 +171,7 @@ export default defineComponent({
           key: 'title',
           has_mediafile: true,
           skip_relations: props.noRelations ? props.noRelations : false,
+          and_filter: true,
         },
       }),
       () => ({
@@ -226,7 +227,7 @@ export default defineComponent({
       }
     }
 
-    const updatSelectedFilters = (input: string[]) => {
+    const updateSelectedFilters = (input: string[]) => {
       if (masonry.value && masonry.value.contructTiles) {
         masonry.value.contructTiles(limit, true)
       }
@@ -284,7 +285,7 @@ export default defineComponent({
       loading,
       result,
       selectedFilters,
-      updatSelectedFilters,
+      updateSelectedFilters,
       searchQueryForQuery,
       searchQueryForInput,
       relationData,
