@@ -156,12 +156,9 @@
         <div v-if="userStore.hasUser" class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
         <base-button class="hidden w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
         <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-        <div class="hidden border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-        <!-- <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-        <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" /> -->
       </div>
-      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <div class="mx-3 align-center">
+      <div v-if="userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
+      <div v-if="userStore.hasUser" class="mx-3 align-center">
         <base-button
           :text="t('buttons.addToStorybox')"
           custom-style="ghost-purple"
