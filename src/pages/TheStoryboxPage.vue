@@ -1,6 +1,6 @@
 <template>
   <BaseModal :modal-state="closeWindow" large="true" class="py-16" :scroll="false">
-    <div class="m-8">
+    <div class="mx-8 h-5/6">
       <div>
         <h1 class="w-full flex justify-center text-4xl my-4 font-bold">{{ t('storybox.title') }}</h1>
         <StoryBoxCreate
