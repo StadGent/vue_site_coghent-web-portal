@@ -9,11 +9,7 @@ import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
-import { watch } from 'vue'
-import { router, useSessionAuth } from './app'
-import { OpenIdConnectClient } from 'session-vue-3-oidc-library/lib'
-import { UserStore } from './stores/UserStore'
-import StoreFactory from './stores/StoreFactory'
+import { useSessionAuth } from './app'
 
 const isServer = typeof window === 'undefined'
 
