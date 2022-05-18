@@ -28,16 +28,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
 import { Language } from '@/pages/TheStoryboxPage.vue'
 
 export default defineComponent({
-  components: { BaseButton, BaseInput },
+  components: {},
   props: {
-    closeWindow: {
-      type: String,
-      required: true,
-    },
     storyTitle: {
       type: String,
       required: true,
@@ -50,18 +45,12 @@ export default defineComponent({
   emits: ['closeWindow', 'storyTitle', 'language'],
   setup(props, { emit }) {
     const { t } = useI18n()
-    const storyTitle = ref<string | null>(null)
     const languages = Object.values(Language)
 
-    const closeWindow = () => {
-      emit('closeWindow', 'hide')
-      console.log('HIDE!')
-    }
-
     const updateStoryTitle = (event: any) => {
-      const storyTitle = event.target.value
-      console.log(`Updated storyTitle:`, storyTitle)
-      emit(`storyTitle`, storyTitle)
+      const title = event.target.value
+      console.log(`Updated storyTitle:`, title)
+      emit(`storyTitle`, title)
     }
 
     const updateLanguage = (_language: string) => {
@@ -71,9 +60,7 @@ export default defineComponent({
 
     return {
       t,
-      storyTitle,
       languages,
-      closeWindow,
       updateStoryTitle,
       updateLanguage,
     }

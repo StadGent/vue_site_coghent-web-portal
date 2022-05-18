@@ -125,7 +125,7 @@ export default defineComponent({
 
     onResult((queryResult: any) => {
       if (queryResult.data.Entity) {
-        const photosArray: ImageSource[] = []
+        const photosArray: typeof  ImageSource[] = []
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {

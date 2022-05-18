@@ -28,7 +28,7 @@ const useStoryBox = (): {
     if (boxVisiter.value != null) {
       itemsInBasket.value = await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket) as Array<typeof Relation>
       amount = itemsInBasket.value.length
-    }else{
+    } else {
       console.log(`Couldn't get the basket items`)
     }
     console.log('itemsInBasket', itemsInBasket)
@@ -65,7 +65,9 @@ const useStoryBox = (): {
     const response = await fetchMore({
       variables: { id: '31099546' },
     })?.catch(error => console.error(`Couldn't get the relation entities`, error))
-    itemsInBasket.value = response?.data.RelationsAsEntities
+    console.log(response)
+    const repsonseAsAny = response as any
+    itemsInBasket.value = repsonseAsAny?.data.RelationsAsEntities
     return itemsInBasket.value
   }
 

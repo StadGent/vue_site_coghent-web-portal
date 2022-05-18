@@ -44,14 +44,13 @@
 </template>
 <script lang="ts">
 import useStoryBox from '@/composables/useStoryBox'
-import { BaseButton, BaseIcon, BaseModal } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseModal } from 'coghent-vue-3-component-library'
 import { defineComponent, onMounted, ref, watch, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import StoryBoxStep2 from '@/components/StoryBoxStep2.vue'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import StoryBoxCreated from '@/components/StoryBoxCreated.vue'
 import { router } from '@/app'
-// import Modal from '@/components/base/Modal.vue'
 
 export type StoryBuild = {
   title: null | string
@@ -69,7 +68,7 @@ export enum Language {
 }
 
 export default defineComponent({
-  components: { BaseButton, StoryBoxStep2, StoryBoxCreate, StoryBoxCreated, BaseIcon, BaseModal },
+  components: { BaseButton, StoryBoxStep2, StoryBoxCreate, StoryBoxCreated, BaseModal },
   setup() {
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
