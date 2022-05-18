@@ -35,10 +35,10 @@
     </div>
   </div>
   <div class="h-full w-full flex flex-cols-2">
-    <div class="w-2/3 mr-6 grid grid-rows-3 grid-cols-1 text-center gap-7 p-4 border border-dashed border-background-dark border-4 my-8">
+    <div class="w-2/3 mr-6 grid grid-rows-2 grid-cols-1 text-center gap-7 p-4 border border-dashed border-background-dark border-4 my-8">
       <p>{{ t('storybox.assets.addMore') }}</p>
       <strong class="cursor-pointer">{{ t('storybox.assets.search') }}</strong>
-      <strong class="cursor-pointer">{{ t('storybox.assets.collection') }}</strong>
+      <strong v-if="false" class="cursor-pointer">{{ t('storybox.assets.collection') }}</strong>
     </div>
     <div class="w-1/3"></div>
   </div>
