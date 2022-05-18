@@ -8,7 +8,7 @@ import { RelationsAsEntitiesDocument } from 'coghent-vue-3-component-library'
 import { boxVisiter, User, RelationType, UseBoxVisiter, Relation } from 'coghent-vue-3-component-library'
 import { ref } from 'vue'
 
-export const itemsInBasket = ref<number>(0)
+export const itemsInBasket = ref<Array<typeof Entity>>([])
 
 const useStoryBox = (): {
   addAssetToVisiter: (_assetId: string) => void
@@ -26,10 +26,11 @@ const useStoryBox = (): {
   const assetsInBasket = async () => {
     let amount = 0
     if (boxVisiter.value != null) {
-      const assets = await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket) as Array<typeof Relation>
-      amount = assets.length
+      itemsInBasket.value = await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket) as Array<typeof Relation>
+      amount = itemsInBasket.value.length
+    }else{
+      console.log(`Couldn't get the basket items`)
     }
-    itemsInBasket.value = amount
     console.log('itemsInBasket', itemsInBasket)
     return amount
   }
@@ -40,7 +41,7 @@ const useStoryBox = (): {
       console.log('Logged in user', user)
       const codeFromUser = boxVisiter.value.code//TODO:
       await useBoxVisiter(apolloClient).addAssetToBoxVisiter(codeFromUser, _assetId, RelationType.InBasket)
-      assetsInBasket()
+      await assetsInBasket()
     }
     else {
       router.push({ path: '/login' })
@@ -56,8 +57,6 @@ const useStoryBox = (): {
   }
 
   const getRelationEntities = async () => {
-    console.log({ apolloClient })
-    let assets: Array<typeof Entity> = []
     const { fetchMore } = provideApolloClient(apolloClient)(() =>
       useQuery(RelationsAsEntitiesDocument, {
         id: '31099546',
@@ -66,11 +65,9 @@ const useStoryBox = (): {
     const response = await fetchMore({
       variables: { id: '31099546' },
     })?.catch(error => console.error(`Couldn't get the relation entities`, error))
-    assets = response?.data.RelationsAsEntities
-    return assets
+    itemsInBasket.value = response?.data.RelationsAsEntities
+    return itemsInBasket.value
   }
-
-
 
   return {
     addAssetToVisiter,
