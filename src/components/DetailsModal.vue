@@ -154,34 +154,27 @@
         />
         <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
         <div v-if="userStore.hasUser" class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-        <base-button
-          v-if="userStore.hasUser"
-          class="hidden w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden"
-          :on-click="onClick"
-          custom-style="secondary-round"
-          custom-icon="edit"
-          :icon-shown="true"
-        />
+        <base-button class="hidden w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
         <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
         <div class="hidden border-r-2 align-center h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-        <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
-        <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" />
+        <!-- <base-button class="hidden w-12 h-12 pl-6 mt-3 ml-3 inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="storybox" :icon-shown="true" />
+        <base-button class="hidden w-max hidden" :text="t('details.modal.add')" :on-click="onClick" custom-style="ghost-purple" custom-icon="storybox" :icon-shown="true" /> -->
       </div>
-      <div v-if="userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <div v-if="userStore.hasUser" class="mx-3 align-center">
+      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
+      <div class="mx-3 align-center">
         <base-button
           :text="t('buttons.addToStorybox')"
           custom-style="ghost-purple"
-          :on-click="() => addAssetToVisiter(entity.id)"
+          :on-click="() => addRemoveAssetToStoryBox(entity.id)"
           :icon-shown="true"
-          custom-icon="storybox"
+          :custom-icon="storyBoxIcon"
           class="px-2 hidden lg:flex"
         />
         <base-button
           custom-style="secondary-round"
-          :on-click="() => addAssetToVisiter(entity.id)"
+          :on-click="() => addRemoveAssetToStoryBox(entity.id)"
           :icon-shown="true"
-          custom-icon="storybox"
+          :custom-icon="storyBoxIcon"
           class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden"
         />
       </div>
@@ -199,11 +192,12 @@ import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
-import useStoryBox from '@/composables/useStoryBox'
-import { iiif } from '@/app'
+import useStoryBox, { itemsInBasket } from '@/composables/useStoryBox'
+import { apolloClient, iiif } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
+import { useBoxVisiter } from 'coghent-vue-3-component-library'
 
 export type DetailsModalType = {
   state: ModalState
@@ -334,7 +328,7 @@ export default defineComponent({
     IIIFViewer,
   },
   setup(props) {
-    const { addAssetToVisiter } = useStoryBox()
+    const { addAssetToVisiter, getRelationEntities } = useStoryBox()
     const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
     const { closeFullscreenModal, FullscreenModalState, openFullscreenModal } = useFullscreenModal()
     let IIIfImageUrl: string = ''
@@ -345,9 +339,29 @@ export default defineComponent({
     const route = useRoute()
     const { history } = useHistory()
     const userStore = StoreFactory.get(UserStore)
-
+    const storyBoxIcon = ref<'check' | 'storybox'>('storybox')
 
     const onClick = () => {}
+
+    const addRemoveAssetToStoryBox = async (_id: string) => {
+      console.log(`====================`)
+      console.log(`List:`, itemsInBasket.value)
+      console.log(
+        `existis?`,
+        itemsInBasket.value.some((item) => item.id === _id)
+      )
+      if (itemsInBasket.value.some((item) => item.id === _id)) {
+        console.log(`EXISTS`, _id)
+        storyBoxIcon.value = 'storybox'
+        await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _id)
+      } else {
+        console.log(`ADDING IT TO THE LIST`, _id)
+        storyBoxIcon.value = 'check'
+        addAssetToVisiter(_id)
+      }
+      await getRelationEntities()
+      console.log(`====================`)
+    }
 
     const copyUrl = async (id: String) => {
       console.log('copyurl', id)
@@ -488,8 +502,10 @@ export default defineComponent({
       collectieNaam,
       objectNames,
       route,
-      addAssetToVisiter,
+      addRemoveAssetToStoryBox,
       userStore,
+      itemsInBasket,
+      storyBoxIcon,
     }
   },
   methods: {
