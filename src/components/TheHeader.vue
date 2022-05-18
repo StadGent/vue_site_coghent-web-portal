@@ -40,10 +40,9 @@
 
     <div class="flex ml-3">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
-      <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
+      <base-button v-if="userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
       <base-button v-if="userStore.hasUser" :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
       <base-button v-if="userStore.hasUser" :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-3 ml-3" />
-      <div>{{ itemsInBasket }}</div>
     </div>
   </div>
   <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
@@ -57,7 +56,6 @@ import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
-import { itemsInBasket } from '@/composables/useStoryBox'
 import { useSessionAuth } from '@/app'
 import { useQuery } from '@vue/apollo-composable'
 
@@ -74,9 +72,6 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const user: typeof User = userStore.user
 
-    watch(itemsInBasket, () => {
-      itemsInBasket.value = itemsInBasket.value
-    })
 
     watch(
       () => route.path,
@@ -117,7 +112,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, itemsInBasket }
+    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route }
   },
 })
 </script>
