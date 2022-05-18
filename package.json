@@ -35,7 +35,8 @@
     "vue-router": "^4.0.11",
     "vue-universal-modal": "^1.1.3",
     "webpack-manifest-plugin": "^4.0.2",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "session-vue-3-oidc-library": "^0.1.2"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^2.0.2",
