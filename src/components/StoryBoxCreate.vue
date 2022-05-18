@@ -18,12 +18,12 @@
                 <h1 class="text-lg font-bold">{{ asset.title[0] ? asset.title[0].value : 'asset' }}</h1>
                 <p class="text-sm">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
               </div>
-              <p class="w-20 flex items-center justify-center items-row-reverse cursor-pointer">
-                <base-icon :icon="'info'" class="stroke-current" />
-              </p>
-              <p class="w-20 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
+              <div class="w-20 flex items-center justify-center items-row-reverse cursor-pointer">
+                <base-icon :icon="'info'" @click="() => router.push(`/entity/${asset.id}`)" class="stroke-current" />
+              </div>
+              <div class="w-20 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
                 <base-icon :icon="'wasteBasket'" class="stroke-current" />
-              </p>
+              </div>
             </div>
           </li>
         </ul>
@@ -51,7 +51,7 @@ import { Entity } from 'coghent-vue-3-component-library'
 import { StoryBuild } from '@/pages/TheStoryboxPage.vue'
 import { useI18n } from 'vue-i18n'
 import { useBoxVisiter } from 'coghent-vue-3-component-library'
-import { apolloClient } from '@/app'
+import { apolloClient, router } from '@/app'
 import useStoryBox from '@/composables/useStoryBox'
 export default defineComponent({
   components: { BaseIcon },
@@ -75,7 +75,6 @@ export default defineComponent({
     }
 
     const deleteAsset = async (_asset: typeof Entity) => {
-      console.log('Delete asset:', _asset)
       await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
       const updatedAssets = await getRelationEntities()
       emit(`assets`, updatedAssets)
@@ -83,11 +82,10 @@ export default defineComponent({
 
     const updateDescription = (event: any) => {
       const description = event.target.value
-      console.log(`Updated description:`, description)
       emit(`description`, description)
     }
 
-    return { t, updateAssets, updateDescription, deleteAsset }
+    return { t, updateAssets, updateDescription, deleteAsset, router }
   },
 })
 </script>
