@@ -115,6 +115,7 @@ export default defineComponent({
     let _skip: Maybe<Scalars['Int']> = 0
     const limit: Maybe<Scalars['Int']> = route.query.touch ? 50 : 25
     const endOfData = ref<Boolean>(false)
+    const useAndFilter = ref<Boolean>(false)
     const entityData = ref<typeof GetEntitiesQuery | undefined>()
     const relationData = ref<typeof GetEntitiesQuery | undefined>()
     const emptySearch = ref<Boolean>(false)
@@ -171,7 +172,7 @@ export default defineComponent({
           key: 'title',
           has_mediafile: true,
           skip_relations: props.noRelations ? props.noRelations : false,
-          and_filter: true,
+          and_filter: useAndFilter.value,
         },
       }),
       () => ({
@@ -228,6 +229,7 @@ export default defineComponent({
     }
 
     const updateSelectedFilters = (input: string[]) => {
+      useAndFilter.value = input.length ? true : false
       if (masonry.value && masonry.value.contructTiles) {
         masonry.value.contructTiles(limit, true)
       }
