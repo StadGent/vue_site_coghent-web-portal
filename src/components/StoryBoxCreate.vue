@@ -15,7 +15,9 @@
                   <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
                 </div>
                 <div :id="asset.id" class="flex flex-col w-full px-2">
-                  <h1 :id="asset.id" class="text-lg font-bold">{{ asset.title[0] ? asset.title[0].value : 'asset' }}</h1>
+                  <h1 @click="() => router.push(`/entity/${asset.id}`)" :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer">
+                    {{ asset.title[0] ? asset.title[0].value : 'asset' }}
+                  </h1>
                   <p :id="asset.id" class="text-sm">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
                 </div>
                 <div :id="asset.id" class="w-20 flex items-center justify-center items-row-reverse cursor-pointer">
