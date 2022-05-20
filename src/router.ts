@@ -9,7 +9,6 @@ import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
-import { useSessionAuth } from './app'
 
 const isServer = typeof window === 'undefined'
 
@@ -49,9 +48,6 @@ export default function (auth: any) {
         return next()
       }
       await auth.assertIsAuthenticated(to.fullPath, next)
-
-      console.log(`session`, useSessionAuth)
-
     })
   }
   return router

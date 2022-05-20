@@ -72,7 +72,6 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const user: typeof User = userStore.user
 
-
     watch(
       () => route.path,
       () => {
