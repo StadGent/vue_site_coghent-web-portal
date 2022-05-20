@@ -21,7 +21,7 @@ const useStoryBox = (): {
   const userStore = StoreFactory.get(UserStore)
   const user: typeof User = userStore.user
 
-  getByCode('31099546')
+  // getByCode('31099546')
 
   const assetsInBasket = async () => {
     let amount = 0
