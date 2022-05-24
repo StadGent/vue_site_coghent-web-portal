@@ -4,7 +4,14 @@
   <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
     <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
       <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
-      <the-carousel v-if="!loading && photos" :source="photos" :infotext="t('main.info')" :mediafiles="mediaFiles" :isTouch="route.query.touch ? true : false" @opening-ccmodal="openCCModal" />
+      <the-carousel
+        v-if="!loading && carouselFiles"
+        :source="carouselFiles"
+        :infotext="t('main.info')"
+        :mediafiles="mediaFiles"
+        :isTouch="route.query.touch ? true : false"
+        @opening-ccmodal="openCCModal"
+      />
     </section>
     <CardComponent :large="true" class="mx-4 sm:mx-0">
       <div class="flex bg-background-medium px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center`]: loading, [`flex-col`]: !loading }">
@@ -98,7 +105,7 @@ export default defineComponent({
     const { result, onResult, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
-    const photos = ref<typeof ImageSource[] | undefined>()
+    const carouselFiles = ref<typeof ImageSource[] | undefined>()
     const mediaFiles = ref<any | undefined>()
     const types = ref<any[] | undefined>()
     const relatedItemIds = ref<string[]>([])
@@ -125,7 +132,7 @@ export default defineComponent({
 
     onResult((queryResult: any) => {
       if (queryResult.data.Entity) {
-        const photosArray: typeof  ImageSource[] = []
+        const photosArray: typeof ImageSource[] = []
 
         mediaFiles.value = queryResult.data.Entity?.mediafiles
         queryResult.data.Entity?.mediafiles.forEach((value: any) => {
@@ -138,12 +145,13 @@ export default defineComponent({
                   imageUrl: isLink ? filename : generateUrl(filename, 'full'),
                   infoJson: generateInfoUrl(filename),
                   fallBackUrl: isLink ? filename : generateUrl(filename, 'full', 'max'),
+                  noImageUrl: noImageUrl,
                 })
               }
             }
           }
         })
-        photos.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl, fallBackUrl: noImageUrl }] : photosArray
+        carouselFiles.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl, fallBackUrl: noImageUrl }] : photosArray
 
         // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex]
 
@@ -204,7 +212,7 @@ export default defineComponent({
     return {
       result,
       t,
-      photos,
+      carouselFiles,
       types,
       openCCModal,
       openDetailsModal,
