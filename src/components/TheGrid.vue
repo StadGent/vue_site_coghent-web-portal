@@ -187,12 +187,13 @@ export default defineComponent({
     }
 
     onResult((queryResult) => {
-      entityData.value = queryResult.data
-      relationData.value = !router.currentRoute.value.params.entityID
-        ? queryResult.data.Entities.relations
-        : queryResult.data.Entities.relations.filter((relation: Relation) => relation.type != 'isIn')
-      console.log(relationData)
-      isEndOfResult(queryResult.data)
+      if (queryResult.data) {
+        entityData.value = queryResult.data
+        relationData.value = !router.currentRoute.value.params.entityID
+          ? queryResult.data.Entities.relations
+          : queryResult.data.Entities.relations.filter((relation: Relation) => relation.type != 'isIn')
+        isEndOfResult(queryResult.data)
+      }
     })
 
     const getData = () => {
