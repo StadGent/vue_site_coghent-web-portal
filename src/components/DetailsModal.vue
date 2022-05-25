@@ -1,6 +1,6 @@
 <template>
   <!--IIIF modal-->
-  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" custom-styles="z-50" @hide-modal="closeFullscreenModal">
+  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" custom-styles="z-50" @hide-modal="closeFullscreenModal" :showCloseButton="false">
     <section class="h-large flex relative w-full">
       <a
         class="right-2 top-2 absolute bg-neutral-0 cursor-pointer hover:bg-accent-yellow ml-2 mr-2 p-2 rounded-full shadow-xl text-accent-purple z-50 hover:text-neutral-0"

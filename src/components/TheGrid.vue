@@ -12,7 +12,7 @@
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
       </div>
     </div>
- <Filter v-if="!noFilters" :selected="selectedFilters" :loading="loading" :filter-all="t('buttons.all-works')" :filters="relationData" @new-selected="updatSelectedFilters" />
+    <Filter v-if="!noFilters" :selected="selectedFilters" :loading="loading" :filter-all="t('buttons.all-works')" :filters="relationData" @new-selected="updatSelectedFilters" />
 
     <div v-if="entityData" class="flex w-full flex-col items-center justify-center">
       <the-masonry
@@ -66,6 +66,7 @@ import { useActiveBox } from '@/composables/useActiveBox'
 import { useHistory } from './BreadCrumbs.vue'
 import { useRouter, useRoute } from 'vue-router'
 import useClipboard from 'vue-clipboard3'
+import { iiif } from '@/app'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -114,7 +115,7 @@ export default defineComponent({
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
     const { randomValue, refresh: refreshSeed } = useSeed()
-    const { generateUrl, noImageUrl } = useIIIF()
+    const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const { clearHistory } = useHistory()
     const frameList = ref<string[]>([])
     const queryEnabled = ref<boolean>(true)
