@@ -38,7 +38,7 @@
           </div>
         </div>
         <base-button
-          v-if="photos"
+          v-if="carouselFiles"
           class="inline⁻block w-max ml-3 mt-3 hover:underline"
           :text="t('details.more')"
           custom-style="ghost-black"
