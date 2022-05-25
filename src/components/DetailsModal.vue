@@ -51,13 +51,13 @@
               <div class="flex relative mb-4 w-60 sm:w-auto mr-4 lg:mr-0">
                 <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :noImageUrl="noImageUrl" extra-class="my-6 sm:w-full" />
                 <base-button
-                  class="w-0 absolute z-20 top-4 left-4 mt-3 ml-3"
+                  class="w-0 absolute top-5 z-20 mt-3 ml-3"
                   custom-style="secondary-round"
                   custom-icon="fullscreen"
                   :icon-shown="true"
                   @click="openIIIFModal(generateInfoUrl(photo.transcode_filename || photo.filename, 'full'))"
                 />
-                <copyright-tab class="absolute top-4 right-4 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
+                <copyright-tab class="absolute top-5 right-0 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
             </div>
           </div>
