@@ -49,7 +49,7 @@
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-3/6 overflow-y-auto">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto">
-                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" extra-class="my-6 sm:w-full" />
+                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :noImageUrl="noImageUrl" extra-class="my-6 sm:w-full" />
                 <base-button
                   class="w-0 absolute z-20 top-4 left-4 mt-3 ml-3"
                   custom-style="secondary-round"
@@ -331,7 +331,7 @@ export default defineComponent({
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
-    const { generateUrl, generateInfoUrl } = iiif
+    const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const router = useRouter()
     const route = useRoute()
     const { history } = useHistory()
@@ -504,6 +504,7 @@ export default defineComponent({
       itemsInBasket,
       storyBoxIcon,
       goToRelation,
+      noImageUrl,
     }
   },
   methods: {
