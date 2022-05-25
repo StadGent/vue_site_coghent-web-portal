@@ -503,6 +503,7 @@ export default defineComponent({
       userStore,
       itemsInBasket,
       storyBoxIcon,
+      goToRelation,
     }
   },
   methods: {
