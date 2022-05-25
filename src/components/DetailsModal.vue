@@ -48,7 +48,7 @@
           </div>
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-3/6 overflow-y-auto">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
-              <div class="flex relative mb-4 w-60 sm:w-auto">
+              <div class="flex relative mb-4 w-60 sm:w-auto mr-4 lg:mr-0">
                 <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :noImageUrl="noImageUrl" extra-class="my-6 sm:w-full" />
                 <base-button
                   class="w-0 absolute z-20 top-4 left-4 mt-3 ml-3"
