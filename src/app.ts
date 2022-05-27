@@ -1,5 +1,5 @@
 import { ApolloClient, ApolloLink, createHttpLink, fromPromise, InMemoryCache, NormalizedCacheObject, ServerError } from '@apollo/client/core'
-import { createSSRApp } from 'vue'
+import { createSSRApp, ref } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
 import { DefaultApolloClient } from '@vue/apollo-composable'
@@ -23,17 +23,22 @@ export let router: Router
 export let apolloClient: ApolloClient<NormalizedCacheObject>;
 export let useSessionAuth: typeof OpenIdConnectClient | null
 
+// Features
+export const useAuthFeature = ref<boolean>(false)
+
 export default async function (authenticated: boolean) {
   const configStore = StoreFactory.get(ConfigStore)
+  const config = await fetch('../config.json').then((r) => r.json())
+  configStore.setConfig(config)
+  useAuthFeature.value = configStore.config.value.features?.login ? configStore.config.value.features?.login : false
   const app = createSSRApp(App)
   const head = createHead()
 
-  const config = await fetch('../config.json').then((r) => r.json())
-  configStore.setConfig(config)
-  if (authenticated) {
+  if (useAuthFeature.value === true) {
     useSessionAuth != null ? useSessionAuth : useSessionAuth = new OpenIdConnectClient(config.oidc)
 
     useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
+    console.log(useSessionAuth.authCode)
   }
 
   iiif = useIIIF(configStore.config.value.iiifLink)
@@ -44,7 +49,7 @@ export default async function (authenticated: boolean) {
   const graphqlErrorInterceptor = onError((error) => {
     console.log({ error });
 
-    if (authenticated) {
+    if (useAuthFeature.value === true) {
       // FIXME: express sends response.status(401)
       if (error.networkError) {
         const network = error.networkError as ServerError;
@@ -86,12 +91,12 @@ export default async function (authenticated: boolean) {
     cache: new InMemoryCache(),
   })
 
-  if (authenticated && useSessionAuth && useSessionAuth.authCode != null) {
+  if (useAuthFeature.value === true && useSessionAuth && useSessionAuth.authCode != null) {
     console.log(`WEB | PROCESS AUTH`)
     useSessionAuth.processAuthCode(useSessionAuth.authCode, router as any)
   }
 
-  if (authenticated) {
+  if (useAuthFeature.value === true) {
     app.use(useSessionAuth as typeof OpenIdConnectClient)
   }
   app

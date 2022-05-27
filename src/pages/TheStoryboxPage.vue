@@ -6,15 +6,15 @@
         <StoryBoxCreate
           v-if="step === 1"
           :description="story.description"
-          @description="(description) => (story.description = description)"
           :assets="story.assets"
+          @description="(description) => (story.description = description)"
           @assets="(assets) => (story.assets = assets)"
         />
         <StoryBoxStep2
           v-if="step === 2"
+          :language="story.language"
           @closeWindow="(action) => (closeWindow = action)"
           @storyTitle="(title) => (story.title = title)"
-          :language="story.language"
           @language="(lang) => (story.language = lang)"
         />
         <StoryBoxCreated v-if="step === 3" />
