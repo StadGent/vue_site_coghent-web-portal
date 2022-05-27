@@ -25,12 +25,14 @@ export let useSessionAuth: typeof OpenIdConnectClient | null
 
 // Features
 export const useAuthFeature = ref<boolean>(false)
+export const useStoryboxFeature = ref<boolean>(false)
 
 export default async function (authenticated: boolean) {
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
   useAuthFeature.value = configStore.config.value.features?.login ? configStore.config.value.features?.login : false
+  useStoryboxFeature.value = configStore.config.value.features?.storybox ? configStore.config.value.features?.storybox : false
   const app = createSSRApp(App)
   const head = createHead()
 

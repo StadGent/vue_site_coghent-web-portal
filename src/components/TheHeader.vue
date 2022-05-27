@@ -40,9 +40,31 @@
 
     <div class="flex ml-3">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
-      <base-button v-if="useAuthFeature === true && !userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
-      <base-button v-if="useAuthFeature === true && userStore.hasUser" :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
-      <base-button v-if="userStore.hasUser" :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-3 ml-3" />
+      <base-button
+        v-if="useAuthFeature === true && !userStore.hasUser"
+        :text="t('buttons.login')"
+        :on-click="goToLoginPage"
+        custom-style="primary"
+        :icon-shown="false"
+        class="px-2 mx-1 mb-2 flex-grow-0"
+      />
+      <base-button
+        v-if="useAuthFeature === true && userStore.hasUser"
+        :text="'Hi, ' + user.preferred_username"
+        :on-click="goToProfilePage"
+        custom-style="ghost-purple"
+        :icon-shown="false"
+        class="px-2 mx-1"
+      />
+      <base-button
+        v-if="useStoryboxFeature === true && userStore.hasUser"
+        :text="t('buttons.storybox')"
+        :on-click="goToVerhalenBox"
+        custom-style="ghost-purple"
+        :icon-shown="true"
+        custom-icon="storybox"
+        class="px-2 mx-3 ml-3"
+      />
     </div>
   </div>
   <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
@@ -58,6 +80,7 @@ import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
 import { useAuthFeature, useSessionAuth } from '@/app'
 import { useQuery } from '@vue/apollo-composable'
+import { useStoryboxFeature } from '@/app'
 
 export default defineComponent({
   name: 'TheHeader',
@@ -111,7 +134,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature }
+    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature }
   },
 })
 </script>

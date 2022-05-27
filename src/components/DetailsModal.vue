@@ -157,8 +157,8 @@
         <base-button class="hidden w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
         <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
       </div>
-      <div v-if="userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <div v-if="userStore.hasUser" class="mx-3 align-center">
+      <div v-if="useStoryboxFeature === true && userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
+      <div v-if="useStoryboxFeature === true && userStore.hasUser" class="mx-3 align-center">
         <base-button
           :text="t('buttons.addToStorybox')"
           custom-style="ghost-purple"
@@ -190,7 +190,7 @@ import useClipboard from 'vue-clipboard3'
 import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import useStoryBox, { itemsInBasket } from '@/composables/useStoryBox'
-import { apolloClient, iiif } from '@/app'
+import { apolloClient, iiif, useStoryboxFeature } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
@@ -505,6 +505,7 @@ export default defineComponent({
       storyBoxIcon,
       goToRelation,
       noImageUrl,
+      useStoryboxFeature,
     }
   },
   methods: {
