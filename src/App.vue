@@ -29,7 +29,7 @@ import TheFooter from './components/TheFooter.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, TheFooter },
+  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
@@ -50,6 +50,8 @@ export default defineComponent({
       }
       return indexStr
     }
+
+    console.log(route)
 
     useHead({
       meta: [
