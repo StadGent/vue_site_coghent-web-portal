@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between flex-wrap sm:flex-nowrap mt-12 md:mt-0">
+  <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
         <router-link :to="{ path: '/home', query: route.query }" class="flex items-center sm:ml-0 ml-3 group">
@@ -21,7 +21,7 @@
               </filter>
             </defs>
           </svg>
-          <div class="flex flex-col items-center mt-5 ml-2">
+          <div class="sm:flex flex-col items-center mt-5 ml-2 hidden">
             <h2 class="md:text-lg text-center group-hover:underline" :class="{ [`font-bold`]: isHomeActive }">
               {{ t('header.discover') }}
             </h2>
@@ -29,7 +29,7 @@
           </div>
         </router-link>
       </div>
-      <div v-if="!route.query.touch" class="group flex flex-col items-center pt-8 md:pt-5">
+      <div v-if="!route.query.touch" class="group sm:flex flex-col items-center pt-8 md:pt-5 hidden">
         <a target="_blank" href="https://www.collectie.gent/over-het-project" class="flex items-center">
           <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
             {{ t('header.about') }}
@@ -38,33 +38,11 @@
       </div>
     </div>
 
-    <div class="flex ml-3">
+    <div v-if="useAuthFeature === true && !userStore.hasUser" class="flex ml-3">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
-      <base-button
-        v-if="useAuthFeature === true && !userStore.hasUser"
-        :text="t('buttons.login')"
-        :on-click="goToLoginPage"
-        custom-style="primary"
-        :icon-shown="false"
-        class="px-2 mx-1 mb-2 flex-grow-0"
-      />
-      <base-button
-        v-if="useAuthFeature === true && userStore.hasUser"
-        :text="'Hi, ' + user.preferred_username"
-        :on-click="goToProfilePage"
-        custom-style="ghost-purple"
-        :icon-shown="false"
-        class="px-2 mx-1"
-      />
-      <base-button
-        v-if="useStoryboxFeature === true && userStore.hasUser"
-        :text="t('buttons.storybox')"
-        :on-click="goToVerhalenBox"
-        custom-style="ghost-purple"
-        :icon-shown="true"
-        custom-icon="storybox"
-        class="px-2 mx-3 ml-3"
-      />
+      <base-button :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
+      <base-button :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
+      <base-button :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-3 ml-3" />
     </div>
   </div>
   <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
