@@ -56,7 +56,7 @@ import { useI18n } from 'vue-i18n'
 import { getCookie, setCookie } from 'tiny-cookie'
 
 export type DisclaimerModalType = {
-  state: ModalState
+  state: typeof ModalState
 }
 
 const DisclaimerModalState = ref<DisclaimerModalType>({
