@@ -1,14 +1,14 @@
 <template>
-  <section class="flex flex-col items-center">
-    <h1 v-show="defaultRelations.length === 0 && !noHeader" class="md:text-5xl sm:text-4xl text-3xl font-bold w-8/12 text-center py-10 block leading-normal">
+  <section class="flex flex-col items-center p-4 sm:p-0">
+    <h1 v-show="defaultRelations.length === 0 && !noHeader" class="md:text-5xl sm:text-4xl text-3xl font-bold w-full sm:w-8/12 text-center py-10 block leading-normal">
       {{ t('main.title') }}
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
-      <div v-show="!route.query.touch" class="w-8/12">
-        <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" class="w-8/12" @on-click="getData" @keyup.enter="getData" />
+      <div v-show="!route.query.touch" class="w-full sm:w-8/12">
+        <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
       </div>
-      <div class=" " :class="route.query.touch ? 'transform scale-150' : 'lg:absolute lg:right-0'">
+      <div :class="route.query.touch ? 'transform scale-150' : 'lg:absolute lg:right-0'">
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
       </div>
     </div>
