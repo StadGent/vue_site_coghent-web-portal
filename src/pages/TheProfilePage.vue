@@ -89,6 +89,7 @@ import { User } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
 import { ConfigStore } from '../stores/ConfigStore'
 import StoreFactory from '../stores/StoreFactory'
+import { useSessionAuth } from '@/app'
 
 export default defineComponent({
   components: { BaseButton, BaseInput },
@@ -111,11 +112,10 @@ export default defineComponent({
       console.log(`STEP 1 | WEB LOGOUT `)
       fetch('/api/logout')
         .then(async (response) => {
-          userStore.setUser({} as typeof User)
-          console.log(`STEP 1 | WEB LOGOUT | user set to none`)
+          userStore.setUser(null)
+          console.log(`STEP 1 | WEB LOGOUT | user set to NULL`)
           router.push('/')
           console.log(`STEP 1 | WEB LOGOUT | going back to home page /`)
-
         })
         .catch((error) => console.log(`WEB | Couldn't logout`, error))
     }

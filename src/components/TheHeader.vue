@@ -82,8 +82,8 @@ export default defineComponent({
     )
 
     const goToLoginPage = async () => {
-      router.push({ path: '/login', query: route.query })
       console.log('\n WEB | Go to login')
+      router.push({ path: '/login', query: route.query })
       // if (useSessionAuth != null) {
       //   console.log('auth is null')
       //   await useSessionAuth.assertIsAuthenticated('/', () => {

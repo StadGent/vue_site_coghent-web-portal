@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloLink, createHttpLink, fromPromise, InMemoryCache, NormalizedCacheObject, ServerError } from '@apollo/client/core'
 import { createSSRApp, ref } from 'vue'
 import App from './App.vue'
-import createRouter from './router'
+import createRouter, { canProcessAuthError } from './router'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { OpenIdConnectClient } from 'session-vue-3-oidc-library'
 import 'coghent-vue-3-component-library/lib/index.css'
@@ -16,11 +16,11 @@ import { Router } from 'vue-router'
 import { onError } from '@apollo/client/link/error'
 import { User } from 'coghent-vue-3-component-library'
 import { UserStore } from './stores/UserStore'
-
+import useGraphqlErrors from './composables/useGraphqlErrors'
 
 export let iiif: any
 export let router: Router
-export let apolloClient: ApolloClient<NormalizedCacheObject>;
+export let apolloClient: ApolloClient<NormalizedCacheObject>
 export let useSessionAuth: typeof OpenIdConnectClient | null
 
 // Features
@@ -31,62 +31,56 @@ export default async function (authenticated: boolean) {
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
+
   useAuthFeature.value = configStore.config.value.features?.login ? configStore.config.value.features?.login : false
   useStoryboxFeature.value = configStore.config.value.features?.storybox ? configStore.config.value.features?.storybox : false
   const app = createSSRApp(App)
   const head = createHead()
+  const userStore = StoreFactory.get(UserStore)
 
   if (useAuthFeature.value === true) {
-    useSessionAuth != null ? useSessionAuth : useSessionAuth = new OpenIdConnectClient(config.oidc)
-
+    console.log('useSessionAuth', useSessionAuth)
+    console.log('useSessionAuth.value', useSessionAuth)
+    // console.log('start================');
+    useSessionAuth != null ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
     useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
-    console.log(useSessionAuth.authCode)
+
+    // console.log(`useSessionAuth.user`, useSessionAuth.user.value)
+    // console.log(`useSessionAuth.user.stringyfy`, JSON.parse(useSessionAuth.user.value))
+    // console.log(`store has user`, userStore.hasUser)
+    // console.log(`store user`, userStore.user)
+    userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user.value) : null)
+    console.log('AUTHCODE', useSessionAuth.authCode)
   }
 
   iiif = useIIIF(configStore.config.value.iiifLink)
 
-  router = createRouter(useSessionAuth ? useSessionAuth : null)
-  const userStore = StoreFactory.get(UserStore)
+  router = createRouter(useSessionAuth != null ? useSessionAuth : null)
 
   const graphqlErrorInterceptor = onError((error) => {
-    console.log({ error });
-
-    if (useAuthFeature.value === true) {
-      // FIXME: express sends response.status(401)
-      if (error.networkError) {
-        const network = error.networkError as ServerError;
-        // console.log('auth before login auth', useSessionAuth);
-        if (network && network.statusCode === 401 || network.statusCode === 400 && useSessionAuth != null) {
-          console.log('Catched network error with statuscode 401 Unauthorized');
-          useSessionAuth.redirectToLogin('/');
-        }
-      };
-
-      // FIXME: express does not send response.status(401). response from call is 401b
-      if (error.response?.errors && error.response?.errors[0]) {
-        console.log('STATUS', error.response?.errors[0].extensions.response.status)
-        fetch('/api/logout')
-          .then(async (response) => {
-            // console.log(`STEP 1 | WEB LOGOUT | status response `, response.status)
-            userStore.setUser({} as typeof User)
-            // console.log(`STEP 1 | WEB LOGOUT | user set to none`)
-            router.push('/')
-            // console.log(`STEP 1 | WEB LOGOUT | going back to home page /`)
-            //FIXME: Definitly not correct masonery component call needs to be retriggered/reloaded
-            window.location.reload()
-
-          })
-          .catch((error) => console.log(`WEB | Couldn't logout`, error))
-      }
+    // console.log(`ROUTER`, router)
+    // console.log(`ROUTER | current`, router.currentRoute)
+    // console.log(`ROUTER | current`, router.currentRoute.value.meta.requiresAuth)
+    console.log({ error })
+    const errorHandler = useGraphqlErrors(error)
+    errorHandler.logFormattedErrors()
+    console.log('canProcessAuthError.value', canProcessAuthError.value)
+    if (errorHandler.checkForUnauthorized() === true) {
+      console.log(`NEEDS LOGIN`)
+      new Promise(async (resolve, reject) => {
+        await fetch('/api/logout')
+        useSessionAuth = null
+        useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
+        resolve
+      })
     }
-
-  });
+  })
 
   // DEV: see what calls are happening from graphql in the browser console
   const graphqlRequestIntercepter = new ApolloLink((operation, forward) => {
     console.log('GRAPHQL call => ', operation.operationName)
-    return forward(operation);
-  });
+    return forward(operation)
+  })
 
   apolloClient = new ApolloClient({
     link: graphqlErrorInterceptor.concat(graphqlRequestIntercepter.concat(createHttpLink({ uri: config.graphQlLink || '/api/graphql' }))),
@@ -101,6 +95,7 @@ export default async function (authenticated: boolean) {
   if (useAuthFeature.value === true) {
     app.use(useSessionAuth as typeof OpenIdConnectClient)
   }
+
   app
     .use(router)
     .use(i18n)

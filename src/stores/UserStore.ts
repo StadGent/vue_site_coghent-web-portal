@@ -7,13 +7,13 @@ export class UserStore extends BaseStore {
 
   loading: boolean = false
 
-  user = ref<typeof User>({} as typeof User)
+  user = ref<typeof User | null>(null)
 
   get hasUser(): boolean {
-    return !!this.user.value.id
+    return this.user.value != null
   }
 
-  setUser(user: typeof User): void {
+  setUser(user: typeof User | null): void {
     this.user.value = user
     this.loading = false
     console.log('the set user', this.user)
