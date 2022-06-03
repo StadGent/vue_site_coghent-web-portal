@@ -13,8 +13,8 @@
         @opening-ccmodal="openCCModal"
       />
     </section>
-    <CardComponent :large="true" class="mx-4 sm:mx-0">
-      <div class="flex bg-background-medium px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center`]: loading, [`flex-col`]: !loading }">
+    <CardComponent :large="true" class="mx-2 md:mx-4 sm:mx-0">
+      <div class="flex bg-background-medium px-0 md:px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center`]: loading, [`flex-col`]: !loading }">
         <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -46,7 +46,14 @@
           :icon-shown="true"
           :on-click="openDetailsModal"
         />
-        <!-- <SpeechBubble v-for="testimoni in testimonies" :key="testimoni.name" :cardDetails="testimoni" color="#FDC20B"></SpeechBubble> -->
+        <!-- <SpeechBubble
+          v-for="(testimoni, index) in testimonies"
+          :key="testimoni.name"
+          :cardDetails="testimoni"
+          color="#FDC20B"
+          :alignment="index % 2 == 0 ? 'Left' : 'Right'"
+          @receivedLike="updateTestimoni"
+        ></SpeechBubble> -->
       </div>
     </CardComponent>
     <section v-if="relatedItemIds.length > 0" class="col-span-2">
@@ -115,7 +122,10 @@ export default defineComponent({
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const { addPageToHistory, history } = useHistory()
-    const testimonies = ref<typeof TestimoniCard[]>([{ name: 'Hilde Vercauteren', date: '2 mei 2021', content: 'Some text', likes: 3, alignment: 'Left' }])
+    const testimonies = ref<typeof TestimoniCard[]>([
+      { id: '1', name: 'Hilde Vercauteren', date: '2 mei 2021', content: 'Mijn grootouders hadden dat vroeger ook altijd staan. Ze wilden niets anders...', likes: 3 },
+      { id: '2', name: 'Johan Patoor', date: '2 mei 2021', content: 'Daz werd oorspronkelijk ontworpen door een marketing bureau uit Antwer...', likes: 7 },
+    ])
 
     watch(
       () => route.fullPath,
@@ -210,6 +220,11 @@ export default defineComponent({
       }
     }
 
+    const updateTestimoni = (testimoni: typeof TestimoniCard) => {
+      const testimoniToUpdate = testimonies.value.find((element: typeof TestimoniCard) => element.id == testimoni.id)
+      testimoniToUpdate.likes++
+    }
+
     const { t } = useI18n()
 
     return {
@@ -229,6 +244,7 @@ export default defineComponent({
       goToRelation,
       relatedItemIds,
       testimonies,
+      updateTestimoni,
     }
   },
 })
