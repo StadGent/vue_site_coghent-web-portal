@@ -46,7 +46,7 @@
           :icon-shown="true"
           :on-click="openDetailsModal"
         />
-        <SpeechBubble v-for="testimoni in testimonies" :key="testimoni.name" :cardDetails="testimoni" color="#FDC20B"></SpeechBubble>
+        <!-- <SpeechBubble v-for="testimoni in testimonies" :key="testimoni.name" :cardDetails="testimoni" color="#FDC20B"></SpeechBubble> -->
       </div>
     </CardComponent>
     <section v-if="relatedItemIds.length > 0" class="col-span-2">
@@ -98,7 +98,7 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
     BreadCrumbs,
-    SpeechBubble,
+    // SpeechBubble,
   },
   setup: () => {
     const id = ref<string>(asString(useRoute().params['entityID']))
