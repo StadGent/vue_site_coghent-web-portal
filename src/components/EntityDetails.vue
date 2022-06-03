@@ -115,7 +115,7 @@ export default defineComponent({
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const { addPageToHistory, history } = useHistory()
-    const testimonies = ref<typeof TestimoniCard[]>([{ name: 'Berend Vandenbussche', date: '2 mei 2021', content: 'Some text', likes: 3, alignment: 'Left' }])
+    const testimonies = ref<typeof TestimoniCard[]>([{ name: 'Hilde Vercauteren', date: '2 mei 2021', content: 'Some text', likes: 3, alignment: 'Left' }])
 
     watch(
       () => route.fullPath,
