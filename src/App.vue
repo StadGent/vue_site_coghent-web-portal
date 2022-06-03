@@ -51,8 +51,6 @@ export default defineComponent({
       return indexStr
     }
 
-    console.log(route)
-
     useHead({
       meta: [
         {

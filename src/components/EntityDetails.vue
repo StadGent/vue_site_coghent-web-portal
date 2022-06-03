@@ -46,6 +46,7 @@
           :icon-shown="true"
           :on-click="openDetailsModal"
         />
+        <SpeechBubble v-for="testimoni in testimonies" :key="testimoni.name" :cardDetails="testimoni" color="#FDC20B"></SpeechBubble>
       </div>
     </CardComponent>
     <section v-if="relatedItemIds.length > 0" class="col-span-2">
@@ -61,7 +62,7 @@
 import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, FullRelationFragment, ImageSource, getFileNameByMimeType } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, SpeechBubble, ImageSource, getFileNameByMimeType, TestimoniCard } from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
@@ -97,6 +98,7 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
     BreadCrumbs,
+    SpeechBubble,
   },
   setup: () => {
     const id = ref<string>(asString(useRoute().params['entityID']))
@@ -113,6 +115,7 @@ export default defineComponent({
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const { addPageToHistory, history } = useHistory()
+    const testimonies = ref<typeof TestimoniCard[]>([{ name: 'Berend Vandenbussche', date: '2 mei 2021', content: 'Some text', likes: 3, alignment: 'Left' }])
 
     watch(
       () => route.fullPath,
@@ -225,6 +228,7 @@ export default defineComponent({
       filterDuplicateTypes,
       goToRelation,
       relatedItemIds,
+      testimonies,
     }
   },
 })
