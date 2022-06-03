@@ -10,7 +10,6 @@ import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
 import { ref } from 'vue'
-import { useSessionAuth } from './app'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
 
@@ -33,8 +32,6 @@ const routes = [
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
 ]
 
-export const canProcessAuthError = ref<boolean>(false)
-
 export default function (auth: any) {
   const router = createRouter({
     routes,
@@ -44,41 +41,19 @@ export default function (auth: any) {
       return { top: 0 }
     },
   })
-  // if (auth) {
-  // router.beforeEach(async (to, _from, next) => {
-  //   console.log(`==================FIRST=======================`)
-  //   console.log(`useSessionAuth`, useSessionAuth)
-  //   if (!to.matched.some((route) => route.meta.requiresAuth)) {
-  //     console.log(`settings canProcessAuthError set to false`)
-  //     canProcessAuthError.value = false
-  //     return next()
-  //   } else {
-  //     console.log(`settings canProcessAuthError set to true`)
-  //     canProcessAuthError.value = true
-  //     await auth.assertIsAuthenticated(to.fullPath, next)
-  //   }
-  //   // console.log(`==================DONE=======================`);
-  // })
-  // }
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
       console.log('useSessionAuth', auth)
       await auth.verifyServerAuth()
-      // if (auth.user.value != null) {
-      //   console.log(`| session has user`)
-      //   StoreFactory.get(UserStore).setUser(auth.user.value)
-      // }
-      if (!to.matched.some((route) => route.meta.requiresAuth)) {
-        canProcessAuthError.value = false
-        return next()
-      }
-      await auth.assertIsAuthenticated(to.fullPath, next)
-      console.log('ROUTER | AUTH SESSION after LOGIN', auth)
-      canProcessAuthError.value = true
       if (auth.user.value != null) {
         console.log(`| session has user`)
         StoreFactory.get(UserStore).setUser(auth.user.value)
       }
+      if (!to.matched.some((route) => route.meta.requiresAuth)) {
+        return next()
+      }
+      await auth.assertIsAuthenticated(to.fullPath, next)
+     
     })
   }
   return router

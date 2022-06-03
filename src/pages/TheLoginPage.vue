@@ -38,8 +38,8 @@ export default defineComponent({
 
     onMounted(async () => {
       console.log(`STEP 1 | WEB | LOGGING IN`)
-      if (useSessionAuth.value != null) {
-        await useSessionAuth.value.redirectToLogin()
+      if (useSessionAuth != null) {
+        await useSessionAuth.redirectToLogin()
         fetch(`/api/me`)
           .then(async (response) => {
             userStore.setUser(await response.json())

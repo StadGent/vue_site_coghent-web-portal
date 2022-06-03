@@ -113,6 +113,7 @@ export default defineComponent({
       fetch('/api/logout')
         .then(async (response) => {
           userStore.setUser(null)
+          useSessionAuth.resetAuthProperties()
           console.log(`STEP 1 | WEB LOGOUT | user set to NULL`)
           router.push('/')
           console.log(`STEP 1 | WEB LOGOUT | going back to home page /`)

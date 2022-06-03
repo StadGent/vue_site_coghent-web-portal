@@ -1,7 +1,7 @@
-import { ApolloClient, ApolloLink, createHttpLink, fromPromise, InMemoryCache, NormalizedCacheObject, ServerError } from '@apollo/client/core'
+import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
 import { createSSRApp, ref } from 'vue'
 import App from './App.vue'
-import createRouter, { canProcessAuthError } from './router'
+import createRouter from './router'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { OpenIdConnectClient } from 'session-vue-3-oidc-library'
 import 'coghent-vue-3-component-library/lib/index.css'
@@ -26,6 +26,7 @@ export let useSessionAuth: typeof OpenIdConnectClient | null
 // Features
 export const useAuthFeature = ref<boolean>(false)
 export const useStoryboxFeature = ref<boolean>(false)
+//
 
 export default async function (authenticated: boolean) {
   const configStore = StoreFactory.get(ConfigStore)
@@ -40,15 +41,13 @@ export default async function (authenticated: boolean) {
 
   if (useAuthFeature.value === true) {
     console.log('useSessionAuth', useSessionAuth)
-    console.log('useSessionAuth.value', useSessionAuth)
-    // console.log('start================');
     useSessionAuth != null ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
+    if (useSessionAuth.user.value != null) {
+      console.log(`| session has user`)
+      userStore.setUser(useSessionAuth.user.value)
+    }
     useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
 
-    // console.log(`useSessionAuth.user`, useSessionAuth.user.value)
-    // console.log(`useSessionAuth.user.stringyfy`, JSON.parse(useSessionAuth.user.value))
-    // console.log(`store has user`, userStore.hasUser)
-    // console.log(`store user`, userStore.user)
     userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user.value) : null)
     console.log('AUTHCODE', useSessionAuth.authCode)
   }
@@ -58,18 +57,14 @@ export default async function (authenticated: boolean) {
   router = createRouter(useSessionAuth != null ? useSessionAuth : null)
 
   const graphqlErrorInterceptor = onError((error) => {
-    // console.log(`ROUTER`, router)
-    // console.log(`ROUTER | current`, router.currentRoute)
-    // console.log(`ROUTER | current`, router.currentRoute.value.meta.requiresAuth)
     console.log({ error })
     const errorHandler = useGraphqlErrors(error)
     errorHandler.logFormattedErrors()
-    console.log('canProcessAuthError.value', canProcessAuthError.value)
     if (errorHandler.checkForUnauthorized() === true) {
       console.log(`NEEDS LOGIN`)
       new Promise(async (resolve, reject) => {
         await fetch('/api/logout')
-        useSessionAuth = null
+        useSessionAuth.resetAuthProperties()
         useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
         resolve
       })
