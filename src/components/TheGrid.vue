@@ -23,7 +23,6 @@
         :items-each-load="limit"
         :end-of-data="endOfData"
         :generate-url="generateUrl"
-        :no-image-url="noImageUrl"
         @load-more="loadMore"
       >
         <template #tile="{ entity, tile, small }">
