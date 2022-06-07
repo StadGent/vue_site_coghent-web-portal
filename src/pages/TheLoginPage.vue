@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, onUpdated, ref } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { GetMeDocument, User } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
@@ -16,18 +16,15 @@ export default defineComponent({
   setup() {
     const userStore = StoreFactory.get(UserStore)
 
-    const { result, fetchMore, loading, onResult, refetch } = useQuery<any>(GetMeDocument, {})
+    const { refetch } = useQuery<any>(GetMeDocument, {})
 
-    const getMe = () => {
-      refetch({})
+    const getMe = (_authCode: string) => {
+      refetch({ accessToken: _authCode })
         ?.then((result) => {
-          console.log('data', result.data)
           const data = result.data
           if (data) {
-            // console.log('STEP 1 | WEB | login user', data.User)
             userStore.setUser(data.User)
             router.go(-1)
-            // console.log('STEP 1 | WEB | Going back 1 route step')
           }
         })
         .catch((error) => {
@@ -37,15 +34,9 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      console.log(`STEP 1 | WEB | LOGGING IN`)
       if (useSessionAuth != null) {
         await useSessionAuth.redirectToLogin()
-        fetch(`/api/me`)
-          .then(async (response) => {
-            userStore.setUser(await response.json())
-            router.go(-1)
-          })
-          .catch((error) => getMe())
+        getMe(useSessionAuth.authCode)
       }
       console.log('refetch')
     })

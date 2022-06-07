@@ -14,7 +14,6 @@ import { createHead } from '@vueuse/head'
 import { useIIIF } from 'coghent-vue-3-component-library'
 import { Router } from 'vue-router'
 import { onError } from '@apollo/client/link/error'
-import { User } from 'coghent-vue-3-component-library'
 import { UserStore } from './stores/UserStore'
 import useGraphqlErrors from './composables/useGraphqlErrors'
 
@@ -40,16 +39,13 @@ export default async function (authenticated: boolean) {
   const userStore = StoreFactory.get(UserStore)
 
   if (useAuthFeature.value === true) {
-    console.log('useSessionAuth', useSessionAuth)
     useSessionAuth != null ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
     if (useSessionAuth.user.value != null) {
-      console.log(`| session has user`)
       userStore.setUser(useSessionAuth.user.value)
     }
     useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
 
     userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user.value) : null)
-    console.log('AUTHCODE', useSessionAuth.authCode)
   }
 
   iiif = useIIIF(configStore.config.value.iiifLink)
@@ -59,32 +55,48 @@ export default async function (authenticated: boolean) {
   const graphqlErrorInterceptor = onError((error) => {
     console.log({ error })
     const errorHandler = useGraphqlErrors(error)
-    errorHandler.logFormattedErrors()
-    if (errorHandler.checkForUnauthorized() === true) {
+    // errorHandler.logFormattedErrors() // DEV:
+    if (useAuthFeature.value === true && errorHandler.checkForUnauthorized() === true) {
       console.log(`NEEDS LOGIN`)
       new Promise(async (resolve, reject) => {
         await fetch('/api/logout')
         useSessionAuth.resetAuthProperties()
-        useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
         resolve
       })
+      useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
     }
   })
 
   // DEV: see what calls are happening from graphql in the browser console
   const graphqlRequestIntercepter = new ApolloLink((operation, forward) => {
-    console.log('GRAPHQL call => ', operation.operationName)
+    // console.log('GRAPHQL call => ', operation.operationName) //DEV:
+    return forward(operation)
+  })
+  const userLink = new ApolloLink((operation, forward) => {
+    if (useAuthFeature.value === true && useSessionAuth != null) {
+      new Promise(async (req, resolve) => {
+        await fetch(`/api/me`).then(async response => {
+          if (response.status === 200) {
+            useSessionAuth.user = await response.json()
+            userStore.setUser(useSessionAuth.user)
+          }
+        })
+        resolve()
+      })
+    }
+
     return forward(operation)
   })
 
+  const graphqlLink = createHttpLink({ uri: config.graphQlLink || '/api/graphql' })
+
   apolloClient = new ApolloClient({
-    link: graphqlErrorInterceptor.concat(graphqlRequestIntercepter.concat(createHttpLink({ uri: config.graphQlLink || '/api/graphql' }))),
+    link: graphqlErrorInterceptor.concat(graphqlRequestIntercepter.concat(userLink.concat(graphqlLink))),
     cache: new InMemoryCache(),
   })
 
   if (useAuthFeature.value === true && useSessionAuth && useSessionAuth.authCode != null) {
-    console.log(`WEB | PROCESS AUTH`)
-    useSessionAuth.processAuthCode(useSessionAuth.authCode, router as any)
+    await useSessionAuth.processAuthCode(useSessionAuth.authCode, router as any)
   }
 
   if (useAuthFeature.value === true) {

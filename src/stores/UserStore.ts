@@ -16,7 +16,6 @@ export class UserStore extends BaseStore {
   setUser(user: typeof User | null): void {
     this.user.value = user
     this.loading = false
-    console.log('the set user', this.user)
   }
 
   /*initUser(): Promise<void> {

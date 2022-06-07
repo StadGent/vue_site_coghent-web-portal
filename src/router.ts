@@ -12,6 +12,9 @@ import TheLoginPage from './pages/TheLoginPage.vue'
 import { ref } from 'vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
+import { ApolloProvider, useQuery } from '@apollo/client'
+import { apolloClient, useSessionAuth } from './app'
+import { GetMeDocument } from 'coghent-vue-3-component-library/lib'
 
 const isServer = typeof window === 'undefined'
 
@@ -29,7 +32,7 @@ const routes = [
   { path: '/pavilion', component: ThePavilion },
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
   { path: '/storybox', component: TheStoryboxPage, meta: { requiresAuth: true } },
-  { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
+  { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
 
 export default function (auth: any) {
@@ -43,17 +46,21 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
-      console.log('useSessionAuth', auth)
+      // HACK:
+      to.query = {}
+      //
       await auth.verifyServerAuth()
       if (auth.user.value != null) {
-        console.log(`| session has user`)
         StoreFactory.get(UserStore).setUser(auth.user.value)
       }
       if (!to.matched.some((route) => route.meta.requiresAuth)) {
         return next()
       }
       await auth.assertIsAuthenticated(to.fullPath, next)
-     
+      if (auth.user.value != null) {
+        console.log(`| session has user`)
+        StoreFactory.get(UserStore).setUser(auth.user.value)
+      }
     })
   }
   return router
