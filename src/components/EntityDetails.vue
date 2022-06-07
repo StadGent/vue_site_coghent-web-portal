@@ -9,7 +9,7 @@
         :source="carouselFiles"
         :infotext="t('main.info')"
         :mediafiles="mediaFiles"
-        :isTouch="route.query.touch ? true : false"
+        :is-touch="route.query.touch ? true : false"
         @opening-ccmodal="openCCModal"
       />
     </section>

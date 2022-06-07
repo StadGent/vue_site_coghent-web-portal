@@ -32,7 +32,7 @@
     </div>
     <div class="flex flex-col w-full px-3">
       <h2 class="md:text-5xl sm:text-4xl text-3xl font-bold w-full text-center py-10 block leading-normal">{{ t('creator.moreWorks') + ' ' + person.fullName }}</h2>
-      <the-grid :small="true" :no-header="true" class="sm:mt-24" :defaultRelations="['entities/' + id]" :noFilters="true" />
+      <the-grid :small="true" :no-header="true" class="sm:mt-24" :default-relations="['entities/' + id]" :no-filters="true" />
     </div>
   </div>
 </template>

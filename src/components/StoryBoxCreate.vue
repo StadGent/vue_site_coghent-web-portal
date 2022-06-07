@@ -6,22 +6,22 @@
         <div>
           <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
           <ul v-if="assets.length > 0" class="overflow-y-auto" :ondragenter="dragEnter">
-            <li v-for="asset in assets" :key="asset" class="w-full my-2 align-middle" :id="asset.id" :ondragstart="dragStart" :ondrop="drop" :draggable="canDrag">
-              <div class="w-full bg-background-medium flex flex-cols py-2" :id="asset.id">
-                <p @mousedown="activateDrag(true)" @mouseleave="activateDrag(false)" :id="asset.id" class="w-20 flex items-center justify-center cursor-move">
+            <li v-for="asset in assets" :id="asset.id" :key="asset" class="w-full my-2 align-middle" :ondragstart="dragStart" :ondrop="drop" :draggable="canDrag">
+              <div :id="asset.id" class="w-full bg-background-medium flex flex-cols py-2">
+                <p :id="asset.id" class="w-20 flex items-center justify-center cursor-move" @mousedown="activateDrag(true)" @mouseleave="activateDrag(false)">
                   <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
                 </p>
                 <div :id="asset.id" class="w-20 flex justify-center items-center">
                   <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
                 </div>
                 <div :id="asset.id" class="flex flex-col w-full px-2">
-                  <h1 @click="() => router.push(`/entity/${asset.id}`)" :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer">
+                  <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
                     {{ asset.title[0] ? asset.title[0].value : 'asset' }}
                   </h1>
                   <p :id="asset.id" class="text-sm">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
                 </div>
                 <div :id="asset.id" class="w-20 flex items-center justify-center items-row-reverse cursor-pointer">
-                  <base-icon :id="asset.id" :icon="'info'" @click="() => router.push(`/entity/${asset.id}`)" class="stroke-current" />
+                  <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
                 </div>
                 <div :id="asset.id" class="w-20 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
                   <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
@@ -33,7 +33,7 @@
       </div>
       <div class="w-1/3">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.story.title') }}</h1>
-        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full bg-background-light p-4" @change="updateDescription" :value="description"></textarea>
+        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full bg-background-light p-4" :value="description" @change="updateDescription"></textarea>
       </div>
     </div>
     <div class="w-full flex flex-cols-2">

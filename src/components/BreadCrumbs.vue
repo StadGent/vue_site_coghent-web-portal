@@ -11,7 +11,7 @@
       </div>
       <div v-for="(page, index) in history.slice(currentPageIndex - 10)" :key="index" class="flex items-center cursor-pointer">
         <base-icon icon="arrowRightLine" class="p-2 black" />
-        <h4 @click="navigateToPageByUrl(page)" :class="page.active ? 'text-text-black' : 'text-accent-purple'">{{ page.name }}</h4>
+        <h4 :class="page.active ? 'text-text-black' : 'text-accent-purple'" @click="navigateToPageByUrl(page)">{{ page.name }}</h4>
       </div>
     </section>
   </div>

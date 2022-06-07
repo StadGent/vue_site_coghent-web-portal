@@ -26,7 +26,7 @@ const useStoryBox = (): {
   const assetsInBasket = async () => {
     let amount = 0
     if (boxVisiter.value != null) {
-      itemsInBasket.value = await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket) as Array<typeof Relation>
+      itemsInBasket.value = (await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket)) as Array<typeof Relation>
       amount = itemsInBasket.value.length
     } else {
       console.log(`Couldn't get the basket items`)
@@ -39,11 +39,10 @@ const useStoryBox = (): {
     console.log('boxvisiter', boxVisiter.value)
     if (user.name || boxVisiter.value != null) {
       console.log('Logged in user', user)
-      const codeFromUser = boxVisiter.value.code//TODO:
+      const codeFromUser = boxVisiter.value.code //TODO:
       await useBoxVisiter(apolloClient).addAssetToBoxVisiter(codeFromUser, _assetId, RelationType.InBasket)
       await assetsInBasket()
-    }
-    else {
+    } else {
       router.push({ path: '/login' })
     }
   }
@@ -51,7 +50,7 @@ const useStoryBox = (): {
   const getAssetsFromBasket = async () => {
     let assetRelations: Array<typeof Relation> = []
     if (boxVisiter.value != null) {
-      assetRelations = await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket) as Array<typeof Relation>
+      assetRelations = (await useBoxVisiter(apolloClient).getRelationsByType(boxVisiter.value.code, RelationType.InBasket)) as Array<typeof Relation>
     }
     return assetRelations
   }
@@ -61,10 +60,10 @@ const useStoryBox = (): {
       useQuery(RelationsAsEntitiesDocument, {
         id: '31099546',
       })
-    );
+    )
     const response = await fetchMore({
       variables: { id: '31099546' },
-    })?.catch(error => console.error(`Couldn't get the relation entities`, error))
+    })?.catch((error) => console.error(`Couldn't get the relation entities`, error))
     console.log(response)
     const repsonseAsAny = response as any
     itemsInBasket.value = repsonseAsAny?.data.RelationsAsEntities
@@ -77,7 +76,6 @@ const useStoryBox = (): {
     getAssetsFromBasket,
     getRelationEntities,
   }
-
 }
 
 export default useStoryBox

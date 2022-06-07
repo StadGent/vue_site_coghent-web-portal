@@ -4,7 +4,7 @@
     <div class="flex flex-col flex-grow items-center justify-center">
       <div class="my-4 mt-32 w-4/6">
         <p class="mb-2">{{ t('storybox.step2.storyTitle') }}</p>
-        <input class="bg-background-medium h-10 w-full p-2" type="text" @change="updateStoryTitle" :value="storyTitle" />
+        <input class="bg-background-medium h-10 w-full p-2" type="text" :value="storyTitle" @change="updateStoryTitle" />
         <!-- <base-input :ref="storyTitle" :model-value="storyTitle" /> -->
       </div>
       <div v-if="false" class="my-4 mt-16 w-4/6">
@@ -13,9 +13,9 @@
           <button
             v-for="lang of languages"
             :key="lang"
-            @click="updateLanguage(lang)"
             class="py-2 px-4 text-lg mr-4 border-2 border-solid"
             :class="lang === language ? `border-background-medium bg-background-dark` : 'border-background-medium'"
+            @click="updateLanguage(lang)"
           >
             {{ lang }}
           </button>

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="flex flex-col w-full px-3">
-      <the-grid :small="false" :no-filters="true" :default-relations="[`entities/${id}`]" :noRelations="true" />
+      <the-grid :small="false" :no-filters="true" :default-relations="[`entities/${id}`]" :no-relations="true" />
     </div>
   </div>
 </template>

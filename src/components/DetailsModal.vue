@@ -1,6 +1,6 @@
 <template>
   <!--IIIF modal-->
-  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" custom-styles="z-50" @hide-modal="closeFullscreenModal" :showCloseButton="false">
+  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" custom-styles="z-50" :show-close-button="false" @hide-modal="closeFullscreenModal">
     <section class="h-large flex relative w-full">
       <a
         class="right-2 top-2 absolute bg-neutral-0 cursor-pointer hover:bg-accent-yellow ml-2 mr-2 p-2 rounded-full shadow-xl text-accent-purple z-50 hover:text-neutral-0"
@@ -49,7 +49,7 @@
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-3/6 lg:h-full overflow-y-auto">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto mr-4 lg:mr-0">
-                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :noImageUrl="noImageUrl" extra-class="my-6 sm:w-full" />
+                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :no-image-url="noImageUrl" extra-class="my-6 sm:w-full" />
                 <base-button
                   class="w-0 absolute top-5 z-20 mt-3 ml-3"
                   custom-style="secondary-round"

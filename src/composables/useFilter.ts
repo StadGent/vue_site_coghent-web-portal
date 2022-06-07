@@ -1,5 +1,5 @@
-import { EntityStore } from '@apollo/client/cache';
-import { Entity, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries';
+import { EntityStore } from '@apollo/client/cache'
+import { Entity, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 
 export type NestedDataObject = {
   description: []
@@ -23,7 +23,7 @@ type TypeObject = {
 const useFilter = (): {
   removeMetadataCollectionFromNestedMetadata: (_entity: NestedDataObject, _parentLabel: string) => NestedDataObject
   getRelation: (_entity: NestedDataObject, _label: string, _value: string) => Relation | undefined
-  removeChildByLabel: (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => NestedDataObject;
+  removeChildByLabel: (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => NestedDataObject
   removeParentCollections: (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => Array<MetadataCollection>
   removeParentsWithoutMetadata: (_entity: NestedDataObject) => NestedDataObject
   removeParentsWithoutData: (_entity: NestedDataObject) => NestedDataObject
@@ -35,18 +35,17 @@ const useFilter = (): {
   getObjectNames: (_objectnameData: Array<Metadata>) => Array<string>
   getMetadataCollectionByLabel: (_metadataCollections: Array<MetadataCollection>, _label: string) => Array<Metadata>
 } => {
-
   const removeMetadataCollectionFromNestedMetadata = (_entity: NestedDataObject, _parentLabel: string) => {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     const metadata = useFilter().getMetadataCollectionByLabel(entity.metadataCollection, _parentLabel)
-    if(metadata.length > 0){
+    if (metadata.length > 0) {
       for (const _meta of metadata) {
         if (_meta.nestedMetaData) {
           _meta.nestedMetaData.metadataCollection = []
         }
       }
-      const matches = entity.metadataCollection.filter(_collection => _collection.label == _parentLabel)
-      if(matches.length == 0){
+      const matches = entity.metadataCollection.filter((_collection) => _collection.label == _parentLabel)
+      if (matches.length == 0) {
         matches[0].data = metadata
       }
     }
@@ -106,7 +105,7 @@ const useFilter = (): {
     let collection = {} as MetadataCollection | undefined
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
-      const filtered = entity.metadataCollection.filter(_collection => _collection.label == _label)
+      const filtered = entity.metadataCollection.filter((_collection) => _collection.label == _label)
       if (filtered && filtered.length != 0) {
         if (filtered.length == 1) {
           collection = filtered[0]
@@ -120,10 +119,10 @@ const useFilter = (): {
     let collection = {} as Metadata | undefined
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
-      const filtered = entity.metadataCollection.filter(_collection => _collection.label == _label)
+      const filtered = entity.metadataCollection.filter((_collection) => _collection.label == _label)
       if (filtered && filtered.length != 0) {
         if (filtered.length == 1) {
-          filtered[0].data?.forEach(_data => {
+          filtered[0].data?.forEach((_data) => {
             if (_data?.nestedMetaData?.title.length != 0) {
               collection = _data as Metadata
             }
@@ -137,17 +136,17 @@ const useFilter = (): {
   const removeChildByLabel = (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
-      const matchingWithParentLabel = entity.metadataCollection.filter(_parentCollection => _parentCollection.label == _parentCollectionLabel)
+      const matchingWithParentLabel = entity.metadataCollection.filter((_parentCollection) => _parentCollection.label == _parentCollectionLabel)
       for (const _parentMatch of matchingWithParentLabel) {
         if (_parentMatch.nested && _parentMatch.data) {
           for (const _data of _parentMatch.data) {
-            const matchingWithLabel = _data?.nestedMetaData?.metadataCollection?.filter(_meta => _meta?.label == _label)
+            const matchingWithLabel = _data?.nestedMetaData?.metadataCollection?.filter((_meta) => _meta?.label == _label)
             if (matchingWithLabel) {
               for (const _childMatch of matchingWithLabel) {
                 const index = _data?.nestedMetaData?.metadataCollection?.indexOf(_childMatch)
                 _data?.nestedMetaData?.metadataCollection?.splice(index as number, 1)
                 if (_data?.nestedMetaData?.metadataCollection?.length == 0) {
-                  const index = _parentMatch.data.indexOf(_data);
+                  const index = _parentMatch.data.indexOf(_data)
                   _parentMatch.data.splice(index, 1)
                 }
               }
@@ -157,7 +156,7 @@ const useFilter = (): {
       }
     }
     return entity
-  };
+  }
 
   const removeParentCollections = (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => {
     const myMetadata: Array<MetadataCollection> = []
@@ -170,7 +169,7 @@ const useFilter = (): {
     if (entity.metadataCollection) {
       for (const _collection of entity.metadataCollection) {
         if (_collection.data && _collection.data.length == 0) {
-          const index = entity.metadataCollection.indexOf(_collection);
+          const index = entity.metadataCollection.indexOf(_collection)
           entity.metadataCollection.splice(index, 1)
         }
       }
@@ -187,7 +186,6 @@ const useFilter = (): {
             if (_data?.nestedMetaData?.metadataCollection && _data?.nestedMetaData?.metadataCollection.length == 0) {
               const index = _parentCollection.data.indexOf(_data)
               _parentCollection.data.splice(index, 1)
-
             }
           }
         }
@@ -228,12 +226,12 @@ const useFilter = (): {
   //TODO:
   const filterOutDuplicateCollections = (_entity: NestedDataObject) => {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
-    const parentLabels = entity.metadataCollection.map(_collection => _collection.label)
+    const parentLabels = entity.metadataCollection.map((_collection) => _collection.label)
     for (const _collection of entity.metadataCollection) {
       if (_collection.nested && _collection.data) {
         for (const _data of _collection.data) {
           if (_data?.nestedMetaData?.metadataCollection?.length != 0) {
-            const filteredMetadata = _data?.nestedMetaData?.metadataCollection?.filter(_metadata => parentLabels.includes(_metadata?.label as string))
+            const filteredMetadata = _data?.nestedMetaData?.metadataCollection?.filter((_metadata) => parentLabels.includes(_metadata?.label as string))
             if (filteredMetadata && filteredMetadata.length != 0) {
               for (const _filtered of filteredMetadata) {
                 removeParentCollections(entity.metadataCollection, [_filtered?.label as string])
@@ -261,6 +259,6 @@ const useFilter = (): {
     getParentCollectionByNameIfTitle,
     getParentCollectionByName,
   }
-};
+}
 
-export default useFilter;
+export default useFilter
