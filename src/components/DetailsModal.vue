@@ -1,17 +1,4 @@
 <template>
-  <!--IIIF modal-->
-  <BaseModal v-if="DetailsModalState.state == 'show'" :modal-state="FullscreenModalState.state" custom-styles="z-50" :show-close-button="false" @hide-modal="closeFullscreenModal">
-    <section class="h-large flex relative w-full">
-      <a
-        class="right-2 top-2 absolute bg-neutral-0 cursor-pointer hover:bg-accent-yellow ml-2 mr-2 p-2 rounded-full shadow-xl text-accent-purple z-50 hover:text-neutral-0"
-        @click="closeFullscreenModal"
-      >
-        <base-icon icon="close" class="h-5 w-5 ml-0.5 stroke-current fill-current stroke-2" />
-      </a>
-      <IIIFViewer :can-go-full-screen="route.query.touch ? false : true" :image-url="IIIfImageUrl" />
-    </section>
-  </BaseModal>
-  <!--Details modal-->
   <BaseModal :large="true" :scroll="true" :modal-state="DetailsModalState.state" custom-styles="z-40" @hide-modal="closeDetailsModal">
     <section v-if="entity" class="bg-background-medium flex flex-col overflow-y-auto sm:pb-0 h-10/12">
       <section class="flex flex-col lg:flex-row sm:h-5/6">
@@ -49,13 +36,13 @@
           <div v-if="entity.mediafiles" class="flex flex-row lg:flex-col pb-5 overflow-x-auto h-3/6 lg:h-full overflow-y-auto">
             <div v-for="(photo, index) in entity.mediafiles" :key="photo">
               <div class="flex relative mb-4 w-60 sm:w-auto mr-4 lg:mr-0">
-                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :no-image-url="noImageUrl" extra-class="my-6 sm:w-full" />
+                <LazyLoadImage :url="generateUrl(photo.transcode_filename || photo.filename, 'full')" :noImageUrl="photo.mediatype.audio ? audioUrl : noImageUrl" extra-class="my-6 sm:w-full" />
                 <base-button
                   class="w-0 absolute top-5 z-20 mt-3 ml-3"
                   custom-style="secondary-round"
                   custom-icon="fullscreen"
                   :icon-shown="true"
-                  @click="openIIIFModal(generateInfoUrl(photo.transcode_filename || photo.filename, 'full'))"
+                  @click="handleMediaModal(photo.transcode_filename || photo.filename, entity.mediafiles[index])"
                 />
                 <copyright-tab class="absolute top-5 right-0 w-full h-full" :infotext="t('main.info')" :selected-index="index" :mediafiles="entity.mediafiles" @openingCcmodal="openNewCCModal" />
               </div>
@@ -184,10 +171,10 @@ import { defineComponent, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
-import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, BaseIcon, IIIFViewer } from 'coghent-vue-3-component-library'
+import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
-import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
+import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import useStoryBox, { itemsInBasket } from '@/composables/useStoryBox'
 import { apolloClient, iiif, useStoryboxFeature } from '@/app'
@@ -230,33 +217,6 @@ const objectNames = ref<any>([])
 const DetailsModalState = ref<DetailsModalType>({
   state: 'hide',
 })
-
-const FullscreenModalState = ref<FullscreenModalType>({
-  state: 'hide',
-})
-
-export const useFullscreenModal = () => {
-  const updateFullscreenModal = (FullscreenModalInput: FullscreenModalType) => {
-    FullscreenModalState.value = FullscreenModalInput
-  }
-
-  const closeFullscreenModal = () => {
-    updateFullscreenModal({
-      state: 'hide',
-    })
-  }
-
-  const openFullscreenModal = () => {
-    updateFullscreenModal({
-      state: 'show',
-    })
-  }
-  return {
-    closeFullscreenModal,
-    openFullscreenModal,
-    FullscreenModalState,
-  }
-}
 
 export const useDetailsModal = () => {
   const updateDetailsModal = (DetailsModalInput: DetailsModalType) => {
@@ -321,24 +281,26 @@ export default defineComponent({
     CopyrightTab,
     LazyLoadImage,
     BaseMetaData,
-    BaseIcon,
-    IIIFViewer,
   },
   setup(props) {
     const { addAssetToVisiter, getRelationEntities } = useStoryBox()
     const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
-    const { closeFullscreenModal, FullscreenModalState, openFullscreenModal } = useFullscreenModal()
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
-    const { generateUrl, generateInfoUrl, noImageUrl } = iiif
+    const { generateUrl, generateInfoUrl, noImageUrl, audioUrl } = iiif
     const router = useRouter()
     const route = useRoute()
     const { history } = useHistory()
     const userStore = StoreFactory.get(UserStore)
     const storyBoxIcon = ref<'check' | 'storybox'>('storybox')
+    const { openMediaModal, setMediaModalImageUrl, setMediaModalFile } = useMediaModal()
 
-    const onClick = () => {}
+    const handleMediaModal = (filename: string, mediaFile: MediaFile) => {
+      setMediaModalImageUrl(generateInfoUrl(filename, 'full'))
+      setMediaModalFile(mediaFile)
+      openMediaModal()
+    }
 
     const addRemoveAssetToStoryBox = async (_id: string) => {
       console.log(`====================`)
@@ -478,9 +440,6 @@ export default defineComponent({
 
     return {
       getObjectName,
-      FullscreenModalState,
-      openFullscreenModal,
-      closeFullscreenModal,
       concatMetadatValues,
       closeDetailsModal,
       DetailsModalState,
@@ -506,6 +465,8 @@ export default defineComponent({
       goToRelation,
       noImageUrl,
       useStoryboxFeature,
+      handleMediaModal,
+      audioUrl,
     }
   },
   methods: {
@@ -515,10 +476,6 @@ export default defineComponent({
       const productionDataRelations: Array<any> = productionData.find((data) => data.label == 'MaterieelDing.productie').nestedMetaData.relations
       const creatorId: string = productionDataRelations.find((relation) => relation.label == 'vervaardiger').key.split('/')[1]
       return creatorId
-    },
-    openIIIFModal(url: string) {
-      this.IIIfImageUrl = url
-      this.openFullscreenModal()
     },
   },
 })
