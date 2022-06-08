@@ -75,14 +75,13 @@ export default async function (authenticated: boolean) {
   })
   const userLink = new ApolloLink((operation, forward) => {
     if (useAuthFeature.value === true && useSessionAuth != null) {
-      new Promise(async (req, resolve) => {
+      new Promise(async (resolve, reject) => {
         await fetch(`/api/me`).then(async (response) => {
           if (response.status === 200) {
             useSessionAuth.user = await response.json()
             userStore.setUser(useSessionAuth.user)
-          }
+          } else resolve
         })
-        resolve()
       })
     }
 
