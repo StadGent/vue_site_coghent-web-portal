@@ -28,7 +28,7 @@ export const useStoryboxFeature = ref<boolean>(false)
 //
 
 export default async function (authenticated: boolean) {
-  console.log(`>web-portal updated session to 0.1.5`)
+  console.log(`>web-portal updated session to 0.1.6`)
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
