@@ -82,7 +82,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuery } from '@vue/apollo-composable'
 import { BaseButton, BaseInput } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { User } from 'coghent-vue-3-component-library'
@@ -118,7 +117,10 @@ export default defineComponent({
           router.push('/')
           console.log(`STEP 1 | WEB LOGOUT | going back to home page /`)
         })
-        .catch((error) => console.log(`WEB | Couldn't logout`, error))
+        .catch((error) => {
+          router.push('/')
+          console.log(`WEB | Couldn't logout`, { error })
+        })
     }
 
     const { t } = useI18n()
