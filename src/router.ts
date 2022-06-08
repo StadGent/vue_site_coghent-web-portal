@@ -50,16 +50,16 @@ export default function (auth: any) {
       to.query = {}
       //
       await auth.verifyServerAuth()
-      if (auth.user.value != null) {
-        StoreFactory.get(UserStore).setUser(auth.user.value)
+      if (auth.user != null) {
+        StoreFactory.get(UserStore).setUser(auth.user)
       }
       if (!to.matched.some((route) => route.meta.requiresAuth)) {
         return next()
       }
       await auth.assertIsAuthenticated(to.fullPath, next)
-      if (auth.user.value != null) {
+      if (auth.user != null) {
         console.log(`| session has user`)
-        StoreFactory.get(UserStore).setUser(auth.user.value)
+        StoreFactory.get(UserStore).setUser(auth.user)
       }
     })
   }

@@ -42,7 +42,15 @@
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
       <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
       <base-button v-if="userStore.hasUser" :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
-      <base-button v-if="userStore.hasUser" :text="t('buttons.storybox')" :on-click="goToVerhalenBox" custom-style="ghost-purple" :icon-shown="true" custom-icon="storybox" class="px-2 mx-3 ml-3" />
+      <base-button
+        v-if="userStore.hasUser && useStoryboxFeature === true"
+        :text="t('buttons.storybox')"
+        :on-click="goToVerhalenBox"
+        custom-style="ghost-purple"
+        :icon-shown="true"
+        custom-icon="storybox"
+        class="px-2 mx-3 ml-3"
+      />
     </div>
   </div>
   <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
@@ -56,9 +64,7 @@ import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
-import { useAuthFeature, useSessionAuth } from '@/app'
-import { useQuery } from '@vue/apollo-composable'
-import { useStoryboxFeature } from '@/app'
+import { useAuthFeature, useStoryboxFeature } from '@/app'
 
 export default defineComponent({
   name: 'TheHeader',
@@ -82,25 +88,7 @@ export default defineComponent({
     )
 
     const goToLoginPage = async () => {
-      console.log('\n WEB | Go to login')
       router.push({ path: '/login', query: route.query })
-      // if (useSessionAuth != null) {
-      //   console.log('auth is null')
-      //   await useSessionAuth.assertIsAuthenticated('/', () => {
-      //     refetch({})
-      //       ?.then((result) => {
-      //         console.log('data', result.data)
-      //         const data = result.data
-      //         if (data) {
-      //           console.log('WEB | login data', data)
-      //           console.log('WEB | login user', data.User)
-      //           userStore.setUser(data.User)
-      //           router.go(-1)
-      //         }
-      //       })
-      //       .catch((error) => console.log('GetMeDocument', error))
-      //   })
-      // }
     }
 
     const goToProfilePage = () => {

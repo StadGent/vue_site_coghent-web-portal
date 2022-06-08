@@ -28,7 +28,7 @@ export const useStoryboxFeature = ref<boolean>(false)
 //
 
 export default async function (authenticated: boolean) {
-  console.log(`>web-portal updated session to 0.1.6`)
+  console.log(`>web-portal updated session to v0.1.7`)
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
@@ -41,12 +41,12 @@ export default async function (authenticated: boolean) {
 
   if (useAuthFeature.value === true) {
     useSessionAuth != null ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
-    if (useSessionAuth.user.value != null) {
-      userStore.setUser(useSessionAuth.user.value)
+    if (useSessionAuth.user != null) {
+      userStore.setUser(useSessionAuth.user)
     }
     useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
 
-    userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user.value) : null)
+    userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user) : null)
   }
 
   iiif = useIIIF(configStore.config.value.iiifLink)
