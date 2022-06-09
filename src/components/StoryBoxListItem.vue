@@ -1,6 +1,7 @@
 <template>
-  <section class="bg-neutral-0 p-4 mb-4 w-full">
-    <div>
+  <section :class="`bg-neutral-0 p-4 mb-4 w-full ${storyBoxInfo.pictureUrl ? 'flex' : ''}`">
+    <div v-if="storyBoxInfo.pictureUrl" class="mr-4 bg-text-dark opacity-50 w-24 h-24"></div>
+    <div class="w-full">
       <div class="flex justify-between pb-2">
         <h2 class="font-bold">{{ storyBoxInfo.title }}</h2>
         <div>
@@ -34,6 +35,7 @@ export type StoryBoxInfo = {
   description: string
   dateCreated: string
   code?: number
+  pictureUrl?: string
 }
 
 export default defineComponent({
