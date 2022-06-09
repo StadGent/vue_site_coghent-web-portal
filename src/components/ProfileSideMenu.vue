@@ -1,6 +1,6 @@
 <template>
   <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 h-full">
-    <div class="flex flex-col justify-between flex-1">
+    <div class="flex flex-col justify-between flex-1 pb-4">
       <div class="flex justify-between items-center">
         <h2 class="mt-5 font-bold text-4xl">Hey {{ user.preferred_username }}!</h2>
         <base-button
@@ -20,7 +20,7 @@
         </router-link>
       </section>
     </div>
-    <base-button class="hidden md:flex" :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
+    <base-button class="hidden md:flex md:border-t-2 border-white" :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
   </div>
 </template>
 
@@ -108,5 +108,9 @@ export default defineComponent({
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.border-white {
+  border-top-color: white;
 }
 </style>

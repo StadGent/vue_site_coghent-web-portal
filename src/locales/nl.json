@@ -86,7 +86,9 @@
     "delete": "Verwijder account",
     "delete-info": "Door je account te verwijderen gaan al je gegevens definitief verloren",
     "delete-button": "Account verwijderen",
-    "logout": "Afmelden"
+    "logout": "Afmelden",
+    "creation-date": "Aangemaakt op ",
+    "code": "Code: "
   },
   "copyright": {
     "title": "Alles wat je wilt weten over de rechtenstatussen",
@@ -115,6 +117,9 @@
   },
   "storybox": {
     "title": "Jouw verhalenbox",
+    "edit": "Dit verhaal wijzigen",
+    "copyCode": "Code kopiëren",
+    "delete": "Dit verhaal verwijderen",
     "assets": {
       "title": "Geselecteerde werken",
       "selectedAssetsInfo": "Versleep de foto’s om de volgorde te veranderen waarin ze te zien zullen zijn. Dit kan van belang zijn voor het verhaal dat je vertelt. Aan de hand van de cijfers kan je ook in de teskt verwijzen naar een bepaald werk.",

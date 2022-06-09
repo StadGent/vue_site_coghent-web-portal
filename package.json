@@ -21,6 +21,7 @@
     "coghent-vue-3-component-library": "^0.1.76",
     "core-js": "^3.16.2",
     "crocks": "^0.2.3",
+    "floating-vue": "^2.0.0-beta.17",
     "fork-ts-checker-webpack-plugin-v5": "npm:fork-ts-checker-webpack-plugin@^5.2.1",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",

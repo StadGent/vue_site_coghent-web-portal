@@ -16,6 +16,9 @@ import { Router } from 'vue-router'
 import { onError } from '@apollo/client/link/error'
 import { UserStore } from './stores/UserStore'
 import useGraphqlErrors from './composables/useGraphqlErrors'
+import FloatingVue from 'floating-vue'
+import { Dropdown } from 'floating-vue'
+import 'floating-vue/dist/style.css'
 
 export let iiif: any
 export let router: Router
@@ -41,8 +44,8 @@ export default async function (authenticated: boolean) {
 
   if (useAuthFeature.value === true) {
     useSessionAuth != null ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
-    if (useSessionAuth.user != null) {
-      userStore.setUser(useSessionAuth.user)
+    if (useSessionAuth.user?.value != null) {
+      userStore.setUser(useSessionAuth.user.value)
     }
     useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
 
@@ -104,12 +107,13 @@ export default async function (authenticated: boolean) {
   }
 
   app
-    .use(router)
+    .use(router, FloatingVue)
     .use(i18n)
     .use(head)
     .use(VueUniversalModal, {
       teleportTarget: '#modals',
     })
+    .component('VDropdown', Dropdown)
     .provide(DefaultApolloClient, apolloClient)
 
   return {

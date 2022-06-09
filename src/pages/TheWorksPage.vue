@@ -1,5 +1,5 @@
 <template>
-  <section class="flex mt-16">
+  <section class="flex md:mt-16">
     <profile-side-menu />
   </section>
 </template>

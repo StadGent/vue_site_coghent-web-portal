@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col md:flex-row mt-16">
+  <section class="flex flex-col md:flex-row md:mt-16">
     <profile-side-menu />
     <div class="flex-1 xl:ml-48 sm:ml-24 p-8">
       <p class="mt-5 font-bold">
