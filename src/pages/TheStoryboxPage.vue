@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :modal-state="closeWindow" large="true" class="py-16" :scroll="true">
+  <BaseModal :modal-state="closeWindow" :large="true" class="py-16 z-40" :scroll="true" @hide-modal="close">
     <div class="h-full p-8 flex flex-col">
       <div class="customParent">
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
@@ -52,9 +52,11 @@ export default defineComponent({
       assets: [],
     })
     const description = ref('')
+    document.body.classList.add('overflow-y-hidden')
 
     const close = () => {
       closeWindow.value = 'hide'
+      document.body.classList.remove('overflow-y-hidden')
       router.push('/')
     }
 
