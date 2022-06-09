@@ -1,25 +1,6 @@
 <template>
-  <section v-if="userStore.hasUser" class="flex mt-16">
-    <div class="bg-background-medium flex p-8 flex-col w-2/6">
-      <div class="flex-col justify-between flex-1">
-        <h2 class="mt-5 font-bold text-4xl">Hey {{ user.preferred_username }}!</h2>
-        <p class="text-accent-yellow font-bold mt-10 text-lg">
-          {{ t('profile.details') }}
-        </p>
-        <router-link to="/">
-          <p class="mt-8 text-lg w-auto inline-block">
-            {{ t('profile.stories') }}
-          </p>
-        </router-link>
-        <br />
-        <router-link to="/">
-          <p class="mt-8 text-lg w-auto inline-block">
-            {{ t('profile.works') }}
-          </p>
-        </router-link>
-      </div>
-      <base-button :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
-    </div>
+  <section class="flex flex-col md:flex-row mt-16">
+    <profile-side-menu />
     <div class="flex-1 xl:ml-48 sm:ml-24 p-8">
       <p class="mt-5 font-bold">
         {{ t('profile.picture') }}
@@ -88,10 +69,11 @@ import { User } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
 import { ConfigStore } from '../stores/ConfigStore'
 import StoreFactory from '../stores/StoreFactory'
+import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import { useSessionAuth } from '@/app'
 
 export default defineComponent({
-  components: { BaseButton, BaseInput },
+  components: { BaseButton, BaseInput, ProfileSideMenu },
   setup() {
     const router = useRouter()
     const userStore = StoreFactory.get(UserStore)

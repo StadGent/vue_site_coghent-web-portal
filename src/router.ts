@@ -8,7 +8,9 @@ import EntityNotFound from './components/EntityNotFound.vue'
 import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
+import TheStoriesPage from './pages/TheStoriesPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
+import TheWorksPage from './pages/TheWorksPage.vue'
 import { ref } from 'vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
@@ -30,8 +32,10 @@ const routes = [
   { path: '/relation/:relationID', component: RelationDetail },
   { path: '/visit/:visitCode', redirect: '/', component: TheGrid },
   { path: '/pavilion', component: ThePavilion },
-  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
-  { path: '/storybox', component: TheStoryboxPage, meta: { requiresAuth: true } },
+  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: false } },
+  { path: '/storybox', component: TheStoryboxPage, meta: { requiresAuth: false } },
+  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: false } },
+  { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: false } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
 
