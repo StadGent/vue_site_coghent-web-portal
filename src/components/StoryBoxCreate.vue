@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <div class="w-full flex flex-cols-2">
+  <div class="h-fit flex flex-col">
+    <div class="w-full flex flex-cols-2 flex-grow">
       <div class="w-2/3 mr-6">
-        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') }}</h1>
+        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${assets != undefined ? assets.length : 0})` }}</h1>
         <div>
           <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
-          <ul v-if="assets.length > 0" class="overflow-y-auto" :ondragenter="dragEnter">
+          <ul v-show="assets != undefined" class="scroll-smooth" :ondragenter="dragEnter">
             <li v-for="asset in assets" :id="asset.id" :key="asset" class="w-full my-2 align-middle" :ondragstart="dragStart" :ondrop="drop" :draggable="canDrag">
               <div :id="asset.id" class="w-full bg-background-medium flex flex-cols py-2">
-                <p :id="asset.id" class="w-20 flex items-center justify-center cursor-move" @mousedown="activateDrag(true)" @mouseleave="activateDrag(false)">
+                <p :id="asset.id" class="w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="activateDrag(false)">
                   <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
                 </p>
                 <div :id="asset.id" class="w-20 flex justify-center items-center">
-                  <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
+                  <!-- <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" /> -->
                 </div>
                 <div :id="asset.id" class="flex flex-col w-full px-2">
                   <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
@@ -33,10 +33,10 @@
       </div>
       <div class="w-1/3">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.story.title') }}</h1>
-        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full bg-background-light p-4" :value="description" @change="updateDescription"></textarea>
+        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full h-5/6 bg-background-light p-4" :value="description" @change="updateDescription"></textarea>
       </div>
     </div>
-    <div class="w-full flex flex-cols-2">
+    <div class="w-full flex flex-cols-2 h-fit object-bottom">
       <div class="w-2/3 mr-6 grid grid-rows-2 grid-cols-1 text-center gap-7 p-4 border border-dashed border-background-dark border-4 my-8">
         <p>{{ t('storybox.assets.addMore') }}</p>
         <strong class="cursor-pointer">{{ t('storybox.assets.search') }}</strong>
@@ -111,13 +111,12 @@ export default defineComponent({
       }
     }
 
-    const activateDrag = (activate: boolean) => {
-      console.log(`candrag activate`, activate)
-      console.log(`candrag activate`, canDrag.value)
-      canDrag.value = activate
-    }
-
-    return { t, updateDescription, deleteAsset, router, dragStart, dragEnter, canDrag, activateDrag }
+    return { t, updateDescription, deleteAsset, router, dragStart, dragEnter, canDrag }
   },
 })
 </script>
+<style scoped>
+.customParent {
+  min-height: 90%;
+}
+</style>

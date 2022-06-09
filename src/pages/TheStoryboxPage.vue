@@ -1,43 +1,17 @@
 <template>
-  <BaseModal :modal-state="closeWindow" large="true" class="py-16" :scroll="false">
-    <div class="mx-8 min-h-full">
-      <div>
-        <h1 class="w-full flex justify-center text-4xl my-4 font-bold">{{ t('storybox.title') }}</h1>
-        <StoryBoxCreate
-          v-if="step === 1"
-          :description="story.description"
-          :assets="story.assets"
-          @description="(description) => (story.description = description)"
-          @assets="(assets) => (story.assets = assets)"
-        />
-        <StoryBoxStep2
-          v-if="step === 2"
-          :language="story.language"
-          @closeWindow="(action) => (closeWindow = action)"
-          @storyTitle="(title) => (story.title = title)"
-          @language="(lang) => (story.language = lang)"
-        />
-        <StoryBoxCreated v-if="step === 3" />
-      </div>
-      <div class="flex flex-row float-right">
-        <base-button v-if="step != MAX_STEP" :text="t('storybox.story.close')" :on-click="() => close()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
-        <base-button
-          v-if="story.assets.length > 0 && step === 1"
-          :text="t('storybox.story.next')"
-          :on-click="() => next(2)"
-          :icon-shown="false"
-          custom-icon="storybox"
-          class="bg-accent-red px-2 mx-3 ml-3"
-        />
-        <base-button
-          v-if="story.title != null && step === 2"
-          :text="t('storybox.story.next')"
-          :on-click="() => next(3)"
-          :icon-shown="false"
-          custom-icon="storybox"
-          class="bg-accent-red px-2 mx-3 ml-3"
-        />
-        <base-button v-if="step === MAX_STEP" :text="t('storybox.story.end')" :on-click="() => createStory()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
+  <BaseModal :modal-state="closeWindow" large="true" class="py-16" :scroll="true">
+    <div class="h-full p-8 flex flex-col">
+      <div class="customParent">
+        <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
+        <div class="w-full mt-6 mb-8">
+          <p class="text-lg my-2 font-bold">{{ t('storybox.step2.storyTitle') }}</p>
+          <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" />
+        </div>
+        <story-box-create :description="story.description" :assets="story.assets" @description="(description) => (story.description = description)" @assets="(assets) => (story.assets = assets)" />
+        <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end">
+          <base-button :text="t('storybox.story.close')" :on-click="() => close()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
+          <base-button :text="t('storybox.story.save')" :on-click="() => save()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
+        </div>
       </div>
     </div>
   </BaseModal>
@@ -45,12 +19,10 @@
 <script lang="ts">
 import useStoryBox from '@/composables/useStoryBox'
 import { BaseButton, BaseModal } from 'coghent-vue-3-component-library'
-import { defineComponent, onMounted, ref, watch, reactive } from 'vue'
+import { defineComponent, onMounted, ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import StoryBoxStep2 from '@/components/StoryBoxStep2.vue'
-import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
-import StoryBoxCreated from '@/components/StoryBoxCreated.vue'
 import { router } from '@/app'
+import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 
 export type StoryBuild = {
   title: null | string
@@ -68,13 +40,11 @@ export enum Language {
 }
 
 export default defineComponent({
-  components: { BaseButton, StoryBoxStep2, StoryBoxCreate, StoryBoxCreated, BaseModal },
+  components: { BaseButton, BaseModal, StoryBoxCreate },
   setup() {
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
     const closeWindow = ref<string>('show')
-    const MAX_STEP = 3
-    const step = ref<number>(1)
     const story = reactive<StoryBuild>({
       title: null,
       language: Language.DUTCH,
@@ -88,14 +58,8 @@ export default defineComponent({
       router.push('/')
     }
 
-    const next = (_step: number) => {
-      step.value = _step
-      console.log(`step:`, step.value)
-      console.log(`story:`, story)
-    }
-
-    const createStory = () => {
-      console.log(`Story:`, story)
+    const save = () => {
+      console.log(`useStoryBox.saveFrame()`, story)
       close()
     }
 
@@ -104,8 +68,12 @@ export default defineComponent({
       console.log('assets', story.assets)
     })
 
-    return { t, closeWindow, step, MAX_STEP, next, description, story, createStory, close }
+    return { t, closeWindow, save, description, story, close }
   },
 })
 </script>
-<style scoped></style>
+<style scoped>
+.customParent {
+  min-height: 90%;
+}
+</style>
