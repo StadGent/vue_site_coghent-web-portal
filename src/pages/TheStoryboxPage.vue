@@ -65,7 +65,6 @@ export default defineComponent({
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
-      console.log('assets', story.assets)
     })
 
     return { t, closeWindow, save, description, story, close }
