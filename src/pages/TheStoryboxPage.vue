@@ -3,12 +3,20 @@
     <div class="h-full p-8 flex flex-col">
       <div class="customParent">
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
-        <div class="w-full mt-6 mb-8">
-          <p class="text-lg my-2 font-bold">{{ t('storybox.step2.storyTitle') }}</p>
-          <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" :value="story.title"/>
+        <div class="flex flex-col lg:flex-row">
+          <div class="lg:w-2/3 w-full lg:mr-6">
+            <p v-if="frames && frames.length > 0" class="text-lg my-2 font-bold">{{ t('storybox.selectFrame') }}</p>
+            <select v-if="frames && frames.length > 0" name="frames" class="bg-background-light h-10 w-full p-2 lg:pr-6">
+              <option v-for="frame in frames" :key="frame.id" :value="frame.id">{{ frame.id }}</option>
+            </select>
+          </div>
+          <div class="w-full lg:w-1/3">
+            <p class="text-lg my-2 font-bold">{{ t('storybox.step2.storyTitle') }}</p>
+            <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" :value="story.title" />
+          </div>
         </div>
         <story-box-create :description="story.description" :assets="story.assets" @description="(description) => (story.description = description)" @assets="(assets) => (story.assets = assets)" />
-        <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end">
+        <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end mt-4">
           <base-button :text="t('storybox.story.close')" :on-click="() => close()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
           <base-button :text="t('storybox.story.save')" :on-click="() => save()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
         </div>
@@ -23,12 +31,14 @@ import { defineComponent, onMounted, ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
+import { Entity } from 'coghent-vue-3-component-library'
 
 export type StoryBuild = {
   title: null | string
   language: null | string
   description: null | string
   assets: Array<any>
+  frameId: null | string
 }
 
 export enum Language {
@@ -50,7 +60,11 @@ export default defineComponent({
       language: Language.DUTCH,
       description: null,
       assets: [],
+      frameId: null,
     })
+    const frames = ref<Array<typeof Entity>>([{ id: 'sdksjadbsa', title: [{ value: 'frametitle' }] }])
+    console.log(`frames`, frames)
+    console.log(`frames.length`, frames.value.length)
     const description = ref('')
     document.body.classList.add('overflow-y-hidden')
 
@@ -60,21 +74,23 @@ export default defineComponent({
       router.push('/')
     }
 
-    const save = () => {
+    const save = async () => {
       console.log(`useStoryBox.saveFrame()`, story)
+      if (story.frameId === null) {
+        console.log(`Create new frame for user`)
+      } else {
+        console.log(`Update frame for user`)
+      }
       close()
     }
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
-      if(true){
-        story.title = 'i already filled this in'
-        story.description = 'i already filled this in'
-        story.assets = []
-      }
+      story.assets = []
+      frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
-    return { t, closeWindow, save, description, story, close }
+    return { t, closeWindow, save, description, story, close, frames }
   },
 })
 </script>
