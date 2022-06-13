@@ -7,7 +7,7 @@
         <ul v-show="assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
           <li v-for="asset in assets" :id="asset.id" :key="asset" class="w-full my-2 align-middle min-h-16 active:bg-background-medium" :ondragstart="dragStart" :ondrop="drop" :draggable="canDrag">
             <div :id="asset.id" class="w-full bg-background-light flex flex-cols py-2">
-              <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="activateDrag(false)">
+              <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="(event)=> canDrag = false">
                 <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
               </p>
               <div :id="asset.id" class="w-28 flex justify-center items-center">
@@ -86,6 +86,7 @@ export default defineComponent({
 
     const dragStart = (event: any) => {
       startDragItem.value = event.srcElement.id
+      console.log({event})
     }
 
     const dragEnter = (event: any) => {
