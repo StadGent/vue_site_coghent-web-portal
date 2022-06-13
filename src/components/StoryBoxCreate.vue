@@ -5,13 +5,22 @@
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${assets != undefined ? assets.length : 0})` }}</h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
         <ul v-show="assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
-          <li v-for="asset in assets" :id="asset.id" :key="asset" class="w-full my-2 align-middle min-h-16 active:bg-background-medium" :ondragstart="dragStart" :ondrop="drop" :draggable="canDrag">
-            <div :id="asset.id" class="w-full bg-background-light flex flex-cols py-2">
-              <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="(event)=> canDrag = false">
+          <li
+            v-for="asset in assets"
+            :id="asset.id"
+            :key="asset"
+            class="rounded-md activeElement w-full my-2 align-middle min-h-16 bg-background-light"
+            :ondragstart="dragStart"
+            :ondragend="dragEnd"
+            :ondrop="dragEnd"
+            :draggable="canDrag"
+          >
+            <div :id="asset.id" class="rounded-md w-full bg-background-light flex flex-cols py-2">
+              <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="dragEnd">
                 <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
               </p>
               <div :id="asset.id" class="w-28 flex justify-center items-center">
-                <!-- <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" /> -->
+                <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
               </div>
               <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
                 <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
@@ -86,12 +95,25 @@ export default defineComponent({
 
     const dragStart = (event: any) => {
       startDragItem.value = event.srcElement.id
-      console.log({event})
+      document.getElementById(event.srcElement.id)?.parentElement?.classList.add(`test`)
+      document.getElementById(event.srcElement.id)?.firstElementChild?.classList.replace('bg-background-light', 'bg-background-dark')
+      document.getElementById(event.srcElement.id)?.firstElementChild?.classList.add('test')
+    }
+    const dragEnd = (event: any) => {
+      canDrag.value = false
+      startDragItem.value = event.srcElement.id
+      document.getElementById(event.srcElement.id)?.parentElement?.classList.remove(`test`)
+      document.getElementById(event.srcElement.id)?.firstElementChild?.classList.replace('bg-background-dark', 'bg-background-light')
+      document.getElementById(event.srcElement.id)?.parentElement?.classList.remove(`test`)
     }
 
     const dragEnter = (event: any) => {
       event.preventDefault()
+      console.log(event)
       swap(props.assets, startDragItem.value, event.srcElement.id)
+    }
+    const click = (event: any) => {
+      console.log(event)
     }
     const swap = (_assets: Array<typeof Entity>, itemOne: string, itemTwo: string) => {
       const assetIndexOne = _assets.indexOf(_assets[_assets.map((asset) => asset.id === itemOne).indexOf(true)])
@@ -107,12 +129,16 @@ export default defineComponent({
       }
     }
 
-    return { t, updateDescription, deleteAsset, router, dragStart, dragEnter, canDrag }
+    return { t, updateDescription, deleteAsset, router, dragStart, dragEnd, dragEnter, canDrag, click }
   },
 })
 </script>
 <style scoped>
 .customParent {
   min-height: 85%;
+}
+
+.test {
+  opacity: 0.9;
 }
 </style>
