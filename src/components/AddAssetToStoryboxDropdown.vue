@@ -1,5 +1,5 @@
 <template>
-  <VDropdown placement="top">
+  <VDropdown placement="top" :disabled="disabled">
     <slot></slot>
     <template #popper>
       <div class="p-4">
@@ -29,7 +29,12 @@ export type StoryboxDropdownInput = {
 export default defineComponent({
   name: 'AddAssetToStoryboxDropdown',
   components: { BaseButton },
-  props: {},
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
   emits: ['addToStorybox'],
   setup(props, { emit }) {
     const { t } = useI18n()
