@@ -1,7 +1,9 @@
 <template>
   <router-link :to="profileListItemInfo.onClickUrl">
     <section :class="`bg-neutral-0 p-4 mb-4 w-full ${profileListItemInfo.pictureUrl ? 'flex' : ''}`">
-      <div v-if="profileListItemInfo.pictureUrl" class="mr-4 bg-text-dark opacity-50 w-12 h-12 md:w-24 md:h-24"></div>
+      <div v-if="profileListItemInfo.pictureUrl" class="mr-4 w-12 h-12 md:w-24 md:h-24">
+        <img :src="profileListItemInfo.pictureUrl" />
+      </div>
       <div class="w-full">
         <div class="flex justify-between pb-2">
           <h2 class="font-bold">{{ profileListItemInfo.title }}</h2>
