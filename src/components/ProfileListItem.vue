@@ -1,23 +1,23 @@
 <template>
-  <router-link :to="storyBoxInfo.onClickUrl">
-    <section :class="`bg-neutral-0 p-4 mb-4 w-full ${storyBoxInfo.pictureUrl ? 'flex' : ''}`">
-      <div v-if="storyBoxInfo.pictureUrl" class="mr-4 bg-text-dark opacity-50 w-12 h-12 md:w-24 md:h-24"></div>
+  <router-link :to="profileListItemInfo.onClickUrl">
+    <section :class="`bg-neutral-0 p-4 mb-4 w-full ${profileListItemInfo.pictureUrl ? 'flex' : ''}`">
+      <div v-if="profileListItemInfo.pictureUrl" class="mr-4 bg-text-dark opacity-50 w-12 h-12 md:w-24 md:h-24"></div>
       <div class="w-full">
         <div class="flex justify-between pb-2">
-          <h2 class="font-bold">{{ storyBoxInfo.title }}</h2>
+          <h2 class="font-bold">{{ profileListItemInfo.title }}</h2>
           <div>
-            <story-edit-dropdown :storyBoxInfo="storyBoxInfo"><BaseButton customIcon="threedots" customStyle="ghost-black" :iconShown="true" /></story-edit-dropdown>
+            <story-edit-dropdown :storyBoxInfo="profileListItemInfo"><BaseButton customIcon="threedots" customStyle="ghost-black" :iconShown="true" /></story-edit-dropdown>
           </div>
         </div>
         <div class="pb-2">
-          <p>{{ storyBoxInfo.description }}</p>
+          <p>{{ profileListItemInfo.description }}</p>
         </div>
         <div class="text-tag-selected text-opacity-50 flex justify-between">
           <div>
-            <p>{{ t('profile.creation-date') + storyBoxInfo.dateCreated }}</p>
+            <p>{{ t('profile.creation-date') + profileListItemInfo.dateCreated }}</p>
           </div>
-          <div v-if="storyBoxInfo.code">
-            <p>{{ t('profile.code') + storyBoxInfo.code }}</p>
+          <div v-if="profileListItemInfo.code">
+            <p>{{ t('profile.code') + profileListItemInfo.code }}</p>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@ export type ProfileListItemInfo = {
   title: string
   description: string
   dateCreated: string
-  onClickUrl?: string
+  onClickUrl: string
   code?: number
   pictureUrl?: string
 }
@@ -45,7 +45,7 @@ export default defineComponent({
   name: 'ProfileListItem',
   components: { BaseButton, StoryEditDropdown },
   props: {
-    storyBoxInfo: {
+    profileListItemInfo: {
       type: Object as PropType<ProfileListItemInfo>,
       required: true,
     },
