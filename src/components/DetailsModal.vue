@@ -146,21 +146,10 @@
       </div>
       <div v-if="useStoryboxFeature === true && userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
       <div v-if="useStoryboxFeature === true && userStore.hasUser" class="mx-3 align-center">
-        <base-button
-          :text="t('buttons.addToStorybox')"
-          custom-style="ghost-purple"
-          :on-click="() => addRemoveAssetToStoryBox(entity.id)"
-          :icon-shown="true"
-          :custom-icon="storyBoxIcon"
-          class="px-2 hidden lg:flex"
-        />
-        <base-button
-          custom-style="secondary-round"
-          :on-click="() => addRemoveAssetToStoryBox(entity.id)"
-          :icon-shown="true"
-          :custom-icon="storyBoxIcon"
-          class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden"
-        />
+        <AddAssetToStoryboxDropdown @addToStorybox="addRemoveAssetToStoryBox">
+          <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="storyBoxIcon" class="px-2 hidden lg:flex" />
+          <base-button custom-style="secondary-round" :icon-shown="true" :custom-icon="storyBoxIcon" class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden" />
+        </AddAssetToStoryboxDropdown>
       </div>
     </section>
   </BaseModal>
@@ -182,6 +171,7 @@ import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
 import { useBoxVisiter } from 'coghent-vue-3-component-library'
+import AddAssetToStoryboxDropdown from './AddAssetToStoryboxDropdown.vue'
 
 export type DetailsModalType = {
   state: ModalState
@@ -281,6 +271,7 @@ export default defineComponent({
     CopyrightTab,
     LazyLoadImage,
     BaseMetaData,
+    AddAssetToStoryboxDropdown,
   },
   setup(props) {
     const { addAssetToVisiter, getRelationEntities } = useStoryBox()
@@ -302,7 +293,10 @@ export default defineComponent({
       openMediaModal()
     }
 
-    const addRemoveAssetToStoryBox = async (_id: string) => {
+    const addRemoveAssetToStoryBox = async (storyBoxId: string) => {
+      console.log(storyBoxId)
+      // TODO: add entity to storyboxid
+      const _id = entity.value.id
       console.log(`====================`)
       console.log(`List:`, itemsInBasket.value)
       console.log(

@@ -35,13 +35,15 @@
       "link": "Link naar object kopiëren",
       "edit": "Informatie wijzigen of aanvullen",
       "add": "Aan mijn verhalenbox toevoegen",
+      "addShort": "Toevoegen",
       "objectNumber": "Objectnummer",
       "objectName": "Objectnaam",
       "collectieNaam": "Dossier",
       "instellingNaam": "Instelling",
       "associations": "Associaties",
       "characteristics": "Kenmerken",
-      "unknown": "Onbekend"
+      "unknown": "Onbekend",
+      "createStorybox": "Maak eerst een verhaal aan"
     },
     "notFound": {
       "title": "Dit asset kon ",
