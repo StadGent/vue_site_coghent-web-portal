@@ -4,13 +4,13 @@
       <div class="customParent">
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
         <div class="flex flex-col lg:flex-row">
-          <div class="lg:w-2/3 w-full lg:mr-6">
+          <div class="mb-4 lg:w-2/3 w-full lg:mr-6">
             <p v-if="frames && frames.length > 0" class="text-lg my-2 font-bold">{{ t('storybox.selectFrame') }}</p>
             <select v-if="frames && frames.length > 0" name="frames" class="bg-background-light h-10 w-full p-2 lg:pr-6">
               <option v-for="frame in frames" :key="frame.id" :value="frame.id">{{ frame.id }}</option>
             </select>
           </div>
-          <div class="w-full lg:w-1/3">
+          <div class="mb-4 lg:my-0 w-full lg:w-1/3">
             <p class="text-lg my-2 font-bold">{{ t('storybox.step2.storyTitle') }}</p>
             <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" :value="story.title" />
           </div>
@@ -86,7 +86,6 @@ export default defineComponent({
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
-      story.assets = []
       frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
