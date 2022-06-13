@@ -12,7 +12,7 @@
 import { defineComponent, PropType } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
-import { StoryBoxInfo } from './StoryBoxListItem.vue'
+import { ProfileListItemInfo } from './ProfileListItem.vue'
 import useClipboard from 'vue-clipboard3'
 
 export default defineComponent({
@@ -20,7 +20,7 @@ export default defineComponent({
   components: { BaseButton },
   props: {
     storyBoxInfo: {
-      type: Object as PropType<StoryBoxInfo>,
+      type: Object as PropType<ProfileListItemInfo>,
       required: true,
     },
   },

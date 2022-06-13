@@ -2,21 +2,21 @@
   <section class="md:flex md:mt-16 gap-8">
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
-      <story-box-list-item v-for="(storyBoxItem, index) of storyBoxItems" :key="index" :storyBoxInfo="storyBoxItem" />
+      <profile-list-item v-for="(storyBoxItem, index) of storyBoxItems" :key="index" :storyBoxInfo="storyBoxItem" />
     </section>
   </section>
 </template>
 
 <script lang="ts">
-import StoryBoxListItem, { StoryBoxInfo } from '@/components/StoryBoxListItem.vue'
+import ProfileListItem, { ProfileListItemInfo } from '@/components/ProfileListItem.vue'
 import { defineComponent, ref } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 
 export default defineComponent({
   name: 'TheStoriesPage',
-  components: { ProfileSideMenu, StoryBoxListItem },
+  components: { ProfileSideMenu, ProfileListItem },
   setup() {
-    const storyBoxItems = ref<StoryBoxInfo[]>([
+    const storyBoxItems = ref<ProfileListItemInfo[]>([
       {
         id: '1',
         title: 'Titel van het verhaal',
