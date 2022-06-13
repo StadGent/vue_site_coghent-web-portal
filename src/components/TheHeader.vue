@@ -43,6 +43,7 @@
       <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
       <base-button v-if="userStore.hasUser" :text="'Hi, ' + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
       <base-button
+        v-if="userStore.hasUser && useStoryboxFeature"
         :has-badge="true"
         :badge-value="'0'"
         :text="t('buttons.storybox')"
