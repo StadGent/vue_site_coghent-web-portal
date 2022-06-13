@@ -47,7 +47,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const userStore = StoreFactory.get(UserStore)
-    const user: typeof User = { id: 1, email: 'Bert_De_Backer@hotmail.com', family_name: 'De Backer', given_name: 'Bert', name: 'Bert De Backer', preferred_username: 'Bert' }
+    const user: typeof User = userStore.user
     const pages = ref<MenuPage[]>([
       { i18nTitle: 'profile.details', link: '/profile' },
       { i18nTitle: 'profile.stories', link: '/mystories' },
