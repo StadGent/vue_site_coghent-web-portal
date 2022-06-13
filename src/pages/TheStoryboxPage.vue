@@ -5,7 +5,7 @@
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
         <div class="w-full mt-6 mb-8">
           <p class="text-lg my-2 font-bold">{{ t('storybox.step2.storyTitle') }}</p>
-          <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" />
+          <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" :value="story.title"/>
         </div>
         <story-box-create :description="story.description" :assets="story.assets" @description="(description) => (story.description = description)" @assets="(assets) => (story.assets = assets)" />
         <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end">
@@ -67,6 +67,11 @@ export default defineComponent({
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
+      if(true){
+        story.title = 'i already filled this in'
+        story.description = 'i already filled this in'
+        story.assets = []
+      }
     })
 
     return { t, closeWindow, save, description, story, close }
