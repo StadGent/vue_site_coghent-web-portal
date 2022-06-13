@@ -48,14 +48,14 @@
         <base-button text="Opslaan" @click="saveEdit('password')" custom-style="primary" :iconShown="false" />
       </div> -->
 
-      <p class="mt-8 font-bold">
+      <p class="invisible mt-8 font-bold">
         {{ t('profile.delete') }}
       </p>
-      <div class="flex mt-4 xl:space-x-44 sm:space-x-24 lg:space-x-44 items-center">
-        <p class="xl:max-w-xs sm:max-w-md text-sm">
+      <div class="invisible flex mt-4 xl:space-x-44 sm:space-x-24 lg:space-x-44 items-center">
+        <p class="invisible xl:max-w-xs sm:max-w-md text-sm">
           {{ t('profile.delete-info') }}
         </p>
-        <base-button :text="t('profile.delete-button')" :on-click="buttonClick" custom-style="ghost-red" :icon-shown="true" custom-icon="delete" />
+        <base-button :text="t('profile.delete-button')" :on-click="buttonClick" custom-style="invisible ghost-red" :icon-shown="true" custom-icon="delete" />
       </div>
     </div>
   </section>

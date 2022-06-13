@@ -8,12 +8,12 @@
           :on-click="logout"
           custom-style="ghost-black"
           :icon-shown="true"
-          :noMargin="true"
+          :no-margin="true"
           custom-icon="logout"
         />
       </div>
       <section class="flex md:block whitespace-nowrap overflow-scroll h-24 md:h-auto no-scrollbar">
-        <router-link v-for="(page, index) in pages" :key="index" :to="page.link" @click="changeActivePage(index)" class="pr-4 md:pr-0">
+        <router-link v-for="(page, index) in pages" :key="index" :to="page.link" class="pr-4 md:pr-0" @click="changeActivePage(index)">
           <p :class="`mt-8 text-lg w-auto ${page.active ? 'text-accent-yellow font-bold' : ''}`">
             {{ t(page.i18nTitle) }}
           </p>
@@ -51,7 +51,7 @@ export default defineComponent({
     const pages = ref<MenuPage[]>([
       { i18nTitle: 'profile.details', link: '/profile' },
       { i18nTitle: 'profile.stories', link: '/mystories' },
-      { i18nTitle: 'profile.works', link: '/myworks' },
+      // { i18nTitle: 'profile.works', link: '/myworks' },
     ])
     const { t } = useI18n()
 
@@ -74,14 +74,11 @@ export default defineComponent({
     )
 
     const logout = async () => {
-      console.log(`STEP 1 | WEB LOGOUT `)
       fetch('/api/logout')
         .then(async (response) => {
           userStore.setUser(null)
           useSessionAuth.resetAuthProperties()
-          console.log(`STEP 1 | WEB LOGOUT | user set to NULL`)
           router.push('/')
-          console.log(`STEP 1 | WEB LOGOUT | going back to home page /`)
         })
         .catch((error) => {
           router.push('/')
