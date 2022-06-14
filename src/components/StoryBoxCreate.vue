@@ -167,7 +167,7 @@ export default defineComponent({
     const updateAssetTiming = (_asset: typeof Entity, _timing: number) => {
       for (const _pair of storyboxStory.assetTimings) {
         if (_pair.key === _asset.id) {
-          _pair.value = Number(Number(_timing).toFixed())
+          _pair.value = Number(_timing).toFixed()
         }
       }
       emit(`story`, storyboxStory)

@@ -32,7 +32,8 @@ import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity } from 'coghent-vue-3-component-library'
-
+import { useQuery } from '@vue/apollo-composable'
+import { CreateStoryboxDocument } from 'coghent-vue-3-component-library'
 export enum Language {
   'DUTCH' = 'Nederlands',
   'English' = 'Engels',
@@ -55,9 +56,10 @@ export default defineComponent({
       assetTimings: [],
       frameId: null,
     })
+    const { fetchMore: createStory } = useQuery(CreateStoryboxDocument, { storyboxInfo: story })
     const frames = ref<Array<typeof Entity>>([
-      { id: 'firstID', title: [{ value: 'frametitle' }] },
-      { id: 'secondID', title: [{ value: 'frametitle' }] },
+      // { id: 'firstID', title: [{ value: 'frametitle' }] },
+      // { id: 'secondID', title: [{ value: 'frametitle' }] },
     ])
     const description = ref('')
     document.body.classList.add('overflow-y-hidden')
@@ -70,11 +72,19 @@ export default defineComponent({
 
     const save = async () => {
       console.log(`useStoryBox.saveFrame()`, story)
-      if (story.frameId === null) {
-        console.log(`Create new frame for user`)
-      } else {
-        console.log(`Update frame for user`)
-      }
+      const createdStoryBox = await createStory({
+        variables: {
+          storyboxInfo: {
+            frameId: null,
+            title: story.title,
+            language: story.language,
+            description: story.description,
+            assets: story.assets.map((asset: any) => asset.id),
+            assetTimings: story.assetTimings,
+          } as typeof StoryboxBuild,
+        },
+      })
+      console.log({ createdStoryBox })
       close()
     }
 
@@ -84,7 +94,7 @@ export default defineComponent({
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
-      story.assets.map((_asset: typeof Entity) => story.assetTimings.push({ key: _asset.id, value: 1 } as typeof KeyValuePair))
+      story.assets.map((_asset: typeof Entity) => story.assetTimings.push({ key: _asset.id, value: '1' } as typeof KeyValuePair))
       frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
