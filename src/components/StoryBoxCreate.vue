@@ -4,6 +4,7 @@
       <div class="lg:w-2/3 w-full lg:mr-6">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${assets != undefined ? assets.length : 0})` }}</h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
+        <div v-if="loading" class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         <ul v-show="storyboxStory.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
           <li
             v-for="asset in storyboxStory.assets"
@@ -72,8 +73,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, ref, watch } from 'vue'
-import { BaseIcon } from 'coghent-vue-3-component-library'
+import { computed, defineComponent, PropType, reactive, ref } from 'vue'
+import { BaseIcon, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { StoryBuild } from '@/pages/TheStoryboxPage.vue'
 import { useI18n } from 'vue-i18n'
@@ -82,7 +83,7 @@ import { apolloClient, router } from '@/app'
 import useStoryBox from '@/composables/useStoryBox'
 
 export default defineComponent({
-  components: { BaseIcon },
+  components: { BaseIcon, CircleLoader },
   props: {
     story: {
       type: Object as PropType<StoryBuild>,
@@ -163,7 +164,24 @@ export default defineComponent({
       emit(`story`, storyboxStory)
     }
 
-    return { t, updateDescription, deleteAsset, router, dragStart, dragEnd, dragEnter, canDrag, click, showTimeEdit, showTimingEdit, activeEditItem, storyboxStory, setAssetTiming, updateAssetTiming }
+    return {
+      t,
+      updateDescription,
+      deleteAsset,
+      router,
+      dragStart,
+      dragEnd,
+      dragEnter,
+      canDrag,
+      click,
+      showTimeEdit,
+      showTimingEdit,
+      activeEditItem,
+      storyboxStory,
+      setAssetTiming,
+      updateAssetTiming,
+      loading: computed(() => false),
+    }
   },
 })
 </script>
