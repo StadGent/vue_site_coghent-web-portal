@@ -76,17 +76,18 @@
 import { computed, defineComponent, PropType, reactive, ref } from 'vue'
 import { BaseIcon, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
-import { StoryBuild } from '@/pages/TheStoryboxPage.vue'
 import { useI18n } from 'vue-i18n'
 import { useBoxVisiter } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import useStoryBox from '@/composables/useStoryBox'
+import { KeyValuePair } from 'coghent-vue-3-component-library'
+import { StoryboxBuild } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   components: { BaseIcon, CircleLoader },
   props: {
     story: {
-      type: Object as PropType<StoryBuild>,
+      type: Object as PropType<typeof StoryboxBuild>,
       required: true,
     },
   },
@@ -98,7 +99,7 @@ export default defineComponent({
     const canDrag = ref<boolean>(false)
     const showTimeEdit = ref<boolean>(false)
     const activeEditItem = ref<string | null>(null)
-    const storyboxStory = reactive<StoryBuild>(props.story)
+    const storyboxStory = reactive<typeof StoryboxBuild>(props.story)
 
     const deleteAsset = async (_asset: typeof Entity) => {
       // await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
@@ -156,11 +157,19 @@ export default defineComponent({
     }
 
     const setAssetTiming = (_asset: typeof Entity) => {
-      return storyboxStory.assetTimings[_asset.id]
+      let returnValue = null
+      storyboxStory.assetTimings.map((_pair: typeof KeyValuePair) => {
+        if (_pair.key === _asset.id) returnValue = _pair.value
+      })
+      return returnValue
     }
 
     const updateAssetTiming = (_asset: typeof Entity, _timing: number) => {
-      storyboxStory.assetTimings[_asset.id] = Number(Number(_timing).toFixed())
+      for (const _pair of storyboxStory.assetTimings) {
+        if (_pair.key === _asset.id) {
+          _pair.value = Number(Number(_timing).toFixed())
+        }
+      }
       emit(`story`, storyboxStory)
     }
 

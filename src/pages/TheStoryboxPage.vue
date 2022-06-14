@@ -26,21 +26,12 @@
 </template>
 <script lang="ts">
 import useStoryBox from '@/composables/useStoryBox'
-import { BaseButton, BaseModal } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseModal, StoryboxBuild, KeyValuePair } from 'coghent-vue-3-component-library'
 import { defineComponent, onMounted, ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity } from 'coghent-vue-3-component-library'
-
-export type StoryBuild = {
-  title: null | string
-  language: null | string
-  description: null | string
-  assets: Array<any>
-  assetTimings: Record<string, number>
-  frameId: null | string
-}
 
 export enum Language {
   'DUTCH' = 'Nederlands',
@@ -56,12 +47,12 @@ export default defineComponent({
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
     const closeWindow = ref<string>('show')
-    const story = reactive<StoryBuild>({
+    const story = reactive<typeof StoryboxBuild>({
       title: null,
       language: Language.DUTCH,
       description: null,
       assets: [],
-      assetTimings: {} as Record<string, number>,
+      assetTimings: [],
       frameId: null,
     })
     const frames = ref<Array<typeof Entity>>([
@@ -93,7 +84,7 @@ export default defineComponent({
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
-      story.assets.map((_asset) => (story.assetTimings[_asset.id] = 1))
+      story.assets.map((_asset: typeof Entity) => story.assetTimings.push({ key: _asset.id, value: 1 } as typeof KeyValuePair))
       frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
