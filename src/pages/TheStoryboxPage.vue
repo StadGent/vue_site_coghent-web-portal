@@ -7,7 +7,7 @@
           <div class="mb-4 lg:w-2/3 w-full lg:mr-6">
             <p v-if="frames && frames.length > 0" class="text-lg my-2 font-bold">{{ t('storybox.selectFrame') }}</p>
             <select v-if="frames && frames.length > 0" name="frames" class="bg-background-light h-10 w-full p-2 lg:pr-6">
-              <option v-for="frame in frames" :key="frame.id" :value="frame.id">{{ frame.id }}</option>
+              <option v-for="frame in frames" :key="frame.id" @click="updateSelectedFrame(frame)" :value="frame.id">{{ frame.id }}</option>
             </select>
           </div>
           <div class="mb-4 lg:my-0 w-full lg:w-1/3">
@@ -62,9 +62,10 @@ export default defineComponent({
       assets: [],
       frameId: null,
     })
-    const frames = ref<Array<typeof Entity>>([{ id: 'sdksjadbsa', title: [{ value: 'frametitle' }] }])
-    console.log(`frames`, frames)
-    console.log(`frames.length`, frames.value.length)
+    const frames = ref<Array<typeof Entity>>([
+      { id: 'firstID', title: [{ value: 'frametitle' }] },
+      { id: 'secondID', title: [{ value: 'frametitle' }] },
+    ])
     const description = ref('')
     document.body.classList.add('overflow-y-hidden')
 
@@ -84,12 +85,16 @@ export default defineComponent({
       close()
     }
 
+    const updateSelectedFrame = (_frame: typeof Entity) => {
+      story.frameId = _frame.id
+    }
+
     onMounted(async () => {
       story.assets = await getRelationEntities()
       frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
-    return { t, closeWindow, save, description, story, close, frames }
+    return { t, closeWindow, save, description, story, close, frames, updateSelectedFrame }
   },
 })
 </script>
