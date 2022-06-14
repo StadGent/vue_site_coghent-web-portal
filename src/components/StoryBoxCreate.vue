@@ -41,7 +41,17 @@
               </div>
               <div :id="'expand' + asset.id" v-if="showTimeEdit === true && activeEditItem === asset.id" class="flex flex-row px-4 gap-4 p-2 pt-6">
                 <label class="flex flex-row text-bold items-center" for="duration">
-                  Deze afbeelding wordt getoond voor <input name="duration" type="number" min="1" max="20" class="p-1.5 rounded-md ml-2 w-16 mr-2" /> seconden.
+                  Deze afbeelding wordt getoond voor
+                  <input
+                    :value="setAssetTiming(asset)"
+                    @change="(event) => updateAssetTiming(asset, event.target.value)"
+                    name="duration"
+                    type="number"
+                    min="1"
+                    max="20"
+                    class="p-1.5 rounded-md ml-2 w-16 mr-2"
+                  />
+                  seconden.
                 </label>
               </div>
             </div>
@@ -144,7 +154,16 @@ export default defineComponent({
       doc?.classList.add(`expanding`)
     }
 
-    return { t, updateDescription, deleteAsset, router, dragStart, dragEnd, dragEnter, canDrag, click, showTimeEdit, showTimingEdit, activeEditItem, storyboxStory }
+    const setAssetTiming = (_asset: typeof Entity) => {
+      return storyboxStory.assetTimings[_asset.id]
+    }
+
+    const updateAssetTiming = (_asset: typeof Entity, _timing: number) => {
+      storyboxStory.assetTimings[_asset.id] = Number(Number(_timing).toFixed())
+      emit(`story`, storyboxStory)
+    }
+
+    return { t, updateDescription, deleteAsset, router, dragStart, dragEnd, dragEnter, canDrag, click, showTimeEdit, showTimingEdit, activeEditItem, storyboxStory, setAssetTiming, updateAssetTiming }
   },
 })
 </script>

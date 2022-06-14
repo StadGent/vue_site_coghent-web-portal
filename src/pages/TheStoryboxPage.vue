@@ -93,6 +93,7 @@ export default defineComponent({
 
     onMounted(async () => {
       story.assets = await getRelationEntities()
+      story.assets.map((_asset) => (story.assetTimings[_asset.id] = 1))
       frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
