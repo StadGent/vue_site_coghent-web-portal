@@ -4,9 +4,9 @@
       <div class="lg:w-2/3 w-full lg:mr-6">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${assets != undefined ? assets.length : 0})` }}</h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
-        <ul v-show="assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
+        <ul v-show="storyboxStory.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
           <li
-            v-for="asset in assets"
+            v-for="asset in storyboxStory.assets"
             :id="asset.id"
             :key="asset"
             class="rounded-md activeElement w-full my-2 align-middle min-h-16 bg-background-light"
@@ -15,24 +15,34 @@
             :ondrop="dragEnd"
             :draggable="canDrag"
           >
-            <div :id="asset.id" class="rounded-md w-full bg-background-light flex flex-cols py-2">
-              <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="dragEnd">
-                <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
-              </p>
-              <div :id="asset.id" class="w-28 flex justify-center items-center">
-                <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
+            <div :id="asset.id">
+              <div :id="asset.id" class="rounded-md w-full bg-background-light flex flex-cols py-2">
+                <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="dragEnd">
+                  <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
+                </p>
+                <div :id="asset.id" class="w-28 flex justify-center items-center">
+                  <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
+                </div>
+                <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
+                  <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
+                    {{ asset.title[0] ? asset.title[0].value : 'asset' }}
+                  </h1>
+                  <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
+                </div>
+                <div :id="asset.id" class="invisible w-20 flex items-center justify-center items-row-reverse cursor-pointer">
+                  <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
+                </div>
+                <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="showTimingEdit(asset.id)">
+                  <base-icon :id="asset.id" :icon="'edit'" class="stroke-current" />
+                </div>
+                <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
+                  <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
+                </div>
               </div>
-              <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
-                <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
-                  {{ asset.title[0] ? asset.title[0].value : 'asset' }}
-                </h1>
-                <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
-              </div>
-              <div :id="asset.id" class="invisible w-20 flex items-center justify-center items-row-reverse cursor-pointer">
-                <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
-              </div>
-              <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
-                <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
+              <div :id="'expand' + asset.id" v-if="showTimeEdit === true && activeEditItem === asset.id" class="flex flex-row px-4 gap-4 p-2 pt-6">
+                <label class="flex flex-row text-bold items-center" for="duration">
+                  Deze afbeelding wordt getoond voor <input name="duration" type="number" min="1" max="20" class="p-1.5 rounded-md ml-2 w-16 mr-2" /> seconden.
+                </label>
               </div>
             </div>
           </li>
@@ -45,14 +55,14 @@
       </div>
       <div class="lg:w-1/3 w-full my-4 lg:my-0">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.story.title') }}</h1>
-        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full lg:h-5/6 h-48 bg-background-light p-4" :value="description" @change="updateDescription"></textarea>
+        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full lg:h-5/6 h-48 bg-background-light p-4" :value="storyboxStory.description" @change="updateDescription"></textarea>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, PropType, reactive, ref, watch } from 'vue'
 import { BaseIcon } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { StoryBuild } from '@/pages/TheStoryboxPage.vue'
@@ -64,34 +74,31 @@ import useStoryBox from '@/composables/useStoryBox'
 export default defineComponent({
   components: { BaseIcon },
   props: {
-    assets: {
-      type: Object as PropType<Array<typeof Entity>>,
-      required: true,
-    },
-    description: {
+    story: {
       type: Object as PropType<StoryBuild>,
       required: true,
     },
   },
-  emits: ['description', 'assets'],
+  emits: ['story'],
   setup(props, { emit }) {
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
     const startDragItem = ref<string>('')
     const canDrag = ref<boolean>(false)
+    const showTimeEdit = ref<boolean>(false)
+    const activeEditItem = ref<string | null>(null)
+    const storyboxStory = reactive<StoryBuild>(props.story)
 
     const deleteAsset = async (_asset: typeof Entity) => {
-      await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
-      const updatedAssets = await getRelationEntities()
-      emit(`assets`, updatedAssets)
+      // await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
+      storyboxStory.assets = await getRelationEntities()
+      emit(`story`, storyboxStory)
     }
 
     const updateDescription = (event: any) => {
-      const description = event.target.value
-      emit(`description`, description)
+      storyboxStory.description = event.target.value
+      emit(`story`, storyboxStory)
     }
-
-    watch(canDrag, () => console.log(`candrag`, canDrag.value))
 
     const dragStart = (event: any) => {
       startDragItem.value = event.srcElement.id
@@ -109,8 +116,7 @@ export default defineComponent({
 
     const dragEnter = (event: any) => {
       event.preventDefault()
-      console.log(event)
-      swap(props.assets, startDragItem.value, event.srcElement.id)
+      swap(props.story.assets, startDragItem.value, event.srcElement.id)
     }
     const click = (event: any) => {
       console.log(event)
@@ -125,11 +131,20 @@ export default defineComponent({
         Object.assign(updatedAssets, _assets)
         updatedAssets[assetIndexOne] = assetTwo
         updatedAssets[assetIndexTwo] = assetOne
-        emit(`assets`, updatedAssets)
+        storyboxStory.assets = updatedAssets
+        emit(`story`, storyboxStory)
       }
     }
 
-    return { t, updateDescription, deleteAsset, router, dragStart, dragEnd, dragEnter, canDrag, click }
+    const showTimingEdit = (_assetId: string) => {
+      showTimeEdit.value = !showTimeEdit.value
+      activeEditItem.value = null
+      activeEditItem.value = _assetId
+      const doc = document.getElementById(`expand${_assetId}`)
+      doc?.classList.add(`expanding`)
+    }
+
+    return { t, updateDescription, deleteAsset, router, dragStart, dragEnd, dragEnter, canDrag, click, showTimeEdit, showTimingEdit, activeEditItem, storyboxStory }
   },
 })
 </script>
@@ -140,5 +155,21 @@ export default defineComponent({
 
 .test {
   opacity: 0.9;
+}
+
+.expanding {
+  animation-name: expand;
+  animation-duration: 5s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+@keyframes expand {
+  0% {
+    height: 0%;
+  }
+  100% {
+    height: 100%;
+  }
 }
 </style>

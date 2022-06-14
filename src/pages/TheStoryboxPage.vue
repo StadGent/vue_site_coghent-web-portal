@@ -15,7 +15,7 @@
             <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" :value="story.title" />
           </div>
         </div>
-        <story-box-create :description="story.description" :assets="story.assets" @description="(description) => (story.description = description)" @assets="(assets) => (story.assets = assets)" />
+        <story-box-create :story="story" @story="(_story) => (story = _story)" />
         <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end mt-4">
           <base-button :text="t('storybox.story.close')" :on-click="() => close()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
           <base-button :text="t('storybox.story.save')" :on-click="() => save()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
@@ -38,6 +38,7 @@ export type StoryBuild = {
   language: null | string
   description: null | string
   assets: Array<any>
+  assetTimings: Record<string, number>
   frameId: null | string
 }
 
@@ -60,6 +61,7 @@ export default defineComponent({
       language: Language.DUTCH,
       description: null,
       assets: [],
+      assetTimings: {} as Record<string, number>,
       frameId: null,
     })
     const frames = ref<Array<typeof Entity>>([

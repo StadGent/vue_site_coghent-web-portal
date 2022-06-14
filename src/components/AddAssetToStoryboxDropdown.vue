@@ -40,8 +40,8 @@ export default defineComponent({
     const { t } = useI18n()
     const storyBoxFormState = ref<string>()
     const userStoryboxes = ref<StoryboxDropdownInput[]>([
-      // { id: '1', name: 'First storybox' },
-      // { id: '2', name: 'Second storybox' },
+      { id: '1', name: 'First storybox' },
+      { id: '2', name: 'Second storybox' },
     ])
 
     const emitButtonClick = () => {
