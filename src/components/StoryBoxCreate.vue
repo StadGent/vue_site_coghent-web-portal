@@ -2,7 +2,7 @@
   <div class="h-fit flex flex-col customParent">
     <div class="flex flex-grow flex-col lg:flex-row">
       <div class="lg:w-2/3 w-full lg:mr-6">
-        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${assets != undefined ? assets.length : 0})` }}</h1>
+        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${storyboxStory.assets != undefined ? storyboxStory.assets.length : 0})` }}</h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
         <div v-if="loading" class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         <ul v-show="storyboxStory.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
@@ -102,7 +102,7 @@ export default defineComponent({
     const storyboxStory = reactive<typeof StoryboxBuild>(props.story)
 
     const deleteAsset = async (_asset: typeof Entity) => {
-      // await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
+      await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
       storyboxStory.assets = await getRelationEntities()
       emit(`story`, storyboxStory)
     }
