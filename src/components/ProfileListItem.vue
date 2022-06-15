@@ -18,10 +18,10 @@
         </div>
         <div class="text-tag-selected text-opacity-50 flex justify-between">
           <div>
-            <p>{{ t('profile.creation-date') + profileListItemInfo.dateCreated }}</p>
+            <p>{{ t('profile.storybox.creation-date') + profileListItemInfo.dateCreated }}</p>
           </div>
           <div v-if="profileListItemInfo.code">
-            <p>{{ t('profile.code') + profileListItemInfo.code }}</p>
+            <p>{{ t('profile.storybox.code') + profileListItemInfo.code }}</p>
           </div>
         </div>
       </div>

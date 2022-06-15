@@ -9,6 +9,7 @@ import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
 import TheStoryboxPage from './pages/TheStoryboxPage.vue'
 import TheStoriesPage from './pages/TheStoriesPage.vue'
+import NewStoryPage from './pages/NewStoryPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
 import TheWorksPage from './pages/TheWorksPage.vue'
 import { ref } from 'vue'
@@ -35,6 +36,7 @@ const routes = [
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: false } },
   { path: '/storybox', component: TheStoryboxPage, meta: { requiresAuth: false } },
   { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: false } },
+  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: false } },
   { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: false } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]

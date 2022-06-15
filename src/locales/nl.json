@@ -89,8 +89,19 @@
     "delete-info": "Door je account te verwijderen gaan al je gegevens definitief verloren",
     "delete-button": "Account verwijderen",
     "logout": "Afmelden",
-    "creation-date": "Aangemaakt op ",
-    "code": "Code: "
+    "storybox": {
+      "creation-date": "Aangemaakt op ",
+      "code": "Code: ",
+      "create": {
+        "create-storybox":"Maak een verhaal zonder code",
+        "create-storybox-with-code":"Ik heb al een code uit de box",
+        "name": "Naam van het verhaal",
+        "description": "Beschrijving",
+        "code": "Code van je box bezoek",
+        "submit": "Verhaal toevoegen"
+      }
+    }
+    
   },
   "copyright": {
     "title": "Alles wat je wilt weten over de rechtenstatussen",
