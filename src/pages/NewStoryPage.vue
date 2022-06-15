@@ -3,12 +3,12 @@
     <div v-if="hasBoxCode" class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyCode">{{ t('profile.storybox.create.code') }}</label
       ><input v-model="storyCode" type="text" id="storyCode" maxlength="8" minlength="8" required />
-      <p class="text-text-red text-xs" id="code-error-container"></p>
+      <p v-if="codeInputError" class="text-text-red text-xs h-4">{{ codeInputError }}</p>
     </div>
     <div class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyName">{{ t('profile.storybox.create.name') }}</label
       ><input v-model="storyName" type="text" id="storyName" required />
-      <p class="text-text-red text-xs" id="name-error-container"></p>
+      <p v-if="nameInputError" class="text-text-red text-xs h-4">{{ nameInputError }}</p>
     </div>
     <div class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyDescription">{{ t('profile.storybox.create.description') }}</label
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
@@ -35,6 +35,8 @@ export default defineComponent({
     const storyName = ref<string>()
     const storyDescription = ref<string>()
     const storyCode = ref<string | undefined>()
+    const codeInputError = ref<string | undefined>(undefined)
+    const nameInputError = ref<string | undefined>(undefined)
 
     const filterInt = (value: string) => {
       if (/^[-+]?(\d+|Infinity)$/.test(value)) {
@@ -45,32 +47,27 @@ export default defineComponent({
     }
 
     const checkValues = () => {
-      let codeInputError: string | undefined = undefined
-      let nameInputError: string | undefined = undefined
-      const codeContainer: HTMLElement | null = document.getElementById('code-error-container')
-      const nameContainer: HTMLElement | null = document.getElementById('name-error-container')
+      codeInputError.value = undefined
+      nameInputError.value = undefined
 
       if (storyCode.value?.length == 8 && hasBoxCode) {
-        if (!isNaN(filterInt(storyCode.value))) {
-          console.log('Valid')
-        } else {
-          console.warn('Please only insert numbers')
-          codeInputError = 'Gelieve enkel nummers in te voeren'
+        if (isNaN(filterInt(storyCode.value))) {
+          codeInputError.value = 'Gelieve enkel nummers in te voeren'
         }
       } else {
-        console.warn('Storycode too short')
-        codeInputError = 'Code te kort'
+        codeInputError.value = 'Code moet 8 karakters bevatten'
       }
       if (storyName.value && storyName.value.length < 5) {
-        nameInputError = 'Naam moet minimum 5 karakters bevatten'
-      }
-      if (codeInputError && codeContainer) {
-        codeContainer.innerHTML = codeInputError
-      }
-      if (nameContainer && nameInputError) {
-        nameContainer.innerHTML = nameInputError
+        nameInputError.value = 'Naam moet minimum 5 karakters bevatten'
       }
     }
+
+    watch(
+      () => [storyName.value, storyCode.value],
+      () => {
+        checkValues()
+      }
+    )
 
     return {
       storyCode,
@@ -80,6 +77,8 @@ export default defineComponent({
       t,
       hasBoxCode,
       checkValues,
+      nameInputError,
+      codeInputError,
     }
   },
 })
