@@ -21,7 +21,7 @@
       </section>
     </div>
     <div class="flex flex-grow"></div>
-    <base-button class="hidden md:flex md:border-t-2 border-white object-bottom" :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
+    <base-button class="hidden md:flex md:border-t-2 border-white" :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
   </div>
 </template>
 
@@ -48,7 +48,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const userStore = StoreFactory.get(UserStore)
-    const user: typeof User = { id: 1, email: 'Bert_De_Backer@hotmail.com', family_name: 'De Backer', given_name: 'Bert', name: 'Bert De Backer', preferred_username: 'Bert' }
+    const user: typeof User = userStore.user
     const pages = ref<MenuPage[]>([
       { i18nTitle: 'profile.details', link: '/profile' },
       { i18nTitle: 'profile.stories', link: '/mystories' },
