@@ -1,6 +1,6 @@
 <template>
-  <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 h-full">
-    <div class="flex flex-col justify-between flex-1 pb-4">
+  <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 page-height">
+    <div class="flex flex-col justify-between pb-4">
       <div class="flex justify-between items-center">
         <h2 class="mt-5 font-bold text-4xl">Hey {{ user.preferred_username }}!</h2>
         <base-button
@@ -12,7 +12,7 @@
           custom-icon="logout"
         />
       </div>
-      <section class="flex md:block whitespace-nowrap overflow-scroll h-24 md:h-auto no-scrollbar">
+      <section class="flex md:block whitespace-nowrap overflow-scroll h-24 md:h-auto no-scrollbar h-full">
         <router-link v-for="(page, index) in pages" :key="index" :to="page.link" class="pr-4 md:pr-0" @click="changeActivePage(index)">
           <p :class="`mt-8 text-lg w-auto ${page.active ? 'text-accent-yellow font-bold' : ''}`">
             {{ t(page.i18nTitle) }}
@@ -20,7 +20,8 @@
         </router-link>
       </section>
     </div>
-    <base-button class="hidden md:flex md:border-t-2 border-white" :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
+    <div class="flex flex-grow"></div>
+    <base-button class="hidden md:flex md:border-t-2 border-white object-bottom" :text="t('profile.logout')" :on-click="logout" custom-style="ghost-black" :icon-shown="true" custom-icon="logout" />
   </div>
 </template>
 
@@ -47,7 +48,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const userStore = StoreFactory.get(UserStore)
-    const user: typeof User = userStore.user
+    const user: typeof User = { id: 1, email: 'Bert_De_Backer@hotmail.com', family_name: 'De Backer', given_name: 'Bert', name: 'Bert De Backer', preferred_username: 'Bert' }
     const pages = ref<MenuPage[]>([
       { i18nTitle: 'profile.details', link: '/profile' },
       { i18nTitle: 'profile.stories', link: '/mystories' },
@@ -109,5 +110,15 @@ export default defineComponent({
 
 .border-white {
   border-top-color: white;
+}
+
+.page-height {
+  min-height: auto;
+}
+
+@media only screen and (min-width: 768px) {
+  .page-height {
+    min-height: 70vh;
+  }
 }
 </style>
