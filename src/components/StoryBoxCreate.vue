@@ -2,7 +2,7 @@
   <div class="h-fit flex flex-col customParent">
     <div class="flex flex-grow flex-col lg:flex-row">
       <div class="lg:w-2/3 w-full lg:mr-6">
-        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${storyboxStory.assets != undefined ? storyboxStory.assets.length : 0})` }}</h1>
+        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${storyboxStory.assetTimings != undefined ? storyboxStory.assetTimings.length : 0})` }}</h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
         <div v-if="loading" class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         <ul v-show="storyboxStory.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, reactive, ref } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 import { BaseIcon, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
@@ -90,6 +90,10 @@ export default defineComponent({
       type: Object as PropType<typeof StoryboxBuild>,
       required: true,
     },
+    loading: {
+      type: Boolean,
+      required: true,
+    },
   },
   emits: ['story'],
   setup(props, { emit }) {
@@ -99,17 +103,24 @@ export default defineComponent({
     const canDrag = ref<boolean>(false)
     const showTimeEdit = ref<boolean>(false)
     const activeEditItem = ref<string | null>(null)
-    const storyboxStory = reactive<typeof StoryboxBuild>(props.story)
+    const storyboxStory = ref<typeof StoryboxBuild>(props.story)
+
+    watch(
+      () => props.story,
+      (storyValue) => {
+        storyboxStory.value = storyValue
+      }
+    )
 
     const deleteAsset = async (_asset: typeof Entity) => {
       await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
-      storyboxStory.assets = await getRelationEntities()
-      emit(`story`, storyboxStory)
+      storyboxStory.value.assets = await getRelationEntities()
+      emit(`story`, storyboxStory.value)
     }
 
     const updateDescription = (event: any) => {
-      storyboxStory.description = event.target.value
-      emit(`story`, storyboxStory)
+      storyboxStory.value.description = event.target.value
+      emit(`story`, storyboxStory.value)
     }
 
     const dragStart = (event: any) => {
@@ -143,8 +154,8 @@ export default defineComponent({
         Object.assign(updatedAssets, _assets)
         updatedAssets[assetIndexOne] = assetTwo
         updatedAssets[assetIndexTwo] = assetOne
-        storyboxStory.assets = updatedAssets
-        emit(`story`, storyboxStory)
+        storyboxStory.value.assets = updatedAssets
+        emit(`story`, storyboxStory.value)
       }
     }
 
@@ -158,19 +169,19 @@ export default defineComponent({
 
     const setAssetTiming = (_asset: typeof Entity) => {
       let returnValue = null
-      storyboxStory.assetTimings.map((_pair: typeof KeyValuePair) => {
+      storyboxStory.value.assetTimings.map((_pair: typeof KeyValuePair) => {
         if (_pair.key === _asset.id) returnValue = _pair.value
       })
       return returnValue
     }
 
     const updateAssetTiming = (_asset: typeof Entity, _timing: number) => {
-      for (const _pair of storyboxStory.assetTimings) {
+      for (const _pair of storyboxStory.value.assetTimings) {
         if (_pair.key === _asset.id) {
           _pair.value = Number(_timing).toFixed()
         }
       }
-      emit(`story`, storyboxStory)
+      emit(`story`, storyboxStory.value)
     }
 
     return {
@@ -189,7 +200,6 @@ export default defineComponent({
       storyboxStory,
       setAssetTiming,
       updateAssetTiming,
-      loading: computed(() => false),
     }
   },
 })

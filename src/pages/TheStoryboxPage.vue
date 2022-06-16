@@ -3,6 +3,7 @@
     <div class="h-full p-8 flex flex-col">
       <div class="customParent">
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
+        <!-- <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div> -->
         <div class="flex flex-col lg:flex-row">
           <div class="mb-4 lg:w-2/3 w-full lg:mr-6">
             <p v-if="frames && frames.length > 0" class="text-lg my-2 font-bold">{{ t('storybox.selectFrame') }}</p>
@@ -15,7 +16,7 @@
             <input class="bg-background-light h-10 w-full p-2" type="text" @change="(event) => (story.title = event.target.value)" :value="story.title" />
           </div>
         </div>
-        <story-box-create :story="story" @story="(_story) => (story = _story)" />
+        <story-box-create :loading="loading" :story="story" @story="(_story) => (story = _story)" />
         <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end mt-4">
           <base-button :text="t('storybox.story.close')" :on-click="() => close()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
           <base-button :text="t('storybox.story.save')" :on-click="() => save()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
@@ -26,13 +27,13 @@
 </template>
 <script lang="ts">
 import useStoryBox from '@/composables/useStoryBox'
-import { BaseButton, BaseModal, StoryboxBuild, KeyValuePair } from 'coghent-vue-3-component-library'
-import { defineComponent, onMounted, ref, reactive } from 'vue'
+import { BaseButton, BaseModal, StoryboxBuild, CircleLoader } from 'coghent-vue-3-component-library'
+import { defineComponent, onMounted, ref, reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apolloClient, router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity } from 'coghent-vue-3-component-library'
-import {  useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
+import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 export enum Language {
   'DUTCH' = 'Nederlands',
   'English' = 'Engels',
@@ -49,7 +50,8 @@ export default defineComponent({
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
     const closeWindow = ref<string>('show')
-    let story = reactive<typeof StoryboxBuild>({
+    const loading = ref<boolean>(true)
+    let story = ref<typeof StoryboxBuild>({
       title: null,
       language: Language.DUTCH,
       description: null,
@@ -67,14 +69,7 @@ export default defineComponent({
       console.log({ StoryBoxState })
       frames.value = StoryBoxState.value.storyboxes
       storyboxCount.value = StoryBoxState.value.count
-      const createdStorybox = useStorybox(apolloClient).createStoryboxFromEntity(frames.value[0])
-      let property: keyof typeof story
-      for (property in story) {
-        if (!(property in createdStorybox)) {
-          createdStorybox[property] = story[property]
-        }
-      }
-      story = createdStorybox
+      frames.value[0] ? await setCorrectStorybox(frames.value[0].id) : null
     })
 
     document.body.classList.add('overflow-y-hidden')
@@ -86,29 +81,51 @@ export default defineComponent({
     }
 
     const save = async () => {
-      console.log(`useStoryBox.saveFrame()`, story)
+      console.log(`useStoryBox.saveFrame()`, story.value)
       await useStorybox(apolloClient).createNew({
-        frameId: story.frameId,
-        title: story.title,
-        language: story.language,
-        description: story.description,
-        assets: story.assets.map((asset: any) => asset.id),
-        assetTimings: story.assetTimings,
+        frameId: story.value.frameId,
+        title: story.value.title,
+        language: story.value.language,
+        description: story.value.description,
+        assets: story.value.assets.map((asset: any) => asset.id),
+        assetTimings: story.value.assetTimings,
       } as typeof StoryboxBuild)
       close()
     }
 
-    const updateSelectedFrame = (_frame: typeof Entity) => {
-      story.frameId = _frame.id
-    }
-
-    onMounted(async () => {
-      story.assets = await getRelationEntities()
-      story.assets.map((_asset: typeof Entity) => story.assetTimings.push({ key: _asset.id, value: '1' } as typeof KeyValuePair))
-      frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
+    watch(StoryBoxState.value, (storybox) => {
+      story.value.assets = storybox.activeStoryboxAssets
     })
 
-    return { t, closeWindow, save, story, close, frames, updateSelectedFrame }
+    const setCorrectStorybox = async (_frameId: string) => {
+      await useStorybox(apolloClient).getStoryboxes()
+      StoryBoxState.value.activeStoryboxAssets = []
+      frames.value = StoryBoxState.value.storyboxes
+      storyboxCount.value = StoryBoxState.value.count
+      const frame = frames.value[frames.value.map((_frame) => _frame.id === _frameId).indexOf(true)]
+      const createdStorybox = useStorybox(apolloClient).createStoryboxFromEntity(frame)
+      let property: keyof typeof story
+      for (property in story) {
+        if (!(property in createdStorybox)) {
+          createdStorybox[property] = story[property]
+        }
+      }
+      story.value = createdStorybox
+      console.log(`Set storybox = `, story.value)
+      if (createdStorybox.assets.length >= 0) {
+        loading.value = true
+        const res = await useStorybox(apolloClient).getAssets(createdStorybox.assets.map((rel: any) => rel))
+        loading.value = false
+        story.value.assets = res
+      } else story.value.assets = []
+    }
+
+    const updateSelectedFrame = async (_frame: typeof Entity) => {
+      story.value.frameId = _frame.id
+      await setCorrectStorybox(story.value.frameId)
+    }
+
+    return { t, closeWindow, save, story, close, frames, updateSelectedFrame, loading }
   },
 })
 </script>
