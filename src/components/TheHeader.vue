@@ -45,7 +45,7 @@
       <base-button
         v-if="userStore.hasUser && useStoryboxFeature"
         :has-badge="true"
-        :badge-value="'0'"
+        :badge-value="storyboxCount"
         :text="t('buttons.storybox')"
         :on-click="goToVerhalenBox"
         custom-style="ghost-purple"
@@ -67,6 +67,7 @@ import StoreFactory from '../stores/StoreFactory'
 import { BaseButton, Badge } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
 import { useAuthFeature, useStoryboxFeature } from '@/app'
+import { storyboxCount } from '@/pages/TheStoryboxPage.vue'
 
 export default defineComponent({
   name: 'TheHeader',
@@ -102,7 +103,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature }
+    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature, storyboxCount }
   },
 })
 </script>

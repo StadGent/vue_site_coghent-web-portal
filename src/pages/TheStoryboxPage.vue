@@ -29,11 +29,10 @@ import useStoryBox from '@/composables/useStoryBox'
 import { BaseButton, BaseModal, StoryboxBuild, KeyValuePair } from 'coghent-vue-3-component-library'
 import { defineComponent, onMounted, ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { router } from '@/app'
+import { apolloClient, router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity } from 'coghent-vue-3-component-library'
-import { useQuery } from '@vue/apollo-composable'
-import { CreateStoryboxDocument } from 'coghent-vue-3-component-library'
+import {  useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 export enum Language {
   'DUTCH' = 'Nederlands',
   'English' = 'Engels',
@@ -42,13 +41,15 @@ export enum Language {
   'SPANISH' = 'Español',
 }
 
+export const storyboxCount = ref<number>(0)
+
 export default defineComponent({
   components: { BaseButton, BaseModal, StoryBoxCreate },
   setup() {
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
     const closeWindow = ref<string>('show')
-    const story = reactive<typeof StoryboxBuild>({
+    let story = reactive<typeof StoryboxBuild>({
       title: null,
       language: Language.DUTCH,
       description: null,
@@ -56,12 +57,26 @@ export default defineComponent({
       assetTimings: [],
       frameId: null,
     })
-    const { fetchMore: createStory } = useQuery(CreateStoryboxDocument, { storyboxInfo: story })
     const frames = ref<Array<typeof Entity>>([
-      // { id: 'firstID', title: [{ value: 'frametitle' }] },
-      // { id: 'secondID', title: [{ value: 'frametitle' }] },
+      // { id: 'First storybox', title: [{ value: 'frametitle' }] },
+      // { id: 'Second storybox', title: [{ value: 'frametitle' }] },
     ])
-    const description = ref('')
+
+    onMounted(async () => {
+      await useStorybox(apolloClient).getStoryboxes()
+      console.log({ StoryBoxState })
+      frames.value = StoryBoxState.value.storyboxes
+      storyboxCount.value = StoryBoxState.value.count
+      const createdStorybox = useStorybox(apolloClient).createStoryboxFromEntity(frames.value[0])
+      let property: keyof typeof story
+      for (property in story) {
+        if (!(property in createdStorybox)) {
+          createdStorybox[property] = story[property]
+        }
+      }
+      story = createdStorybox
+    })
+
     document.body.classList.add('overflow-y-hidden')
 
     const close = () => {
@@ -72,19 +87,14 @@ export default defineComponent({
 
     const save = async () => {
       console.log(`useStoryBox.saveFrame()`, story)
-      const createdStoryBox = await createStory({
-        variables: {
-          storyboxInfo: {
-            frameId: null,
-            title: story.title,
-            language: story.language,
-            description: story.description,
-            assets: story.assets.map((asset: any) => asset.id),
-            assetTimings: story.assetTimings,
-          } as typeof StoryboxBuild,
-        },
-      })
-      console.log({ createdStoryBox })
+      await useStorybox(apolloClient).createNew({
+        frameId: story.frameId,
+        title: story.title,
+        language: story.language,
+        description: story.description,
+        assets: story.assets.map((asset: any) => asset.id),
+        assetTimings: story.assetTimings,
+      } as typeof StoryboxBuild)
       close()
     }
 
@@ -98,7 +108,7 @@ export default defineComponent({
       frames.value && frames.value.length > 0 ? (story.frameId = frames.value[0].id) : null
     })
 
-    return { t, closeWindow, save, description, story, close, frames, updateSelectedFrame }
+    return { t, closeWindow, save, story, close, frames, updateSelectedFrame }
   },
 })
 </script>

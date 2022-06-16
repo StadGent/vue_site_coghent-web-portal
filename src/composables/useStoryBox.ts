@@ -64,7 +64,7 @@ const useStoryBox = (): {
     const response = await fetchMore({
       variables: { id: '31099546' },
     })?.catch((error) => console.error(`Couldn't get the relation entities`, error))
-    console.log(response)
+    // console.log(response)
     const repsonseAsAny = response as any
     itemsInBasket.value = repsonseAsAny?.data.RelationsAsEntities
     return itemsInBasket.value

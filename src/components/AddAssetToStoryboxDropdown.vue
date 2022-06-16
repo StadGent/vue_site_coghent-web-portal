@@ -17,9 +17,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
+import { apolloClient } from '@/app'
+import { storyboxCount } from '@/pages/TheStoryboxPage.vue'
+import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
+import { Entity } from 'coghent-vue-3-component-library'
 
 export type StoryboxDropdownInput = {
   id: string
@@ -40,8 +44,8 @@ export default defineComponent({
     const { t } = useI18n()
     const storyBoxFormState = ref<string>()
     const userStoryboxes = ref<StoryboxDropdownInput[]>([
-      { id: '1', name: 'First storybox' },
-      { id: '2', name: 'Second storybox' },
+      // { id: '1', name: 'First storybox' },
+      // { id: '2', name: 'Second storybox' },
     ])
 
     const emitButtonClick = () => {
@@ -52,6 +56,13 @@ export default defineComponent({
         }
       }
     }
+
+    onMounted(async () => {
+      await useStorybox(apolloClient).getStoryboxes()
+      console.log({ StoryBoxState })
+      StoryBoxState.value.storyboxes.map((_box: typeof Entity) => userStoryboxes.value.push({ id: _box.id, name: _box.title && _box.title[0] ? _box.title[0].value : _box.id }))
+      storyboxCount.value = StoryBoxState.value.count
+    })
 
     return {
       storyBoxFormState,
