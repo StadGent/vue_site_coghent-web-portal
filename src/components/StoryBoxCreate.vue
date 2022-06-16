@@ -4,7 +4,6 @@
       <div class="lg:w-2/3 w-full lg:mr-6">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${storyboxStory.assetTimings != undefined ? storyboxStory.assetTimings.length : 0})` }}</h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
-        <div v-if="loading" class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         <ul v-show="storyboxStory.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
           <li
             v-for="asset in storyboxStory.assets"
@@ -74,7 +73,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from 'vue'
-import { BaseIcon, CircleLoader } from 'coghent-vue-3-component-library'
+import { BaseIcon } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { useBoxVisiter } from 'coghent-vue-3-component-library'
@@ -84,7 +83,7 @@ import { KeyValuePair } from 'coghent-vue-3-component-library'
 import { StoryboxBuild } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
-  components: { BaseIcon, CircleLoader },
+  components: { BaseIcon },
   props: {
     story: {
       type: Object as PropType<typeof StoryboxBuild>,

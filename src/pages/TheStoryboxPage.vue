@@ -1,9 +1,11 @@
 <template>
   <BaseModal :modal-state="closeWindow" :large="true" class="py-16 z-40" :scroll="true" @hide-modal="close">
-    <div class="h-full p-8 flex flex-col">
+    <div v-if="loading" class="h-full p-8 flex flex-col bg-background-light opacity-70 flex-grow absolute top-0 w-full justify-center items-center overflow-hidden">
+      <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
+    </div>
+    <div class="h-full p-8 flex flex-col " :class="`${loading ? 'overflow-y-hidden' : ''}`">
       <div class="customParent">
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
-        <!-- <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div> -->
         <div class="flex flex-col lg:flex-row">
           <div class="mb-4 lg:w-2/3 w-full lg:mr-6">
             <p v-if="frames && frames.length > 0" class="text-lg my-2 font-bold">{{ t('storybox.selectFrame') }}</p>
@@ -45,14 +47,14 @@ export enum Language {
 export const storyboxCount = ref<number>(0)
 
 export default defineComponent({
-  components: { BaseButton, BaseModal, StoryBoxCreate },
+  components: { BaseButton, BaseModal, StoryBoxCreate, CircleLoader },
   setup() {
     const { t } = useI18n()
     const { getRelationEntities } = useStoryBox()
     const closeWindow = ref<string>('show')
     const loading = ref<boolean>(true)
     let story = ref<typeof StoryboxBuild>({
-      title: null,
+      title: '',
       language: Language.DUTCH,
       description: null,
       assets: [],
