@@ -41,7 +41,8 @@
 import ProfileListItem, { ProfileListItemInfo } from '@/components/ProfileListItem.vue'
 import { defineComponent, ref } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, useStorybox } from 'coghent-vue-3-component-library'
+import { apolloClient } from '@/app'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
@@ -49,23 +50,15 @@ export default defineComponent({
   components: { ProfileSideMenu, ProfileListItem, BaseButton },
   setup() {
     const { t } = useI18n()
-    const storyBoxItems = ref<ProfileListItemInfo[]>([
-      {
-        id: '1',
-        title: 'Titel van het verhaal',
-        description: 'Ex quis veniam cupidatat sunt id sunt minim do exercitation officia. Cillum officia consequat sint ...',
-        dateCreated: '12 mei 2021',
-        onClickUrl: '/story/1',
-        code: 245700,
-      },
-      {
-        id: '2',
-        title: 'Lorem ipsum',
-        description: 'Ex quis veniam cupidatat sunt id sunt minim do exercitation officia.',
-        dateCreated: '1 januari 2012',
-        onClickUrl: '/story/2',
-      },
-    ])
+    const storyBoxItems = ref<ProfileListItemInfo[]>([])
+
+    const getStoryBoxes = async () => {
+      const storyboxItems = await useStorybox(apolloClient).getStoryboxes()
+      console.log({ storyboxItems })
+    }
+
+    getStoryBoxes()
+
     return {
       storyBoxItems,
       t,
