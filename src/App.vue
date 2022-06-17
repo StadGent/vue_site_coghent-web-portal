@@ -4,7 +4,7 @@
     <div class="container min-h-screen">
       <the-header />
       <router-view />
-      <details-modal :scroll="false" />
+      <details-modal />
       <creative-modal />
       <disclaimer-button v-if="!route.query.touch" />
       <disclaimer-pop-up v-if="!route.query.touch" />
