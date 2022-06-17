@@ -12,6 +12,7 @@ import TheStoriesPage from './pages/TheStoriesPage.vue'
 import NewStoryPage from './pages/NewStoryPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
 import TheWorksPage from './pages/TheWorksPage.vue'
+import TheVisitPage from './pages/TheVisitPage.vue'
 import { ref } from 'vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
@@ -31,7 +32,7 @@ const routes = [
   { path: '/entity/not-found', component: EntityNotFound },
   { path: '/creator/:creatorID', component: CreatorDetails },
   { path: '/relation/:relationID', component: RelationDetail },
-  { path: '/visit/:visitCode', redirect: '/', component: TheGrid },
+  { path: '/visit/:visitCode', component: TheVisitPage, meta: { requiresAuth: false } },
   { path: '/pavilion', component: ThePavilion },
   { path: '/profile', component: TheProfilePage, meta: { requiresAuth: false } },
   { path: '/storybox', component: TheStoryboxPage, meta: { requiresAuth: false } },
