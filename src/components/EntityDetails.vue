@@ -14,7 +14,7 @@
       />
     </section>
     <CardComponent :large="true" class="mx-2 md:mx-4 sm:mx-0">
-      <div class="flex bg-background-medium px-0 md:px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center flex-col`]: loading, [`flex-col`]: !loading }">
+      <div class="flex bg-background-medium px-0 md:px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center flex-col overflow-hidden`]: loading, [`flex-col`]: !loading }">
         <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -111,7 +111,7 @@ export default defineComponent({
     const id = ref<string>(asString(useRoute().params['entityID']))
     const router = useRouter()
     const route = useRoute()
-    const { result, onResult, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
+    const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
@@ -137,18 +137,12 @@ export default defineComponent({
       { immediate: true }
     )
 
-    onMounted(() => {
-      if (route.params.entityID) {
-        refetch({ id: asString(route.params.entityID) })
-      }
-    })
-
-    onResult((queryResult: any) => {
-      if (queryResult.data.Entity) {
+    const setEntityInformation = (queryResult: any) => {
+      if (queryResult.Entity) {
         const photosArray: typeof ImageSource[] = []
 
-        mediaFiles.value = queryResult.data.Entity?.mediafiles
-        queryResult.data.Entity?.mediafiles.forEach((value: any) => {
+        mediaFiles.value = queryResult.Entity?.mediafiles
+        queryResult.Entity?.mediafiles.forEach((value: any) => {
           if (value) {
             console.log(value)
             const filename: string | undefined = getFileNameByMimeType(value)
@@ -176,7 +170,7 @@ export default defineComponent({
         //     typeArray.push(value.value)
         //   }
         // })
-        queryResult.data.Entity?.relations.forEach((value: any) => {
+        queryResult.Entity?.relations.forEach((value: any) => {
           if (!metaDataInLabel.includes(value.label)) {
             value.value && typeArray.push({ label: value.value, id: value.key, relation: value.label })
           }
@@ -192,7 +186,14 @@ export default defineComponent({
       } else {
         router.push({ path: '/entity/not-found', query: route.query })
       }
-    })
+    }
+
+    watch(
+      () => result.value,
+      (queryResult: any) => {
+        setEntityInformation(queryResult)
+      }
+    )
 
     const filterDuplicateTypes = (_relations: Array<TypeObject>) => {
       let myRelations: Array<TypeObject> = []
