@@ -99,7 +99,7 @@ export default defineComponent({
     }
 
     const goToVerhalenBox = () => {
-      router.push({ path: '/storybox', query: route.query })
+      router.push({ path: '/mystories', query: route.query })
     }
 
     const { t } = useI18n()

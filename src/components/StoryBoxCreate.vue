@@ -2,11 +2,13 @@
   <div class="h-fit flex flex-col customParent">
     <div class="flex flex-grow flex-col lg:flex-row">
       <div class="lg:w-2/3 w-full lg:mr-6">
-        <h1 class="text-lg my-2 font-bold">{{ t('storybox.assets.title') + `(${storyboxStory.assetTimings != undefined ? storyboxStory.assetTimings.length : 0})` }}</h1>
+        <h1 class="text-lg my-2 font-bold">
+          {{ t('storybox.assets.title') + `(${StoryBoxState.activeStorybox.assetTimings != undefined ? StoryBoxState.activeStorybox.assetTimings.length : 0})` }}
+        </h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
-        <ul v-show="storyboxStory.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
+        <ul v-show="StoryBoxState.activeStorybox.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
           <li
-            v-for="asset in storyboxStory.assets"
+            v-for="asset in StoryBoxState.activeStorybox.assets"
             :id="asset.id"
             :key="asset"
             class="rounded-md activeElement w-full my-2 align-middle min-h-16 bg-background-light"
@@ -21,7 +23,7 @@
                   <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
                 </p>
                 <div :id="asset.id" class="w-28 flex justify-center items-center">
-                  <img :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
+                  <img :id="asset.id" class="w-16 h-16 object-scale-down" v-if="asset.mediafiles" :src="asset.mediafiles[0].thumbnail_file_location" />
                 </div>
                 <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
                   <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
@@ -65,7 +67,12 @@
       </div>
       <div class="lg:w-1/3 w-full my-4 lg:my-0">
         <h1 class="text-lg my-2 font-bold">{{ t('storybox.story.title') }}</h1>
-        <textarea :placeholder="t('storybox.story.storyPlaceholder')" class="w-full lg:h-5/6 h-48 bg-background-light p-4" :value="storyboxStory.description" @change="updateDescription"></textarea>
+        <textarea
+          :placeholder="t('storybox.story.storyPlaceholder')"
+          class="w-full lg:h-5/6 h-48 bg-background-light p-4"
+          :value="StoryBoxState.activeStorybox.description"
+          @change="updateDescription"
+        ></textarea>
       </div>
     </div>
   </div>
@@ -80,46 +87,29 @@ import { useBoxVisiter } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import useStoryBox from '@/composables/useStoryBox'
 import { KeyValuePair } from 'coghent-vue-3-component-library'
-import { StoryboxBuild } from 'coghent-vue-3-component-library'
+import { StoryBoxState } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   components: { BaseIcon },
   props: {
-    story: {
-      type: Object as PropType<typeof StoryboxBuild>,
-      required: true,
-    },
     loading: {
       type: Boolean,
       required: true,
     },
   },
-  emits: ['story'],
-  setup(props, { emit }) {
+  setup(props) {
     const { t } = useI18n()
-    const { getRelationEntities } = useStoryBox()
     const startDragItem = ref<string>('')
     const canDrag = ref<boolean>(false)
     const showTimeEdit = ref<boolean>(false)
     const activeEditItem = ref<string | null>(null)
-    const storyboxStory = ref<typeof StoryboxBuild>(props.story)
+    const assets = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assets)
+    const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
 
-    watch(
-      () => props.story,
-      (storyValue) => {
-        storyboxStory.value = storyValue
-      }
-    )
-
-    const deleteAsset = async (_asset: typeof Entity) => {
-      await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _asset.id)
-      storyboxStory.value.assets = await getRelationEntities()
-      emit(`story`, storyboxStory.value)
-    }
+    const deleteAsset = async (_asset: typeof Entity) => {}
 
     const updateDescription = (event: any) => {
-      storyboxStory.value.description = event.target.value
-      emit(`story`, storyboxStory.value)
+      StoryBoxState.value.activeStorybox.description = event.target.value
     }
 
     const dragStart = (event: any) => {
@@ -138,7 +128,7 @@ export default defineComponent({
 
     const dragEnter = (event: any) => {
       event.preventDefault()
-      swap(props.story.assets, startDragItem.value, event.srcElement.id)
+      swap(StoryBoxState.value.activeStorybox.assets, startDragItem.value, event.srcElement.id)
     }
     const click = (event: any) => {
       console.log(event)
@@ -153,8 +143,7 @@ export default defineComponent({
         Object.assign(updatedAssets, _assets)
         updatedAssets[assetIndexOne] = assetTwo
         updatedAssets[assetIndexTwo] = assetOne
-        storyboxStory.value.assets = updatedAssets
-        emit(`story`, storyboxStory.value)
+        StoryBoxState.value.activeStorybox.assets = updatedAssets
       }
     }
 
@@ -168,19 +157,18 @@ export default defineComponent({
 
     const setAssetTiming = (_asset: typeof Entity) => {
       let returnValue = null
-      storyboxStory.value.assetTimings.map((_pair: typeof KeyValuePair) => {
+      StoryBoxState.value.activeStorybox.assetTimings.map((_pair: typeof KeyValuePair) => {
         if (_pair.key === _asset.id) returnValue = _pair.value
       })
       return returnValue
     }
 
     const updateAssetTiming = (_asset: typeof Entity, _timing: number) => {
-      for (const _pair of storyboxStory.value.assetTimings) {
+      for (const _pair of StoryBoxState.value.activeStorybox.assetTimings) {
         if (_pair.key === _asset.id) {
           _pair.value = Number(_timing).toFixed()
         }
       }
-      emit(`story`, storyboxStory.value)
     }
 
     return {
@@ -196,9 +184,9 @@ export default defineComponent({
       showTimeEdit,
       showTimingEdit,
       activeEditItem,
-      storyboxStory,
       setAssetTiming,
       updateAssetTiming,
+      StoryBoxState,
     }
   },
 })
