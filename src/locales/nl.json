@@ -101,7 +101,9 @@
         "submit": "Verhaal toevoegen"
       }
     }
-    
+  },
+  "visit": {
+    "linkCodeToAccount": "Verhalenbox aan account toevoegen"
   },
   "copyright": {
     "title": "Alles wat je wilt weten over de rechtenstatussen",
