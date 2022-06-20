@@ -104,7 +104,19 @@ export default defineComponent({
     const assets = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assets)
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
 
-    const deleteAsset = async (_asset: typeof Entity) => {}
+    const deleteAsset = async (_asset: typeof Entity) => {
+      const index = assets.value.indexOf(_asset)
+      assets.value = deleteFromArray(assets.value, index)
+      StoryBoxState.value.activeStorybox.assets = assets.value
+    }
+
+    const deleteFromArray = (_array: Array<any>, _index: number) => {
+      let arrayToUpdate = _array
+      if (_index != -1) {
+        arrayToUpdate.splice(_index, 1)
+      }
+      return arrayToUpdate
+    }
 
     const updateDescription = (event: any) => {
       StoryBoxState.value.activeStorybox.description = event.target.value

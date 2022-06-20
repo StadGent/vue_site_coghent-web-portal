@@ -66,7 +66,6 @@ export default defineComponent({
         loading.value = true
         await useStorybox(apolloClient).createStoryboxFromEntity(storyboxId)
         loading.value = false
-        console.log(`activeStorybox`, StoryBoxState.value.activeStorybox)
       } else router.push('/mystories')
     })
 

@@ -65,9 +65,11 @@ export default async function (authenticated: boolean) {
       new Promise(async (resolve, reject) => {
         await fetch('/api/logout')
         useSessionAuth.resetAuthProperties()
+        userStore.setUser(null)
         resolve
       })
-      useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
+      router.push(`/`)
+      // useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
     }
   })
 
