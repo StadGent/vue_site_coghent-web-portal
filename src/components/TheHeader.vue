@@ -2,7 +2,7 @@
   <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
-        <a :href="route.fullPath" class="flex items-center sm:ml-0 ml-3 group">
+        <a :href="isTouchActive ? '/home?touch=true' : '/home'" class="flex items-center sm:ml-0 ml-3 group">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" fill="#FDC20B" />
             <g filter="url(#filter0_i)">
@@ -77,11 +77,14 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const checkHome = () => route.path === '/' || route.name === 'singleObject'
+    const checkTouch = () => route.fullPath.includes('touch=true')
 
+    const isTouchActive = ref<Boolean>(checkTouch())
     const isHomeActive = ref<Boolean>(checkHome())
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
     const userStore = StoreFactory.get(UserStore)
     const user: typeof User = userStore.user
+    console.log(isTouchActive.value)
 
     watch(
       () => route.path,
@@ -108,7 +111,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, isHomeActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature, storyboxCount }
+    return { t, isHomeActive, isTouchActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature, storyboxCount }
   },
 })
 </script>
