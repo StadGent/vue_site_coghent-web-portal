@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col items-center justify-center w-full">
     <BaseIcon class="black p-12 opacity-50" icon="link" :width="250" :height="250" /><BoxVisitCode :code="code" />
-    <div class="flex items-center mt-12">
-      <CircleLoader />
+    <div class="flex items-center mt-12 flex-col-reverse md:flex-row">
+      <CircleLoader class="mt-4 md:mt-0" />
       <p>{{ t('visit.linkCodeToAccount') }}</p>
     </div>
   </div>
