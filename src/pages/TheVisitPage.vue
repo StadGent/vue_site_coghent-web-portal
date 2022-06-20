@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { BoxVisitCode, BaseIcon, CircleLoader } from 'coghent-vue-3-component-library'
+import { BoxVisitCode, BaseIcon, CircleLoader, useStoryBox } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
@@ -22,6 +22,10 @@ export default defineComponent({
     const { t } = useI18n()
     const route = useRoute()
     const code = ref<string | string[]>(route.params.visitCode)
+
+    if (code.value.length == 8) {
+      // TODO: Link code to account
+    }
 
     return { t, code }
   },
