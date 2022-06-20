@@ -59,15 +59,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, ref } from 'vue'
+import { defineComponent, watch, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
-import { BaseButton, Badge } from 'coghent-vue-3-component-library'
+import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
-import { useAuthFeature, useStoryboxFeature } from '@/app'
+import { apolloClient, useAuthFeature, useStoryboxFeature } from '@/app'
 import { storyboxCount } from '@/pages/TheStoryboxPage.vue'
+import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'TheHeader',
@@ -89,6 +90,10 @@ export default defineComponent({
         isPavilionActive.value = route.path === '/pavilion'
       }
     )
+    onMounted(async () => {
+      await useStorybox(apolloClient).getStoryboxes()
+      storyboxCount.value = StoryBoxState.value.count
+    })
 
     const goToLoginPage = async () => {
       router.push({ path: '/login', query: route.query })

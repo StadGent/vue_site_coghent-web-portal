@@ -4,7 +4,7 @@
     <template #popper>
       <div class="p-4">
         <div v-show="userStoryboxes.length" v-for="(storybox, index) in userStoryboxes" :key="index">
-          <input type="radio" :id="index" :value="storybox.name" v-model="storyBoxFormState" />
+          <input type="radio" :id="storybox.id" :value="storybox.name" v-model="storyBoxFormState" />
           <label :for="index" class="p-2">{{ storybox.name }}</label>
         </div>
         <div v-if="!userStoryboxes.length">
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { apolloClient } from '@/app'
@@ -38,6 +38,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    entity: {
+      type: Object as PropType<typeof Entity>,
+      required: true,
+    },
   },
   emits: ['addToStorybox'],
   setup(props, { emit }) {
@@ -57,8 +61,22 @@ export default defineComponent({
       }
     }
 
+    const assetIsInStorybox = (_storyboxId: string) => {}
+    watch(
+      () => props.entity,
+      () => {
+        for (const storybox of StoryBoxState.value.storyboxes) {
+          const found = useStorybox(apolloClient).assetIsInStorybox(props.entity.id, storybox.id)
+          if (found != undefined) {
+            document.getElementById(storybox.id)?.setAttribute(`disabled`, `true`)
+          } else {
+            document.getElementById(storybox.id)?.setAttribute(`disabled`, `false`)
+          }
+        }
+      }
+    )
+
     onMounted(async () => {
-      await useStorybox(apolloClient).getStoryboxes()
       console.log({ StoryBoxState })
       StoryBoxState.value.storyboxes.map((_box: typeof Entity) => userStoryboxes.value.push({ id: _box.id, name: _box.title && _box.title[0] ? _box.title[0].value : _box.id }))
       storyboxCount.value = StoryBoxState.value.count
@@ -69,6 +87,7 @@ export default defineComponent({
       userStoryboxes,
       emitButtonClick,
       t,
+      assetIsInStorybox,
     }
   },
 })

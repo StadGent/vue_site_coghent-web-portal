@@ -145,8 +145,8 @@
         <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
       </div>
       <div v-if="useStoryboxFeature === true && userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <div v-if="useStoryboxFeature === true && userStore.hasUser" class="mx-3 align-center">
-        <AddAssetToStoryboxDropdown @addToStorybox="addRemoveAssetToStoryBox">
+      <div v-if="useStoryboxFeature === true && userStore.hasUser && entity" class="mx-3 align-center">
+        <AddAssetToStoryboxDropdown :entity="entity" @addToStorybox="(id) => addAssetToStorybox(id)">
           <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="storyBoxIcon" class="px-2 hidden lg:flex" />
           <base-button custom-style="secondary-round" :icon-shown="true" :custom-icon="storyBoxIcon" class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden" />
         </AddAssetToStoryboxDropdown>
@@ -165,13 +165,14 @@ import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
-import useStoryBox, { itemsInBasket } from '@/composables/useStoryBox'
+import { itemsInBasket } from '@/composables/useStoryBox'
 import { apolloClient, iiif, useStoryboxFeature } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
-import { useBoxVisiter } from 'coghent-vue-3-component-library'
 import AddAssetToStoryboxDropdown from './AddAssetToStoryboxDropdown.vue'
+import { StoryBoxState } from 'coghent-vue-3-component-library'
+import { useStorybox } from 'coghent-vue-3-component-library'
 
 export type DetailsModalType = {
   state: ModalState
@@ -274,7 +275,6 @@ export default defineComponent({
     AddAssetToStoryboxDropdown,
   },
   setup(props) {
-    const { addAssetToVisiter, getRelationEntities } = useStoryBox()
     const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
@@ -293,27 +293,12 @@ export default defineComponent({
       openMediaModal()
     }
 
-    const addRemoveAssetToStoryBox = async (storyBoxId: string) => {
-      console.log(storyBoxId)
-      // TODO: add entity to storyboxid
-      const _id = entity.value.id
-      console.log(`====================`)
-      console.log(`List:`, itemsInBasket.value)
-      console.log(
-        `existis?`,
-        itemsInBasket.value.some((item) => item.id === _id)
-      )
-      if (itemsInBasket.value.some((item) => item.id === _id)) {
-        console.log(`EXISTS`, _id)
-        storyBoxIcon.value = 'storybox'
-        await useBoxVisiter(apolloClient).deleteRelationFromBoxVisiter('31099546', _id)
-      } else {
-        console.log(`ADDING IT TO THE LIST`, _id)
-        storyBoxIcon.value = 'check'
-        addAssetToVisiter(_id)
+    const addAssetToStorybox = async (_storyBoxId: string) => {
+      for (const _box of StoryBoxState.value.storyboxes) {
+        if (_box.id === _storyBoxId) {
+          await useStorybox(apolloClient).assetToStorybox(_storyBoxId, entity.value.id)
+        }
       }
-      await getRelationEntities()
-      console.log(`====================`)
     }
 
     const copyUrl = async (id: String) => {
@@ -452,7 +437,7 @@ export default defineComponent({
       collectieNaam,
       objectNames,
       route,
-      addRemoveAssetToStoryBox,
+      addAssetToStorybox,
       userStore,
       itemsInBasket,
       storyBoxIcon,

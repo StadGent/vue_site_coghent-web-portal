@@ -69,6 +69,7 @@ export default async function (authenticated: boolean) {
         resolve
       })
       router.push(`/`)
+      error.forward(error.operation)
       // useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
     }
   })
