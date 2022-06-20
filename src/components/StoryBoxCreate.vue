@@ -79,13 +79,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { BaseIcon } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
-import { useBoxVisiter } from 'coghent-vue-3-component-library'
-import { apolloClient, router } from '@/app'
-import useStoryBox from '@/composables/useStoryBox'
+import { router } from '@/app'
 import { KeyValuePair } from 'coghent-vue-3-component-library'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 
@@ -124,6 +122,7 @@ export default defineComponent({
       document.getElementById(event.srcElement.id)?.parentElement?.classList.remove(`test`)
       document.getElementById(event.srcElement.id)?.firstElementChild?.classList.replace('bg-background-dark', 'bg-background-light')
       document.getElementById(event.srcElement.id)?.parentElement?.classList.remove(`test`)
+      StoryBoxState.value.activeStorybox.assets = assets.value
     }
 
     const dragEnter = (event: any) => {
@@ -133,7 +132,7 @@ export default defineComponent({
     const click = (event: any) => {
       console.log(event)
     }
-    const swap = (_assets: Array<typeof Entity>, itemOne: string, itemTwo: string) => {
+    const swap = async (_assets: Array<typeof Entity>, itemOne: string, itemTwo: string) => {
       const assetIndexOne = _assets.indexOf(_assets[_assets.map((asset) => asset.id === itemOne).indexOf(true)])
       const assetOne = _assets[_assets.map((asset) => asset.id === itemOne).indexOf(true)]
       const assetIndexTwo = _assets.indexOf(_assets[_assets.map((asset) => asset.id === itemTwo).indexOf(true)])
@@ -143,7 +142,7 @@ export default defineComponent({
         Object.assign(updatedAssets, _assets)
         updatedAssets[assetIndexOne] = assetTwo
         updatedAssets[assetIndexTwo] = assetOne
-        StoryBoxState.value.activeStorybox.assets = updatedAssets
+        assets.value = updatedAssets
       }
     }
 
@@ -187,6 +186,8 @@ export default defineComponent({
       setAssetTiming,
       updateAssetTiming,
       StoryBoxState,
+      assets,
+      assetTimings,
     }
   },
 })
