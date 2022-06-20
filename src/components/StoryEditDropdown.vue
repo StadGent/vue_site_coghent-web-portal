@@ -2,9 +2,9 @@
   <VDropdown>
     <slot></slot>
     <template #popper>
-      <div><BaseButton customStyle="storybox-black" :text="t('storybox.edit')" customIcon="edit" :iconShown="true" @click="editStory" /></div>
-      <div v-if="storyBoxInfo.code"><BaseButton customStyle="storybox-black" :text="t('storybox.copyCode')" customIcon="copy" :iconShown="true" @click="copyStoryCode" /></div>
-      <div><BaseButton customStyle="storybox-red" :text="t('storybox.delete')" customIcon="wasteBasket" :iconShown="true" @click="deleteStory" /></div>
+      <div><BaseButton custom-style="storybox-black" :text="t('storybox.edit')" custom-icon="edit" :icon-shown="true" @click="editStory" /></div>
+      <div v-if="storyBoxInfo.code"><BaseButton custom-style="storybox-black" :text="t('storybox.copyCode')" custom-icon="copy" :icon-shown="true" @click="copyStoryCode" /></div>
+      <div><BaseButton custom-style="storybox-red" :text="t('storybox.delete')" custom-icon="wasteBasket" :icon-shown="true" @click="deleteStory" /></div>
     </template>
   </VDropdown>
 </template>

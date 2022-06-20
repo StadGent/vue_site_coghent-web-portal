@@ -2,7 +2,7 @@
   <section class="flex md:mt-16 gap-8">
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
-      <profile-list-item v-for="(work, index) in myWorks" :key="index" :profileListItemInfo="work" />
+      <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
     </section>
   </section>
 </template>

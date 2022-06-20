@@ -8,8 +8,8 @@
         <div class="flex justify-between pb-2">
           <h2 class="font-bold">{{ profileListItemInfo.title }}</h2>
           <div>
-            <story-edit-dropdown :storyBoxInfo="profileListItemInfo" @click.stop.prevent=""
-              ><BaseButton customIcon="threedots" :noMargin="true" customStyle="ghost-black" :iconShown="true"
+            <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent=""
+              ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
             /></story-edit-dropdown>
           </div>
         </div>

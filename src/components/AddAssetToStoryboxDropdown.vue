@@ -3,14 +3,14 @@
     <slot></slot>
     <template #popper>
       <div class="p-4">
-        <div v-show="userStoryboxes.length" v-for="(storybox, index) in userStoryboxes" :key="index">
-          <input type="radio" :id="storybox.id" :value="storybox.name" v-model="storyBoxFormState" />
+        <div v-for="(storybox, index) in userStoryboxes" v-show="userStoryboxes.length" :key="index">
+          <input :id="storybox.id" v-model="storyBoxFormState" type="radio" :value="storybox.name" />
           <label :for="index" class="p-2">{{ storybox.name }}</label>
         </div>
         <div v-if="!userStoryboxes.length">
           <p class="text-center">{{ t('details.modal.createStorybox') }}</p>
         </div>
-        <BaseButton :customStyle="storyBoxFormState ? 'primary' : 'primaryUnavailable'" :text="t('details.modal.addShort')" class="mt-4" @click="emitButtonClick" :iconShown="false" />
+        <BaseButton :custom-style="storyBoxFormState ? 'primary' : 'primaryUnavailable'" :text="t('details.modal.addShort')" class="mt-4" :icon-shown="false" @click="emitButtonClick" />
       </div>
     </template>
   </VDropdown>

@@ -12,8 +12,8 @@
             <input
               class="bg-background-light h-10 w-full p-2"
               type="text"
-              @change="(event) => (StoryBoxState.activeStorybox != null ? (StoryBoxState.activeStorybox.title = event.target.value) : '')"
               :value="StoryBoxState.activeStorybox != null ? StoryBoxState.activeStorybox.title : ''"
+              @change="(event) => (StoryBoxState.activeStorybox != null ? (StoryBoxState.activeStorybox.title = event.target.value) : '')"
             />
           </div>
         </div>
@@ -27,8 +27,8 @@
   </BaseModal>
 </template>
 <script lang="ts">
-import { BaseButton, BaseModal, CircleLoader } from 'coghent-vue-3-component-library'
-import { defineComponent, onMounted, ref } from 'vue'
+import { BaseButton, BaseModal, StoryboxBuild, CircleLoader } from 'coghent-vue-3-component-library'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apolloClient, router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
@@ -66,6 +66,7 @@ export default defineComponent({
         loading.value = true
         await useStorybox(apolloClient).createStoryboxFromEntity(storyboxId)
         loading.value = false
+        console.log(`activeStorybox`, StoryBoxState.value.activeStorybox)
       } else router.push('/mystories')
     })
 
@@ -74,7 +75,7 @@ export default defineComponent({
     const close = () => {
       closeWindow.value = 'hide'
       document.body.classList.remove('overflow-y-hidden')
-      router.push('/mystories')
+      router.push('/')
     }
 
     const save = async () => {

@@ -23,7 +23,7 @@
                   <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
                 </p>
                 <div :id="asset.id" class="w-28 flex justify-center items-center">
-                  <img :id="asset.id" class="w-16 h-16 object-scale-down" v-if="asset.mediafiles" :src="asset.mediafiles[0].thumbnail_file_location" />
+                  <img v-if="asset.mediafiles" :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
                 </div>
                 <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
                   <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
@@ -41,17 +41,17 @@
                   <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
                 </div>
               </div>
-              <div :id="'expand' + asset.id" v-if="showTimeEdit === true && activeEditItem === asset.id" class="flex flex-row px-4 gap-4 p-2 pt-6">
+              <div v-if="showTimeEdit === true && activeEditItem === asset.id" :id="'expand' + asset.id" class="flex flex-row px-4 gap-4 p-2 pt-6">
                 <label class="flex flex-row text-bold items-center" for="duration">
                   Deze afbeelding wordt getoond voor
                   <input
                     :value="setAssetTiming(asset)"
-                    @change="(event) => updateAssetTiming(asset, event.target.value)"
                     name="duration"
                     type="number"
                     min="1"
                     max="20"
                     class="p-1.5 rounded-md ml-2 w-16 mr-2"
+                    @change="(event) => updateAssetTiming(asset, event.target.value)"
                   />
                   seconden.
                 </label>
@@ -61,7 +61,7 @@
         </ul>
         <div class="h-fit object-bottom w-full grid grid-rows-2 grid-cols-1 text-center gap-7 p-4 border border-dashed border-background-dark border-4 mt-8">
           <p>{{ t('storybox.assets.addMore') }}</p>
-          <strong @click="() => router.push('/')" class="cursor-pointer">{{ t('storybox.assets.search') }}</strong>
+          <strong class="cursor-pointer" @click="() => router.push('/')">{{ t('storybox.assets.search') }}</strong>
           <strong v-if="false" class="cursor-pointer">{{ t('storybox.assets.collection') }}</strong>
         </div>
       </div>
