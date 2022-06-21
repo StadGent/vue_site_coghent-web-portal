@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col md:flex-row md:mt-16">
     <profile-side-menu />
-    <div class="flex-1 xl:ml-48 sm:ml-24 p-8">
+    <div v-if="user != null" class="flex-1 xl:ml-48 sm:ml-24 p-8">
       <p class="mt-5 font-bold">
         {{ t('profile.picture') }}
       </p>
@@ -85,8 +85,10 @@ export default defineComponent({
     const buttonClick = () => {}
 
     const getEditPage = () => {
-      const editRoute = userEditUrl + userStore.user.value.id
-      return editRoute
+      if (userStore.hasUser) {
+        const editRoute = userEditUrl + userStore.user.value.id
+        return editRoute
+      } else return
     }
 
     const logout = async () => {

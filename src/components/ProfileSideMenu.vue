@@ -2,7 +2,7 @@
   <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 page-height">
     <div class="flex flex-col justify-between pb-4">
       <div class="flex justify-between items-center">
-        <h2 class="mt-5 font-bold text-4xl">Hey {{ user.preferred_username }}!</h2>
+        <h2 v-if="user != null" class="mt-5 font-bold text-4xl">Hey {{ user.preferred_username }}!</h2>
         <base-button
           class="md:hidden block w-8 h-8 bg-neutral-0 rounded-full flex justify-center"
           :on-click="logout"
