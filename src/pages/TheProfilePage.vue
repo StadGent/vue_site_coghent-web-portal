@@ -10,7 +10,7 @@
         <!-- <base-button class="self-end" text="Verwijderen" :on-click="buttonClick" custom-style="ghost-black" :iconShown="true" customIcon="delete" /> -->
       </div>
 
-      <div class="flex mt-4">
+      <div v-show="false" class="flex mt-4">
         <a :href="getEditPage()" target="_blank">
           <base-button :text="t('profile.edit')" :on-click="buttonClick" custom-style="primary" :icon-shown="false" class="px-2 mb-2" />
         </a>

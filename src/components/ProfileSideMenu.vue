@@ -59,7 +59,6 @@ export default defineComponent({
     const changeActivePage = (pageIndex: number) => {
       pages.value.forEach((page: MenuPage) => (page.active = false))
       pages.value[pageIndex].active = true
-      console.log(pages)
     }
 
     watch(
