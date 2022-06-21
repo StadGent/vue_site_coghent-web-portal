@@ -63,22 +63,26 @@ export default defineComponent({
       if (storyName.value && storyName.value.length < 5) {
         nameInputError.value = 'Naam moet minimum 5 karakters bevatten'
       }
+
+      return !codeInputError.value && !nameInputError.value ? true : false
     }
 
     const save = async () => {
-      checkValues()
-      StoryBoxState.value.activeStorybox = {
-        frameId: null,
-        title: storyName.value,
-        description: storyDescription.value,
-      } as typeof StoryboxBuild
-      if (hasBoxCode.value === true) {
-        const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
-        StoryBoxState.value.activeStorybox.frameId = newFrame.id
+      const valid = checkValues()
+      if (valid) {
+        StoryBoxState.value.activeStorybox = {
+          frameId: null,
+          title: storyName.value,
+          description: storyDescription.value,
+        } as typeof StoryboxBuild
+        if (hasBoxCode.value === true) {
+          const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
+          StoryBoxState.value.activeStorybox.frameId = newFrame.id
+        }
+        router.push(`/mystories`)
+        await useStorybox(apolloClient).createNew()
+        storyboxDataIsUpdated.value = true
       }
-      router.push(`/mystories`)
-      await useStorybox(apolloClient).createNew()
-      storyboxDataIsUpdated.value = true
     }
 
     watch(
