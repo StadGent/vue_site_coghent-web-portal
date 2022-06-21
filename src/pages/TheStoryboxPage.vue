@@ -27,13 +27,12 @@
   </BaseModal>
 </template>
 <script lang="ts">
-import { BaseButton, BaseModal, StoryboxBuild, CircleLoader } from 'coghent-vue-3-component-library'
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { BaseButton, BaseModal, CircleLoader } from 'coghent-vue-3-component-library'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apolloClient, router } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
-import { Entity } from 'coghent-vue-3-component-library'
-import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
+import { Entity, useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 
 export enum Language {
   'DUTCH' = 'Nederlands',
@@ -64,7 +63,6 @@ export default defineComponent({
         loading.value = true
         await useStorybox(apolloClient).createStoryboxFromEntity(storyboxId)
         loading.value = false
-        console.log(`activeStorybox`, StoryBoxState.value.activeStorybox)
       } else router.push('/mystories')
     })
 

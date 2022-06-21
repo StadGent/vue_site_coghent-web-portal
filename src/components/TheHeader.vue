@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, ref, onMounted } from 'vue'
+import { defineComponent, watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { UserStore } from '../stores/UserStore'
@@ -100,7 +100,10 @@ export default defineComponent({
         loggedIn.value = true
         await useStorybox(apolloClient).getStoryboxes()
         storyboxCount.value = StoryBoxState.value.count
-      } else loggedIn.value = false
+      } else {
+        loggedIn.value = false
+        router.push(`/`)
+      }
     })
 
     const goToLoginPage = async () => {

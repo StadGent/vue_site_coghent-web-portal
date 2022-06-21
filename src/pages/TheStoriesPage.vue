@@ -42,13 +42,15 @@
 
 <script lang="ts">
 import ProfileListItem, { ProfileListItemInfo } from '@/components/ProfileListItem.vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import { BaseButton, useStorybox } from 'coghent-vue-3-component-library'
 import { apolloClient } from '@/app'
 import { useI18n } from 'vue-i18n'
 import { StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity, getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
+import { storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
+import { storyboxCount } from './TheStoryboxPage.vue'
 
 export default defineComponent({
   name: 'TheStoriesPage',
@@ -58,9 +60,20 @@ export default defineComponent({
     const storyBoxItems = ref<ProfileListItemInfo[]>([])
     const loading = ref<Boolean>(false)
 
-    const getStoryBoxes = async () => {
+    watch(storyboxDataIsUpdated, async (status: boolean) => {
+      if (status === true) {
+        await getStoryBoxes(true)
+        storyboxDataIsUpdated.value = false
+      }
+    })
+
+    const getStoryBoxes = async (_skipGetNew = false) => {
+      storyBoxItems.value = []
       loading.value = true
-      await useStorybox(apolloClient).getStoryboxes()
+      if (!_skipGetNew) {
+        await useStorybox(apolloClient).getStoryboxes()
+      }
+      storyboxCount.value = StoryBoxState.value.count
       loading.value = false
       StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
         const title = getMetadataOfTypeFromEntity(_box, `title`)
@@ -72,7 +85,6 @@ export default defineComponent({
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
       })
-      console.log(`storyBoxItems`, storyBoxItems)
     }
 
     getStoryBoxes()

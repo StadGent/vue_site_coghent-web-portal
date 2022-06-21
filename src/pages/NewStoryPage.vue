@@ -14,7 +14,7 @@
       <label class="font-bold mb-2" for="storyDescription">{{ t('profile.storybox.create.description') }}</label
       ><textarea id="storyDescripton" v-model="storyDescription" class="h-24" type="text" />
     </div>
-    <div class="w-full flex justify-end mt-4"><BaseButton :on-click="checkValues" class="max-w-max" :text="t('profile.storybox.create.submit')" /></div>
+    <div class="w-full flex justify-end mt-4"><BaseButton :on-click="save" class="max-w-max" :text="t('profile.storybox.create.submit')" /></div>
   </section>
 </template>
 
@@ -23,6 +23,9 @@ import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
+import { useStorybox } from 'coghent-vue-3-component-library'
+import { apolloClient, router } from '@/app'
+import { StoryboxBuild, StoryBoxState, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'NewStoryPage',
@@ -62,6 +65,22 @@ export default defineComponent({
       }
     }
 
+    const save = async () => {
+      checkValues()
+      StoryBoxState.value.activeStorybox = {
+        frameId: null,
+        title: storyName.value,
+        description: storyDescription.value,
+      } as typeof StoryboxBuild
+      if (hasBoxCode.value === true) {
+        const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
+        StoryBoxState.value.activeStorybox.frameId = newFrame.id
+      }
+      router.push(`/mystories`)
+      await useStorybox(apolloClient).createNew()
+      storyboxDataIsUpdated.value = true
+    }
+
     watch(
       () => [storyName.value, storyCode.value],
       () => {
@@ -79,6 +98,7 @@ export default defineComponent({
       checkValues,
       nameInputError,
       codeInputError,
+      save,
     }
   },
 })

@@ -10,11 +10,15 @@
   </VDropdown>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { ProfileListItemInfo } from './ProfileListItem.vue'
 import useClipboard from 'vue-clipboard3'
+import { apolloClient, router } from '@/app'
+import { useMutation } from '@vue/apollo-composable'
+import { DeleteEntityDocument, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
+import { useStorybox } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'StoryEditDropdown',
@@ -26,12 +30,14 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const canRunDeleteQuery = ref<true | false>(false)
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
 
+    const { mutate } = useMutation(DeleteEntityDocument)
+
     const editStory = () => {
-      console.log(props.storyBoxInfo)
-      console.log('EDIT')
+      router.push(`/mystories/${props.storyBoxInfo.id}`)
     }
 
     const copyStoryCode = () => {
@@ -40,9 +46,13 @@ export default defineComponent({
       }
     }
 
-    const deleteStory = () => {
-      console.log(props.storyBoxInfo)
-      console.log('DELETE')
+    const deleteStory = async () => {
+      new Promise(async (res, rej) => {
+        useStorybox(apolloClient).deleteStoryBoxes([props.storyBoxInfo.id])
+        await mutate({ id: props.storyBoxInfo.id })
+        storyboxDataIsUpdated.value = true
+        res
+      })
     }
 
     return {
