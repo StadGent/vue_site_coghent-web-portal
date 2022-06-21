@@ -47,7 +47,8 @@ import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import { BaseButton, useStorybox } from 'coghent-vue-3-component-library'
 import { apolloClient } from '@/app'
 import { useI18n } from 'vue-i18n'
-import { StoryboxBuild, StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
+import { StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
+import { Entity, getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'TheStoriesPage',
@@ -61,13 +62,17 @@ export default defineComponent({
       loading.value = true
       await useStorybox(apolloClient).getStoryboxes()
       loading.value = false
-      StoryBoxState.value.storyboxes.map((_box: typeof StoryboxBuild) => {
+      StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
+        const title = getMetadataOfTypeFromEntity(_box, `title`)
+        const description = getMetadataOfTypeFromEntity(_box, `description`)
         storyBoxItems.value.push({
           id: _box.id,
-          title: _box.id,
+          title: title ? title.value : _box.id,
+          description: description ? description.value : '',
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
       })
+      console.log(`storyBoxItems`, storyBoxItems)
     }
 
     getStoryBoxes()
