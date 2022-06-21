@@ -17,7 +17,7 @@ import { onError } from '@apollo/client/link/error'
 import { UserStore } from './stores/UserStore'
 import useGraphqlErrors from './composables/useGraphqlErrors'
 import FloatingVue from 'floating-vue'
-import { Dropdown } from 'floating-vue'
+import { Dropdown, VClosePopper } from 'floating-vue'
 import 'floating-vue/dist/style.css'
 
 export let iiif: any
@@ -115,6 +115,7 @@ export default async function (authenticated: boolean) {
       teleportTarget: '#modals',
     })
     .component('VDropdown', Dropdown)
+    .directive('close-popper', VClosePopper)
     .provide(DefaultApolloClient, apolloClient)
 
   return {
