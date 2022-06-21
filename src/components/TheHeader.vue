@@ -93,9 +93,12 @@ export default defineComponent({
         isPavilionActive.value = route.path === '/pavilion'
       }
     )
-    onMounted(async () => {
-      await useStorybox(apolloClient).getStoryboxes()
-      storyboxCount.value = StoryBoxState.value.count
+
+    watch(userStore.user, async () => {
+      if (userStore.hasUser) {
+        await useStorybox(apolloClient).getStoryboxes()
+        storyboxCount.value = StoryBoxState.value.count
+      }
     })
 
     const goToLoginPage = async () => {

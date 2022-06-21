@@ -62,7 +62,9 @@
         <div class="h-fit object-bottom w-full grid grid-rows-2 grid-cols-1 text-center gap-7 p-4 border border-dashed border-background-dark border-4 mt-8">
           <p>{{ t('storybox.assets.addMore') }}</p>
           <strong class="cursor-pointer" @click="() => router.push('/')">{{ t('storybox.assets.search') }}</strong>
-          <strong v-if="false" class="cursor-pointer">{{ t('storybox.assets.collection') }}</strong>
+          <router-link :to="{ path: '/' }" class="h-full w-full">
+            <strong v-if="false" class="cursor-pointer">{{ t('storybox.assets.collection') }}</strong>
+          </router-link>
         </div>
       </div>
       <div class="lg:w-1/3 w-full my-4 lg:my-0">
