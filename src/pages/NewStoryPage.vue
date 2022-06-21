@@ -14,7 +14,9 @@
       <label class="font-bold mb-2" for="storyDescription">{{ t('profile.storybox.create.description') }}</label
       ><textarea id="storyDescripton" v-model="storyDescription" class="h-24" type="text" />
     </div>
-    <div class="w-full flex justify-end mt-4"><BaseButton :on-click="save" class="max-w-max" :text="t('profile.storybox.create.submit')" /></div>
+    <div class="w-full flex justify-end mt-4">
+      <BaseButton :customStyle="formValid ? 'primaryUnavailable' : 'primary'" :on-click="save" class="max-w-max" :text="t('profile.storybox.create.submit')" />
+    </div>
   </section>
 </template>
 
@@ -40,6 +42,7 @@ export default defineComponent({
     const storyCode = ref<string | undefined>()
     const codeInputError = ref<string | undefined>(undefined)
     const nameInputError = ref<string | undefined>(undefined)
+    const formValid = ref<boolean>(false)
 
     const filterInt = (value: string) => {
       if (/^[-+]?(\d+|Infinity)$/.test(value)) {
@@ -68,8 +71,8 @@ export default defineComponent({
     }
 
     const save = async () => {
-      const valid = checkValues()
-      if (valid) {
+      formValid.value = checkValues()
+      if (formValid.value) {
         StoryBoxState.value.activeStorybox = {
           frameId: null,
           title: storyName.value,
@@ -88,7 +91,7 @@ export default defineComponent({
     watch(
       () => [storyName.value, storyCode.value],
       () => {
-        checkValues()
+        formValid.value = checkValues()
       }
     )
 
@@ -103,6 +106,7 @@ export default defineComponent({
       nameInputError,
       codeInputError,
       save,
+      formValid,
     }
   },
 })
