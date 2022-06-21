@@ -1,8 +1,8 @@
 <template>
-  <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 page-height">
+  <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 page-height break-all">
     <div class="flex flex-col justify-between pb-4">
       <div class="flex justify-between items-center">
-        <h2 v-if="user != null" class="mt-5 font-bold text-4xl break-words">{{ t(`profile.greeting`) }} {{ user.preferred_username }}!</h2>
+        <h2 v-if="user != null" class="mt-5 font-bold text-4xl">{{ t(`profile.greeting`) }}<br />{{ user.preferred_username }}!</h2>
         <base-button
           class="md:hidden block w-8 h-8 bg-neutral-0 rounded-full flex justify-center"
           :on-click="logout"
@@ -48,7 +48,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const userStore = StoreFactory.get(UserStore)
-    const user: typeof User = userStore.user
+    const user: typeof User = { id: 1, email: 'Bert_De_Backer@hotmail.com', family_name: 'De Backer', given_name: 'Bert', name: 'Bert De Backer', preferred_username: 'Jonasvanhoof' }
     const pages = ref<MenuPage[]>([
       { i18nTitle: 'profile.details', link: '/profile' },
       { i18nTitle: 'profile.stories', link: '/mystories' },
