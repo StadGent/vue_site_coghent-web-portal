@@ -80,6 +80,9 @@ export default defineComponent({
         } as typeof StoryboxBuild
         if (hasBoxCode.value === true) {
           const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
+          if (newFrame.errors) {
+            codeInputError.value = 'Code bestaat niet'
+          }
           StoryBoxState.value.activeStorybox.frameId = newFrame.id
         }
         router.push(`/mystories`)
