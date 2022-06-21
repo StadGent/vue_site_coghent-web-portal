@@ -15,7 +15,7 @@
       ><textarea id="storyDescripton" v-model="storyDescription" class="h-24" type="text" />
     </div>
     <div class="w-full flex justify-end mt-4">
-      <BaseButton :customStyle="formValid ? 'primaryUnavailable' : 'primary'" :on-click="save" class="max-w-max" :text="t('profile.storybox.create.submit')" />
+      <BaseButton :customStyle="!formValid ? 'primaryUnavailable' : 'primary'" :on-click="save" class="max-w-max" :text="t('profile.storybox.create.submit')" />
     </div>
   </section>
 </template>
