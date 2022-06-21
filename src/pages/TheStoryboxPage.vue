@@ -59,8 +59,6 @@ export default defineComponent({
     onMounted(async () => {
       const storyboxId = router.currentRoute.value.params.storyboxId
       if (storyboxId) {
-        console.log({ StoryBoxState })
-        console.log(`Selected storybox:`, storyboxId)
         frames.value = StoryBoxState.value.storyboxes
         storyboxCount.value = StoryBoxState.value.count
         loading.value = true

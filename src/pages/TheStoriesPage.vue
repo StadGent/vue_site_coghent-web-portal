@@ -68,7 +68,6 @@ export default defineComponent({
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
       })
-      console.log({ storyBoxItems })
     }
 
     getStoryBoxes()

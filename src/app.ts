@@ -57,7 +57,7 @@ export default async function (authenticated: boolean) {
   router = createRouter(useSessionAuth != null ? useSessionAuth : null)
 
   const graphqlErrorInterceptor = onError((error) => {
-    console.log({ error })
+    // console.log({ error }) // DEV:
     const errorHandler = useGraphqlErrors(error)
     // errorHandler.logFormattedErrors() // DEV:
     if (useAuthFeature.value === true && errorHandler.checkForUnauthorized() === true) {
@@ -69,8 +69,6 @@ export default async function (authenticated: boolean) {
         resolve
       })
       router.push(`/`)
-      error.forward(error.operation)
-      // useSessionAuth.redirectToLogin(router.currentRoute?.value.fullPath)
     }
   })
 
