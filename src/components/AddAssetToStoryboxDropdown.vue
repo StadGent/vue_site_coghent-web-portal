@@ -10,7 +10,7 @@
         <div v-if="!userStoryboxes.length">
           <p class="text-center">{{ t('details.modal.createStorybox') }}</p>
         </div>
-        <BaseButton :custom-style="storyBoxFormState ? 'primary' : 'primaryUnavailable'" :text="t('details.modal.addShort')" class="mt-4" :icon-shown="false" @click="emitButtonClick" />
+        <BaseButton v-close-popper :custom-style="storyBoxFormState ? 'primary' : 'primaryUnavailable'" :text="t('details.modal.addShort')" class="mt-4" :icon-shown="false" @click="emitButtonClick" />
       </div>
     </template>
   </VDropdown>
