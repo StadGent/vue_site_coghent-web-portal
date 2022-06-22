@@ -14,7 +14,7 @@
     </div>
     <Filter v-if="!noFilters" :selected="selectedFilters" :loading="loading" :filter-all="t('buttons.all-works')" :filters="relationData" @new-selected="updateSelectedFilters" />
 
-    <div v-if="entityData" class="flex w-full flex-col items-center justify-center">
+    <div v-if="entityData && entityData.Entities" class="flex w-full flex-col items-center justify-center">
       <the-masonry
         ref="masonry"
         :small="small"
