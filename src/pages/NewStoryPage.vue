@@ -63,7 +63,7 @@ export default defineComponent({
       } else if (hasBoxCode.value) {
         codeInputError.value = t('storybox.new.codeLength')
       }
-      if (storyName.value && storyName.value.length < 5) {
+      if (storyName.value && storyName.value.length && storyName.value.length < 5) {
         nameInputError.value = t('storybox.new.nameLength')
       }
 
