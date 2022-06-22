@@ -22,13 +22,13 @@ export default defineComponent({
   setup() {
     const { t } = useI18n()
     const route = useRoute()
-    const code = ref<string | string[]>(route.params.visitCode)
+    const code = ref<string>(route.params.visitCode as string)
 
     watch(
       () => code.value,
       () => {
         if (code.value.length == 8) {
-          const link = useStorybox(apolloClient).linkBoxCodeToUser(code.value)
+          const link = useStorybox(apolloClient).linkBoxCodeToUser(parseInt(code.value))
           if (!link.errors) {
             console.log('Linked')
             console.log(link)
