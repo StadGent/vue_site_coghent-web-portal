@@ -11,6 +11,7 @@
         :mediafiles="mediaFiles"
         :is-touch="route.query.touch ? true : false"
         @opening-ccmodal="openCCModal"
+        @currentPictureIndex="setPictureIndex"
       />
     </section>
     <CardComponent :large="true" class="mx-2 md:mx-4 sm:mx-0">
@@ -37,15 +38,20 @@
             {{ metaData.label }}
           </div>
         </div>
-        <base-button
-          v-if="carouselFiles"
-          class="inline⁻block w-max ml-3 mt-3 hover:underline"
-          :text="t('details.more')"
-          custom-style="ghost-black"
-          custom-icon="info"
-          :icon-shown="true"
-          :on-click="openDetailsModal"
-        />
+        <div v-if="result" class="flex items-center justify-between">
+          <base-button
+            v-if="carouselFiles"
+            class="inline⁻block w-max ml-3 mt-3 hover:underline"
+            :text="t('details.more')"
+            custom-style="ghost-black"
+            custom-icon="info"
+            :icon-shown="true"
+            :on-click="openDetailsModal"
+          />
+          <a class="bg-background-light rounded-full p-4" :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')" target="_blank" download>
+            <baseIcon icon="download" />
+          </a>
+        </div>
         <!-- <SpeechBubble
           v-for="(testimoni, index) in testimonies"
           :key="testimoni.name"
@@ -69,7 +75,7 @@
 import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, SpeechBubble, ImageSource, getFileNameByMimeType, TestimoniCard } from 'coghent-vue-3-component-library'
+import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, SpeechBubble, ImageSource, getFileNameByMimeType, TestimoniCard, BaseIcon } from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
@@ -105,6 +111,7 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
     BreadCrumbs,
+    BaseIcon,
     // SpeechBubble,
   },
   setup: () => {
@@ -126,6 +133,7 @@ export default defineComponent({
       { id: '1', name: 'Hilde Vercauteren', date: '2 mei 2021', content: 'Mijn grootouders hadden dat vroeger ook altijd staan. Ze wilden niets anders...', likes: 3 },
       { id: '2', name: 'Johan Patoor', date: '2 mei 2021', content: 'Daz werd oorspronkelijk ontworpen door een marketing bureau uit Antwer...', likes: 7 },
     ])
+    const carouselPictureIndex = ref<number>(0)
 
     watch(
       () => route.fullPath,
@@ -223,6 +231,10 @@ export default defineComponent({
       }
     }
 
+    const setPictureIndex = (newIndex: number) => {
+      carouselPictureIndex.value = newIndex
+    }
+
     const updateTestimoni = (testimoni: typeof TestimoniCard) => {
       const testimoniToUpdate = testimonies.value.find((element: typeof TestimoniCard) => element.id == testimoni.id)
       testimoniToUpdate.likes++
@@ -248,6 +260,9 @@ export default defineComponent({
       relatedItemIds,
       testimonies,
       updateTestimoni,
+      generateUrl,
+      setPictureIndex,
+      carouselPictureIndex,
     }
   },
 })
