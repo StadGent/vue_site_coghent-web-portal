@@ -17,7 +17,7 @@
           <p>{{ profileListItemInfo.description }}</p>
         </div>
         <div class="text-tag-selected text-opacity-50 flex justify-between">
-          <div>
+          <div v-if="profileListItemInfo.dateCreated">
             <p>{{ t('profile.storybox.creation-date') + profileListItemInfo.dateCreated }}</p>
           </div>
           <div v-if="profileListItemInfo.code">
