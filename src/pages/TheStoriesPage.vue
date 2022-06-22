@@ -76,12 +76,14 @@ export default defineComponent({
       storyboxCount.value = StoryBoxState.value.count
       loading.value = false
       StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
+        const code = getMetadataOfTypeFromEntity(_box, `boxCode`)
         const title = getMetadataOfTypeFromEntity(_box, `title`)
         const description = getMetadataOfTypeFromEntity(_box, `description`)
         storyBoxItems.value.push({
           id: _box.id,
           title: title ? title.value : _box.id,
           description: description ? description.value : '',
+          code: code?code.value:null,
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
       })
