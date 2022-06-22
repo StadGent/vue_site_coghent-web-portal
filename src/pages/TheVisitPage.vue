@@ -13,6 +13,7 @@ import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { BoxVisitCode, BaseIcon, CircleLoader, useStoryBox } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
+import { apolloClient } from '@/app'
 
 export default defineComponent({
   name: 'TheVisitPage',
@@ -24,7 +25,11 @@ export default defineComponent({
     const code = ref<string | string[]>(route.params.visitCode)
 
     if (code.value.length == 8) {
-      // TODO: Link code to account
+      const link = useStoryBox(apolloClient).linkCodeToUser(code.value)
+      if (!link.errors) {
+        console.log('Linked')
+        console.log(link)
+      }
     }
 
     return { t, code }
