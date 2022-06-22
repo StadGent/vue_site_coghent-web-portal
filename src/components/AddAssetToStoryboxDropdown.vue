@@ -24,6 +24,7 @@ import { apolloClient } from '@/app'
 import { storyboxCount } from '@/pages/TheStoryboxPage.vue'
 import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
+import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 
 export type StoryboxDropdownInput = {
   id: string
@@ -61,7 +62,6 @@ export default defineComponent({
       }
     }
 
-    const assetIsInStorybox = (_storyboxId: string) => {}
     watch(
       () => props.entity,
       () => {
@@ -77,8 +77,10 @@ export default defineComponent({
     )
 
     onMounted(async () => {
-      console.log({ StoryBoxState })
-      StoryBoxState.value.storyboxes.map((_box: typeof Entity) => userStoryboxes.value.push({ id: _box.id, name: _box.title && _box.title[0] ? _box.title[0].value : _box.id }))
+      StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
+        const title = getMetadataOfTypeFromEntity(_box, 'title')
+        userStoryboxes.value.push({ id: _box.id, name: title ? title.value : _box.id })
+      })
       storyboxCount.value = StoryBoxState.value.count
     })
 
@@ -87,7 +89,6 @@ export default defineComponent({
       userStoryboxes,
       emitButtonClick,
       t,
-      assetIsInStorybox,
     }
   },
 })
