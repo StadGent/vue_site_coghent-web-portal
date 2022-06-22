@@ -102,7 +102,8 @@ export default defineComponent({
         storyboxCount.value = StoryBoxState.value.count
       } else {
         loggedIn.value = false
-        router.push(`/`)
+        console.log(`no user im logged out going back to /home`)
+        router.push({ path: `/home` })
       }
     })
 
