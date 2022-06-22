@@ -71,7 +71,7 @@ export default defineComponent({
     const close = () => {
       closeWindow.value = 'hide'
       document.body.classList.remove('overflow-y-hidden')
-      router.push({path: '/mystories'})
+      router.push({ path: '/mystories' })
     }
 
     const save = async () => {

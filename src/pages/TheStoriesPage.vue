@@ -83,7 +83,7 @@ export default defineComponent({
           id: _box.id,
           title: title ? title.value : _box.id,
           description: description ? description.value : '',
-          code: code?code.value:null,
+          code: code ? code.value : null,
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
       })
