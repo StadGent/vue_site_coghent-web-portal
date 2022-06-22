@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { BoxVisitCode, BaseIcon, CircleLoader, useStorybox } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { apolloClient } from '@/app'
@@ -22,6 +22,7 @@ export default defineComponent({
   setup() {
     const { t } = useI18n()
     const route = useRoute()
+    const router = useRouter()
     const code = ref<string>(route.params.visitCode as string)
 
     watch(
@@ -30,8 +31,7 @@ export default defineComponent({
         if (code.value.length == 8) {
           const link = useStorybox(apolloClient).linkBoxCodeToUser(code.value)
           if (!link.errors) {
-            console.log('Linked')
-            console.log(link)
+            router.push('/mystories/' + link.LinkStorybox.id)
           }
         }
       },
