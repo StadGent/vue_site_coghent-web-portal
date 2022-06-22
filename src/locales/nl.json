@@ -143,6 +143,12 @@
       "search": "Zelf een werk toevoegen",
       "collection": "Zoeken in de collectie"
     },
+    "new":{
+      "onlyNumbers": "Gelieve enkel nummers in te voeren",
+      "codeLength": "Code moet 8 karakters bevatten",
+      "nameLength": "Naam moet minimum 5 karakters bevatten",
+      "codeDoesNotExist": "Code bestaat niet"
+    },
     "selectFrame": "Selecteer het verhaal dat je wilt aanpassen",
     "story": {
       "title": "Mijn verhaal",

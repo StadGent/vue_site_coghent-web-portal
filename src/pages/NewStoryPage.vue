@@ -58,13 +58,13 @@ export default defineComponent({
 
       if (storyCode.value?.length == 8 && hasBoxCode) {
         if (isNaN(filterInt(storyCode.value))) {
-          codeInputError.value = 'Gelieve enkel nummers in te voeren'
+          codeInputError.value = t('storybox.new.onlyNumbers')
         }
-      } else {
-        codeInputError.value = 'Code moet 8 karakters bevatten'
+      } else if (hasBoxCode.value) {
+        codeInputError.value = t('storybox.new.codeLength')
       }
       if (storyName.value && storyName.value.length < 5) {
-        nameInputError.value = 'Naam moet minimum 5 karakters bevatten'
+        nameInputError.value = t('storybox.new.nameLength')
       }
 
       return !codeInputError.value && !nameInputError.value ? true : false
@@ -81,7 +81,7 @@ export default defineComponent({
         if (hasBoxCode.value === true) {
           const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
           if (newFrame.errors) {
-            codeInputError.value = 'Code bestaat niet'
+            codeInputError.value = t('storybox.new.codeDoesNotExist')
           }
           StoryBoxState.value.activeStorybox.frameId = newFrame.id
         }
