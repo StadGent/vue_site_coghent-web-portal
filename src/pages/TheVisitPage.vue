@@ -28,7 +28,7 @@ export default defineComponent({
       () => code.value,
       () => {
         if (code.value.length == 8) {
-          const link = useStorybox(apolloClient).linkBoxCodeToUser(parseInt(code.value))
+          const link = useStorybox(apolloClient).linkBoxCodeToUser(code.value)
           if (!link.errors) {
             console.log('Linked')
             console.log(link)
