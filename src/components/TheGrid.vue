@@ -194,7 +194,6 @@ export default defineComponent({
           : queryResult.data.Entities.relations.filter((relation: Relation) => relation.type != 'isIn')
         isEndOfResult(queryResult.data)
       }
-      storyboxCount.value = StoryBoxState.value.count
     })
 
     const getData = () => {
