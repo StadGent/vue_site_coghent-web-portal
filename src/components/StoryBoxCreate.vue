@@ -154,10 +154,31 @@ export default defineComponent({
       if (canDrag.value === true && assetOne && assetTwo && assetIndexOne != assetIndexTwo) {
         let updatedAssets: Array<typeof Entity> = []
         Object.assign(updatedAssets, _assets)
-        updatedAssets[assetIndexOne] = assetTwo
-        updatedAssets[assetIndexTwo] = assetOne
+        updatedAssets = deleteItemFromArray(assetOne, updatedAssets)
+        updatedAssets = placeItemOnIndexMoveOthers(assetTwo, assetOne, updatedAssets)
         assets.value = updatedAssets
       }
+    }
+
+    const deleteItemFromArray = (_item: typeof Entity, _items: Array<typeof Entity>) => {
+      let updatedItems: Array<typeof Entity> = []
+      Object.assign(updatedItems, _items)
+      const index = updatedItems.map((asset) => asset.id === _item.id).indexOf(true)
+      updatedItems.splice(index, 1)
+      return updatedItems
+    }
+
+    const placeItemOnIndexMoveOthers = (_itemTwo: typeof Entity, _item: typeof Entity, _items: Array<typeof Entity>) => {
+      const index = _items.map((asset) => asset.id === _itemTwo.id).indexOf(true)
+      let updatedItems: Array<typeof Entity> = []
+      if (index != -1) {
+        const itemsbefore = _items.slice(0, index + 1)
+        updatedItems.push(...itemsbefore)
+        updatedItems.push(_item)
+        const itemsafter = _items.slice(index + 1, _items.length)
+        updatedItems.push(...itemsafter)
+      }
+      return updatedItems
     }
 
     const showTimingEdit = (_assetId: string) => {
