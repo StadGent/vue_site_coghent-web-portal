@@ -24,6 +24,7 @@ export let iiif: any
 export let router: Router
 export let apolloClient: ApolloClient<NormalizedCacheObject>
 export let useSessionAuth: typeof OpenIdConnectClient | null
+export const storyboxCount = ref<number>(0)
 
 // Features
 export const useAuthFeature = ref<boolean>(false)

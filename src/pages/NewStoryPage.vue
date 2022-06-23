@@ -26,7 +26,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
-import { apolloClient, router } from '@/app'
+import { apolloClient, router, storyboxCount } from '@/app'
 import { StoryboxBuild, StoryBoxState, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
@@ -87,6 +87,7 @@ export default defineComponent({
         }
         router.push(`/mystories`)
         await useStorybox(apolloClient).createNew()
+        storyboxCount.value = StoryBoxState.value.count
         storyboxDataIsUpdated.value = true
       }
     }

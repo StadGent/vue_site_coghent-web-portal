@@ -50,7 +50,7 @@ import { useI18n } from 'vue-i18n'
 import { StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity, getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 import { storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
-import { storyboxCount } from './TheStoryboxPage.vue'
+import { storyboxCount } from '@/app'
 
 export default defineComponent({
   name: 'TheStoriesPage',
@@ -72,6 +72,7 @@ export default defineComponent({
       loading.value = true
       if (!_skipGetNew) {
         await useStorybox(apolloClient).getStoryboxes()
+        storyboxCount.value = StoryBoxState.value.count
       }
       storyboxCount.value = StoryBoxState.value.count
       loading.value = false

@@ -30,7 +30,7 @@
 import { BaseButton, BaseModal, CircleLoader } from 'coghent-vue-3-component-library'
 import { defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { apolloClient, router } from '@/app'
+import { apolloClient, router, storyboxCount } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity, useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 
@@ -41,8 +41,6 @@ export enum Language {
   'GERMAN' = 'Deutsch',
   'SPANISH' = 'Español',
 }
-
-export const storyboxCount = ref<number>(0)
 
 export default defineComponent({
   components: { BaseButton, BaseModal, StoryBoxCreate, CircleLoader },

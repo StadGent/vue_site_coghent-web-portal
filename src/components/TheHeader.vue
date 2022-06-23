@@ -41,7 +41,14 @@
     <div v-if="useAuthFeature === true" class="flex ml-3">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
       <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
-      <base-button v-if="userStore.hasUser" :text="t(`profile.greeting`) + `,  ` + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
+      <base-button
+        v-if="userStore.hasUser"
+        :text="t(`profile.greeting`) + `,  ` + user.preferred_username"
+        :on-click="goToProfilePage"
+        custom-style="ghost-purple"
+        :icon-shown="false"
+        class="px-2 mx-1"
+      />
       <base-button
         v-if="userStore.hasUser && useStoryboxFeature"
         :has-badge="true"
@@ -59,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, ref } from 'vue'
+import { defineComponent, watch, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { UserStore } from '../stores/UserStore'
@@ -67,7 +74,7 @@ import StoreFactory from '../stores/StoreFactory'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
 import { apolloClient, useAuthFeature, useStoryboxFeature } from '@/app'
-import { storyboxCount } from '@/pages/TheStoryboxPage.vue'
+import { storyboxCount } from '@/app'
 import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
@@ -94,6 +101,9 @@ export default defineComponent({
       }
     )
 
+    onMounted(() => {
+      useStorybox(apolloClient).getStoryboxes()
+    })
 
     const goToLoginPage = async () => {
       router.push({ path: '/login', query: route.query })
