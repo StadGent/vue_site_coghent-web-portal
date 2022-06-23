@@ -213,15 +213,10 @@ const useFilter = (): {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     const filtered = entity.metadataCollection.filter((_collectie) => _collectie.label == _label)[0]
     const firstLevel = getFirstMetadataCollectionData(filtered)
-    console.log({ firstLevel })
     const item = entity.metadataCollection.filter((element) => element.label == filtered.label)[0]
     if (firstLevel && firstLevel[0]) {
       item.data = firstLevel[0].data
     }
-    console.log(item)
-
-    console.log({ newMetadataCollections })
-    console.log({ entity })
     return entity
   }
 
