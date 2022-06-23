@@ -184,7 +184,7 @@
   "Periode.begin": "begin periode",
   "Periode.einde": "einde periode",
   //creatie: 
-  "ConceptueelDing.heeftCreatie": "Ontworpen door",
+  "Entiteit.wordtNaarVerwezenDoor": "Ontworpen door",
   //productie
   "MaterieelDing.productie": "Vervaardigd door",
   "Gebeurtenis.tijd": "productiedatum",
