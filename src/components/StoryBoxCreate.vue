@@ -11,7 +11,7 @@
             v-for="asset in StoryBoxState.activeStorybox.assets"
             :id="asset.id"
             :key="asset"
-            class="rounded-md activeElement w-full my-2 align-middle min-h-16 bg-background-light"
+            class="rounded-md activeElement w-full my-2 align-middle min-h-16"
             :ondragstart="dragStart"
             :ondragend="dragEnd"
             :ondrop="dragEnd"
@@ -41,7 +41,7 @@
                   <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
                 </div>
               </div>
-              <div v-if="showTimeEdit === true && activeEditItem === asset.id" :id="'expand' + asset.id" class="flex flex-row px-4 gap-4 p-2 pt-6">
+              <div v-if="showTimeEdit === true && activeEditItem === asset.id" :id="'expand' + asset.id" class="bg-background-light flex flex-row px-4 gap-4 p-2 pt-6">
                 <label class="flex flex-row text-bold items-center" for="duration">
                   Deze afbeelding wordt getoond voor
                   <input
@@ -57,6 +57,7 @@
                 </label>
               </div>
             </div>
+            <div v-if="draggingAssetComesBelow === asset.id && draggingAssetComesBelow != startDragItem && canDrag === true" class="my-1.5 h-1 bg-background-dark w-full"></div>
           </li>
         </ul>
         <div class="h-fit object-bottom w-full grid grid-rows-2 grid-cols-1 text-center gap-7 p-4 border border-dashed border-background-dark border-4 mt-8">
@@ -105,6 +106,7 @@ export default defineComponent({
     const activeEditItem = ref<string | null>(null)
     const assets = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assets)
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
+    const draggingAssetComesBelow = ref<string | null>(null)
 
     const deleteAsset = async (_asset: typeof Entity) => {
       const index = assets.value.indexOf(_asset)
@@ -125,6 +127,7 @@ export default defineComponent({
     }
 
     const dragStart = (event: any) => {
+      showTimeEdit.value = false
       startDragItem.value = event.srcElement.id
       document.getElementById(event.srcElement.id)?.parentElement?.classList.add(`test`)
       document.getElementById(event.srcElement.id)?.firstElementChild?.classList.replace('bg-background-light', 'bg-background-dark')
@@ -151,6 +154,7 @@ export default defineComponent({
       const assetOne = _assets[_assets.map((asset) => asset.id === itemOne).indexOf(true)]
       const assetIndexTwo = _assets.indexOf(_assets[_assets.map((asset) => asset.id === itemTwo).indexOf(true)])
       const assetTwo = _assets[_assets.map((asset) => asset.id === itemTwo).indexOf(true)]
+      assetIndexTwo != -1 ? (draggingAssetComesBelow.value = assetTwo.id) : (draggingAssetComesBelow.value = null)
       if (canDrag.value === true && assetOne && assetTwo && assetIndexOne != assetIndexTwo) {
         let updatedAssets: Array<typeof Entity> = []
         Object.assign(updatedAssets, _assets)
@@ -182,11 +186,14 @@ export default defineComponent({
     }
 
     const showTimingEdit = (_assetId: string) => {
-      showTimeEdit.value = !showTimeEdit.value
-      activeEditItem.value = null
-      activeEditItem.value = _assetId
-      const doc = document.getElementById(`expand${_assetId}`)
-      doc?.classList.add(`expanding`)
+      if (activeEditItem.value === _assetId && showTimeEdit.value === true) showTimeEdit.value = false
+      else {
+        showTimeEdit.value = true
+        activeEditItem.value = null
+        activeEditItem.value = _assetId
+        const doc = document.getElementById(`expand${_assetId}`)
+        doc?.classList.add(`expanding`)
+      }
     }
 
     const setAssetTiming = (_asset: typeof Entity) => {
@@ -223,6 +230,7 @@ export default defineComponent({
       StoryBoxState,
       assets,
       assetTimings,
+      draggingAssetComesBelow,
     }
   },
 })
