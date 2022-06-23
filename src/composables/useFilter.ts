@@ -209,13 +209,14 @@ const useFilter = (): {
   }
 
   const setMetadataToOneRelationDown = (_entity: NestedDataObject, _label: string) => {
-    const newMetadataCollections: MetadataCollection[] = []
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     const filtered = entity.metadataCollection.filter((_collectie) => _collectie.label == _label)[0]
-    const firstLevel = getFirstMetadataCollectionData(filtered)
-    const item = entity.metadataCollection.filter((element) => element.label == filtered.label)[0]
-    if (firstLevel && firstLevel[0]) {
-      item.data = firstLevel[0].data
+    if (filtered) {
+      const firstLevel = getFirstMetadataCollectionData(filtered)
+      const item = entity.metadataCollection.filter((element) => element.label == filtered.label)[0]
+      if (firstLevel && firstLevel[0]) {
+        item.data = firstLevel[0].data
+      }
     }
     return entity
   }
