@@ -83,7 +83,7 @@ export default async function (authenticated: boolean) {
         await fetch(`/api/me`).then(async (response) => {
           if (response.status === 200) {
             useSessionAuth.user = await response.json()
-            userStore.setUser(useSessionAuth.user)
+            userStore.hasUser ? null : userStore.setUser(useSessionAuth.user)
           } else resolve
         })
       })

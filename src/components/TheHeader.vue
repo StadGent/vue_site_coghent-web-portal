@@ -40,10 +40,10 @@
 
     <div v-if="useAuthFeature === true" class="flex ml-3">
       <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
-      <base-button v-if="!loggedIn" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
-      <base-button v-if="loggedIn" :text="t(`profile.greeting`) + `,  ` + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
+      <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
+      <base-button v-if="userStore.hasUser" :text="t(`profile.greeting`) + `,  ` + user.preferred_username" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
       <base-button
-        v-if="loggedIn && useStoryboxFeature"
+        v-if="userStore.hasUser && useStoryboxFeature"
         :has-badge="true"
         :badge-value="storyboxCount"
         :text="t('buttons.storybox')"
@@ -85,7 +85,6 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const user: typeof User = userStore.user
     console.log(isTouchActive.value)
-    const loggedIn = ref<true | false>(false)
 
     watch(
       () => route.path,
@@ -95,17 +94,6 @@ export default defineComponent({
       }
     )
 
-    watch(userStore.user, async () => {
-      if (userStore.hasUser) {
-        loggedIn.value = true
-        await useStorybox(apolloClient).getStoryboxes()
-        storyboxCount.value = StoryBoxState.value.count
-      } else {
-        loggedIn.value = false
-        console.log(`no user im logged out going back to /home`)
-        router.push({ path: `/home` })
-      }
-    })
 
     const goToLoginPage = async () => {
       router.push({ path: '/login', query: route.query })
@@ -120,7 +108,7 @@ export default defineComponent({
     }
 
     const { t } = useI18n()
-    return { t, isHomeActive, isTouchActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature, storyboxCount, loggedIn }
+    return { t, isHomeActive, isTouchActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature, storyboxCount }
   },
 })
 </script>

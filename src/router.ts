@@ -13,12 +13,8 @@ import NewStoryPage from './pages/NewStoryPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
 import TheWorksPage from './pages/TheWorksPage.vue'
 import TheVisitPage from './pages/TheVisitPage.vue'
-import { ref } from 'vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
-import { ApolloProvider, useQuery } from '@apollo/client'
-import { apolloClient, useSessionAuth } from './app'
-import { GetMeDocument } from 'coghent-vue-3-component-library/lib'
 
 const isServer = typeof window === 'undefined'
 
@@ -43,6 +39,7 @@ const routes = [
 ]
 
 export default function (auth: any) {
+  const userStore = StoreFactory.get(UserStore)
   const router = createRouter({
     routes,
     history: createWebHistory(process.env.BASE_URL),
@@ -57,16 +54,15 @@ export default function (auth: any) {
       to.query = {}
       //
       await auth.verifyServerAuth()
-      if (auth.user != null) {
-        StoreFactory.get(UserStore).setUser(auth.user)
+      if (auth.user != null && !userStore.hasUser) {
+        userStore.setUser(auth.user)
       }
       if (!to.matched.some((route) => route.meta.requiresAuth)) {
         return next()
       }
       await auth.assertIsAuthenticated(to.fullPath, next)
-      if (auth.user != null) {
-        console.log(`| session has user`)
-        StoreFactory.get(UserStore).setUser(auth.user)
+      if (auth.user != null && !userStore.hasUser) {
+        userStore.setUser(auth.user)
       }
     })
   }

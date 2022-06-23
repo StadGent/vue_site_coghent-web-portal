@@ -6,7 +6,7 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { GetMeDocument, User } from 'coghent-vue-3-component-library'
+import { GetMeDocument } from 'coghent-vue-3-component-library'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 import { router, useSessionAuth } from '@/app'
@@ -38,7 +38,6 @@ export default defineComponent({
         await useSessionAuth.redirectToLogin()
         getMe(useSessionAuth.authCode)
       }
-      console.log('refetch')
     })
 
     return {}
