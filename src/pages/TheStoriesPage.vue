@@ -1,4 +1,5 @@
 <template>
+  <QRCodeModal />
   <div class="w-full flex justify-end">
     <VDropdown
       ><BaseButton class="hidden md:block" custom-icon="newItem" custom-style="square-icon" :icon-shown="true" :no-margin="true" />
@@ -51,10 +52,11 @@ import { StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity, getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 import { storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
 import { storyboxCount } from '@/app'
+import QRCodeModal from '../components/QRCodeModal.vue'
 
 export default defineComponent({
   name: 'TheStoriesPage',
-  components: { ProfileSideMenu, ProfileListItem, BaseButton, CircleLoader },
+  components: { ProfileSideMenu, ProfileListItem, BaseButton, CircleLoader, QRCodeModal },
   setup() {
     const { t } = useI18n()
     const storyBoxItems = ref<ProfileListItemInfo[]>([])

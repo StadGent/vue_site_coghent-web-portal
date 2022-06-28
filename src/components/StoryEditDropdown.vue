@@ -3,8 +3,7 @@
     <slot></slot>
     <template #popper>
       <div><BaseButton custom-style="storybox-black" :text="t('storybox.edit')" custom-icon="edit" :icon-shown="true" @click="editStory" /></div>
-      <div v-if="storyBoxInfo.code"><BaseButton custom-style="storybox-black" :text="t('storybox.copyCode')" custom-icon="copy" :icon-shown="true" @click="copyStoryCode" /></div>
-      <div v-else><BaseButton custom-style="storybox-black" :text="t('storybox.showQR')" custom-icon="qrCode" :icon-shown="true" @click="copyStoryCode" /></div>
+      <div><BaseButton v-close-popper custom-style="storybox-black" :text="t('storybox.showQR')" custom-icon="qrCode" :icon-shown="true" @click="openQRCodeModal" /></div>
       <div><BaseButton custom-style="storybox-red" :text="t('storybox.delete')" custom-icon="wasteBasket" :icon-shown="true" @click="deleteStory" /></div>
     </template>
   </VDropdown>
@@ -19,6 +18,7 @@ import { apolloClient, router } from '@/app'
 import { useMutation } from '@vue/apollo-composable'
 import { DeleteEntityDocument, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
+import { useQRCodeModal } from './QRCodeModal.vue'
 
 export default defineComponent({
   name: 'StoryEditDropdown',
@@ -33,17 +33,12 @@ export default defineComponent({
     const canRunDeleteQuery = ref<true | false>(false)
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
+    const { openQRCodeModal } = useQRCodeModal()
 
     const { mutate } = useMutation(DeleteEntityDocument)
 
     const editStory = () => {
       router.push(`/mystories/${props.storyBoxInfo.id}`)
-    }
-
-    const copyStoryCode = () => {
-      if (props.storyBoxInfo.code) {
-        toClipboard(props.storyBoxInfo.code?.toString())
-      }
     }
 
     const deleteStory = async () => {
@@ -57,9 +52,9 @@ export default defineComponent({
 
     return {
       editStory,
-      copyStoryCode,
       deleteStory,
       t,
+      openQRCodeModal,
     }
   },
 })
