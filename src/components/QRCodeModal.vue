@@ -62,8 +62,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     const parseStoryboxUrl = () => {
-      console.log(location.hostname)
-      const url = `${location.hostname}/visit/${QRCodeModalState.value.code}`
+      const url = `${location.origin}/visit/${QRCodeModalState.value.code}`
       return url
     }
 
