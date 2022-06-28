@@ -3,7 +3,7 @@
     <slot></slot>
     <template #popper>
       <div><BaseButton custom-style="storybox-black" :text="t('storybox.edit')" custom-icon="edit" :icon-shown="true" @click="editStory" /></div>
-      <div><BaseButton v-close-popper custom-style="storybox-black" :text="t('storybox.showQR')" custom-icon="qrCode" :icon-shown="true" @click="openQRCodeModal" /></div>
+      <div><BaseButton v-close-popper custom-style="storybox-black" :text="t('storybox.showQR')" custom-icon="qrCode" :icon-shown="true" @click="openQR" /></div>
       <div><BaseButton custom-style="storybox-red" :text="t('storybox.delete')" custom-icon="wasteBasket" :icon-shown="true" @click="deleteStory" /></div>
     </template>
   </VDropdown>
@@ -33,12 +33,19 @@ export default defineComponent({
     const canRunDeleteQuery = ref<true | false>(false)
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
-    const { openQRCodeModal } = useQRCodeModal()
+    const { openQRCodeModal, setQRCodeModalCode } = useQRCodeModal()
 
     const { mutate } = useMutation(DeleteEntityDocument)
 
     const editStory = () => {
       router.push(`/mystories/${props.storyBoxInfo.id}`)
+    }
+
+    const openQR = () => {
+      if (props.storyBoxInfo.code) {
+        setQRCodeModalCode(props.storyBoxInfo.code)
+        openQRCodeModal()
+      }
     }
 
     const deleteStory = async () => {
@@ -54,7 +61,7 @@ export default defineComponent({
       editStory,
       deleteStory,
       t,
-      openQRCodeModal,
+      openQR,
     }
   },
 })

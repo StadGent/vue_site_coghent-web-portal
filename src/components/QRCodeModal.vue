@@ -5,7 +5,7 @@
         <h1 class="font-bold text-4xl">{{ t('storybox.scan') }}</h1>
       </div>
       <div class="flex-grow flex justify-center items-center">
-        <qrcode-vue :value="QRCodeValue" :size="300" level="H" />
+        <qrcode-vue :value="parseStoryboxUrl()" :size="300" level="H" />
       </div></div
   ></BaseModal>
 </template>
@@ -15,54 +15,59 @@ import { defineComponent, ref } from 'vue'
 import { BaseModal, ModalState } from 'coghent-vue-3-component-library'
 import QrcodeVue from 'qrcode.vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 export type QRCodeModalType = {
   state: typeof ModalState
+  code: string
 }
 
 const QRCodeModalState = ref<QRCodeModalType>({
   state: 'hide',
+  code: '',
 })
 
 export const useQRCodeModal = () => {
-  const updateQRCodeModal = (QRCodeModalInput: QRCodeModalType) => {
-    QRCodeModalState.value = QRCodeModalInput
+  const updateQRCodeModalState = (QRCodeModalInput: typeof ModalState) => {
+    QRCodeModalState.value.state = QRCodeModalInput
+  }
+
+  const setQRCodeModalCode = (code: string) => {
+    QRCodeModalState.value.code = code
   }
 
   const closeQRCodeModal = () => {
-    updateQRCodeModal({
-      state: 'hide',
-    })
+    updateQRCodeModalState('hide')
   }
 
   const openQRCodeModal = () => {
-    updateQRCodeModal({
-      state: 'show',
-    })
+    updateQRCodeModalState('show')
   }
 
   return {
     closeQRCodeModal,
     openQRCodeModal,
     QRCodeModalState,
+    setQRCodeModalCode,
   }
 }
 
 export default defineComponent({
   name: 'QRCodeModal',
   components: { BaseModal, QrcodeVue },
-  props: {
-    QRCodeValue: {
-      type: String,
-      default: 'Hello World',
-      required: true,
-    },
-  },
+  props: {},
   setup() {
     const { closeQRCodeModal, QRCodeModalState } = useQRCodeModal()
+    const router = useRouter()
     const { t } = useI18n()
 
-    return { closeQRCodeModal, QRCodeModalState, t }
+    const parseStoryboxUrl = () => {
+      console.log(location.hostname)
+      const url = `${location.hostname}/visit/${QRCodeModalState.value.code}`
+      return url
+    }
+
+    return { closeQRCodeModal, QRCodeModalState, t, parseStoryboxUrl }
   },
 })
 </script>

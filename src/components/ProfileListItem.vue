@@ -41,7 +41,7 @@ export type ProfileListItemInfo = {
   description: string
   dateCreated: string
   onClickUrl: string
-  code?: number
+  code?: string
   pictureUrl?: string
 }
 
