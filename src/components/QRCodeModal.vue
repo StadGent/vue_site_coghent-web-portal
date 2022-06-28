@@ -15,7 +15,6 @@ import { defineComponent, ref } from 'vue'
 import { BaseModal, ModalState } from 'coghent-vue-3-component-library'
 import QrcodeVue from 'qrcode.vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 
 export type QRCodeModalType = {
   state: typeof ModalState
@@ -58,7 +57,6 @@ export default defineComponent({
   props: {},
   setup() {
     const { closeQRCodeModal, QRCodeModalState } = useQRCodeModal()
-    const router = useRouter()
     const { t } = useI18n()
 
     const parseStoryboxUrl = () => {
