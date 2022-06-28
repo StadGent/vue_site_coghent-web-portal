@@ -23,7 +23,7 @@
                   <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
                 </p>
                 <div :id="asset.id" class="w-28 flex justify-center items-center">
-                  <img v-if="asset.mediafiles" :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0].thumbnail_file_location" />
+                  <img v-if="asset.mediafiles" :id="asset.id" class="w-16 h-16 object-scale-down" :src="asset.mediafiles[0] && asset.mediafiles[0].thumbnail_file_location?asset.mediafiles[0].thumbnail_file_location:`/no-image.png`" />
                 </div>
                 <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
                   <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
