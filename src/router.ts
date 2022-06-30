@@ -30,11 +30,11 @@ const routes = [
   { path: '/relation/:relationID', component: RelationDetail },
   { path: '/visit/:visitCode', component: TheVisitPage, meta: { requiresAuth: false } },
   { path: '/pavilion', component: ThePavilion },
-  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
-  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: true } },
-  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: true } },
-  { path: '/mystories/:storyboxId', component: TheStoryboxPage, meta: { requiresAuth: true } },
-  { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: true } },
+  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: false } },
+  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: false } },
+  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: false } },
+  { path: '/mystories/:storyboxId', component: TheStoryboxPage, meta: { requiresAuth: false } },
+  { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: false } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
 
@@ -50,9 +50,6 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
-      // HACK:
-      to.query = {}
-      //
       await auth.verifyServerAuth()
       if (auth.user != null && !userStore.hasUser) {
         userStore.setUser(auth.user)
