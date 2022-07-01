@@ -1,13 +1,12 @@
-import { EntityStore } from '@apollo/client/cache'
-import { Entity, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
+import { Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library'
 
 export type NestedDataObject = {
   description: []
   id: string
   mediafiles: []
-  metadataCollection: Array<MetadataCollection>
+  metadataCollection: Array<typeof MetadataCollection>
   objectNumber: []
-  relations: Array<Relation>
+  relations: Array<typeof Relation>
   title: []
   type: string
   types: Array<TypeObject>
@@ -22,18 +21,18 @@ type TypeObject = {
 
 const useFilter = (): {
   removeMetadataCollectionFromNestedMetadata: (_entity: NestedDataObject, _parentLabel: string) => NestedDataObject
-  getRelation: (_entity: NestedDataObject, _label: string, _value: string) => Relation | undefined
+  getRelation: (_entity: NestedDataObject, _label: string, _value: string) => typeof Relation | undefined
   removeChildByLabel: (_entity: NestedDataObject, _parentCollectionLabel: string, _label: string) => NestedDataObject
-  removeParentCollections: (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => Array<MetadataCollection>
+  removeParentCollections: (_metadataCollection: Array<typeof MetadataCollection>, _parentLabels: Array<string>) => Array<typeof MetadataCollection>
   removeParentsWithoutMetadata: (_entity: NestedDataObject) => NestedDataObject
   removeParentsWithoutData: (_entity: NestedDataObject) => NestedDataObject
   setMetadataToOneRelationDown: (_entity: NestedDataObject, _label: string) => NestedDataObject
   filterOutDuplicateCollections: (_entity: NestedDataObject) => NestedDataObject
-  getParentCollectionByNameIfTitle: (_entity: NestedDataObject, _label: string) => Metadata | undefined
-  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => MetadataCollection | undefined
-  getDataOfCollection: (_entity: NestedDataObject, _parentLabel: string) => Array<MetadataCollection>
-  getObjectNames: (_objectnameData: Array<Metadata>) => Array<string>
-  getMetadataCollectionByLabel: (_metadataCollections: Array<MetadataCollection>, _label: string) => Array<Metadata>
+  getParentCollectionByNameIfTitle: (_entity: NestedDataObject, _label: string) => typeof Metadata | undefined
+  getParentCollectionByName: (_entity: NestedDataObject, _label: string) => typeof MetadataCollection | undefined
+  getDataOfCollection: (_entity: NestedDataObject, _parentLabel: string) => Array<typeof MetadataCollection>
+  getObjectNames: (_objectnameData: Array<typeof Metadata>) => Array<string>
+  getMetadataCollectionByLabel: (_metadataCollections: Array<typeof MetadataCollection>, _label: string) => Array<typeof Metadata>
 } => {
   const removeMetadataCollectionFromNestedMetadata = (_entity: NestedDataObject, _parentLabel: string) => {
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
@@ -60,7 +59,7 @@ const useFilter = (): {
     }
   }
 
-  const getObjectNames = (_objectnameData: Array<Metadata>) => {
+  const getObjectNames = (_objectnameData: Array<typeof Metadata>) => {
     const objectNames: Array<string> = []
     for (const _meta of _objectnameData) {
       if (_meta.value) {
@@ -71,13 +70,13 @@ const useFilter = (): {
   }
 
   const getDataOfCollection = (_entity: NestedDataObject, _parentLabel: string) => {
-    const objectNaamData: Array<MetadataCollection> = []
+    const objectNaamData: Array<typeof MetadataCollection> = []
     const collection = getParentCollectionByName(_entity, _parentLabel)
     if (collection && collection.nested && collection.data && collection.data.length != 0) {
       for (const _data of collection.data) {
         if (_data && _data?.nestedMetaData && _data?.nestedMetaData.metadataCollection && _data?.nestedMetaData.metadataCollection?.length != 0) {
           for (const _meta of _data?.nestedMetaData.metadataCollection) {
-            objectNaamData.push(_meta as MetadataCollection)
+            objectNaamData.push(_meta as typeof MetadataCollection)
           }
         }
       }
@@ -85,8 +84,8 @@ const useFilter = (): {
     return objectNaamData
   }
 
-  const getMetadataCollectionByLabel = (_metadataCollections: Array<MetadataCollection>, _label: string) => {
-    const metadataForLabel: Array<Metadata> = []
+  const getMetadataCollectionByLabel = (_metadataCollections: Array<typeof MetadataCollection>, _label: string) => {
+    const metadataForLabel: Array<typeof Metadata> = []
     if (_metadataCollections.length != 0) {
       for (const _collection of _metadataCollections) {
         if (_collection.nested && _collection.nested && _collection.data && _collection.data.length != 0) {
@@ -102,7 +101,7 @@ const useFilter = (): {
   }
 
   const getParentCollectionByName = (_entity: NestedDataObject, _label: string) => {
-    let collection = {} as MetadataCollection | undefined
+    let collection = {} as typeof MetadataCollection | undefined
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
       const filtered = entity.metadataCollection.filter((_collection) => _collection.label == _label)
@@ -116,15 +115,15 @@ const useFilter = (): {
   }
 
   const getParentCollectionByNameIfTitle = (_entity: NestedDataObject, _label: string) => {
-    let collection = {} as Metadata | undefined
+    let collection = {} as typeof Metadata | undefined
     const entity = JSON.parse(JSON.stringify(_entity)) as NestedDataObject
     if (entity.metadataCollection) {
       const filtered = entity.metadataCollection.filter((_collection) => _collection.label == _label)
       if (filtered && filtered.length != 0) {
         if (filtered.length == 1) {
-          filtered[0].data?.forEach((_data) => {
+          filtered[0].data?.forEach((_data: any) => {
             if (_data?.nestedMetaData?.title.length != 0) {
-              collection = _data as Metadata
+              collection = _data as typeof Metadata
             }
           })
         }
@@ -140,7 +139,7 @@ const useFilter = (): {
       for (const _parentMatch of matchingWithParentLabel) {
         if (_parentMatch.nested && _parentMatch.data) {
           for (const _data of _parentMatch.data) {
-            const matchingWithLabel = _data?.nestedMetaData?.metadataCollection?.filter((_meta) => _meta?.label == _label)
+            const matchingWithLabel = _data?.nestedMetaData?.metadataCollection?.filter((_meta: any) => _meta?.label == _label)
             if (matchingWithLabel) {
               for (const _childMatch of matchingWithLabel) {
                 const index = _data?.nestedMetaData?.metadataCollection?.indexOf(_childMatch)
@@ -158,8 +157,8 @@ const useFilter = (): {
     return entity
   }
 
-  const removeParentCollections = (_metadataCollection: Array<MetadataCollection>, _parentLabels: Array<string>) => {
-    const myMetadata: Array<MetadataCollection> = []
+  const removeParentCollections = (_metadataCollection: Array<typeof MetadataCollection>, _parentLabels: Array<string>) => {
+    const myMetadata: Array<typeof MetadataCollection> = []
     Object.assign(myMetadata, _metadataCollection)
     return myMetadata.filter((_collection) => !_parentLabels.includes(_collection.label))
   }
@@ -195,14 +194,14 @@ const useFilter = (): {
     return entity
   }
 
-  const getFirstMetadataCollectionData = (_metadataCollection: MetadataCollection) => {
+  const getFirstMetadataCollectionData = (_metadataCollection: typeof MetadataCollection) => {
     if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
       const _metadataCollectionFirstLevel = _metadataCollection.data[0].nestedMetaData?.metadataCollection
       return _metadataCollectionFirstLevel
     } else return null
   }
 
-  const getFirstMetadataCollectionLabel = (_metadataCollection: MetadataCollection): string => {
+  const getFirstMetadataCollectionLabel = (_metadataCollection: typeof MetadataCollection): string => {
     if (_metadataCollection && _metadataCollection.nested && _metadataCollection.data?.[0]) {
       return _metadataCollection.data[0].value as string
     } else return ''
@@ -229,7 +228,7 @@ const useFilter = (): {
       if (_collection.nested && _collection.data) {
         for (const _data of _collection.data) {
           if (_data?.nestedMetaData?.metadataCollection?.length != 0) {
-            const filteredMetadata = _data?.nestedMetaData?.metadataCollection?.filter((_metadata) => parentLabels.includes(_metadata?.label as string))
+            const filteredMetadata = _data?.nestedMetaData?.metadataCollection?.filter((_metadata: any) => parentLabels.includes(_metadata?.label as string))
             if (filteredMetadata && filteredMetadata.length != 0) {
               for (const _filtered of filteredMetadata) {
                 removeParentCollections(entity.metadataCollection, [_filtered?.label as string])
