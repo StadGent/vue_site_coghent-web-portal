@@ -55,10 +55,11 @@
 import { defineComponent, watch, ref, reactive, PropType, computed, toRaw, onMounted } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { BaseSearch, GetEntitiesDocument, GetEntitiesQuery, GetEntitiesQueryVariables, BaseButton, TheMasonry } from 'coghent-vue-3-component-library'
+import { Entity, Maybe, Relation, Scalars, Story } from 'coghent-vue-3-component-library'
 import 'coghent-vue-3-component-library/lib/index.css'
 import { useI18n } from 'vue-i18n'
 import Filter from './Filter.vue'
-import { Entity, Maybe, Relation, Scalars, Story } from 'coghent-vue-3-component-library/lib/queries'
+// import { Entity, Maybe, Relation, Scalars, Story } from 'coghent-vue-3-component-library/lib/queries'
 import useSeed from '../composables/useSeed'
 import { useActiveBox } from '@/composables/useActiveBox'
 import { useHistory } from './BreadCrumbs.vue'
@@ -105,12 +106,12 @@ export default defineComponent({
     const selectedFilters = ref<string[]>([])
     const searchQueryForInput = ref<string>('')
     const searchQueryForQuery = ref<string>(props.defaultSearchQuery)
-    let _skip: Maybe<Scalars['Int']> = 0
-    const limit: Maybe<Scalars['Int']> = route.query.touch ? 50 : 25
+    let _skip: number = 0
+    const limit: number = route.query.touch ? 50 : 25
     const endOfData = ref<Boolean>(false)
     const useAndFilter = ref<Boolean>(false)
     const entityData = ref<typeof GetEntitiesQuery | undefined>()
-    const relationData = ref<Relation[] | undefined>([])
+    const relationData = ref<typeof Relation[] | undefined>([])
     const emptySearch = ref<Boolean>(false)
     const masonry = ref<any>(null)
     const { randomValue, refresh: refreshSeed } = useSeed()
@@ -137,7 +138,7 @@ export default defineComponent({
           const frameIds: string[] = []
           if (result) {
             result.forEach((story: any) => {
-              const storyFrameIds: string[] = story.frames.map((frame: Entity) => 'entities/' + frame.id)
+              const storyFrameIds: string[] = story.frames.map((frame: typeof Entity) => 'entities/' + frame.id)
               frameIds.push(...storyFrameIds)
             })
             frameList.value.push(...frameIds)
@@ -191,7 +192,7 @@ export default defineComponent({
         entityData.value = queryResult.data
         relationData.value = !router.currentRoute.value.params.entityID
           ? queryResult.data.Entities.relations
-          : queryResult.data.Entities.relations.filter((relation: Relation) => relation.type != 'isIn')
+          : queryResult.data.Entities.relations.filter((relation: typeof Relation) => relation.type != 'isIn')
         isEndOfResult(queryResult.data)
       }
     })

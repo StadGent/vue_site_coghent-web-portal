@@ -43,8 +43,7 @@ import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
-import { GetCreatorByIdDocument, GetEntityByIdDocument, BaseButton, BaseMetaData, BaseMetaDataTab, FullRelationFragment } from 'coghent-vue-3-component-library'
-import { Relation, Entity } from 'coghent-vue-3-component-library/lib/queries'
+import { GetCreatorByIdDocument, GetEntityByIdDocument, BaseButton, BaseMetaData, BaseMetaDataTab, Relation } from 'coghent-vue-3-component-library'
 import { useHistory } from './BreadCrumbs.vue'
 
 const asString = (x: string | string[]) => (Array.isArray(x) ? x[0] : x)
@@ -105,7 +104,7 @@ export default defineComponent({
       return objects
     }
 
-    const getDataFromRelations = (relations: Relation[], relationLabels: string[]) => {
+    const getDataFromRelations = (relations: typeof Relation[], relationLabels: string[]) => {
       relations.forEach((relation) => {
         if (relationLabels.find((relationlabel: string) => relationlabel == relation.label) && relation.label && relation.value) {
           const dataObject: Metadata = {
@@ -132,7 +131,7 @@ export default defineComponent({
 
         getDataFromRelations(queryResult.data.Entity.relations, ['geslacht'])
 
-        queryResult.data.Entity?.relations.forEach((relation: Relation) => {
+        queryResult.data.Entity?.relations.forEach((relation: typeof Relation) => {
           if (relation.label == 'heeftGeboorte' || relation.label == 'heeftOverlijden') {
             additionalInfoIds.push(relation.key)
           }

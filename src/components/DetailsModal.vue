@@ -160,10 +160,10 @@ import { defineComponent, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
-import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal } from 'coghent-vue-3-component-library'
+import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal,  MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
-import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
+// import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
 import { apolloClient, iiif, useStoryboxFeature } from '@/app'
@@ -186,9 +186,9 @@ type NestedDataObject = {
   description: []
   id: string
   mediafiles: []
-  metadataCollection: Array<MetadataCollection>
+  metadataCollection: Array<typeof MetadataCollection>
   objectNumber: []
-  relations: Array<Relation>
+  relations: Array<typeof Relation>
   title: []
   type: string
   types: Array<TypeObject>
@@ -226,7 +226,7 @@ export const useDetailsModal = () => {
     })
   }
 
-  const createTypesFromMetadata = (_metadata: Array<Metadata>) => {
+  const createTypesFromMetadata = (_metadata: Array<typeof Metadata>) => {
     const newTypes: Array<TypeObject> = []
     if (_metadata.length != 0) {
       for (const _meta of _metadata) {
@@ -287,7 +287,7 @@ export default defineComponent({
     const storyBoxIcon = ref<'check' | 'storybox'>('storybox')
     const { openMediaModal, setMediaModalImageUrl, setMediaModalFile } = useMediaModal()
 
-    const handleMediaModal = (filename: string, mediaFile: MediaFile) => {
+    const handleMediaModal = (filename: string, mediaFile: typeof MediaFile) => {
       setMediaModalImageUrl(generateInfoUrl(filename, 'full'))
       setMediaModalFile(mediaFile)
       openMediaModal()
@@ -323,9 +323,9 @@ export default defineComponent({
       return returnValue
     }
 
-    const concatMetadatValues = (input: Metadata[]): string => {
+    const concatMetadatValues = (input: typeof Metadata[]): string => {
       let concatString: string = ''
-      input.forEach((meta: Metadata) => {
+      input.forEach((meta: typeof Metadata) => {
         if (concatString === '') {
           concatString = meta.value ? meta.value : t('details.modal.unknown')
           concatString = replaceDotsWithOnbekend(concatString)
@@ -367,7 +367,7 @@ export default defineComponent({
       Object.assign(entity, _entity)
       const parentLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
       entity = useFilter().setMetadataToOneRelationDown(entity, 'Entiteit.wordtNaarVerwezenDoor')
-      entity.metadataCollection = useFilter().removeParentCollections(entity.metadataCollection as Array<MetadataCollection>, parentLabels)
+      entity.metadataCollection = useFilter().removeParentCollections(entity.metadataCollection as Array<typeof MetadataCollection>, parentLabels)
       entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'MaterieelDing.beheerder')
       entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'Entiteit.classificatie')
       entity = useFilter().removeChildByLabel(entity, 'Collectie.naam', 'GecureerdeCollectie.bestaatUit')
