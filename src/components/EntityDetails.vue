@@ -148,11 +148,9 @@ export default defineComponent({
     const setEntityInformation = (queryResult: any) => {
       if (queryResult.Entity) {
         const photosArray: typeof ImageSource[] = []
-
         mediaFiles.value = queryResult.Entity?.mediafiles
         queryResult.Entity?.mediafiles.forEach((value: any) => {
           if (value) {
-            console.log(value)
             const filename: string | undefined = getFileNameByMimeType(value)
             if (filename) {
               const isLink: boolean = filename?.includes('https://')
