@@ -49,14 +49,12 @@
               <div v-if="showTimeEdit === true && activeEditItem === asset.id" :id="'expand' + asset.id" class="bg-background-light flex flex-row px-4 gap-4 p-2 pt-6">
                 <label class="flex flex-row text-bold items-center" for="duration">
                   Deze afbeelding wordt getoond voor
-                  <input
-                    :value="setAssetTiming(asset)"
-                    name="duration"
-                    type="number"
-                    min="1"
-                    max="20"
-                    class="p-1.5 rounded-md ml-2 w-16 mr-2"
-                    @change="(event) => updateAssetTiming(asset, event.target.value)"
+                  <BaseDropDown
+                    :numberStep="5"
+                    :numberMax="30"
+                    @selected="(option) => updateAssetTiming(asset, option)"
+                    :active="Number(setAssetTiming(asset))"
+                    :style="`p-1.5 rounded-md ml-2 w-16 mr-2 bg-text-white`"
                   />
                   seconden.
                 </label>
@@ -88,7 +86,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BaseIcon } from 'coghent-vue-3-component-library'
+import { BaseIcon, BaseDropDown } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
@@ -96,7 +94,7 @@ import { KeyValuePair } from 'coghent-vue-3-component-library'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
-  components: { BaseIcon },
+  components: { BaseIcon, BaseDropDown },
   props: {
     loading: {
       type: Boolean,
