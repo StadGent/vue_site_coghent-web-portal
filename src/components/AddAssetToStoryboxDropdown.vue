@@ -3,8 +3,8 @@
     <slot></slot>
     <template #popper>
       <div class="p-4">
-        <div v-for="(storybox, index) in userStoryboxes" v-show="userStoryboxes.length" :key="index">
-          <input :id="storybox.id" v-model="storyBoxFormState" type="radio" :value="storybox.name" />
+        <div v-for="(storybox, index) in userStoryboxes" v-show="userStoryboxes.length" :key="index" :disabled="true">
+          <input :id="storybox.id" v-model="storyBoxFormState" type="radio" :value="storybox.name" :disabled="cannotAdd(storybox.id)" />
           <label :for="index" class="p-2">{{ storybox.name }}</label>
         </div>
         <div v-if="!userStoryboxes.length">
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
+import { defineComponent, onMounted, PropType, ref } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { apolloClient, storyboxCount } from '@/app'
@@ -52,7 +52,7 @@ export default defineComponent({
       // { id: '2', name: 'Second storybox' },
     ])
 
-    const emitButtonClick = () => {
+    const emitButtonClick = async () => {
       if (storyBoxFormState.value) {
         const selectedStoryBoxId: string | undefined = userStoryboxes.value.find((userStorybox: StoryboxDropdownInput) => userStorybox.name == storyBoxFormState.value)?.id
         if (selectedStoryBoxId) {
@@ -61,19 +61,14 @@ export default defineComponent({
       }
     }
 
-    watch(
-      () => props.entity,
-      () => {
-        for (const storybox of StoryBoxState.value.storyboxes) {
-          const found = useStorybox(apolloClient).assetIsInStorybox(props.entity.id, storybox.id)
-          if (found != undefined) {
-            document.getElementById(storybox.id)?.setAttribute(`disabled`, `true`)
-          } else {
-            document.getElementById(storybox.id)?.setAttribute(`disabled`, `false`)
-          }
-        }
-      }
-    )
+    const cannotAdd = (_boxId: string) => {
+      const doNotAdd: Array<boolean> = []
+      const assetsInBox = useStorybox(apolloClient).getStoryboxAssetAmount(_boxId)
+      doNotAdd.push(!(assetsInBox < 10))
+      const found = useStorybox(apolloClient).assetIsInStorybox(props.entity, _boxId)
+      doNotAdd.push(found ? true : false)
+      return doNotAdd.some((state) => state === true)
+    }
 
     onMounted(async () => {
       StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
@@ -88,6 +83,7 @@ export default defineComponent({
       userStoryboxes,
       emitButtonClick,
       t,
+      cannotAdd,
     }
   },
 })

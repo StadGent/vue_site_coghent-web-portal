@@ -299,6 +299,7 @@ export default defineComponent({
           await useStorybox(apolloClient).assetToStorybox(_storyBoxId, entity.value.id)
         }
       }
+      await useStorybox(apolloClient).getStoryboxes()
     }
 
     const copyUrl = async (id: String) => {
