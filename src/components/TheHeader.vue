@@ -102,8 +102,10 @@ export default defineComponent({
     )
 
     onMounted(async () => {
-      await useStorybox(apolloClient).getStoryboxes()
-      storyboxCount.value = StoryBoxState.value.count
+      if (userStore.hasUser) {
+        await useStorybox(apolloClient).getStoryboxes()
+        storyboxCount.value = StoryBoxState.value.count
+      }
     })
 
     const goToLoginPage = async () => {
