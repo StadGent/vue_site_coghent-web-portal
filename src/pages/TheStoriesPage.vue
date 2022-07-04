@@ -36,7 +36,13 @@
       <div v-if="loading" class="h-full p-8 flex flex-col w-full justify-center items-center overflow-hidden">
         <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
       </div>
-      <profile-list-item v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :profile-list-item-info="storyBoxItem" />
+      <div v-if="!loading &&storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
+        <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`storybox.noStories`) }}</h1>
+        <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
+          <base-button :text="t('storybox.createNew')" :on-click="() => router.push(`/mystories/new`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
+        </div>
+      </div>
+      <profile-list-item :v-show="storyBoxItems.length > 0" v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :profile-list-item-info="storyBoxItem" />
     </section>
   </section>
 </template>
@@ -46,7 +52,7 @@ import ProfileListItem, { ProfileListItemInfo } from '@/components/ProfileListIt
 import { defineComponent, ref, watch } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import { BaseButton, useStorybox } from 'coghent-vue-3-component-library'
-import { apolloClient } from '@/app'
+import { apolloClient, router } from '@/app'
 import { useI18n } from 'vue-i18n'
 import { StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
 import { Entity, getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
@@ -98,6 +104,7 @@ export default defineComponent({
       storyBoxItems,
       loading,
       t,
+      router,
     }
   },
 })

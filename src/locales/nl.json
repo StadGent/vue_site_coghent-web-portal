@@ -131,6 +131,8 @@
     "InCopyrightUnknownText": "De rechtenverklaring is toegekend door een derde gezien de rechthebbende niet lokaliseerbaar en/of identificeerbaar is. In geval van CoGhent is de rechtenverklaring toegekend door de cultureel erfgoedinstelling die het werk in de collectie heeft. Er rusten rechten op het werk. Je bent zelf verantwoordelijk voor het gebruik van het werk. Bij hergebruik is de wetgeving betreffende auteursrecht van toepassing."
   },
   "storybox": {
+    "noStories": "Je hebt nog geen verhalen",
+    "createNew": "Maak jouw verhaal",
     "title": "Jouw verhalenbox",
     "edit": "Dit verhaal wijzigen",
     "copyCode": "Code kopiëren",
