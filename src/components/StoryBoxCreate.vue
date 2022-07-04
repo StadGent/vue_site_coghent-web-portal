@@ -56,7 +56,7 @@
                   Deze afbeelding wordt getoond voor
                   <BaseDropDown
                     :numberStep="5"
-                    :numberMax="30"
+                    :numberMax="60"
                     @selected="(option) => updateAssetTiming(asset, option)"
                     :active="Number(setAssetTiming(asset))"
                     :style="`p-1.5 rounded-md ml-2 w-16 mr-2 bg-text-white`"
