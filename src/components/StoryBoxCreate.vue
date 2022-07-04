@@ -3,7 +3,12 @@
     <div class="flex flex-grow flex-col lg:flex-row">
       <div class="lg:w-2/3 w-full lg:mr-6">
         <h1 class="text-lg my-2 font-bold">
-          {{ t('storybox.assets.title') + `(${StoryBoxState.activeStorybox.assetTimings != undefined ? StoryBoxState.activeStorybox.assetTimings.length : 0})` }}
+          {{
+            t('storybox.assets.title') +
+            `(${StoryBoxState.activeStorybox.assetTimings != undefined ? StoryBoxState.activeStorybox.assetTimings.length : 0} ${
+              StoryBoxState.activeStorybox.assetTimings != undefined  && StoryBoxState.activeStorybox.assetTimings.length === 10 ? ` maximum` : ``
+            })`
+          }}
         </h1>
         <p class="text-sm">{{ t('storybox.assets.selectedAssetsInfo') }}</p>
         <ul v-show="StoryBoxState.activeStorybox.assets != undefined" class="scroll-smooth w-full my-4 lg:my-0" :ondragenter="dragEnter">
