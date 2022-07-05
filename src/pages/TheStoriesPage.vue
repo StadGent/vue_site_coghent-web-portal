@@ -33,16 +33,16 @@
           </template>
         </VDropdown>
       </div>
-      <div v-if="loading" class="h-full p-8 flex flex-col w-full justify-center items-center overflow-hidden">
+      <div v-if="loading && storyBoxItems.length === 0" class="h-full p-8 flex flex-col w-full justify-center items-center overflow-hidden">
         <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
       </div>
-      <div v-if="!loading &&storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
+      <div v-if="!loading && storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
         <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`storybox.noStories`) }}</h1>
         <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
           <base-button :text="t('storybox.createNew')" :on-click="() => router.push(`/mystories/new`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
         </div>
       </div>
-      <profile-list-item :v-show="storyBoxItems.length > 0" v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :profile-list-item-info="storyBoxItem" />
+      <profile-list-item :v-show="storyBoxItems.length > 0 && !loading" v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :profile-list-item-info="storyBoxItem" />
     </section>
   </section>
 </template>
@@ -83,19 +83,21 @@ export default defineComponent({
         storyboxCount.value = StoryBoxState.value.count
       }
       storyboxCount.value = StoryBoxState.value.count
-      loading.value = false
-      StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
-        const code = getMetadataOfTypeFromEntity(_box, `boxCode`)
+      for (const _box of StoryBoxState.value.storyboxes) {
+        let code = null
+        const visiter = await useStorybox(apolloClient).getVisiterFromFrame(_box.id)
+        visiter ? (code = visiter.code) : (code = null)
         const title = getMetadataOfTypeFromEntity(_box, `title`)
         const description = getMetadataOfTypeFromEntity(_box, `description`)
         storyBoxItems.value.push({
           id: _box.id,
           title: title ? title.value : _box.id,
           description: description ? description.value : '',
-          code: code ? code.value : null,
+          code: code,
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
-      })
+      }
+      loading.value = false
     }
 
     getStoryBoxes()

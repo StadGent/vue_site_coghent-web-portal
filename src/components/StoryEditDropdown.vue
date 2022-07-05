@@ -41,11 +41,14 @@ export default defineComponent({
       router.push(`/mystories/${props.storyBoxInfo.id}`)
     }
 
-    const openQR = () => {
-      if (props.storyBoxInfo.code) {
-        setQRCodeModalCode(props.storyBoxInfo.code)
-        openQRCodeModal()
+    const openQR = async () => {
+      let code = props.storyBoxInfo.code
+      if (props.storyBoxInfo.code === null) {
+        const visiter = await useStorybox(apolloClient).linkFrameToStoryAndCreateVisiter(props.storyBoxInfo.id)
+        code = visiter.code
       }
+      setQRCodeModalCode(code as string)
+      openQRCodeModal()
     }
 
     const deleteStory = async () => {
