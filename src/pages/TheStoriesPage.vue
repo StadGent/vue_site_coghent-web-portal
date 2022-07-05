@@ -33,7 +33,7 @@
           </template>
         </VDropdown>
       </div>
-      <div v-if="loading && storyBoxItems.length === 0" class="h-full p-8 flex flex-col w-full justify-center items-center overflow-hidden">
+      <div v-if="loading && storyBoxItems.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
         <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
       </div>
       <div v-if="!loading && storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
@@ -84,16 +84,13 @@ export default defineComponent({
       }
       storyboxCount.value = StoryBoxState.value.count
       for (const _box of StoryBoxState.value.storyboxes) {
-        let code = null
-        const visiter = await useStorybox(apolloClient).getVisiterFromFrame(_box.id)
-        visiter ? (code = visiter.code) : (code = null)
         const title = getMetadataOfTypeFromEntity(_box, `title`)
         const description = getMetadataOfTypeFromEntity(_box, `description`)
         storyBoxItems.value.push({
           id: _box.id,
           title: title ? title.value : _box.id,
           description: description ? description.value : '',
-          code: code,
+          code: undefined,
           onClickUrl: `/mystories/${_box.id}`,
         } as ProfileListItemInfo)
       }
