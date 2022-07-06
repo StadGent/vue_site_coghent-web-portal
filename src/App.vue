@@ -6,8 +6,8 @@
       <router-view />
       <details-modal />
       <creative-modal />
-      <disclaimer-button v-if="!route.query.touch" />
-      <disclaimer-pop-up v-if="!route.query.touch" />
+      <disclaimer-button v-if="!route.query.touch && !useStoryboxFeature" />
+      <disclaimer-pop-up v-if="!route.query.touch && !useStoryboxFeature" />
     </div>
     <the-footer />
   </div>
@@ -26,6 +26,7 @@ import DetailsModal from './components/DetailsModal.vue'
 import DisclaimerPopUp from './components/DisclaimerPopUp.vue'
 import DisclaimerButton from './components/DisclaimerButton.vue'
 import TheFooter from './components/TheFooter.vue'
+import { useStoryboxFeature } from './app'
 
 export default defineComponent({
   name: 'App',
@@ -63,6 +64,7 @@ export default defineComponent({
     return {
       t,
       route,
+      useStoryboxFeature,
     }
   },
 })
