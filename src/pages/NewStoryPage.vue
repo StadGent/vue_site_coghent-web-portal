@@ -28,6 +28,7 @@ import { BaseButton } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { apolloClient, router, storyboxCount } from '@/app'
 import { StoryboxBuild, StoryBoxState, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
+import { useBoxVisiter } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'NewStoryPage',
@@ -52,13 +53,16 @@ export default defineComponent({
       }
     }
 
-    const checkValues = () => {
+    const checkValues = async () => {
       codeInputError.value = undefined
       nameInputError.value = undefined
 
       if (storyCode.value?.length == 8 && hasBoxCode) {
         if (isNaN(filterInt(storyCode.value))) {
           codeInputError.value = t('storybox.new.onlyNumbers')
+        } else {
+          const visiter = await useBoxVisiter(apolloClient).getByCode(String(storyCode.value))
+          visiter === null ? (codeInputError.value = t('storybox.new.codeDoesNotExist')) : null
         }
       } else if (hasBoxCode.value) {
         codeInputError.value = t('storybox.new.codeLength')
@@ -71,7 +75,7 @@ export default defineComponent({
     }
 
     const save = async () => {
-      formValid.value = checkValues()
+      formValid.value = await checkValues()
       if (formValid.value) {
         StoryBoxState.value.activeStorybox = {
           frameId: null,
@@ -94,8 +98,8 @@ export default defineComponent({
 
     watch(
       () => [storyName.value, storyCode.value],
-      () => {
-        formValid.value = checkValues()
+      async () => {
+        formValid.value = await checkValues()
       }
     )
 
