@@ -29,6 +29,13 @@
           </div>
         </a>
       </div>
+      <div v-if="route.query.touch" class="group sm:flex flex-col items-center pt-8 md:pt-5 hidden">
+        <a href="https://cogent.collectie.gent/touchtable/start" class="flex items-center">
+          <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
+            {{ t('header.code') }}
+          </h2>
+        </a>
+      </div>
       <div v-if="!route.query.touch" class="group sm:flex flex-col items-center pt-8 md:pt-5 hidden">
         <a target="_blank" href="https://www.collectie.gent/over-het-project" class="flex items-center">
           <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
