@@ -28,7 +28,7 @@
 </template>
 <script lang="ts">
 import { BaseButton, BaseModal, CircleLoader } from 'coghent-vue-3-component-library'
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apolloClient, router, storyboxCount } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
@@ -77,6 +77,10 @@ export default defineComponent({
       await useStorybox(apolloClient).createNew()
       close()
     }
+
+    onUnmounted(() => {
+      document.body.classList.remove('overflow-y-hidden')
+    })
 
     return { t, closeWindow, save, close, frames, loading, StoryBoxState }
   },
