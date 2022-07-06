@@ -51,9 +51,6 @@ export default defineComponent({
       }
       setQRCodeModalCode(code as string)
       openQRCodeModal()
-      const storybox = await useStorybox(apolloClient).getStoryBoxById(props.storyBoxInfo.id)
-      await useStorybox(apolloClient).createStoryboxFromEntity(storybox.id)
-      await useStorybox(apolloClient).createNew()
     }
 
     const deleteStory = async () => {
