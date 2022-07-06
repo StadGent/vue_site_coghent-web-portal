@@ -33,7 +33,7 @@ export default defineComponent({
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
-    const indexValue = configStore.config.value.vueAppIndex
+    const indexValue: boolean | undefined = configStore.config.value.vueAppIndex
     const route = useRoute()
 
     if (route.query.touch) {
@@ -43,9 +43,9 @@ export default defineComponent({
 
     const getIndexValue = () => {
       let indexStr = ''
-      if (indexValue) {
+      if (indexValue === true) {
         indexStr = 'INDEX, FOLLOW'
-      } else {
+      } else if (indexValue === undefined || indexValue === false) {
         indexStr = 'NOINDEX, NOFOLLOW'
       }
       return indexStr
