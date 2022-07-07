@@ -48,9 +48,9 @@
             :icon-shown="true"
             :on-click="openDetailsModal"
           />
-          <a class="bg-background-light rounded-full p-4" :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')" target="_blank" download>
+          <!-- <a class="bg-background-light rounded-full p-4" :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')" target="_blank" download>
             <baseIcon icon="download" />
-          </a>
+          </a> -->
         </div>
         <!-- <SpeechBubble
           v-for="(testimoni, index) in testimonies"
