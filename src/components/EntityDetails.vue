@@ -111,7 +111,7 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
     BreadCrumbs,
-    BaseIcon,
+    // BaseIcon,
     // SpeechBubble,
   },
   setup: () => {
