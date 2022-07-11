@@ -2,7 +2,7 @@
   <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
-        <a :href="isTouchActive ? '/home?touch=true' : '/home'" class="flex items-center sm:ml-0 ml-3 group">
+        <a @click="checkAction" class="flex items-center sm:ml-0 ml-3 group">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" fill="#FDC20B" />
             <g filter="url(#filter0_i)">
@@ -57,7 +57,7 @@
         class="px-2 mx-1"
       />
       <base-button
-        v-if="userStore.hasUser && useStoryboxFeature"
+        v-if="userStore.hasUser && useStoryboxFeature && !isMobile"
         :has-badge="true"
         :badge-value="storyboxCount"
         :text="t('buttons.storybox')"
@@ -80,19 +80,20 @@ import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
-import { apolloClient, useAuthFeature, useStoryboxFeature } from '@/app'
+import { apolloClient, router, useAuthFeature, useStoryboxFeature } from '@/app'
 import { storyboxCount } from '@/app'
 import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'TheHeader',
   components: { BaseButton },
-  setup() {
+  setup(props, { emit }) {
     const route = useRoute()
-    const router = useRouter()
+    // const router = useRouter()
     const checkHome = () => route.path === '/' || route.name === 'singleObject'
     const checkTouch = () => route.fullPath.includes('touch=true')
 
+    const isMobile = ref<boolean>(false)
     const isTouchActive = ref<Boolean>(checkTouch())
     const isHomeActive = ref<Boolean>(checkHome())
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
@@ -112,6 +113,9 @@ export default defineComponent({
       if (userStore.hasUser) {
         await useStorybox(apolloClient).getStoryboxes()
         storyboxCount.value = StoryBoxState.value.count
+        if (window.innerWidth <= 900) {
+          isMobile.value = true
+        }
       }
     })
 
@@ -127,8 +131,37 @@ export default defineComponent({
       router.push({ path: '/mystories', query: route.query })
     }
 
+    const checkAction = () => {
+      if (window.innerWidth <= 900) {
+        isMobile.value = true
+        emit(`isOpen`, true)
+      } else {
+        isMobile.value = false
+        if (isTouchActive.value === true) {
+          router.push({ path: `/home`, query: { touch: 'true' } })
+        } else router.push({ path: `/home` })
+      }
+      // :href="isTouchActive ? '/home?touch=true' : '/home'"
+    }
+
     const { t } = useI18n()
-    return { t, isHomeActive, isTouchActive, isPavilionActive, goToProfilePage, goToVerhalenBox, goToLoginPage, userStore, user, route, useAuthFeature, useStoryboxFeature, storyboxCount }
+    return {
+      t,
+      isHomeActive,
+      isTouchActive,
+      isPavilionActive,
+      goToProfilePage,
+      goToVerhalenBox,
+      goToLoginPage,
+      userStore,
+      user,
+      route,
+      useAuthFeature,
+      useStoryboxFeature,
+      storyboxCount,
+      checkAction,
+      isMobile,
+    }
   },
 })
 </script>
