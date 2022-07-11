@@ -156,23 +156,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, inject, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
-import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal,  MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library'
+import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal, MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 // import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
-import { apolloClient, iiif, useStoryboxFeature } from '@/app'
+import { apolloClient, iiif, useGtmFeature, useStoryboxFeature } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
 import AddAssetToStoryboxDropdown from './AddAssetToStoryboxDropdown.vue'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
+import { HeadAttrs, useHead } from '@vueuse/head'
+import { getFirstValueOfPropertyFromEntity } from 'coghent-vue-3-component-library'
+import { getFirstMediafileWithFilelocationOfEntity } from 'coghent-vue-3-component-library'
 
 export type DetailsModalType = {
   state: ModalState
@@ -286,6 +289,37 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const storyBoxIcon = ref<'check' | 'storybox'>('storybox')
     const { openMediaModal, setMediaModalImageUrl, setMediaModalFile } = useMediaModal()
+    const head = reactive<Array<HeadAttrs>>([])
+
+    useHead({ meta: head })
+
+    watch(entity, async () => {
+      if (useGtmFeature.value === true) {
+        let title = getFirstValueOfPropertyFromEntity(entity.value, `title`)
+        let description = getFirstValueOfPropertyFromEntity(entity.value, `description`)
+        let image = ''
+        entity.value.primary_transcode ? (image = entity.value.primary_transcode) : ''
+        const media = await getFirstMediafileWithFilelocationOfEntity(entity.value)
+        media && media.original_file_location ? (image = media.original_file_location) : ``
+        console.log(`entity`, entity)
+        head.push(
+          ...[
+            {
+              property: 'og:title',
+              content: title ? title.value : '',
+            },
+            {
+              property: 'og:description',
+              content: description ? description.value : '',
+            },
+            {
+              property: 'og:image',
+              content: image,
+            },
+          ]
+        )
+      }
+    })
 
     const handleMediaModal = (filename: string, mediaFile: typeof MediaFile) => {
       setMediaModalImageUrl(generateInfoUrl(filename, 'full'))

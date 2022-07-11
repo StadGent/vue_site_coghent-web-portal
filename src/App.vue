@@ -26,7 +26,8 @@ import DetailsModal from './components/DetailsModal.vue'
 import DisclaimerPopUp from './components/DisclaimerPopUp.vue'
 import DisclaimerButton from './components/DisclaimerButton.vue'
 import TheFooter from './components/TheFooter.vue'
-import { useStoryboxFeature } from './app'
+import { useGtmFeature, useStoryboxFeature } from './app'
+import { addGoogleData, setDataLayer, setScriptTag } from '@/composables/gtm'
 
 export default defineComponent({
   name: 'App',
@@ -36,6 +37,10 @@ export default defineComponent({
     const configStore = StoreFactory.get(ConfigStore)
     const indexValue: boolean | undefined = configStore.config.value.vueAppIndex
     const route = useRoute()
+
+    if (useGtmFeature.value === true) {
+      addGoogleData(`GTM-MHV9SLC`, `UA-164592648-1`)
+    }
 
     if (route.query.touch) {
       // Disable rightclick if touchmode
