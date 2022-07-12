@@ -70,7 +70,7 @@ export default defineComponent({
         router.push(_menutItem.link)
       } else {
         closeMenu()
-        window.location.href = _menutItem.link
+        window.open(_menutItem.link, '_blank')
       }
     }
 
