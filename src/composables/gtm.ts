@@ -44,11 +44,11 @@ export const addIframeToBody = (_gtmId: string) => {
 }
 
 export const addGoogleData = (_gtmId: string | undefined, _gaId: string | undefined) => {
-  if (_gaId !== undefined && _gaId !== '') {
+  if (_gaId !== undefined && _gaId !== 'false') {
     setDataLayer(_gaId)
     setScriptTag(_gaId)
   }
-  if (_gtmId !== undefined && _gtmId !== '') {
+  if (_gtmId !== undefined && _gtmId !== 'false') {
     addGmtTaG(_gtmId)
     addIframeToBody(_gtmId)
     // setScriptTag(_gtmId)
