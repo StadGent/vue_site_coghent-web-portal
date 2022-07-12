@@ -12,6 +12,11 @@
             {{ t('footer.eu-info') }}
           </div>
         </div>
+        <div class="flex flex-row w-full justify-center gap-8 mt-4 mb-8">
+          <div class="p-4 cursor-pointer" v-for="social of allSocials" :key="social.icon" @click="toSocial(social)">
+            <base-icon :icon="social.icon" class="black" />
+          </div>
+        </div>
         <ul v-if="!route.query.touch" class="mt-5 flex justify-center">
           <li>
             <a href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline mr-4 font-light"> {{ t('footer.cookie-policy') }}</a>
@@ -29,22 +34,29 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { CardComponent } from 'coghent-vue-3-component-library'
+import { CardComponent, BaseIcon } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import useSocials, { SocialLink } from '@/composables/useSocials'
 
 export default defineComponent({
   name: 'TheFooter',
   components: {
     CardComponent,
+    BaseIcon,
   },
   setup() {
     const { t } = useI18n()
     const route = useRoute()
+    const { all: allSocials } = useSocials()
+
+    const toSocial = (_social: SocialLink) => (window.location.href = _social.link)
 
     return {
       t,
       route,
+      allSocials,
+      toSocial
     }
   },
 })
