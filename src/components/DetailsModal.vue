@@ -166,7 +166,7 @@ import useClipboard from 'vue-clipboard3'
 // import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
-import { apolloClient, iiif, useGtmFeature, useStoryboxFeature } from '@/app'
+import { apolloClient, iiif, useGoogleFeature, useStoryboxFeature } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
@@ -294,7 +294,7 @@ export default defineComponent({
     useHead({ meta: head })
 
     watch(entity, async () => {
-      if (useGtmFeature.value === true) {
+      if (useGoogleFeature.value === true) {
         let title = getFirstValueOfPropertyFromEntity(entity.value, `title`)
         let description = getFirstValueOfPropertyFromEntity(entity.value, `description`)
         let image = ''

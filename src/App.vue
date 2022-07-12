@@ -28,7 +28,7 @@ import DisclaimerPopUp from './components/DisclaimerPopUp.vue'
 import DisclaimerButton from './components/DisclaimerButton.vue'
 import TheFooter from './components/TheFooter.vue'
 import MobileMenu from './components/MobileMenu.vue'
-import { useGtmFeature, useStoryboxFeature } from './app'
+import { useGoogleFeature, useStoryboxFeature } from './app'
 import { addGoogleData  } from '@/composables/gtm'
 
 export default defineComponent({
@@ -41,7 +41,7 @@ export default defineComponent({
     const route = useRoute()
     const mobileMenuIsOpen = ref<boolean>(false)
 
-    if (useGtmFeature.value === true) {
+    if (useGoogleFeature.value === true) {
       addGoogleData(`GTM-MHV9SLC`, `UA-164592648-1`)
     }
 
