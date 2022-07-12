@@ -43,10 +43,14 @@ export const addIframeToBody = (_gtmId: string) => {
   document.body.appendChild(noScript)
 }
 
-export const addGoogleData = (_gtmId: string, _gaId: string) => {
-  setDataLayer(_gaId)
-  setScriptTag(_gaId)
-  addGmtTaG(_gtmId)
-  addIframeToBody(_gtmId)
-  setScriptTag(_gtmId)
+export const addGoogleData = (_gtmId: string | undefined, _gaId: string | undefined) => {
+  if (_gaId !== undefined && _gaId !== '') {
+    setDataLayer(_gaId)
+    setScriptTag(_gaId)
+  }
+  if (_gtmId !== undefined && _gtmId !== '') {
+    addGmtTaG(_gtmId)
+    addIframeToBody(_gtmId)
+    // setScriptTag(_gtmId)
+  }
 }

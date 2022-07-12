@@ -29,7 +29,7 @@ import DisclaimerButton from './components/DisclaimerButton.vue'
 import TheFooter from './components/TheFooter.vue'
 import MobileMenu from './components/MobileMenu.vue'
 import { useGoogleFeature, useStoryboxFeature } from './app'
-import { addGoogleData  } from '@/composables/gtm'
+import { addGoogleData } from '@/composables/gtm'
 
 export default defineComponent({
   name: 'App',
@@ -42,7 +42,9 @@ export default defineComponent({
     const mobileMenuIsOpen = ref<boolean>(false)
 
     if (useGoogleFeature.value === true) {
-      addGoogleData(`GTM-MHV9SLC`, `UA-164592648-1`)
+      const gtmId = configStore.config.value.google?.tagManager
+      const gaId = configStore.config.value.google?.analytics
+      addGoogleData(gtmId, gaId)
     }
 
     if (route.query.touch) {
