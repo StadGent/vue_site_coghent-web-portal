@@ -1,4 +1,5 @@
 {
+  "title": "De Collectie Van De Gentenaar",
   "main": {
     "title": "Duik mee in de geschiedenis en ontdek de vele objecten uit onze",
     "rich": "rijke collectie!",
@@ -14,7 +15,7 @@
   "header": {
     "discover": "Ontdek de collectie",
     "pavilion": "Het paviljoen",
-    "about": "Over het project",
+    "about": "Over dit project",
     "code": "Gebruik je code",
     "coghentBox": "CoGent-box",
     "profile": "Profiel"

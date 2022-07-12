@@ -36,17 +36,19 @@
           </h2>
         </a>
       </div>
-      <div v-if="!route.query.touch" class="group sm:flex flex-col items-center pt-8 md:pt-5 hidden">
-        <a target="_blank" href="https://www.collectie.gent/over-het-project" class="flex items-center">
-          <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
-            {{ t('header.about') }}
-          </h2>
-        </a>
+      <div v-if="!route.query.touch && !isMobile" class="flex flex-row gap-8">
+        <div v-for="menuItem of headerItems" :key="menuItem.title" class="group sm:flex flex-col items-center pt-8 md:pt-5 hidden">
+          <a target="_blank" :href="menuItem.link" class="flex items-center">
+            <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
+              {{ menuItem.title }}
+            </h2>
+          </a>
+        </div>
       </div>
     </div>
 
     <div v-if="useAuthFeature === true" class="flex ml-3">
-      <div class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
+      <div v-if="!isMobile" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
       <base-button v-if="!userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
       <base-button
         v-if="userStore.hasUser"
@@ -83,6 +85,7 @@ import { User } from 'coghent-vue-3-component-library'
 import { apolloClient, router, useAuthFeature, useStoryboxFeature } from '@/app'
 import { storyboxCount } from '@/app'
 import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
+import useMenu from '@/composables/useMenu'
 
 export default defineComponent({
   name: 'TheHeader',
@@ -92,6 +95,7 @@ export default defineComponent({
     // const router = useRouter()
     const checkHome = () => route.path === '/' || route.name === 'singleObject'
     const checkTouch = () => route.fullPath.includes('touch=true')
+    const { headerItems } = useMenu()
 
     const isMobile = ref<boolean>(false)
     const isTouchActive = ref<Boolean>(checkTouch())
@@ -110,12 +114,12 @@ export default defineComponent({
     )
 
     onMounted(async () => {
+      if (window.innerWidth <= 900) {
+        isMobile.value = true
+      }
       if (userStore.hasUser) {
         await useStorybox(apolloClient).getStoryboxes()
         storyboxCount.value = StoryBoxState.value.count
-        if (window.innerWidth <= 900) {
-          isMobile.value = true
-        }
       }
     })
 
@@ -161,6 +165,7 @@ export default defineComponent({
       storyboxCount,
       checkAction,
       isMobile,
+      headerItems,
     }
   },
 })

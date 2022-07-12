@@ -20,7 +20,7 @@
             </filter>
           </defs>
         </svg>
-        <h1 class="ml-4">{{ t('header.discover') }}</h1>
+        <h1 class="ml-4">{{ t('title') }}</h1>
       </div>
       <div class="flex justify-between flex-col h-full bg-background-medium pl-6">
         <ul>

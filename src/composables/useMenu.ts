@@ -50,9 +50,27 @@ const useMenu = () => {
     },
   ]
 
+  const headerItems: Array<MenuItem> = [
+    {
+      id: `CoGent-box`,
+      title: t(`header.coghentBox`),
+      link: `https://www.collectie.gent/cogent-box`,
+      localLink: false,
+      requireAuth: false
+    },
+    {
+      id: `Over het project`,
+      title: t(`header.about`),
+      link: `https://www.collectie.gent/over-het-project`,
+      localLink: false,
+      requireAuth: false
+    }
+  ]
+
   return {
     mobileItems,
     bottomMobileItems,
+    headerItems,
   }
 }
 
