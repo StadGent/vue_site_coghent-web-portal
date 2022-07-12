@@ -50,13 +50,13 @@ export default defineComponent({
     const route = useRoute()
     const { all: allSocials } = useSocials()
 
-    const toSocial = (_social: SocialLink) => (window.location.href = _social.link)
+    const toSocial = (_social: SocialLink) => window.open(_social.link, '_blank')
 
     return {
       t,
       route,
       allSocials,
-      toSocial
+      toSocial,
     }
   },
 })
