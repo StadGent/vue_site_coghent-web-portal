@@ -3,14 +3,21 @@
     <slot></slot>
     <template #popper>
       <div class="p-4">
-        <div v-for="(storybox, index) in userStoryboxes" v-show="userStoryboxes.length" :key="index" :disabled="true">
-          <input :id="storybox.id" v-model="storyBoxFormState" type="radio" :value="storybox.name" :disabled="cannotAdd(storybox.id)" />
+        <div v-for="(storybox, index) in userStoryboxes" v-show="userStoryboxes.length" :key="index" @change="setStatusForStorybox(storybox)">
+          <input :id="storybox.id" v-model="storybox.checked" type="checkbox" :value="storybox.name" :disabled="storybox.added" />
           <label :for="index" class="p-2">{{ storybox.name }}</label>
         </div>
         <div v-if="!userStoryboxes.length">
           <p class="text-center">{{ t('details.modal.createStorybox') }}</p>
         </div>
-        <BaseButton v-close-popper :custom-style="storyBoxFormState ? 'primary' : 'primaryUnavailable'" :text="t('details.modal.addShort')" class="mt-4" :icon-shown="false" @click="emitButtonClick" />
+        <BaseButton
+          v-close-popper
+          :custom-style="canAddToStoryboxes === true ? 'primary' : 'primaryUnavailable'"
+          :text="t('details.modal.addShort')"
+          class="mt-4"
+          :icon-shown="false"
+          @click="emitButtonClick"
+        />
       </div>
     </template>
   </VDropdown>
@@ -28,6 +35,8 @@ import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 export type StoryboxDropdownInput = {
   id: string
   name: string
+  checked: boolean
+  added: boolean
 }
 
 export default defineComponent({
@@ -46,44 +55,58 @@ export default defineComponent({
   emits: ['addToStorybox'],
   setup(props, { emit }) {
     const { t } = useI18n()
-    const storyBoxFormState = ref<string>()
-    const userStoryboxes = ref<StoryboxDropdownInput[]>([
-      // { id: '1', name: 'First storybox' },
-      // { id: '2', name: 'Second storybox' },
-    ])
+    const canAddToStoryboxes = ref<boolean>(false)
+    const userStoryboxes = ref<StoryboxDropdownInput[]>([])
 
     const emitButtonClick = async () => {
-      if (storyBoxFormState.value) {
-        const selectedStoryBoxId: string | undefined = userStoryboxes.value.find((userStorybox: StoryboxDropdownInput) => userStorybox.name == storyBoxFormState.value)?.id
-        if (selectedStoryBoxId) {
-          emit('addToStorybox', selectedStoryBoxId)
+      const idsToAdd: Array<string> = []
+      if (canAddToStoryboxes.value) {
+        for (const box of userStoryboxes.value) {
+          if (box.added === false && box.checked === true) idsToAdd.push(box.id)
         }
+        emit('addToStorybox', idsToAdd)
       }
     }
 
     const cannotAdd = (_boxId: string) => {
+      console.log(`cannotAdd`, _boxId)
       const doNotAdd: Array<boolean> = []
       const assetsInBox = useStorybox(apolloClient).getStoryboxAssetAmount(_boxId)
       doNotAdd.push(!(assetsInBox < 10))
+      console.log(`CHECK IF ASSET IN BOX`, props.entity.id)
       const found = useStorybox(apolloClient).assetIsInStorybox(props.entity, _boxId)
       doNotAdd.push(found ? true : false)
+      console.log(`doNotAdd`, doNotAdd)
       return doNotAdd.some((state) => state === true)
     }
 
-    onMounted(async () => {
+    const checkIfStoryBoxesCanBeAdded = () => {
+      userStoryboxes.value.some((_object) => _object.checked === true && _object.added === false) === true ? (canAddToStoryboxes.value = true) : (canAddToStoryboxes.value = false)
+    }
+
+    const setStatusForStorybox = (_storybox: StoryboxDropdownInput) => {
+      checkIfStoryBoxesCanBeAdded()
+    }
+
+    const _init_ = () => {
       StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
         const title = getMetadataOfTypeFromEntity(_box, 'title')
-        userStoryboxes.value.push({ id: _box.id, name: title ? title.value : _box.id })
+        userStoryboxes.value.push({ id: _box.id, name: title ? title.value : _box.id, checked: cannotAdd(_box.id), added: cannotAdd(_box.id) })
       })
       storyboxCount.value = StoryBoxState.value.count
+    }
+
+    onMounted(async () => {
+      _init_()
     })
 
     return {
-      storyBoxFormState,
+      canAddToStoryboxes,
       userStoryboxes,
       emitButtonClick,
       t,
       cannotAdd,
+      setStatusForStorybox,
     }
   },
 })
