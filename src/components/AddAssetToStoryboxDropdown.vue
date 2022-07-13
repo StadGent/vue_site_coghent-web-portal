@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { apolloClient, storyboxCount } from '@/app'
@@ -51,6 +51,10 @@ export default defineComponent({
       type: Object as PropType<typeof Entity>,
       required: true,
     },
+    trigger: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['addToStorybox'],
   setup(props, { emit }) {
@@ -69,11 +73,9 @@ export default defineComponent({
     }
 
     const cannotAdd = (_boxId: string) => {
-      console.log(`cannotAdd`, _boxId)
       const doNotAdd: Array<boolean> = []
       const assetsInBox = useStorybox(apolloClient).getStoryboxAssetAmount(_boxId)
       doNotAdd.push(!(assetsInBox < 10))
-      console.log(`CHECK IF ASSET IN BOX`, props.entity.id)
       const found = useStorybox(apolloClient).assetIsInStorybox(props.entity, _boxId)
       doNotAdd.push(found ? true : false)
       console.log(`doNotAdd`, doNotAdd)
@@ -89,6 +91,7 @@ export default defineComponent({
     }
 
     const _init_ = () => {
+      userStoryboxes.value = []
       StoryBoxState.value.storyboxes.forEach((_box: typeof Entity) => {
         const title = getMetadataOfTypeFromEntity(_box, 'title')
         userStoryboxes.value.push({ id: _box.id, name: title ? title.value : _box.id, checked: cannotAdd(_box.id), added: cannotAdd(_box.id) })
@@ -96,9 +99,10 @@ export default defineComponent({
       storyboxCount.value = StoryBoxState.value.count
     }
 
-    onMounted(async () => {
-      _init_()
-    })
+    watch(
+      () => props.trigger,
+      (isTriggered) => _init_()
+    )
 
     return {
       canAddToStoryboxes,
