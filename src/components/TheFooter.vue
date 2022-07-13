@@ -13,7 +13,7 @@
           </div>
         </div>
         <div v-if="!route.query.touch" class="flex flex-row w-full justify-center gap-8 mt-4 mb-8">
-          <div class="p-4 cursor-pointer" v-for="social of allSocials" :key="social.icon" @click="toSocial(social)">
+          <div v-for="social of allSocials" :key="social.icon" class="p-4 cursor-pointer" @click="toSocial(social)">
             <base-icon :icon="social.icon" class="black" />
           </div>
         </div>

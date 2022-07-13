@@ -2,8 +2,8 @@ import { ConfigStore } from '@/stores/ConfigStore'
 import StoreFactory from '@/stores/StoreFactory'
 
 export type SocialLink = {
-  icon: string,
-  link: string,
+  icon: string
+  link: string
 }
 const useSocials = () => {
   const configStore = StoreFactory.get(ConfigStore)
@@ -26,7 +26,7 @@ const useSocials = () => {
   setSocials()
 
   return {
-    all
+    all,
   }
 }
 

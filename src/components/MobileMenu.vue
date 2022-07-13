@@ -24,12 +24,12 @@
       </div>
       <div class="flex justify-between flex-col h-full bg-background-medium pl-6">
         <ul>
-          <li class="flex items-center justify-left border-b-2 border-background-light h-16" v-for="menuItem of menuItems" :key="menuItem.id" @click="() => openMenuItem(menuItem)">
+          <li v-for="menuItem of menuItems" :key="menuItem.id" class="flex items-center justify-left border-b-2 border-background-light h-16" @click="() => openMenuItem(menuItem)">
             {{ menuItem.title }}
           </li>
         </ul>
         <ul class="border-t-2 border-background-light flex object-bottom">
-          <li class="flex items-center justify-left h-16" v-for="menuItem of menuItemsBottom" :key="menuItem.id" @click="() => openMenuItem(menuItem)">
+          <li v-for="menuItem of menuItemsBottom" :key="menuItem.id" class="flex items-center justify-left h-16" @click="() => openMenuItem(menuItem)">
             {{ menuItem.title }}
           </li>
         </ul>

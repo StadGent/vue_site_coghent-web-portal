@@ -6,7 +6,7 @@
           {{
             t('storybox.assets.title') +
             `(${StoryBoxState.activeStorybox.assetTimings != undefined ? StoryBoxState.activeStorybox.assetTimings.length : 0} ${
-              StoryBoxState.activeStorybox.assetTimings != undefined  && StoryBoxState.activeStorybox.assetTimings.length === 10 ? ` maximum` : ``
+              StoryBoxState.activeStorybox.assetTimings != undefined && StoryBoxState.activeStorybox.assetTimings.length === 10 ? ` maximum` : ``
             })`
           }}
         </h1>
@@ -55,11 +55,11 @@
                 <label class="flex flex-row text-bold items-center" for="duration">
                   Deze afbeelding wordt getoond voor
                   <BaseDropDown
-                    :numberStep="5"
-                    :numberMax="60"
-                    @selected="(option) => updateAssetTiming(asset, option)"
+                    :number-step="5"
+                    :number-max="60"
                     :active="Number(setAssetTiming(asset))"
                     :style="`p-1.5 rounded-md ml-2 w-16 mr-2 bg-text-white`"
+                    @selected="(option) => updateAssetTiming(asset, option)"
                   />
                   seconden.
                 </label>
@@ -176,7 +176,7 @@ export default defineComponent({
       let updatedItems: Array<typeof Entity> = []
       Object.assign(updatedItems, _items)
       const index = updatedItems.map((asset) => asset.id === _item.id).indexOf(true)
-      index !== -1?updatedItems.splice(index, 1):null
+      index !== -1 ? updatedItems.splice(index, 1) : null
       return updatedItems
     }
 

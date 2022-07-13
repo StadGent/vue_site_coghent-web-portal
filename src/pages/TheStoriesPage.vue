@@ -42,7 +42,7 @@
           <base-button :text="t('storybox.createNew')" :on-click="() => router.push(`/mystories/new`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
         </div>
       </div>
-      <profile-list-item :v-show="storyBoxItems.length > 0 && !loading" v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :profile-list-item-info="storyBoxItem" />
+      <profile-list-item v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :v-show="storyBoxItems.length > 0 && !loading" :profile-list-item-info="storyBoxItem" />
     </section>
   </section>
 </template>

@@ -146,9 +146,14 @@
       </div>
       <div v-if="useStoryboxFeature === true && userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
       <div v-if="useStoryboxFeature === true && userStore.hasUser && entity" class="mx-3 align-center">
-        <AddAssetToStoryboxDropdown @click="() => storyboxDdOpen = !storyboxDdOpen" :trigger="storyboxDdOpen" :entity="entity" @addToStorybox="(ids) => addAssetToStorybox(ids)">
+        <AddAssetToStoryboxDropdown :trigger="storyboxDdOpen" :entity="entity" @click="() => (storyboxDdOpen = !storyboxDdOpen)" @addToStorybox="(ids) => addAssetToStorybox(ids)">
           <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="assetIsInAStorybox ? `check` : `storybox`" class="px-2 hidden lg:flex" />
-          <base-button custom-style="secondary-round" :icon-shown="true" :custom-icon="assetIsInAStorybox ? `check` : `storybox`" class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden" />
+          <base-button
+            custom-style="secondary-round"
+            :icon-shown="true"
+            :custom-icon="assetIsInAStorybox ? `check` : `storybox`"
+            class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden"
+          />
         </AddAssetToStoryboxDropdown>
       </div>
     </section>
