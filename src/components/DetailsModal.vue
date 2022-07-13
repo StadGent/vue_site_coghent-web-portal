@@ -156,7 +156,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, reactive, ref, watch } from 'vue'
+import { defineComponent, reactive, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
@@ -277,7 +277,7 @@ export default defineComponent({
     AddAssetToStoryboxDropdown,
   },
   setup(props) {
-    const { closeDetailsModal, DetailsModalState, openDetailsModal } = useDetailsModal()
+    const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
     const { toClipboard } = useClipboard()
@@ -321,6 +321,10 @@ export default defineComponent({
       }
     })
 
+    watch(DetailsModalState, (_modal) => {
+      _modal.state === 'show' ? checkAssetIsInAStorybox() : null
+    })
+
     const checkAssetIsInAStorybox = async () => {
       new Promise((resolve, reject) => {
         for (const box of StoryBoxState.value.storyboxes) {
@@ -347,6 +351,7 @@ export default defineComponent({
         }
       }
       await useStorybox(apolloClient).getStoryboxes()
+      checkAssetIsInAStorybox()
     }
 
     const copyUrl = async (id: String) => {
