@@ -96,6 +96,7 @@ export default defineComponent({
         const title = getMetadataOfTypeFromEntity(_box, 'title')
         userStoryboxes.value.push({ id: _box.id, name: title ? title.value : _box.id, checked: cannotAdd(_box.id), added: cannotAdd(_box.id) })
       })
+      canAddToStoryboxes.value = userStoryboxes.value.some((_obj) => _obj.added === false)
       storyboxCount.value = StoryBoxState.value.count
     }
 
