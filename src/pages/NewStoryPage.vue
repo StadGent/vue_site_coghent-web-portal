@@ -83,16 +83,16 @@ export default defineComponent({
           description: storyDescription.value,
         } as typeof StoryboxBuild
         if (hasBoxCode.value === true) {
-          const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
-          if (newFrame.errors) {
-            codeInputError.value = t('storybox.new.codeDoesNotExist')
+          const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value), storyName.value ? storyName.value : '', storyDescription.value ? storyDescription.value : '')
+          if (newFrame === null) {
+            codeInputError.value = t('storybox.new.linkedCode')
+          } else {
+            StoryBoxState.value.activeStorybox.frameId = newFrame.id
+            storyboxCount.value = StoryBoxState.value.count
+            storyboxDataIsUpdated.value = true
+            router.push(`/mystories`)
           }
-          StoryBoxState.value.activeStorybox.frameId = newFrame.id
         }
-        router.push(`/mystories`)
-        await useStorybox(apolloClient).createNew()
-        storyboxCount.value = StoryBoxState.value.count
-        storyboxDataIsUpdated.value = true
       }
     }
 

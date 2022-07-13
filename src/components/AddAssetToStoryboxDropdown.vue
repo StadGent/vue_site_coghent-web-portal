@@ -78,7 +78,6 @@ export default defineComponent({
       doNotAdd.push(!(assetsInBox < 10))
       const found = useStorybox(apolloClient).assetIsInStorybox(props.entity, _boxId)
       doNotAdd.push(found ? true : false)
-      console.log(`doNotAdd`, doNotAdd)
       return doNotAdd.some((state) => state === true)
     }
 
