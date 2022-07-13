@@ -176,7 +176,7 @@ export default defineComponent({
       let updatedItems: Array<typeof Entity> = []
       Object.assign(updatedItems, _items)
       const index = updatedItems.map((asset) => asset.id === _item.id).indexOf(true)
-      updatedItems.splice(index, 1)
+      index !== -1?updatedItems.splice(index, 1):null
       return updatedItems
     }
 
