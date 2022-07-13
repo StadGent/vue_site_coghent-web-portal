@@ -147,7 +147,7 @@
       <div v-if="useStoryboxFeature === true && userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
       <div v-if="useStoryboxFeature === true && userStore.hasUser && entity" class="mx-3 align-center">
         <AddAssetToStoryboxDropdown :entity="entity" @addToStorybox="(ids) => addAssetToStorybox(ids)">
-          <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="storyBoxIcon" class="px-2 hidden lg:flex" />
+          <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="assetIsInAStorybox ? `check` : `storybox`" class="px-2 hidden lg:flex" />
           <base-button custom-style="secondary-round" :icon-shown="true" :custom-icon="storyBoxIcon" class="w-12 h-12 pl-6 stroke-current text-accent-purple inline-block lg:hidden" />
         </AddAssetToStoryboxDropdown>
       </div>
@@ -163,7 +163,6 @@ import { ModalState } from './base/Modal.vue'
 import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal, MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
-// import { MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library/lib/queries'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
 import { apolloClient, iiif, useGoogleFeature, useStoryboxFeature } from '@/app'
@@ -290,10 +289,12 @@ export default defineComponent({
     const storyBoxIcon = ref<'check' | 'storybox'>('storybox')
     const { openMediaModal, setMediaModalImageUrl, setMediaModalFile } = useMediaModal()
     const head = reactive<Array<HeadAttrs>>([])
+    const assetIsInAStorybox = ref<boolean>(false)
 
     useHead({ meta: head })
 
     watch(entity, async () => {
+      await checkAssetIsInAStorybox()
       if (useGoogleFeature.value === true) {
         let title = getFirstValueOfPropertyFromEntity(entity.value, `title`)
         let description = getFirstValueOfPropertyFromEntity(entity.value, `description`)
@@ -301,7 +302,6 @@ export default defineComponent({
         entity.value.primary_transcode ? (image = entity.value.primary_transcode) : ''
         const media = await getFirstMediafileWithFilelocationOfEntity(entity.value)
         media && media.original_file_location ? (image = media.original_file_location) : ``
-        console.log(`entity`, entity)
         head.push(
           ...[
             {
@@ -320,6 +320,18 @@ export default defineComponent({
         )
       }
     })
+
+    const checkAssetIsInAStorybox = async () => {
+      new Promise((resolve, reject) => {
+        for (const box of StoryBoxState.value.storyboxes) {
+          const found = useStorybox(apolloClient).assetIsInStorybox(entity.value, box.id)
+          found && found.key ? resolve(true) : null
+        }
+        resolve(false)
+      }).then((val) => {
+        assetIsInAStorybox.value = val as boolean
+      })
+    }
 
     const handleMediaModal = (filename: string, mediaFile: typeof MediaFile) => {
       setMediaModalImageUrl(generateInfoUrl(filename, 'full'))
@@ -482,6 +494,7 @@ export default defineComponent({
       useStoryboxFeature,
       handleMediaModal,
       audioUrl,
+      assetIsInAStorybox,
     }
   },
   methods: {
