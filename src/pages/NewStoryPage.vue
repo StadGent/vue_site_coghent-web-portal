@@ -77,11 +77,6 @@ export default defineComponent({
     const save = async () => {
       formValid.value = await checkValues()
       if (formValid.value) {
-        StoryBoxState.value.activeStorybox = {
-          frameId: null,
-          title: storyName.value,
-          description: storyDescription.value,
-        } as typeof StoryboxBuild
         if (hasBoxCode.value === true) {
           const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value), storyName.value ? storyName.value : '', storyDescription.value ? storyDescription.value : '')
           if (newFrame === null) {
@@ -89,10 +84,17 @@ export default defineComponent({
           } else {
             StoryBoxState.value.activeStorybox.frameId = newFrame.id
             storyboxCount.value = StoryBoxState.value.count
-            storyboxDataIsUpdated.value = true
-            router.push(`/mystories`)
           }
+        } else {
+          StoryBoxState.value.activeStorybox = {
+            frameId: null,
+            title: storyName.value,
+            description: storyDescription.value,
+          } as typeof StoryboxBuild
+          await useStorybox(apolloClient).createNew()
         }
+        storyboxDataIsUpdated.value = true
+        router.push(`/mystories`)
       }
     }
 
