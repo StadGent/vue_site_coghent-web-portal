@@ -144,8 +144,8 @@
         <base-button class="hidden w-12 h-12 pl-6 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
         <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
       </div>
-      <div v-if="useStoryboxFeature === true && userStore.hasUser" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <div v-if="useStoryboxFeature === true && userStore.hasUser && entity" class="mx-3 align-center">
+      <div v-if="canAddToStoryBox === true" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
+      <div v-if="canAddToStoryBox === true" class="mx-3 align-center">
         <AddAssetToStoryboxDropdown :trigger="storyboxDdOpen" :entity="entity" @click="() => (storyboxDdOpen = !storyboxDdOpen)" @addToStorybox="(ids) => addAssetToStorybox(ids)">
           <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="assetIsInAStorybox ? `check` : `storybox`" class="px-2 hidden lg:flex" />
           <base-button
@@ -178,8 +178,7 @@ import AddAssetToStoryboxDropdown from './AddAssetToStoryboxDropdown.vue'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { HeadAttrs, useHead } from '@vueuse/head'
-import { getFirstValueOfPropertyFromEntity } from 'coghent-vue-3-component-library'
-import { getFirstMediafileWithFilelocationOfEntity } from 'coghent-vue-3-component-library'
+import { getFirstValueOfPropertyFromEntity, Entity, getFirstMediafileWithFilelocationOfEntity, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
 
 export type DetailsModalType = {
   state: ModalState
@@ -295,10 +294,12 @@ export default defineComponent({
     const head = reactive<Array<HeadAttrs>>([])
     const assetIsInAStorybox = ref<boolean>(false)
     const storyboxDdOpen = ref<boolean>(false)
+    const canAddToStoryBox = ref<boolean>(false)
 
     useHead({ meta: head })
 
     watch(entity, async () => {
+      canAddToStoryBox.value = await checkForValidStoryboxAsset(entity.value, entity.value.primary_mediafile)
       await checkAssetIsInAStorybox()
       if (useGoogleFeature.value === true) {
         let title = getFirstValueOfPropertyFromEntity(entity.value, `title`)
@@ -329,6 +330,16 @@ export default defineComponent({
     watch(DetailsModalState, (_modal) => {
       _modal.state === 'show' ? checkAssetIsInAStorybox() : null
     })
+
+    const checkForValidStoryboxAsset = async (_entity: typeof Entity, _filename: string | undefined): Promise<boolean> => {
+      const checks: Array<boolean> = []
+      useStoryboxFeature.value === true && userStore.hasUser && entity ? checks.push(true) : checks.push(false)
+      if (!checks.includes(false)) {
+        const mediaTypeForPrimaryFile = await getMediaTypeByfilename(entity.value, entity.value.primary_mediafile)
+        mediaTypeForPrimaryFile !== null && mediaTypeForPrimaryFile.image && mediaTypeForPrimaryFile.image === true ? checks.push(true) : checks.push(false)
+      }
+      return !checks.some((_check) => _check === false)
+    }
 
     const checkAssetIsInAStorybox = async () => {
       new Promise((resolve, reject) => {
@@ -505,6 +516,7 @@ export default defineComponent({
       audioUrl,
       assetIsInAStorybox,
       storyboxDdOpen,
+      canAddToStoryBox,
     }
   },
   methods: {
