@@ -35,8 +35,8 @@ const routes = [
   { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: true } },
   { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: true } },
   { path: '/mystories/:storyboxId', component: TheStoryboxPage, meta: { requiresAuth: true } },
-  { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: true } },
-  { path: '/myworks/upload', component: TheUploadPage, meta: { requiresAuth: false } },
+  { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: false } },
+  { path: '/upload', component: TheUploadPage, meta: { requiresAuth: false } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
 

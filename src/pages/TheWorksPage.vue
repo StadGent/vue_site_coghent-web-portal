@@ -22,7 +22,7 @@ export default defineComponent({
   components: { ProfileSideMenu, ProfileListItem, BaseButton },
   setup() {
     const { t } = useI18n()
-    const uploadRoute = `/myworks/upload`
+    const uploadRoute = `/upload`
     const myWorks = ref<ProfileListItemInfo[]>([
       {
         id: '1',

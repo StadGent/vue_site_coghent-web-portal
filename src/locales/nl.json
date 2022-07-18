@@ -97,8 +97,8 @@
       "creation-date": "Aangemaakt op ",
       "code": "Code: ",
       "create": {
-        "create-storybox":"Maak een verhaal zonder code",
-        "create-storybox-with-code":"Ik heb al een code uit de box",
+        "create-storybox": "Maak een verhaal zonder code",
+        "create-storybox-with-code": "Ik heb al een code uit de box",
         "name": "Naam van het verhaal",
         "description": "Beschrijving",
         "code": "Code van je box bezoek",
@@ -150,7 +150,7 @@
       "search": "Zelf een werk toevoegen",
       "collection": "Zoeken in de collectie"
     },
-    "new":{
+    "new": {
       "onlyNumbers": "Gelieve enkel nummers in te voeren",
       "codeLength": "Code moet 8 karakters bevatten",
       "nameLength": "Naam moet minimum 5 karakters bevatten",
@@ -176,8 +176,13 @@
       "status": "Bedankt om je verhaal met ons te delen! We hebben je verhaal goed ontvangen en kijken alles eventjes na. Je kan de status opvolgen in je account bij Mijn verhalen. Het zou kunnen dat we nog contact met je opnemen als we extra informatie nodig hebben."
     }
   },
-  "myWorks":{
+  "myWorks": {
     "upload": "Upload"
+  },
+  "flow": {
+    "next": "Volgende",
+    "previous": "Vorige",
+    "save": "Bewaren"
   },
   //collectie
   "Collectie.naam": "Dossier",
