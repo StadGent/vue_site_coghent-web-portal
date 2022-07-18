@@ -177,7 +177,14 @@
     }
   },
   "myWorks": {
-    "upload": "Upload"
+    "upload": {
+      "title": "Upload",
+      "stepOne": {
+        "title": "Fijn dat je wil bijdragen aan onze collectie! We zijn benieuwd naar jouw werk...",
+        "sleep": "Sleep je bestand in dit venster",
+        "uploadFromComputer": "Of upload vanop je computer"
+      }
+    }
   },
   "flow": {
     "next": "Volgende",

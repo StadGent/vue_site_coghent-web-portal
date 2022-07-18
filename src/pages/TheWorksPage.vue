@@ -3,7 +3,7 @@
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
       <div class="p-4 flex justify-end">
-        <base-button :on-click="() => router.push(uploadRoute)" :iconShown="true" customIcon="newItem" :text="t(`myWorks.upload`)"></base-button>
+        <base-button class="text-text-white" :on-click="() => router.push(uploadRoute)" :iconShown="true" customIcon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
       </div>
       <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
     </section>
