@@ -176,6 +176,9 @@
       "status": "Bedankt om je verhaal met ons te delen! We hebben je verhaal goed ontvangen en kijken alles eventjes na. Je kan de status opvolgen in je account bij Mijn verhalen. Het zou kunnen dat we nog contact met je opnemen als we extra informatie nodig hebben."
     }
   },
+  "myWorks":{
+    "upload": "Upload"
+  },
   //collectie
   "Collectie.naam": "Dossier",
   //identificatie

@@ -13,6 +13,7 @@ import NewStoryPage from './pages/NewStoryPage.vue'
 import TheLoginPage from './pages/TheLoginPage.vue'
 import TheWorksPage from './pages/TheWorksPage.vue'
 import TheVisitPage from './pages/TheVisitPage.vue'
+import TheUploadPage from './pages/TheUploadPage.vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
 
@@ -35,6 +36,7 @@ const routes = [
   { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: true } },
   { path: '/mystories/:storyboxId', component: TheStoryboxPage, meta: { requiresAuth: true } },
   { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: true } },
+  { path: '/myworks/upload', component: TheUploadPage, meta: { requiresAuth: false } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
 
