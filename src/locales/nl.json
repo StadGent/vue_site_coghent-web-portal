@@ -183,6 +183,21 @@
         "title": "Fijn dat je wil bijdragen aan onze collectie! We zijn benieuwd naar jouw werk...",
         "sleep": "Sleep je bestand in dit venster",
         "uploadFromComputer": "Of upload vanop je computer"
+      },
+      "stepTwo": {
+        "title": "Kan je ons vertellen van wie dit werk oorspronkelijk is?",
+        "options": {
+          "owner": {
+            "title": "Ik ben zelf de maker van het werk",
+            "info": "Dit wil zeggen dat je het werk helemaal zelf geschilderd, geboetseerd, getekend, ... hebt.",
+            "disclaimer": "Bij het uploaden van eigen werk geldt CC0 als copyright, lees hier alles over onze voorwaarden"
+          },
+          "uploader": {
+            "title": "Iemand anders heeft dit werk gemaakt",
+            "info": "Dit wil zeggen dat je een foto, scan, kopie, ... van het werk van iemand anders instuurt.",
+            "disclaimer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel suspendisse cursus feugiat est diam sed. Ultricies est, augue purus odio hier alles over onze voorwaarden "
+          }
+        }
       }
     }
   },
