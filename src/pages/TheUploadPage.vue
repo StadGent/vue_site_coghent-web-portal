@@ -5,6 +5,7 @@
         <UploadStepOne v-if="currentUploadStep === 1" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
         <UploadStepThree v-if="currentUploadStep === 3" />
+        <UploadStepFour v-if="currentUploadStep === 4" />
       </div>
       <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
         <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :iconShown="false" customStyle="secondary" :text="t(`flow.previous`)"></base-button>
@@ -25,6 +26,7 @@ import { useI18n } from 'vue-i18n'
 import UploadStepOne from '@/components/UploadStepOne.vue'
 import UploadStepTwo from '@/components/UploadStepTwo.vue'
 import UploadStepThree from '@/components/UploadStepThree.vue'
+import UploadStepFour from '@/components/UploadStepFour.vue'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { router } from '@/app'
@@ -44,6 +46,7 @@ export default defineComponent({
     UploadStepOne,
     UploadStepTwo,
     UploadStepThree,
+    UploadStepFour,
     StepProgress,
   },
   setup() {

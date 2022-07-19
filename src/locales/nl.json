@@ -214,6 +214,9 @@
           "relations": "Relaties"
         }
       },
+      "stepFour":{
+        "title": "Kijk zeker nog even na of alle gegevens over het werk dat je wil bijdragen kloppen."
+      },
       "steps": {
         "stepOne": "Bestand opladen",
         "stepTwo": "Werk verifiëren",
