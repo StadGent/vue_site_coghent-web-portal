@@ -199,6 +199,21 @@
           }
         }
       },
+      "stepThree": {
+        "title": "Ken je meer gegevens over de oorspronkelijke maker van het werk?",
+        "metadata": {
+          "title": "Informatie die we heel graag kennen",
+          "q1": "(Originele) title van het werk",
+          "q2": "Beschrijving (waarover gaat het werk, wat is er afgebeeld,...)",
+          "q3": "Wie heeft het werk gemaakt (fotograaf, kunstenaar,...)?",
+          "q4": "Wanneer is het werk gemaakt (datum, periode,...)?"
+        },
+        "relation": {
+          "title": "Voeg relaties toe aan je werk, locaties, objecten, ...",
+          "search": "zoek relaties",
+          "relations": "Relaties"
+        }
+      },
       "steps": {
         "stepOne": "Bestand opladen",
         "stepTwo": "Werk verifiëren",

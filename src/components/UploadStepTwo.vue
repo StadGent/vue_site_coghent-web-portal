@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full p-8 flex text-center flex-col">
+  <div class="h-full p-8 flex text-center flex-col items-center">
     <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepTwo.title') }}</h1>
     <div class="h-full w-full grid grid-cols-2 gap-4 my-8">
       <div class="bg-text-white p-4 flex flex-col text-center" v-for="option of options" :key="option.title" @click="setSelectedOption(option)">

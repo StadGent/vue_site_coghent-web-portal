@@ -1,11 +1,12 @@
 <template>
   <BaseModal :modal-state="modalState" :large="true" class="py-16 z-40" :scroll="false" @hide-modal="() => openCloseUpload(`hide`)">
     <div class="flex flex-col justify-between h-full bg-background-medium">
-      <div class="h-full pt-8">
+      <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
+        <UploadStepThree v-if="currentUploadStep === 3" />
       </div>
-      <div class="flex flex-rows px-8 pt-4 h-fit items-center bg-background-light">
+      <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
         <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :iconShown="false" customStyle="secondary" :text="t(`flow.previous`)"></base-button>
         <div class="w-full h-full flex items-center">
           <StepProgress :steps="steps" :showTitles="true" :currentStep="currentUploadStep" :currentStatus="'inProgress'" />
@@ -23,6 +24,7 @@ import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UploadStepOne from '@/components/UploadStepOne.vue'
 import UploadStepTwo from '@/components/UploadStepTwo.vue'
+import UploadStepThree from '@/components/UploadStepThree.vue'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { router } from '@/app'
@@ -41,6 +43,7 @@ export default defineComponent({
     BaseButton,
     UploadStepOne,
     UploadStepTwo,
+    UploadStepThree,
     StepProgress,
   },
   setup() {
