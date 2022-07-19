@@ -198,6 +198,12 @@
             "disclaimer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel suspendisse cursus feugiat est diam sed. Ultricies est, augue purus odio hier alles over onze voorwaarden "
           }
         }
+      },
+      "steps": {
+        "stepOne": "Bestand opladen",
+        "stepTwo": "Werk verifiëren",
+        "stepThree": "Details aanvullen",
+        "stepFour": "Controle voor verzenden"
       }
     }
   },

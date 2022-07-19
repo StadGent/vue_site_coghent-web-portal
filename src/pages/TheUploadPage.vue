@@ -5,9 +5,11 @@
         <UploadStepOne v-if="currentUploadStep === 1" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
       </div>
-      <div class="flex flex-rows px-8 h-fit items-center bg-background-light">
+      <div class="flex flex-rows px-8 pt-4 h-fit items-center bg-background-light">
         <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :iconShown="false" customStyle="secondary" :text="t(`flow.previous`)"></base-button>
-        <div class="w-full flex justify-center">flow state</div>
+        <div class="w-full h-full flex items-center">
+          <StepProgress :steps="steps" :showTitles="true" :currentStep="currentUploadStep" :currentStatus="'inProgress'" />
+        </div>
         <base-button class="my-8" :on-click="nextStep" :iconShown="false" :text="t(`flow.next`)"></base-button>
       </div>
     </div>
@@ -16,7 +18,7 @@
 
 <script lang="ts">
 import { useUpload } from 'coghent-vue-3-component-library'
-import { ModalState, BaseButton, BaseModal, currentUploadStep } from 'coghent-vue-3-component-library'
+import { ModalState, BaseButton, BaseModal, currentUploadStep, StepProgress } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UploadStepOne from '@/components/UploadStepOne.vue'
@@ -39,6 +41,7 @@ export default defineComponent({
     BaseButton,
     UploadStepOne,
     UploadStepTwo,
+    StepProgress,
   },
   setup() {
     const { modalState, openCloseUpload } = useModal()
@@ -46,6 +49,7 @@ export default defineComponent({
     const { t } = useI18n()
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
+    const steps = ref<Array<string>>([])
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
@@ -56,10 +60,18 @@ export default defineComponent({
       _step !== 1 ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
     })
 
+    const setSteps = () => {
+      steps.value.push(`${t(`myWorks.upload.steps.stepOne`)}`)
+      steps.value.push(`${t(`myWorks.upload.steps.stepTwo`)}`)
+      steps.value.push(`${t(`myWorks.upload.steps.stepThree`)}`)
+      steps.value.push(`${t(`myWorks.upload.steps.stepFour`)}`)
+    }
+
     const init = () => {
       if (userStore.hasUser) {
         newInit(userStore.user.value.email)
         openCloseUpload(`show`)
+        setSteps()
       } else router.go(-1)
     }
 
@@ -73,6 +85,7 @@ export default defineComponent({
       currentUploadStep,
       nextStep,
       previousStep,
+      steps,
     }
   },
 })
