@@ -19,16 +19,24 @@
       </div>
       <div class="bg-text-white py-4 px-8 flex flex-col text-left">
         <h2 class="font-bold text-lg">{{ t('myWorks.upload.stepThree.relation.title') }}</h2>
-        <input
-          v-model="relationSearch"
-          class="mt-8 bg-background-light appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          :placeholder="t(`myWorks.upload.stepThree.relation.search`)"
-        />
+        <span>
+          <input
+            v-model="relationSearch"
+            class="mt-8 bg-background-light appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            :placeholder="t(`myWorks.upload.stepThree.relation.search`)"
+          />
+          <ul v-if="dropdownResults.length >= 1" class="px-2">
+            <li v-for="result of dropdownResults" :key="result" class="bg-background-medium text-left flex items-center h-8 px-4 py-1 hover:bg-background-dark" @click="addToRelations(result)">
+              {{ result }}
+            </li>
+          </ul>
+        </span>
+
         <h3 class="mt-8 text-base font-normal">{{ t(`myWorks.upload.stepThree.relation.relations`) }}</h3>
         <div class="flex-grow my-4 p-4 flex flex-row flex-wrap bg-background-light gap-2">
-          <div v-for="tag of relations" :key="tag" class="mr-2 bg-tag-neutral max-h-8 w-fit flex items-center px-2 py-1">
-            <span>tag</span> <BaseIcon icon="check" class="stroke-current ml-2 p-1" />
+          <div v-for="relation of relations" :key="relation" class="mr-2 bg-tag-neutral max-h-8 w-fit flex items-center px-2 py-1">
+            <span>relation</span> <BaseIcon icon="close" class="stroke-current ml-2 p-1 cursor-pointer" :on-click="removeFromRelations(relation)" />
           </div>
         </div>
       </div>
@@ -58,12 +66,13 @@ export default defineComponent({
   setup() {
     const { t } = useI18n()
     const metadata = ref<Array<MetadataQuestion>>([])
-    const relations = ref<Array<typeof Relation>>([])
+    const relations = ref<Array<typeof Relation>>(['dsds', 'sdsd'])
     const relationSearch = ref<string>('')
     const searchValue = ref<string | null>(null)
-    const queryRelations = ref<boolean>(true)
+    const queryRelations = ref<boolean>(false)
+    const dropdownResults = ref<Array<string>>([])
 
-    const { result, onResult, loading, fetchMore } = useQuery(
+    const { onResult, loading } = useQuery(
       GetEntitiesDocument,
       () => ({
         limit: 10,
@@ -71,48 +80,30 @@ export default defineComponent({
         searchValue: {
           value: '',
           isAsc: false,
-          relation_filter: [],
+          relation_filter: [searchValue.value],
           randomize: true,
           // seed: randomValue.value,
           key: 'title',
-          has_mediafile: true,
-          skip_relations: false,
+          has_mediafile: false,
+          skip_relations: true,
           and_filter: true,
         },
       }),
       () => ({
         prefetch: false,
-        enabled: queryRelations.value,
+        enabled: true,
       })
     )
 
     onResult((response) => {
       console.log(`response`, response)
-      queryRelations.value = false
+      // dropdownResults.value = response.data.Entities.results
     })
 
     watch(relationSearch, async (value) => {
       searchValue.value = null
-      if (loading.value === false && queryRelations.value === false) {
-        searchValue.value = await debounce(() => relationSearch.value, 3000)()
-        await fetchMore({
-          variables: {
-            limit: 10,
-            skip: 0,
-            searchValue: {
-              value: searchValue.value,
-              isAsc: false,
-              relation_filter: [],
-              randomize: true,
-              // seed: randomValue.value,
-              key: 'title',
-              has_mediafile: true,
-              skip_relations: false,
-              and_filter: true,
-            },
-          },
-        })
-        queryRelations.value = true
+      if (loading.value === false) {
+        searchValue.value = await debounce(() => relationSearch.value, 700)()
       }
     })
     watch(searchValue, async (value) => {
@@ -129,6 +120,15 @@ export default defineComponent({
       }
     }
 
+    const addToRelations = (_result: string) => {
+      console.log(`adding to relations`, _result)
+      relations.value.push({} as typeof Relation)
+    }
+
+    const removeFromRelations = (_relation: typeof Relation) => {
+      relations.value = relations.value.filter((relation: typeof Relation) => relation != _relation)
+    }
+
     const init = () => {
       searchValue.value = null
       setMetadataQuestions()
@@ -141,6 +141,9 @@ export default defineComponent({
       metadata,
       relations,
       relationSearch,
+      dropdownResults,
+      addToRelations,
+      removeFromRelations,
     }
   },
 })
