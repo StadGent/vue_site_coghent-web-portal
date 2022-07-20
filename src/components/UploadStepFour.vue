@@ -7,7 +7,7 @@
           <img src="/no-image.png" alt="" />
         </div>
         <div class="w-3/5 flex flex-grow flex-col text-left p-8">
-          <div v-for="meta of uploadState.metadata" :key="meta.key" class="flex flex-col mb-4">
+          <div class="flex flex-col mb-4" v-for="meta of uploadState.metadata" :key="meta.key">
             <p class="text-base font-normal mb-2 text-touchtable-dark opacity-50">{{ meta.label }}</p>
             <h4 class="font-semibold text-lg">{{ meta.value }}</h4>
           </div>
@@ -18,18 +18,13 @@
 </template>
 
 <script lang="ts">
-import { uploadState, Metadata } from 'coghent-vue-3-component-library'
+import { uploadState } from 'coghent-vue-3-component-library'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup() {
     const { t } = useI18n()
-    const metadata = ref<Array<typeof Metadata>>([])
-
-    const init = () => {}
-
-    init()
 
     return {
       t,

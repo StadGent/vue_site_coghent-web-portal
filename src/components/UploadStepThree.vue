@@ -26,17 +26,18 @@
             :placeholder="t(`myWorks.upload.stepThree.relation.search`)"
             @change="updatedRelations"
           />
-          <ul v-if="dropdownResults.length >= 1" class="px-2">
-            <li v-for="result of dropdownResults" :key="result" class="bg-background-medium text-left flex items-center h-8 px-4 py-1 hover:bg-background-dark" @click="addToRelations(result)">
-              {{ result }}
+          <ul v-if="dropdownResults.length >= 1 && relationSearch.length" class="px-2">
+            <li v-for="item of dropdownResults" :key="item" class="bg-background-medium text-left flex items-center h-8 px-4 py-1 hover:bg-background-dark" @click="addToRelations(item)">
+              {{ item.value }}
             </li>
           </ul>
         </span>
 
         <h3 class="mt-8 text-base font-normal">{{ t(`myWorks.upload.stepThree.relation.relations`) }}</h3>
-        <div class="flex-grow my-4 p-4 flex flex-row flex-wrap bg-background-light gap-2">
-          <div v-for="relation of relations" :key="relation" class="mr-2 bg-tag-neutral max-h-8 w-fit flex items-center px-2 py-1" @change="updatedRelations">
-            <span>relation</span> <BaseIcon icon="close" class="stroke-current ml-2 p-1 cursor-pointer" :on-click="removeFromRelations(relation)" />
+        <div class="flex-grow flex my-4 p-4 flex flex-row flex-wrap bg-background-light gap-2">
+          <div v-for="relation of relations" :key="relation" class="mr-2 bg-tag-neutral max-h-14 w-fit flex items-center px-2 py-1">
+            <p>{{ relation.value }}</p>
+            <BaseIcon icon="close" class="stroke-current ml-2 p-1 cursor-pointer" @click="() => removeFromRelations(relation)" />
           </div>
         </div>
       </div>
@@ -45,12 +46,15 @@
 </template>
 
 <script lang="ts">
-import { Relation } from 'coghent-vue-3-component-library'
-import { MetaKey, BaseIcon, Metadata } from 'coghent-vue-3-component-library'
+import { Relation, GetUploadRelationsDocument } from 'coghent-vue-3-component-library'
+import { MetaKey, BaseIcon, Metadata, KeyValuePair } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'ts-debounce'
 import { uploadState } from 'coghent-vue-3-component-library'
+import { useQuery } from '@vue/apollo-composable'
+import { Entity } from 'coghent-vue-3-component-library'
+import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 
 export type MetadataQuestion = {
   text: string
@@ -68,16 +72,39 @@ export default defineComponent({
     const metadata = ref<Array<MetadataQuestion>>([])
     const relations = ref<Array<typeof Relation>>([])
     const relationSearch = ref<string>('')
-    const searchValue = ref<string | null>(null)
-    const dropdownResults = ref<Array<string>>([])
+    const dropdownResults = ref<Array<typeof KeyValuePair>>([])
+
+    const { fetchMore } = useQuery(GetUploadRelationsDocument, { searchValue: '' })
+
+    const setRelationDropdownData = (_entities: Array<typeof Entity>) => {
+      const data: Array<typeof KeyValuePair> = []
+      for (const entity of _entities) {
+        let value = null
+        if (entity.type === 'person') {
+          const found = getMetadataOfTypeFromEntity(entity, 'fullname')
+          found ? (value = found.value) : null
+        }
+        if (entity.type === 'thesaurus') {
+          const found = getMetadataOfTypeFromEntity(entity, 'title')
+          found ? (value = found.value) : null
+        }
+        if (value != null) {
+          data.push({
+            key: entity.id,
+            value: value,
+          } as typeof KeyValuePair)
+        }
+      }
+      dropdownResults.value = data
+    }
 
     watch(relationSearch, async (value) => {
-      searchValue.value = null
-      searchValue.value = await debounce(() => relationSearch.value, 700)()
-    })
-
-    watch(searchValue, (value) => {
-      console.log(`searchValue`, value)
+      relationSearch.value = await debounce(() => relationSearch.value, 100)()
+      dropdownResults.value = []
+      if (relationSearch.value !== '' || relationSearch.value !== null) {
+        const response = await fetchMore({ variables: { searchValue: relationSearch.value } })
+        response?.data.GetUploadRelations ? setRelationDropdownData(response.data.GetUploadRelations.results) : null
+      }
     })
 
     const setMetadataQuestions = () => {
@@ -92,13 +119,20 @@ export default defineComponent({
       }
     }
 
-    const addToRelations = (_result: string) => {
-      console.log(`adding to relations`, _result)
-      relations.value.push({} as typeof Relation)
+    const addToRelations = (_keyValue: typeof KeyValuePair) => {
+      const found = relations.value.find((keypair) => keypair.key === _keyValue.key)
+      if (found === undefined) {
+        relations.value.push({
+          key: _keyValue.key,
+          value: _keyValue.value,
+        } as typeof Relation)
+        updateRelations()
+      }
     }
 
-    const removeFromRelations = (_relation: typeof Relation) => {
+    const removeFromRelations = (_relation: typeof KeyValuePair) => {
       relations.value = relations.value.filter((relation: typeof Relation) => relation != _relation)
+      updateRelations()
     }
 
     const updateMetadata = () => {
@@ -115,15 +149,22 @@ export default defineComponent({
       emit(`updatedMetadata`, updatedMetadata)
     }
 
-    const updatedRelations = () => {
-      console.log(`updatedRelations`)
+    const setRelations = () => {
+      if (uploadState.relations && uploadState.relations.length >= 1) {
+        relations.value = uploadState.relations
+      } else if (uploadState.relation === undefined) {
+        uploadState.relations = []
+      }
+    }
+
+    const updateRelations = () => {
       emit(`updatedRelations`, relations.value)
-      console.log(`relations`, relations.value)
+      dropdownResults.value = []
     }
 
     const init = () => {
-      searchValue.value = null
       setMetadataQuestions()
+      setRelations()
     }
 
     init()
@@ -137,7 +178,7 @@ export default defineComponent({
       addToRelations,
       removeFromRelations,
       updateMetadata,
-      updatedRelations,
+      updateRelations,
     }
   },
 })

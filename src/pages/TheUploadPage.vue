@@ -4,7 +4,7 @@
       <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="relations = uploadState.relations = relations" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
+        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) => uploadState.relations = relations" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
         <UploadStepFour v-if="currentUploadStep === 4" />
         <UploadDone v-if="currentUploadStep === 5" />
       </div>

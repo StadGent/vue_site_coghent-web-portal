@@ -54,7 +54,7 @@ export default defineComponent({
         title: `${t(`myWorks.upload.stepTwo.options.owner.title`)}`,
         info: `${t(`myWorks.upload.stepTwo.options.owner.info`)}`,
         disclaimer: `${t(`myWorks.upload.stepTwo.options.owner.disclaimer`)}`,
-        creator: UploadCreation.Owner,
+        creator: UploadCreation.Cc0,
       } as UploadOption)
       options.value.push({
         selected: false,
