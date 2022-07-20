@@ -4,7 +4,7 @@
       <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) = uploadState.relations = relations" @updatedMetadata="(metadata) => uploadState.metadata = metadata" />
+        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="relations = uploadState.relations = relations" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
         <UploadStepFour v-if="currentUploadStep === 4" />
         <UploadDone v-if="currentUploadStep === 5" />
       </div>
@@ -13,7 +13,8 @@
         <div class="w-full h-full flex items-center">
           <StepProgress :steps="steps" :showTitles="true" :currentStep="currentUploadStep" :currentStatus="'inProgress'" />
         </div>
-        <base-button class="my-8" :on-click="nextStep" :iconShown="false" :text="t(`flow.next`)"></base-button>
+        <base-button v-if="currentUploadStep < 5" class="my-8" :on-click="nextStep" :iconShown="false" :text="t(`flow.next`)"></base-button>
+        <base-button v-if="currentUploadStep === 5" class="my-8" :on-click="closeWizard" :iconShown="false" :text="t(`flow.close`)"></base-button>
       </div>
     </div>
   </BaseModal>
@@ -33,6 +34,7 @@ import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { router } from '@/app'
 import { uploadState } from 'coghent-vue-3-component-library'
+import { UploadStatus } from 'coghent-vue-3-component-library'
 
 const useModal = () => {
   const modalState = ref<typeof ModalState>(`hide`)
@@ -54,7 +56,7 @@ export default defineComponent({
   },
   setup() {
     const { modalState, openCloseUpload } = useModal()
-    const { newInit, nextStep, previousStep } = useUpload()
+    const { newInit, nextStep, previousStep, setStatus } = useUpload()
     const { t } = useI18n()
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
@@ -74,6 +76,12 @@ export default defineComponent({
       steps.value.push(`${t(`myWorks.upload.steps.stepTwo`)}`)
       steps.value.push(`${t(`myWorks.upload.steps.stepThree`)}`)
       steps.value.push(`${t(`myWorks.upload.steps.stepFour`)}`)
+    }
+
+    const closeWizard = () => {
+      setStatus(UploadStatus.Waiting)
+      openCloseUpload('hide')
+      router.push(`myWorks`)
     }
 
     const init = () => {
@@ -96,6 +104,7 @@ export default defineComponent({
       previousStep,
       steps,
       uploadState,
+      closeWizard,
     }
   },
 })

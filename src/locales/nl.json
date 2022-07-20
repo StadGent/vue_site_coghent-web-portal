@@ -233,7 +233,8 @@
   "flow": {
     "next": "Volgende",
     "previous": "Vorige",
-    "save": "Bewaren"
+    "save": "Bewaren",
+    "close": "Sluiten"
   },
   //collectie
   "Collectie.naam": "Dossier",
