@@ -160,6 +160,7 @@ export default defineComponent({
     const updateRelations = () => {
       emit(`updatedRelations`, relations.value)
       dropdownResults.value = []
+      relationSearch.value = ''
     }
 
     const init = () => {

@@ -6,10 +6,18 @@
         <div class="w-2/5 flex flex-grow justify-center items-center py-8">
           <img src="/no-image.png" alt="" />
         </div>
-        <div class="w-3/5 flex flex-grow flex-col text-left p-8">
+        <div class="w-3/5 flex flex-grow flex-col text-left p-8 overflow-y-auto">
           <div class="flex flex-col mb-4" v-for="meta of uploadState.metadata" :key="meta.key">
             <p class="text-base font-normal mb-2 text-touchtable-dark opacity-50">{{ meta.label }}</p>
             <h4 class="font-semibold text-lg">{{ meta.value }}</h4>
+          </div>
+          <div>
+            <h4 class="text-base font-normal mb-2 text-touchtable-dark opacity-50">{{ t(`myWorks.upload.stepFour.relations`) }}</h4>
+            <div class="flex flex-row flex-wrap gap-2">
+              <p v-for="relation of uploadState.relations" :key="relation.key" class="mr-2 bg-tag-neutral flex items-center px-2 py-1">
+                {{ relation.value }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -19,7 +27,7 @@
 
 <script lang="ts">
 import { uploadState } from 'coghent-vue-3-component-library'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
