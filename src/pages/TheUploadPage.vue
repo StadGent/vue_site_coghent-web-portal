@@ -4,7 +4,7 @@
       <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree v-if="currentUploadStep === 3" />
+        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) = uploadState.relations = relations" @updatedMetadata="(metadata) => uploadState.metadata = metadata" />
         <UploadStepFour v-if="currentUploadStep === 4" />
       </div>
       <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { useUpload } from 'coghent-vue-3-component-library'
-import { ModalState, BaseButton, BaseModal, currentUploadStep, StepProgress } from 'coghent-vue-3-component-library'
+import { ModalState, BaseButton, BaseModal, currentUploadStep, StepProgress, Metadata, Relation } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UploadStepOne from '@/components/UploadStepOne.vue'
@@ -92,6 +92,7 @@ export default defineComponent({
       nextStep,
       previousStep,
       steps,
+      uploadState,
     }
   },
 })
