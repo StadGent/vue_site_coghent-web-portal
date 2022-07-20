@@ -6,6 +6,7 @@
         <UploadStepTwo v-if="currentUploadStep === 2" />
         <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) = uploadState.relations = relations" @updatedMetadata="(metadata) => uploadState.metadata = metadata" />
         <UploadStepFour v-if="currentUploadStep === 4" />
+        <UploadDone v-if="currentUploadStep === 5" />
       </div>
       <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
         <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :iconShown="false" customStyle="secondary" :text="t(`flow.previous`)"></base-button>
@@ -20,13 +21,14 @@
 
 <script lang="ts">
 import { useUpload } from 'coghent-vue-3-component-library'
-import { ModalState, BaseButton, BaseModal, currentUploadStep, StepProgress, Metadata, Relation } from 'coghent-vue-3-component-library'
+import { ModalState, BaseButton, BaseModal, currentUploadStep, StepProgress } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UploadStepOne from '@/components/UploadStepOne.vue'
 import UploadStepTwo from '@/components/UploadStepTwo.vue'
 import UploadStepThree from '@/components/UploadStepThree.vue'
 import UploadStepFour from '@/components/UploadStepFour.vue'
+import UploadDone from '@/components/UploadDone.vue'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { router } from '@/app'
@@ -47,6 +49,7 @@ export default defineComponent({
     UploadStepTwo,
     UploadStepThree,
     UploadStepFour,
+    UploadDone,
     StepProgress,
   },
   setup() {

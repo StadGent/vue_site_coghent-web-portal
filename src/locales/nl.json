@@ -217,6 +217,11 @@
       "stepFour":{
         "title": "Kijk zeker nog even na of alle gegevens over het werk dat je wil bijdragen kloppen."
       },
+      "stepDone": {
+        "title": "Bedankt voor je bijdrage aan onze collectie!",
+        "info": "We hebben alle gegevens goed ontvangen en kijken nu alles na. We sturen je een berichtje van zodra het werk goedgekeurd is en op de website staat. Het zou kunnen dat we nog contact opnemen voor extra informatie, nemen foto's, ...",
+        "thanks":"Bedankt om onze collectie nog groter te maken!"
+      },
       "steps": {
         "stepOne": "Bestand opladen",
         "stepTwo": "Werk verifiëren",
