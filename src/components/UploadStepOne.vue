@@ -14,7 +14,7 @@ import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
-  name: "UploadStepOne",
+  name: 'UploadStepOne',
   components: { BaseButton },
   setup() {
     const { t } = useI18n()

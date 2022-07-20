@@ -9,12 +9,12 @@
         <UploadDone v-if="currentUploadStep === 5" />
       </div>
       <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
-        <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :iconShown="false" customStyle="secondary" :text="t(`flow.previous`)"></base-button>
+        <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
         <div class="w-full h-full flex items-center">
-          <StepProgress :steps="steps" :showTitles="true" :currentStep="currentUploadStep" :currentStatus="'inProgress'" />
+          <StepProgress :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
         </div>
-        <base-button v-if="currentUploadStep < 5" class="my-8" :on-click="nextStep" :iconShown="false" :text="t(`flow.next`)"></base-button>
-        <base-button v-if="currentUploadStep === 5" class="my-8" :on-click="closeWizard" :iconShown="false" :text="t(`flow.close`)"></base-button>
+        <base-button v-if="currentUploadStep < 5" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.next`)"></base-button>
+        <base-button v-if="currentUploadStep === 5" class="my-8" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
       </div>
     </div>
   </BaseModal>

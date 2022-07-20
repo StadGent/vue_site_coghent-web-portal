@@ -5,11 +5,11 @@
       <div class="bg-text-white py-4 px-8 flex flex-col text-left">
         <h2 class="font-bold text-lg mb-4">{{ t('myWorks.upload.stepThree.metadata.title') }}</h2>
         <span class="pr-4 overflow-y-auto">
-          <div class="flex flex-col my-4" v-for="question of metadata" :key="question.text" @change="updateMetadata">
+          <div v-for="question of metadata" :key="question.text" class="flex flex-col my-4" @change="updateMetadata">
             <label class="block text-base font-normal mb-2" :for="question.text"> {{ question.text }} </label>
             <input
-              v-model="question.answer"
               :key="question.text"
+              v-model="question.answer"
               class="bg-background-light appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
             />
@@ -20,11 +20,11 @@
         <h2 class="font-bold text-lg">{{ t('myWorks.upload.stepThree.relation.title') }}</h2>
         <span>
           <input
-            @change="updatedRelations"
             v-model="relationSearch"
             class="mt-8 bg-background-light appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             :placeholder="t(`myWorks.upload.stepThree.relation.search`)"
+            @change="updatedRelations"
           />
           <ul v-if="dropdownResults.length >= 1" class="px-2">
             <li v-for="result of dropdownResults" :key="result" class="bg-background-medium text-left flex items-center h-8 px-4 py-1 hover:bg-background-dark" @click="addToRelations(result)">
