@@ -50,6 +50,7 @@ import { MetaKey, BaseIcon, Metadata } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'ts-debounce'
+import { uploadState } from 'coghent-vue-3-component-library'
 
 export type MetadataQuestion = {
   text: string
@@ -82,9 +83,10 @@ export default defineComponent({
     const setMetadataQuestions = () => {
       const metaTags: Array<typeof MetaKey> = ['title', 'description', 'maker', 'periode']
       for (let index = 1; index <= 4; index++) {
+        const match = uploadState.metadata.find((meta: typeof Metadata) => meta.key === metaTags[index - 1])
         metadata.value.push({
           text: t(`myWorks.upload.stepThree.metadata.q${index}`),
-          answer: null,
+          answer: match !== undefined ? match.value : null,
           key: metaTags[index - 1],
         })
       }
@@ -106,11 +108,13 @@ export default defineComponent({
           updatedMetadata.push({
             key: meta.key,
             value: meta.answer,
+            label: meta.text,
           } as typeof Metadata)
         }
       }
       emit(`updatedMetadata`, updatedMetadata)
     }
+
     const updatedRelations = () => {
       console.log(`updatedRelations`)
       emit(`updatedRelations`, relations.value)
