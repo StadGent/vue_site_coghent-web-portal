@@ -34,7 +34,7 @@ export const useGoogleFeature = ref<boolean>(false)
 
 export default async function (authenticated: boolean) {
   console.log(`>web-portal updated session to v0.1.7`)
-  console.log(`>web-portal updated CL to v0.1.105`)
+  console.log(`>web-portal updated CL to v0.1.106`)
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
