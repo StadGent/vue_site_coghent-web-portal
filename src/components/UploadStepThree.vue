@@ -7,13 +7,17 @@
         <span class="pr-4 overflow-y-auto">
           <div class="flex flex-col my-4" v-for="question of metadata" :key="question.text">
             <label class="block text-base font-normal mb-2" :for="question.text"> {{ question.text }} </label>
+
+            <input type="text" v-modal="testVar">
+            <p>testvar{{testVar}}</p>
             <input
-              @update="(event) => (question.answer = event.target.value)"
+              @update="(event) => question.answer = event.target.value"
               :value="question.answer"
               :id="question.text"
               class="bg-background-light appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
             />
+            <p>answer: {{question}}</p>
           </div>
         </span>
       </div>
@@ -63,13 +67,15 @@ export default defineComponent({
   components: {
     BaseIcon,
   },
-  setup() {
+  emits: [],
+  setup(props, { emit }) {
     const { t } = useI18n()
     const metadata = ref<Array<MetadataQuestion>>([])
     const relations = ref<Array<typeof Relation>>(['dsds', 'sdsd'])
     const relationSearch = ref<string>('')
     const searchValue = ref<string | null>(null)
     const queryRelations = ref<boolean>(false)
+    const testVar = ref<string>('')
     const dropdownResults = ref<Array<string>>([])
 
     const { onResult, loading } = useQuery(
@@ -110,12 +116,26 @@ export default defineComponent({
       console.log(`searchValue`, value)
     })
 
+    watch(
+      () => metadata,
+      async (value) => {
+        console.log(`metadata`, value)
+      }
+    )
+    watch(
+      () => testVar,
+      async (value) => {
+        console.log(`testVar`, value)
+      }
+    )
+
     const setMetadataQuestions = () => {
+      const metaTags: Array<typeof MetaKey> = ['title', 'description', 'maker', 'periode']
       for (let index = 1; index <= 4; index++) {
         metadata.value.push({
           text: t(`myWorks.upload.stepThree.metadata.q${index}`),
           answer: null,
-          key: null,
+          key: metaTags[index - 1],
         })
       }
     }
@@ -127,6 +147,15 @@ export default defineComponent({
 
     const removeFromRelations = (_relation: typeof Relation) => {
       relations.value = relations.value.filter((relation: typeof Relation) => relation != _relation)
+    }
+
+    const updateMetadata = (_event: any, _question: MetadataQuestion) => {
+      console.log(`update metadata`)
+      console.log(`_event`, _event.target.value)
+      console.log(`_question`, _question)
+      // _question.answer = _event.target.value
+
+      console.log(`metadata`, metadata)
     }
 
     const init = () => {
@@ -144,6 +173,8 @@ export default defineComponent({
       dropdownResults,
       addToRelations,
       removeFromRelations,
+      updateMetadata,
+      testVar
     }
   },
 })
