@@ -2,9 +2,9 @@
   <BaseModal :modal-state="modalState" :large="true" class="py-16 z-40" :scroll="false" @hide-modal="() => openCloseUpload(`hide`)">
     <div class="flex flex-col justify-between h-full bg-background-medium">
       <div class="h-4/5 pt-8">
-        <UploadStepOne v-if="currentUploadStep === 1" />
+        <UploadStepOne v-if="currentUploadStep === 1" @stepDone="(status) => (stepDone = status)" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) => uploadState.relations = relations" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
+        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) => (uploadState.relations = relations)" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
         <UploadStepFour v-if="currentUploadStep === 4" />
         <UploadDone v-if="currentUploadStep === 5" />
       </div>
@@ -13,7 +13,14 @@
         <div class="w-full h-full flex items-center">
           <StepProgress :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
         </div>
-        <base-button v-if="currentUploadStep < 5" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.next`)"></base-button>
+        <base-button
+          v-if="currentUploadStep < 5"
+          class="my-8"
+          :on-click="nextStep"
+          :custom-style="stepDone === true ? 'primary' : 'primaryUnavailable'"
+          :icon-shown="false"
+          :text="t(`flow.next`)"
+        ></base-button>
         <base-button v-if="currentUploadStep === 5" class="my-8" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
       </div>
     </div>
@@ -61,6 +68,7 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
+    const stepDone = ref<boolean>(false)
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
@@ -69,6 +77,9 @@ export default defineComponent({
 
     watch(currentUploadStep, (_step: number) => {
       _step !== 1 ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
+    })
+    watch(stepDone, () => {
+      console.log(`stepDone`, stepDone.value)
     })
 
     const setSteps = () => {
@@ -105,6 +116,7 @@ export default defineComponent({
       steps,
       uploadState,
       closeWizard,
+      stepDone,
     }
   },
 })
