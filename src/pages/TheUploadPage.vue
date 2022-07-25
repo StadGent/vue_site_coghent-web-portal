@@ -4,7 +4,12 @@
       <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1" @stepDone="(status) => (stepDone = status)" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) => (uploadState.relations = relations)" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
+        <UploadStepThree
+          v-if="currentUploadStep === 3"
+          @stepDone="(status) => (stepDone = status)"
+          @updatedRelations="(relations) => (uploadState.relations = relations)"
+          @updatedMetadata="(metadata) => (uploadState.metadata = metadata)"
+        />
         <UploadStepFour v-if="currentUploadStep === 4" />
         <UploadDone v-if="currentUploadStep === 5" />
       </div>
@@ -16,7 +21,7 @@
         <base-button
           v-if="currentUploadStep < 5"
           class="my-8"
-          :on-click="nextStep"
+          :on-click="() => (stepDone === true ? nextStep() : null)"
           :custom-style="stepDone === true ? 'primary' : 'primaryUnavailable'"
           :icon-shown="false"
           :text="t(`flow.next`)"

@@ -66,7 +66,7 @@ export default defineComponent({
   components: {
     BaseIcon,
   },
-  emits: [`updatedMetadata`, 'updatedRelations'],
+  emits: [`updatedMetadata`, 'updatedRelations', 'stepDone'],
   setup(props, { emit }) {
     const { t } = useI18n()
     const metadata = ref<Array<MetadataQuestion>>([])
@@ -163,9 +163,14 @@ export default defineComponent({
       relationSearch.value = ''
     }
 
+    const checkFields = () => {
+      emit(`stepDone`, false)
+    }
+
     const init = () => {
       setMetadataQuestions()
       setRelations()
+      checkFields()
     }
 
     init()
