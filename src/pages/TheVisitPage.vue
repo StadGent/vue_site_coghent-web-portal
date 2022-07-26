@@ -30,7 +30,7 @@ export default defineComponent({
       () => {
         if (code.value.length == 8) {
           const link = useStorybox(apolloClient).linkBoxCodeToUser(code.value)
-          if (!link.errors) {
+          if (!link.errors && link.id) {
             router.push('/mystories/' + link.id)
           }
         }
