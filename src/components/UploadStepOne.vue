@@ -86,7 +86,6 @@ export default defineComponent({
     }
 
     watch(addedFiles, (files) => {
-      console.log(`files`, files)
       if (files === MAX_FILES) {
         dropzone.value?.disable()
         uploadState.file = dropzone.value!.files[0]

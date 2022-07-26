@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { useUpload } from 'coghent-vue-3-component-library'
-import { UploadCreation } from 'coghent-vue-3-component-library'
+import { Rights } from 'coghent-vue-3-component-library'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -37,7 +37,7 @@ type UploadOption = {
   title: string
   info: string
   disclaimer: string
-  creator: typeof UploadCreation
+  liscense: typeof Rights
 }
 
 export default defineComponent({
@@ -54,14 +54,14 @@ export default defineComponent({
         title: `${t(`myWorks.upload.stepTwo.options.owner.title`)}`,
         info: `${t(`myWorks.upload.stepTwo.options.owner.info`)}`,
         disclaimer: `${t(`myWorks.upload.stepTwo.options.owner.disclaimer`)}`,
-        creator: UploadCreation.Cc0,
+        liscense: Rights.Cc0,
       } as UploadOption)
       options.value.push({
         selected: false,
         title: `${t(`myWorks.upload.stepTwo.options.uploader.title`)}`,
         info: `${t(`myWorks.upload.stepTwo.options.uploader.info`)}`,
         disclaimer: `${t(`myWorks.upload.stepTwo.options.uploader.disclaimer`)}`,
-        creator: UploadCreation.Other,
+        liscense: Rights.Undetermined,
       } as UploadOption)
     }
 
@@ -69,7 +69,7 @@ export default defineComponent({
       for (const [index, option] of options.value.entries()) {
         _option.title === option.title ? (options.value[index].selected = true) : (options.value[index].selected = false)
       }
-      setCreator(_option.creator)
+      setCreator(_option.liscense)
     }
 
     setOptions()
