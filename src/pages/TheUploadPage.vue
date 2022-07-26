@@ -4,14 +4,12 @@
       <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1" @stepDone="(status) => (stepDone = status)" />
         <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree
-          v-if="currentUploadStep === 3"
-          @stepDone="(status) => (stepDone = status)"
-          @updatedRelations="(relations) => (uploadState.relations = relations)"
-          @updatedMetadata="(metadata) => (uploadState.metadata = metadata)"
-        />
-        <UploadStepFour v-if="currentUploadStep === 4" />
-        <UploadDone v-if="currentUploadStep === 5" />
+        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) => (uploadState.relations = relations)" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
+        <UploadStepFour v-if="currentUploadStep === 4 || currentUploadStep === 5" />
+        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="currentUploadStep === 5">
+          <CircleLoader />
+        </div>
+        <UploadDone v-if="currentUploadStep === TOTAL_STEPS" />
       </div>
       <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
         <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
@@ -19,21 +17,22 @@
           <StepProgress :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
         </div>
         <base-button
-          v-if="currentUploadStep < 5"
+          v-if="currentUploadStep < 4"
           class="my-8"
           :on-click="() => (stepDone === true ? nextStep() : null)"
           :custom-style="stepDone === true ? 'primary' : 'primaryUnavailable'"
           :icon-shown="false"
           :text="t(`flow.next`)"
         ></base-button>
-        <base-button v-if="currentUploadStep === 5" class="my-8" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
+        <base-button v-if="currentUploadStep === 4" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.upload`)"></base-button>
+        <base-button v-if="currentUploadStep === TOTAL_STEPS" class="my-8" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
       </div>
     </div>
   </BaseModal>
 </template>
 
 <script lang="ts">
-import { useUpload } from 'coghent-vue-3-component-library'
+import { useUpload, CircleLoader } from 'coghent-vue-3-component-library'
 import { ModalState, BaseButton, BaseModal, currentUploadStep, StepProgress } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -44,7 +43,7 @@ import UploadStepFour from '@/components/UploadStepFour.vue'
 import UploadDone from '@/components/UploadDone.vue'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
-import { router } from '@/app'
+import { apolloClient, router } from '@/app'
 import { uploadState } from 'coghent-vue-3-component-library'
 import { UploadStatus } from 'coghent-vue-3-component-library'
 
@@ -65,26 +64,31 @@ export default defineComponent({
     UploadStepFour,
     UploadDone,
     StepProgress,
+    CircleLoader,
   },
   setup() {
     const { modalState, openCloseUpload } = useModal()
-    const { newInit, nextStep, previousStep, setStatus } = useUpload()
+    const { newInit, nextStep, previousStep, setStatus, upload } = useUpload()
     const { t } = useI18n()
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
     const stepDone = ref<boolean>(false)
+    const TOTAL_STEPS = 6
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
       state === 'hide' ? document.body.classList.remove('overflow-y-hidden') : null
     })
 
-    watch(currentUploadStep, (_step: number) => {
+    watch(currentUploadStep, async (_step: number) => {
       _step !== 1 ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
-    })
-    watch(stepDone, () => {
-      console.log(`stepDone`, stepDone.value)
+      _step !== TOTAL_STEPS ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
+
+      if (_step === 5) {
+        await upload(apolloClient)
+        nextStep()
+      }
     })
 
     const setSteps = () => {
@@ -122,6 +126,7 @@ export default defineComponent({
       uploadState,
       closeWizard,
       stepDone,
+      TOTAL_STEPS,
     }
   },
 })
