@@ -1,7 +1,8 @@
-import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
+import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
 import { createSSRApp, ref } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
+import { createUploadLink } from 'apollo-upload-client';
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { OpenIdConnectClient } from 'session-vue-3-oidc-library'
 import 'coghent-vue-3-component-library/lib/index.css'
@@ -96,7 +97,7 @@ export default async function (authenticated: boolean) {
     return forward(operation)
   })
 
-  const graphqlLink = createHttpLink({ uri: config.graphQlLink || '/api/graphql' })
+  const graphqlLink = createUploadLink({ uri: config.graphQlLink || '/api/graphql' })
 
   apolloClient = new ApolloClient({
     link: graphqlErrorInterceptor.concat(graphqlRequestIntercepter.concat(userLink.concat(graphqlLink))),
