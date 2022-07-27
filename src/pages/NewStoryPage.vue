@@ -1,16 +1,17 @@
 <template>
-  <section class="w-1/2">
+  <section class="w-3/5">
     <div v-if="hasBoxCode" class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyCode">{{ t('profile.storybox.create.code') }}</label
       ><input id="storyCode" v-model="storyCode" type="text" maxlength="8" minlength="8" required />
       <p v-if="codeInputError" class="text-text-red text-xs h-4">{{ codeInputError }}</p>
+      <BoxVisitCode class="mt-8" :code="storyCode" />
     </div>
-    <div class="flex flex-col py-2">
+    <div v-if="!hasBoxCode" class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyName">{{ t('profile.storybox.create.name') }}</label
       ><input id="storyName" v-model="storyName" type="text" required />
       <p v-if="nameInputError" class="text-text-red text-xs h-4">{{ nameInputError }}</p>
     </div>
-    <div class="flex flex-col py-2">
+    <div v-if="!hasBoxCode" class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyDescription">{{ t('profile.storybox.create.description') }}</label
       ><textarea id="storyDescripton" v-model="storyDescription" class="h-24" type="text" />
     </div>
@@ -27,12 +28,12 @@ import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { apolloClient, router, storyboxCount } from '@/app'
-import { StoryboxBuild, StoryBoxState, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
+import { StoryboxBuild, StoryBoxState, storyboxDataIsUpdated, BoxVisitCode } from 'coghent-vue-3-component-library'
 import { useBoxVisiter } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'NewStoryPage',
-  components: { BaseButton },
+  components: { BaseButton, BoxVisitCode },
   props: {},
   setup() {
     const route = useRoute()
@@ -40,7 +41,7 @@ export default defineComponent({
     const hasBoxCode = ref<boolean>(route.fullPath.includes('code'))
     const storyName = ref<string>()
     const storyDescription = ref<string>()
-    const storyCode = ref<string | undefined>()
+    const storyCode = ref<string>('')
     const codeInputError = ref<string | undefined>(undefined)
     const nameInputError = ref<string | undefined>(undefined)
     const formValid = ref<boolean>(false)
@@ -57,12 +58,9 @@ export default defineComponent({
       codeInputError.value = undefined
       nameInputError.value = undefined
 
-      if (storyCode.value?.length == 8 && hasBoxCode) {
+      if (storyCode.value?.length == 8 && hasBoxCode.value) {
         if (isNaN(filterInt(storyCode.value))) {
           codeInputError.value = t('storybox.new.onlyNumbers')
-        } else {
-          const visiter = await useBoxVisiter(apolloClient).getByCode(String(storyCode.value))
-          visiter === null ? (codeInputError.value = t('storybox.new.codeDoesNotExist')) : null
         }
       } else if (hasBoxCode.value) {
         codeInputError.value = t('storybox.new.codeLength')
@@ -71,19 +69,23 @@ export default defineComponent({
         nameInputError.value = t('storybox.new.nameLength')
       }
 
-      return !codeInputError.value && !nameInputError.value ? true : false
+      console.log(!codeInputError.value ? true : false)
+      console.log(hasBoxCode.value ? true : false)
+
+      return !codeInputError.value && hasBoxCode.value ? true : !codeInputError.value && !nameInputError.value && hasBoxCode.value ? true : false
     }
 
     const save = async () => {
       formValid.value = await checkValues()
       if (formValid.value) {
         if (hasBoxCode.value === true) {
-          const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value), storyName.value ? storyName.value : '', storyDescription.value ? storyDescription.value : '')
+          const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
           if (newFrame === null) {
             codeInputError.value = t('storybox.new.linkedCode')
           } else {
             StoryBoxState.value.activeStorybox.frameId = newFrame.id
             storyboxCount.value = StoryBoxState.value.count
+            router.push(`/mystories/${newFrame.id}`)
           }
         } else {
           StoryBoxState.value.activeStorybox = {
@@ -92,9 +94,9 @@ export default defineComponent({
             description: storyDescription.value,
           } as typeof StoryboxBuild
           await useStorybox(apolloClient).createNew()
+          router.push(`/mystories`)
         }
         storyboxDataIsUpdated.value = true
-        router.push(`/mystories`)
       }
     }
 
