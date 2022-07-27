@@ -1,21 +1,23 @@
 <template>
-  <section class="flex md:mt-16 gap-8 flex-col md:flex-row">
-    <profile-side-menu />
-    <section class="w-full p-4 md:p-0">
-      <div class="pb-4 mb-4 flex justify-end">
-        <base-button class="text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
-      </div>
-      <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
-        <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
-      </div>
-      <div v-if="!isLoading && myWorks.length === 0" class="flex items-center flex-col w-full h-full">
-        <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`myWorks.upload.noItems`) }}</h1>
-        <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
-          <base-button v-show="false" :text="t('flow.upload')" :on-click="() => router.push(`/upload`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
+  <section class="flex md:mt-16 gap-8 flex-col">
+    <div class="md:visible invisible pb-4 flex justify-end">
+      <base-button class="text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
+    </div>
+    <span class="flex flex-col md:flex-row">
+      <profile-side-menu />
+      <section class="w-full p-4 md:ml-8 md:p-0">
+        <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
+          <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         </div>
-      </div>
-      <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
-    </section>
+        <div v-if="!isLoading && myWorks.length === 0" class="flex items-center flex-col w-full h-full">
+          <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`myWorks.upload.noItems`) }}</h1>
+          <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
+            <base-button v-show="false" :text="t('flow.upload')" :on-click="() => router.push(`/upload`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
+          </div>
+        </div>
+        <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
+      </section>
+    </span>
   </section>
 </template>
 <script lang="ts">
