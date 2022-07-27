@@ -28,7 +28,7 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          // fetch('/api/logout')
+          fetch('/api/logout')
           router.push('/')
         })
     }
