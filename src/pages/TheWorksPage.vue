@@ -1,8 +1,8 @@
 <template>
-  <section class="flex md:mt-16 gap-8">
+  <section class="flex md:mt-16 gap-8 flex-col md:flex-row">
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
-      <div class="p-4 flex justify-end">
+      <div class="pb-4 mb-4 flex justify-end">
         <base-button class="text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
       </div>
       <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
@@ -41,32 +41,23 @@ export default defineComponent({
     const { t } = useI18n()
     const uploadRoute = `/upload`
     const myWorks = ref<Array<ProfileListItemInfo>>([])
-    // const myWorks = ref<ProfileListItemInfo[]>([
-    //   {
-    //     id: '1',
-    //     title: 'My work',
-    //     description: 'My best work',
-    //     dateCreated: '24 februari 2020',
-    //     onClickUrl: '/work/1',
-    //     pictureUrl: './no-image.png',
-    //   },
-    // ])
     const isLoading = ref<boolean>(false)
-    const { getAllUploads, stripUserUploadPrefix } = useUpload()
+    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink } = useUpload()
 
     const prepareCards = (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
         for (const asset of _entities) {
+          const mediafiles = getMediafiles(asset)
           let title = getMetadataOfTypeFromEntity(asset, 'title')
-          let description = getMetadataOfTypeFromEntity(asset, 'description')
+          let maker = getMetadataOfTypeFromEntity(asset, 'maker')
           let publicationStatus = getMetadataOfTypeFromEntity(asset, 'publication_status')
           myWorks.value.push({
             id: asset.id,
             title: title ? stripUserUploadPrefix(title.value) : 'Title placeholder',
-            description: description ? description.value : 'Description placeholder',
+            description: maker ? maker.value : 'Onbekend',
             dateCreated: '24 februari 2020',
             onClickUrl: '/work/1',
-            pictureUrl: './no-image.png',
+            pictureUrl: getMediafileLink(mediafiles),
             status: publicationStatus ? publicationStatus.value : null,
             type: ProfileListItemType.uploadedWork,
           } as ProfileListItemInfo)
@@ -78,7 +69,6 @@ export default defineComponent({
       isLoading.value = true
       const entitiesResults = await getAllUploads(apolloClient)
       prepareCards(entitiesResults.results)
-      console.log(`myWorks`, myWorks)
       isLoading.value = false
     }
 
