@@ -92,7 +92,7 @@ export default defineComponent({
           description: description ? description.value : '',
           code: undefined,
           onClickUrl: `/mystories/${_box.id}`,
-          type: ProfileListItemType.story
+          type: ProfileListItemType.story,
         } as ProfileListItemInfo)
       }
       loading.value = false
