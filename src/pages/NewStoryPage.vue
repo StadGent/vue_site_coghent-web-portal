@@ -69,9 +69,6 @@ export default defineComponent({
         nameInputError.value = t('storybox.new.nameLength')
       }
 
-      console.log(!codeInputError.value ? true : false)
-      console.log(hasBoxCode.value ? true : false)
-
       return !codeInputError.value && hasBoxCode.value ? true : !codeInputError.value && !nameInputError.value && hasBoxCode.value ? true : false
     }
 
@@ -83,6 +80,7 @@ export default defineComponent({
           if (newFrame === null) {
             codeInputError.value = t('storybox.new.linkedCode')
           } else {
+            console.log({ newFrame })
             StoryBoxState.value.activeStorybox.frameId = newFrame.id
             storyboxCount.value = StoryBoxState.value.count
             router.push(`/mystories/${newFrame.id}`)
