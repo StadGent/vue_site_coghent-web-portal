@@ -7,7 +7,7 @@
       <div class="w-full">
         <div class="flex justify-between pb-2">
           <h2 class="font-bold">{{ profileListItemInfo.title }}</h2>
-          <div>
+          <div v-if="showStoryFeature">
             <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent=""
               ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
             /></story-edit-dropdown>
@@ -20,7 +20,7 @@
           <div v-if="profileListItemInfo.dateCreated">
             <p>{{ t('profile.storybox.creation-date') + profileListItemInfo.dateCreated }}</p>
           </div>
-          <div v-if="profileListItemInfo.code">
+          <div v-if="profileListItemInfo.code && showStoryFeature">
             <p>{{ t('profile.storybox.code') + profileListItemInfo.code }}</p>
           </div>
         </div>
@@ -30,10 +30,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import StoryEditDropdown from './StoryEditDropdown.vue'
+
+export enum ProfileListItemType {
+  story,
+  uploadedWork,
+}
 
 export type ProfileListItemInfo = {
   id: string
@@ -43,6 +48,8 @@ export type ProfileListItemInfo = {
   onClickUrl: string
   code?: string
   pictureUrl?: string
+  status?: string
+  type: ProfileListItemType
 }
 
 export default defineComponent({
@@ -54,11 +61,21 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const { t } = useI18n()
+    const showStoryFeature = ref<boolean>(false)
+
+    const checkCardType = () => {
+      if (props.profileListItemInfo.type === ProfileListItemType.story) {
+        showStoryFeature.value = true
+      }
+    }
+
+    checkCardType()
 
     return {
       t,
+      showStoryFeature,
     }
   },
 })

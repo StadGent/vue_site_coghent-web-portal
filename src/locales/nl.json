@@ -178,6 +178,7 @@
   },
   "myWorks": {
     "upload": {
+      "noItems": "Upload je eigen werken en draag zo bij aan de collectie!",
       "title": "Upload",
       "stepOne": {
         "title": "Fijn dat je wil bijdragen aan onze collectie! We zijn benieuwd naar jouw werk...",

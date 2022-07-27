@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import ProfileListItem, { ProfileListItemInfo } from '@/components/ProfileListItem.vue'
+import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '@/components/ProfileListItem.vue'
 import { defineComponent, ref, watch } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import { BaseButton, useStorybox } from 'coghent-vue-3-component-library'
@@ -92,6 +92,7 @@ export default defineComponent({
           description: description ? description.value : '',
           code: undefined,
           onClickUrl: `/mystories/${_box.id}`,
+          type: ProfileListItemType.story
         } as ProfileListItemInfo)
       }
       loading.value = false
