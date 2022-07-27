@@ -7,6 +7,10 @@
       <div class="w-full">
         <div class="flex justify-between pb-2">
           <h2 class="font-bold">{{ profileListItemInfo.title }}</h2>
+          <div v-if="showWorksFeature" class="mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="getTagInfo().style">
+            <div :class="getTagInfo().style" class="lg:visible mr-2 invisible rounded-full h-2 w-2"></div>
+            {{ getTagInfo().title }}
+          </div>
           <div v-if="showStoryFeature">
             <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent=""
               ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
@@ -34,6 +38,8 @@ import { defineComponent, PropType, ref } from 'vue'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import StoryEditDropdown from './StoryEditDropdown.vue'
+import { PublicationStatus } from 'coghent-vue-3-component-library'
+import { Publication } from 'coghent-vue-3-component-library'
 
 export enum ProfileListItemType {
   story,
@@ -64,11 +70,41 @@ export default defineComponent({
   setup(props) {
     const { t } = useI18n()
     const showStoryFeature = ref<boolean>(false)
+    const showWorksFeature = ref<boolean>(false)
 
     const checkCardType = () => {
       if (props.profileListItemInfo.type === ProfileListItemType.story) {
         showStoryFeature.value = true
       }
+      if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
+        showWorksFeature.value = true
+      }
+    }
+
+    const getTagInfo = () => {
+      const info = {
+        style: '',
+        title: '',
+      }
+      if (props.profileListItemInfo.status) {
+        let activeKey = null
+        for (const key of Object.values(Publication)) {
+          if (props.profileListItemInfo.status === PublicationStatus[key as string]) {
+            activeKey = key
+          }
+        }
+        switch (activeKey) {
+          case Publication.Validate:
+            info.title = 'In behandeling'
+            info.style = 'bg-accent-orange text-accent-orange'
+            break
+          case Publication.Public:
+            info.title = 'Gepubliceerd'
+            info.style = 'bg-accent-lightGreen text-accent-lightGreen'
+            break
+        }
+      }
+      return info
     }
 
     checkCardType()
@@ -76,6 +112,8 @@ export default defineComponent({
     return {
       t,
       showStoryFeature,
+      showWorksFeature,
+      getTagInfo,
     }
   },
 })

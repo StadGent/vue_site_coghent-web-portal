@@ -63,7 +63,7 @@ export default defineComponent({
           myWorks.value.push({
             id: asset.id,
             title: title ? stripUserUploadPrefix(title.value) : 'Title placeholder',
-            description: description ? description.value : 'Descrip[tion placeholder',
+            description: description ? description.value : 'Description placeholder',
             dateCreated: '24 februari 2020',
             onClickUrl: '/work/1',
             pictureUrl: './no-image.png',
