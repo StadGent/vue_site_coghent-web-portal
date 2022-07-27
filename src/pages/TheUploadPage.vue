@@ -82,11 +82,11 @@ export default defineComponent({
     })
 
     watch(currentUploadStep, async (_step: number) => {
-      _step !== 1 ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
       _step !== TOTAL_STEPS ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
+      _step <= 2 ? (showPrevious.value = 'invisible') : (showPrevious.value = 'visible')
 
       if (_step === 5) {
-       await upload(apolloClient)
+        await upload(apolloClient)
         nextStep()
       }
     })

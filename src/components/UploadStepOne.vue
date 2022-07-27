@@ -89,7 +89,7 @@ export default defineComponent({
       if (files === MAX_FILES) {
         dropzone.value?.disable()
         uploadState.file = dropzone.value!.files[0]
-       emit(`stepDone`, files === MAX_FILES)
+        emit(`stepDone`, files === MAX_FILES)
       } else {
         dropzone.value?.enable()
         emit(`stepDone`, files === MAX_FILES)
