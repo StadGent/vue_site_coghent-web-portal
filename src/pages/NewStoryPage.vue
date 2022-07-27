@@ -80,11 +80,7 @@ export default defineComponent({
           if (newFrame === null) {
             codeInputError.value = t('storybox.new.linkedCode')
           } else {
-            console.log({ newFrame })
-            addStoryboxes([newFrame])
-            StoryBoxState.value.activeStorybox.frameId = newFrame.id
-            storyboxCount.value = StoryBoxState.value.count
-            router.push(`/mystories/${newFrame.id}`)
+            router.push(`/mystories`)
           }
         } else {
           StoryBoxState.value.activeStorybox = {
