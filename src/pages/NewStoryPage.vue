@@ -28,8 +28,7 @@ import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { apolloClient, router, storyboxCount } from '@/app'
-import { StoryboxBuild, StoryBoxState, storyboxDataIsUpdated, BoxVisitCode } from 'coghent-vue-3-component-library'
-import { useBoxVisiter } from 'coghent-vue-3-component-library'
+import { StoryboxBuild, StoryBoxState, BoxVisitCode, useStoryBox } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'NewStoryPage',
@@ -45,6 +44,7 @@ export default defineComponent({
     const codeInputError = ref<string | undefined>(undefined)
     const nameInputError = ref<string | undefined>(undefined)
     const formValid = ref<boolean>(false)
+    const { addStoryboxes } = useStorybox()
 
     const filterInt = (value: string) => {
       if (/^[-+]?(\d+|Infinity)$/.test(value)) {
@@ -81,6 +81,7 @@ export default defineComponent({
             codeInputError.value = t('storybox.new.linkedCode')
           } else {
             console.log({ newFrame })
+            addStoryboxes([newFrame])
             StoryBoxState.value.activeStorybox.frameId = newFrame.id
             storyboxCount.value = StoryBoxState.value.count
             router.push(`/mystories/${newFrame.id}`)
@@ -94,7 +95,6 @@ export default defineComponent({
           await useStorybox(apolloClient).createNew()
           router.push(`/mystories`)
         }
-        storyboxDataIsUpdated.value = true
       }
     }
 
