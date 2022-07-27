@@ -86,7 +86,7 @@ export default defineComponent({
       _step !== TOTAL_STEPS ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
 
       if (_step === 5) {
-        await upload(apolloClient)
+       await upload(apolloClient)
         nextStep()
       }
     })

@@ -6,7 +6,7 @@
         <h2 class="text-lg font-bold">{{ t('myWorks.upload.stepDone.info') }}</h2>
         <h3 class="text-lg font-bold mt-8">{{ t('myWorks.upload.stepDone.thanks') }}</h3>
         <!-- <img class="h-36 mt-8 w-36" src="handsUp.svg" alt="" /> -->
-        <span class="h-36 mt-8 w-36">
+        <span class="flex flex-grow h-36 mt-8 w-36">
           <svg viewBox="0 0 304 304" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="152" cy="152" r="152" fill="#02A77F" />
             <path
