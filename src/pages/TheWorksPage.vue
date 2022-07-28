@@ -23,6 +23,7 @@
 <script lang="ts">
 import { apolloClient, router } from '@/app'
 import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '@/components/ProfileListItem.vue'
+import uploadWizard from '@/composables/uploadWizard'
 import { useUpload, CircleLoader } from 'coghent-vue-3-component-library'
 import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
@@ -44,12 +45,13 @@ export default defineComponent({
     const uploadRoute = `/upload`
     const myWorks = ref<Array<ProfileListItemInfo>>([])
     const isLoading = ref<boolean>(false)
-    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink } = useUpload()
+    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, entityToUploadComposable } = useUpload()
+    const { ASSET_ID_PARAM } = uploadWizard()
 
-    const prepareCards = (_entities: Array<typeof Entity> | null) => {
+    const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
         for (const asset of _entities) {
-          const mediafiles = getMediafiles(asset)
+          const mediafiles = await getMediafiles(asset)
           let title = getMetadataOfTypeFromEntity(asset, 'title')
           let maker = getMetadataOfTypeFromEntity(asset, 'maker')
           let publicationStatus = getMetadataOfTypeFromEntity(asset, 'publication_status')
@@ -58,7 +60,7 @@ export default defineComponent({
             title: title ? stripUserUploadPrefix(title.value) : 'Title placeholder',
             description: maker ? maker.value : 'Onbekend',
             dateCreated: '24 februari 2020',
-            onClickUrl: '/work/1',
+            onClickUrl: `upload?${ASSET_ID_PARAM}=${asset.id}`,
             pictureUrl: getMediafileLink(mediafiles),
             status: publicationStatus ? publicationStatus.value : null,
             type: ProfileListItemType.uploadedWork,
@@ -70,7 +72,9 @@ export default defineComponent({
     const init = async () => {
       isLoading.value = true
       const entitiesResults = await getAllUploads(apolloClient)
-      prepareCards(entitiesResults.results)
+      await prepareCards(entitiesResults.results)
+      // const comp = await entityToUploadComposable(entitiesResults.results[0].id, apolloClient)
+      // console.log(`uploadComposable from entity`, comp)
       isLoading.value = false
     }
 

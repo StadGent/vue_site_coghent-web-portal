@@ -2,14 +2,18 @@
   <BaseModal :modal-state="modalState" :large="true" class="py-16 z-40" :scroll="false" @hide-modal="() => openCloseUpload(`hide`)">
     <div class="flex flex-col justify-between h-full bg-background-medium">
       <div class="h-4/5 pt-8">
-        <UploadStepOne v-if="currentUploadStep === 1" @stepDone="(status) => (stepDone = status)" />
-        <UploadStepTwo v-if="currentUploadStep === 2" />
-        <UploadStepThree v-if="currentUploadStep === 3" @updatedRelations="(relations) => (uploadState.relations = relations)" @updatedMetadata="(metadata) => (uploadState.metadata = metadata)" />
-        <UploadStepFour v-if="currentUploadStep === 4 || currentUploadStep === 5" />
-        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="currentUploadStep === 5">
+        <UploadStepOne v-if="currentUploadStep === 1 && canShowStep(1)" @stepDone="(status) => (stepDone = status)" />
+        <UploadStepTwo v-if="currentUploadStep === 2 && canShowStep(2)" />
+        <UploadStepThree
+          v-if="currentUploadStep === 3 && canShowStep(3)"
+          @updatedRelations="(relations) => (uploadState.relations = relations)"
+          @updatedMetadata="(metadata) => (uploadState.metadata = metadata)"
+        />
+        <UploadStepFour v-if="currentUploadStep === 4 || (currentUploadStep === 5 && canShowStep(4))" />
+        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="currentUploadStep === 5 && canShowStep(5)">
           <CircleLoader />
         </div>
-        <UploadDone v-if="currentUploadStep === TOTAL_STEPS" />
+        <UploadDone v-if="currentUploadStep === TOTAL_STEPS && canShowStep(TOTAL_STEPS)" />
       </div>
       <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
         <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
@@ -46,6 +50,8 @@ import { UserStore } from '@/stores/UserStore'
 import { apolloClient, router } from '@/app'
 import { uploadState } from 'coghent-vue-3-component-library'
 import { UploadStatus } from 'coghent-vue-3-component-library'
+import uploadWizard from '@/composables/uploadWizard'
+import { getUrlParamValue } from 'coghent-vue-3-component-library'
 
 const useModal = () => {
   const modalState = ref<typeof ModalState>(`hide`)
@@ -68,13 +74,13 @@ export default defineComponent({
   },
   setup() {
     const { modalState, openCloseUpload } = useModal()
-    const { newInit, nextStep, previousStep, setStatus, upload } = useUpload()
+    const { newInit, nextStep, previousStep, setStatus, upload, setStep } = useUpload()
     const { t } = useI18n()
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
-    const stepDone = ref<boolean>(false)
-    const TOTAL_STEPS = 6
+    const stepDone = ref<boolean>(true)
+    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep } = uploadWizard()
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
@@ -109,6 +115,7 @@ export default defineComponent({
         newInit(userStore.user.value.email)
         openCloseUpload(`show`)
         setSteps()
+        getActionValues(getUrlParamValue(ASSET_ID_PARAM), setStep)
       } else router.go(-1)
     }
 
@@ -127,6 +134,7 @@ export default defineComponent({
       closeWizard,
       stepDone,
       TOTAL_STEPS,
+      canShowStep,
     }
   },
 })
