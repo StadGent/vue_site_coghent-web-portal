@@ -1,5 +1,5 @@
 <template>
-  <section class="w-3/5">
+  <section class="w-full md:w-3/5 p-8 md:p-0">
     <div v-if="hasBoxCode" class="flex flex-col py-2">
       <label class="font-bold mb-2" for="storyCode">{{ t('profile.storybox.create.code') }}</label
       ><input id="storyCode" v-model="storyCode" type="text" maxlength="8" minlength="8" required />
