@@ -36,7 +36,7 @@ import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
 import Dropzone from 'dropzone'
 import StoreFactory from '@/stores/StoreFactory'
 import { ConfigStore } from '@/stores/ConfigStore'
-import { uploadState } from 'coghent-vue-3-component-library'
+import { uploadState, useUpload } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'UploadStepOne',
@@ -54,6 +54,7 @@ export default defineComponent({
     const configStore = StoreFactory.get(ConfigStore)
     const dropzone = ref<Dropzone | null>(null)
     const MAX_FILES = 1
+    const { setBase64Image } = useUpload()
 
     const createDropzone = () => {
       if (dropzoneContainer.value != null) {
@@ -89,6 +90,7 @@ export default defineComponent({
       if (files === MAX_FILES) {
         dropzone.value?.disable()
         uploadState.file = dropzone.value!.files[0]
+        setBase64Image(uploadState.file.dataURL ? uploadState.file.dataURL : null)
         emit(`stepDone`, files === MAX_FILES)
       } else {
         dropzone.value?.enable()

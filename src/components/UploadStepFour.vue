@@ -4,7 +4,7 @@
     <div class="w-full h-full flex flex-col py-8 justify-center items-center">
       <div class="w-4/5 bg-text-white py-4 px-8 flex flex-row text-left">
         <div class="w-2/5 flex flex-grow justify-center items-center py-8">
-          <img src="/no-image.png" alt="" />
+          <img :src="uploadState.base64Image" alt="" />
         </div>
         <div class="w-3/5 flex flex-grow flex-col text-left p-8 overflow-y-auto">
           <div class="flex flex-col mb-4" v-for="meta of uploadState.metadata" :key="meta.key">
