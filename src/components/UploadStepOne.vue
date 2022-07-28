@@ -54,7 +54,7 @@ export default defineComponent({
     const configStore = StoreFactory.get(ConfigStore)
     const dropzone = ref<Dropzone | null>(null)
     const MAX_FILES = 1
-    const { setBase64Image } = useUpload()
+    const { setBase64Image, setFile } = useUpload()
 
     const createDropzone = () => {
       if (dropzoneContainer.value != null) {
@@ -89,7 +89,7 @@ export default defineComponent({
     watch(addedFiles, (files) => {
       if (files === MAX_FILES) {
         dropzone.value?.disable()
-        uploadState.file = dropzone.value!.files[0]
+        setFile(dropzone.value!.files[0])
         setBase64Image(uploadState.file.dataURL ? uploadState.file.dataURL : null)
         emit(`stepDone`, files === MAX_FILES)
       } else {
