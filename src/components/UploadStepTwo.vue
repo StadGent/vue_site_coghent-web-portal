@@ -2,7 +2,13 @@
   <div class="h-full p-8 flex text-center flex-col items-center">
     <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepTwo.title') }}</h1>
     <div class="h-full w-full grid grid-cols-2 gap-4 my-8">
-      <div v-for="option of options" :key="option.title" class="bg-text-white p-4 flex flex-col text-center" @click="setSelectedOption(option)">
+      <div
+        v-for="option of options"
+        :key="option.title"
+        :class="[option.selected === true ? 'border-2 border-accent-purple' : '']"
+        class="bg-text-white p-4 flex flex-col text-center"
+        @click="setSelectedOption(option)"
+      >
         <div class="h-full flex justify-center items-center">
           <div class="rounded-full w-20 h-20 z-10 flex justify-center items-center cursor-pointer" :class="[option.selected ? styleButton.selected : styleButton.notSelectedRing]">
             <div class="rounded-full bg-text-white w-16 h-16 flex justify-center items-center" :class="[option.selected ? styleButton.selected : styleButton.notSelected]">
@@ -21,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { useUpload, uploadState } from 'coghent-vue-3-component-library'
+import { useUpload } from 'coghent-vue-3-component-library'
 import { Rights } from 'coghent-vue-3-component-library'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
