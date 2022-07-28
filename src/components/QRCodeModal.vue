@@ -4,15 +4,16 @@
       <div class="w-full">
         <h1 class="font-bold text-4xl">{{ t('storybox.scan') }}</h1>
       </div>
-      <div class="flex-grow flex justify-center items-center">
+      <div class="flex-grow flex justify-center items-center flex-col">
         <qrcode-vue :value="parseStoryboxUrl()" :size="300" level="H" />
+        <BoxVisitCode :code="QRCodeModalState.code" class="mt-12" />
       </div></div
   ></BaseModal>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BaseModal, ModalState } from 'coghent-vue-3-component-library'
+import { BaseModal, ModalState, BoxVisitCode } from 'coghent-vue-3-component-library'
 import QrcodeVue from 'qrcode.vue'
 import { useI18n } from 'vue-i18n'
 
@@ -53,7 +54,7 @@ export const useQRCodeModal = () => {
 
 export default defineComponent({
   name: 'QRCodeModal',
-  components: { BaseModal, QrcodeVue },
+  components: { BaseModal, QrcodeVue, BoxVisitCode },
   props: {},
   setup() {
     const { closeQRCodeModal, QRCodeModalState } = useQRCodeModal()
