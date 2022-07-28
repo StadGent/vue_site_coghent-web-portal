@@ -1,7 +1,7 @@
 <template>
   <!-- <router-link :to="profileListItemInfo.onClickUrl" > -->
   <section
-    @click="showStoryFeature === true ? router.push(profileListItemInfo.onClickUrl) : null"
+    @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
     :class="`${showStoryFeature ? 'cursor-pointer' : ''} bg-neutral-0 p-4 mb-4 w-full ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
   >
     <div v-if="profileListItemInfo.pictureUrl" class="flex items-center mr-4 w-12 h-12 md:w-24 md:h-24">
@@ -75,13 +75,16 @@ export default defineComponent({
     const { t } = useI18n()
     const showStoryFeature = ref<boolean>(false)
     const showWorksFeature = ref<boolean>(false)
+    const isClickable = ref<boolean>(false)
 
     const checkCardType = () => {
       if (props.profileListItemInfo.type === ProfileListItemType.story) {
         showStoryFeature.value = true
+        isClickable.value = true
       }
       if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
         showWorksFeature.value = true
+        isClickable.value = true
       }
     }
 
@@ -119,6 +122,7 @@ export default defineComponent({
       showWorksFeature,
       getTagInfo,
       router,
+      isClickable,
     }
   },
 })
