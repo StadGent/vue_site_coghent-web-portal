@@ -69,7 +69,7 @@ export default defineComponent({
         nameInputError.value = t('storybox.new.nameLength')
       }
 
-      return !codeInputError.value && hasBoxCode.value ? true : !codeInputError.value && !nameInputError.value && hasBoxCode.value ? true : false
+      return !codeInputError.value && hasBoxCode.value ? true : !nameInputError.value && !hasBoxCode.value ? true : false
     }
 
     const save = async () => {
