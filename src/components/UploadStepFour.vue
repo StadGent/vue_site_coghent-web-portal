@@ -4,7 +4,7 @@
     <div class="w-full h-full flex flex-col py-8 justify-center items-center">
       <div class="w-4/5 bg-text-white py-4 px-8 flex flex-row text-left">
         <div class="w-2/5 flex flex-grow justify-center items-center py-8">
-          <img :src="uploadState.base64Image" alt="" />
+          <img :src="setMediafile()" alt="" />
         </div>
         <div class="w-3/5 flex flex-grow flex-col text-left p-8 overflow-y-auto">
           <div class="flex flex-col mb-4" v-for="meta of uploadState.metadata" :key="meta.key">
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { uploadState } from 'coghent-vue-3-component-library'
+import { uploadState, NO_IMAGE_PATH } from 'coghent-vue-3-component-library'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -34,9 +34,17 @@ export default defineComponent({
   setup() {
     const { t } = useI18n()
 
+    const setMediafile = () => {
+      let imageSrc = NO_IMAGE_PATH
+      if (uploadState.file !== null) imageSrc = uploadState.file
+      if (uploadState.base64Image !== null) imageSrc = uploadState.base64Image
+      return imageSrc
+    }
+
     return {
       t,
       uploadState,
+      setMediafile,
     }
   },
 })

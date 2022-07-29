@@ -20,7 +20,7 @@ const uploadWizard = () => {
     },
     [UploadModalAction.edit_upload]: {
       type: UploadModalAction.edit_upload,
-      steps: [2, 3, 4, 5, 6],
+      steps: [3, 4, 5, 6],
       upload: null
     },
   }
