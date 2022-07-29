@@ -16,11 +16,13 @@ const uploadWizard = () => {
     [UploadModalAction.new_upload]: {
       type: UploadModalAction.new_upload,
       steps: [...Array(TOTAL_STEPS).keys()].map((i) => i + 1),
+      showPreviousInSteps: [2, 3, 4, 5],
       upload: null
     },
     [UploadModalAction.edit_upload]: {
       type: UploadModalAction.edit_upload,
       steps: [3, 4, 5, 6],
+      showPreviousInSteps: [4, 5],
       upload: null
     },
   }
@@ -53,6 +55,10 @@ const uploadWizard = () => {
     return actions.value.steps.includes(_step)
   }
 
+  const showPreviousButton = (_step: number) => {
+    return actions.value.showPreviousInSteps.includes(_step)
+  }
+
   return {
     ASSET_ID_PARAM,
     TOTAL_STEPS,
@@ -61,6 +67,7 @@ const uploadWizard = () => {
     canShowStep,
     isModeEdit,
     isModeUploadNew,
+    showPreviousButton,
   }
 }
 

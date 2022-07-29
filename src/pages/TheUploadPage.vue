@@ -81,7 +81,7 @@ export default defineComponent({
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
     const stepDone = ref<boolean>(false)
-    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep, actions, isModeEdit, isModeUploadNew } = uploadWizard()
+    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep, actions, isModeEdit, isModeUploadNew, showPreviousButton } = uploadWizard()
     const isLoading = ref<boolean>(false)
 
     watch(modalState, (state: string) => {
@@ -90,8 +90,7 @@ export default defineComponent({
     })
 
     watch(currentUploadStep, async (_step: number) => {
-      _step !== TOTAL_STEPS ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
-      _step <= 2 || _step === TOTAL_STEPS ? (showPrevious.value = 'invisible') : (showPrevious.value = 'visible')
+      showPreviousButton(_step) ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
 
       if (_step === 5) {
         isLoading.value = true
@@ -160,6 +159,7 @@ export default defineComponent({
       isLoading,
       isModeEdit,
       isModeUploadNew,
+      showPreviousButton,
     }
   },
 })
