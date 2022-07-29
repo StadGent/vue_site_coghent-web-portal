@@ -53,6 +53,7 @@ const uploadWizard = () => {
     if (_asset) {
       actions.value = definedActions['edit_upload']
       const comp = await _getUploadComposable(_asset, apolloClient)
+      console.log({ comp });
       actions.value.upload = comp
       console.log(`ASSET ID`, _asset);
     }

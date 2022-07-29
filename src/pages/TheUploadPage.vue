@@ -10,7 +10,7 @@
           @updatedMetadata="(metadata) => (uploadState.metadata = metadata)"
         />
         <UploadStepFour v-if="currentUploadStep === 4 || (currentUploadStep === 5 && canShowStep(4))" />
-        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="isLoading">
+        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="showLoader()">
           <CircleLoader />
         </div>
         <UploadDone v-if="currentUploadStep === TOTAL_STEPS && canShowStep(TOTAL_STEPS)" />
@@ -51,8 +51,9 @@ import { UserStore } from '@/stores/UserStore'
 import { apolloClient, router } from '@/app'
 import { uploadState } from 'coghent-vue-3-component-library'
 import { UploadStatus } from 'coghent-vue-3-component-library'
-import uploadWizard, { UploadModalAction } from '@/composables/uploadWizard'
+import uploadWizard from '@/composables/uploadWizard'
 import { getUrlParamValue } from 'coghent-vue-3-component-library'
+import { uploadLoadingState } from 'coghent-vue-3-component-library'
 
 const useModal = () => {
   const modalState = ref<typeof ModalState>(`hide`)
@@ -75,14 +76,13 @@ export default defineComponent({
   },
   setup() {
     const { modalState, openCloseUpload } = useModal()
-    const { newInit, nextStep, previousStep, setStatus, upload, setStep, entityToUploadComposable, setUploadState } = useUpload()
+    const { newInit, nextStep, previousStep, setStatus, upload, setStep, entityToUploadComposable, setUploadState, updateAsset } = useUpload()
     const { t } = useI18n()
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
     const stepDone = ref<boolean>(false)
     const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep, actions, isModeEdit, isModeUploadNew, showPreviousButton } = uploadWizard()
-    const isLoading = ref<boolean>(false)
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
@@ -93,13 +93,18 @@ export default defineComponent({
       showPreviousButton(_step) ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
 
       if (_step === 5) {
-        isLoading.value = true
         isModeUploadNew.value === true ? await upload(apolloClient) : null
-        isModeEdit.value === true ? console.log(`updating`) : null
-        isLoading.value = false
+        isModeEdit.value === true ? await updateAsset(apolloClient) : null
         nextStep()
       }
     })
+
+    watch(
+      () => uploadLoadingState.actionValues,
+      (actionValuesState) => {
+        actionValuesState === 'loaded' ? (stepDone.value = true) : null
+      }
+    )
 
     const setSteps = () => {
       steps.value.push(`${t(`myWorks.upload.steps.stepOne`)}`)
@@ -114,22 +119,14 @@ export default defineComponent({
       router.push(`myWorks`)
     }
 
-    const prepareWizardData = async () => {
-      isLoading.value = true
+    const prepareWizardData = () => {
       setSteps()
-      await getActionValues(getUrlParamValue(ASSET_ID_PARAM), setStep, entityToUploadComposable)
-      switch (actions.value.type) {
-        case UploadModalAction.edit_upload:
-          console.log(`ACTION is edit`, actions.value)
-          actions.value.upload !== null ? setUploadState(actions.value.upload) : null
-          stepDone.value = true
-          break
-        default:
-          // UploadModalAction.new_upload
-          console.log(`ACTION is upload`, actions.value)
-          break
-      }
-      isLoading.value = false
+      getActionValues(getUrlParamValue(ASSET_ID_PARAM), setStep, entityToUploadComposable)
+    }
+
+    const showLoader = () => {
+      const statusses = [uploadLoadingState.actionValues === 'loading', uploadLoadingState.upload === 'loading', uploadLoadingState.update === 'loading']
+      return statusses.some((status) => status === true)
     }
 
     const init = () => {
@@ -156,10 +153,11 @@ export default defineComponent({
       stepDone,
       TOTAL_STEPS,
       canShowStep,
-      isLoading,
       isModeEdit,
       isModeUploadNew,
       showPreviousButton,
+      uploadLoadingState,
+      showLoader,
     }
   },
 })

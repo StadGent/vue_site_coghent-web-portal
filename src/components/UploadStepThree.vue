@@ -65,7 +65,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { t } = useI18n()
     const { getMetadataWithQuestions } = uploadWizard()
-    const metadata = ref<Array<MetadataQuestion>>(getMetadataWithQuestions())
+    const metadata = ref<Array<MetadataQuestion>>([])
     const relations = ref<Array<typeof Relation>>([])
     const relationSearch = ref<string>('')
     const dropdownResults = ref<Array<typeof KeyValuePair>>([])
@@ -154,6 +154,8 @@ export default defineComponent({
     }
 
     const init = () => {
+      console.log(`uploadState.metadata`, uploadState.metadata)
+      metadata.value = getMetadataWithQuestions()
       setRelations()
       checkFields()
     }
