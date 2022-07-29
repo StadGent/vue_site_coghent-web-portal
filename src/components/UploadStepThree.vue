@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { Relation, GetUploadRelationsDocument } from 'coghent-vue-3-component-library'
-import { MetaKey, BaseIcon, Metadata, KeyValuePair } from 'coghent-vue-3-component-library'
+import { BaseIcon, Metadata, KeyValuePair } from 'coghent-vue-3-component-library'
 import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'ts-debounce'
@@ -55,12 +55,7 @@ import { uploadState } from 'coghent-vue-3-component-library'
 import { useQuery } from '@vue/apollo-composable'
 import { Entity } from 'coghent-vue-3-component-library'
 import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
-
-export type MetadataQuestion = {
-  text: string
-  answer: string | null
-  key: typeof MetaKey | null
-}
+import uploadWizard, { MetadataQuestion } from '@/composables/uploadWizard'
 
 export default defineComponent({
   components: {
@@ -69,7 +64,8 @@ export default defineComponent({
   emits: [`updatedMetadata`, 'updatedRelations', 'stepDone'],
   setup(props, { emit }) {
     const { t } = useI18n()
-    const metadata = ref<Array<MetadataQuestion>>([])
+    const { getMetadataWithQuestions } = uploadWizard()
+    const metadata = ref<Array<MetadataQuestion>>(getMetadataWithQuestions())
     const relations = ref<Array<typeof Relation>>([])
     const relationSearch = ref<string>('')
     const dropdownResults = ref<Array<typeof KeyValuePair>>([])
@@ -106,18 +102,6 @@ export default defineComponent({
         response?.data.GetUploadRelations ? setRelationDropdownData(response.data.GetUploadRelations.results) : null
       }
     })
-
-    const setMetadataQuestions = () => {
-      const metaTags: Array<typeof MetaKey> = ['title', 'description', 'maker', 'periode']
-      for (let index = 1; index <= 4; index++) {
-        const match = uploadState.metadata.find((meta: typeof Metadata) => meta.key === metaTags[index - 1])
-        metadata.value.push({
-          text: t(`myWorks.upload.stepThree.metadata.q${index}`),
-          answer: match !== undefined ? match.value : null,
-          key: metaTags[index - 1],
-        })
-      }
-    }
 
     const addToRelations = (_keyValue: typeof KeyValuePair) => {
       const found = relations.value.find((keypair) => keypair.key === _keyValue.key)
@@ -170,7 +154,6 @@ export default defineComponent({
     }
 
     const init = () => {
-      setMetadataQuestions()
       setRelations()
       checkFields()
     }

@@ -1,8 +1,7 @@
 <template>
-  <!-- <router-link :to="profileListItemInfo.onClickUrl" > -->
   <section
     @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
-    :class="`${showStoryFeature ? 'cursor-pointer' : ''} bg-neutral-0 p-4 mb-4 w-full ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
+    :class="`${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 p-4 mb-4 w-full ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
   >
     <div v-if="profileListItemInfo.pictureUrl" class="flex items-center mr-4 w-12 h-12 md:w-24 md:h-24">
       <img :src="profileListItemInfo.pictureUrl" />
@@ -33,7 +32,6 @@
       </div>
     </div>
   </section>
-  <!-- </router-link> -->
 </template>
 
 <script lang="ts">

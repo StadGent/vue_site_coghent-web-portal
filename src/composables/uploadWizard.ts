@@ -1,9 +1,17 @@
 import { apolloClient } from '@/app'
+import { MetaKey, uploadState, Metadata } from 'coghent-vue-3-component-library'
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export enum UploadModalAction {
   new_upload = 'new_upload',
   edit_upload = 'edit_upload',
+}
+
+export type MetadataQuestion = {
+  text: string
+  answer: string | null
+  key: typeof MetaKey | null
 }
 
 const uploadWizard = () => {
@@ -59,6 +67,21 @@ const uploadWizard = () => {
     return actions.value.showPreviousInSteps.includes(_step)
   }
 
+  const getMetadataWithQuestions = () => {
+    const { t } = useI18n()
+    const metadata: Array<any> = []
+    const metaTags: Array<typeof MetaKey> = ['title', 'description', 'maker', 'periode']
+    for (let index = 1;index <= 4;index++) {
+      const match = uploadState.metadata.find((meta: typeof Metadata) => meta.key === metaTags[index - 1])
+      metadata.push({
+        text: t(`myWorks.upload.stepThree.metadata.q${index}`),
+        answer: match !== undefined ? match.value : null,
+        key: metaTags[index - 1],
+      })
+    }
+    return metadata
+  }
+
   return {
     ASSET_ID_PARAM,
     TOTAL_STEPS,
@@ -68,6 +91,7 @@ const uploadWizard = () => {
     isModeEdit,
     isModeUploadNew,
     showPreviousButton,
+    getMetadataWithQuestions,
   }
 }
 
