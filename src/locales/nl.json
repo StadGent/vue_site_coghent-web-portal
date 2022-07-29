@@ -237,7 +237,8 @@
     "previous": "Vorige",
     "save": "Bewaren",
     "close": "Sluiten",
-    "upload": "Upload"
+    "upload": "Upload",
+    "update": "Update"
   },
   //collectie
   "Collectie.naam": "Dossier",

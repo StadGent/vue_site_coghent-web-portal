@@ -151,7 +151,9 @@ export default defineComponent({
 
     const setRelations = () => {
       if (uploadState.relations && uploadState.relations.length >= 1) {
-        relations.value = uploadState.relations
+        for (const relation of uploadState.relations) {
+          relations.value.push({ key: relation.key, value: relation.value } as typeof KeyValuePair)
+        }
       } else if (uploadState.relation === undefined) {
         uploadState.relations = []
       }

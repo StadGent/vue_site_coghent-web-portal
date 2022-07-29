@@ -73,8 +73,6 @@ export default defineComponent({
       isLoading.value = true
       const entitiesResults = await getAllUploads(apolloClient)
       await prepareCards(entitiesResults.results)
-      // const comp = await entityToUploadComposable(entitiesResults.results[0].id, apolloClient)
-      // console.log(`uploadComposable from entity`, comp)
       isLoading.value = false
     }
 

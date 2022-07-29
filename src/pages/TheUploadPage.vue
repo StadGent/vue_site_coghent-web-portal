@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :modal-state="modalState" :large="true" class="py-16 z-40" :scroll="false" @hide-modal="() => openCloseUpload(`hide`)">
+  <BaseModal :modal-state="modalState" :large="true" class="py-16 z-40" :scroll="false" @hide-modal="() => closeWizard()">
     <div class="flex flex-col justify-between h-full bg-background-medium">
       <div class="h-4/5 pt-8">
         <UploadStepOne v-if="currentUploadStep === 1 && canShowStep(1)" @stepDone="(status) => (stepDone = status)" />
@@ -10,7 +10,7 @@
           @updatedMetadata="(metadata) => (uploadState.metadata = metadata)"
         />
         <UploadStepFour v-if="currentUploadStep === 4 || (currentUploadStep === 5 && canShowStep(4))" />
-        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="currentUploadStep === 5 && canShowStep(5)">
+        <div class="h-full w-full flex justify-center items-center absolute top-0 left-0 bg-background-dark opacity-50" v-if="isLoading">
           <CircleLoader />
         </div>
         <UploadDone v-if="currentUploadStep === TOTAL_STEPS && canShowStep(TOTAL_STEPS)" />
@@ -28,7 +28,8 @@
           :icon-shown="false"
           :text="t(`flow.next`)"
         ></base-button>
-        <base-button v-if="currentUploadStep === 4" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.upload`)"></base-button>
+        <base-button v-if="currentUploadStep === 4 && isModeUploadNew === true" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.upload`)"></base-button>
+        <base-button v-if="currentUploadStep === 4 && isModeEdit === true" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.update`)"></base-button>
         <base-button v-if="currentUploadStep === TOTAL_STEPS" class="my-8" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
       </div>
     </div>
@@ -50,7 +51,7 @@ import { UserStore } from '@/stores/UserStore'
 import { apolloClient, router } from '@/app'
 import { uploadState } from 'coghent-vue-3-component-library'
 import { UploadStatus } from 'coghent-vue-3-component-library'
-import uploadWizard from '@/composables/uploadWizard'
+import uploadWizard, { UploadModalAction } from '@/composables/uploadWizard'
 import { getUrlParamValue } from 'coghent-vue-3-component-library'
 
 const useModal = () => {
@@ -74,13 +75,14 @@ export default defineComponent({
   },
   setup() {
     const { modalState, openCloseUpload } = useModal()
-    const { newInit, nextStep, previousStep, setStatus, upload, setStep } = useUpload()
+    const { newInit, nextStep, previousStep, setStatus, upload, setStep, entityToUploadComposable, setUploadState } = useUpload()
     const { t } = useI18n()
     const userStore = StoreFactory.get(UserStore)
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
-    const stepDone = ref<boolean>(true)
-    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep } = uploadWizard()
+    const stepDone = ref<boolean>(false)
+    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep, actions, isModeEdit, isModeUploadNew } = uploadWizard()
+    const isLoading = ref<boolean>(false)
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
@@ -92,7 +94,10 @@ export default defineComponent({
       _step <= 2 || _step === TOTAL_STEPS ? (showPrevious.value = 'invisible') : (showPrevious.value = 'visible')
 
       if (_step === 5) {
-        await upload(apolloClient)
+        isLoading.value = true
+        isModeUploadNew.value === true ? await upload(apolloClient) : null
+        isModeEdit.value === true ? console.log(`updating`) : null
+        isLoading.value = false
         nextStep()
       }
     })
@@ -110,12 +115,29 @@ export default defineComponent({
       router.push(`myWorks`)
     }
 
+    const prepareWizardData = async () => {
+      isLoading.value = true
+      setSteps()
+      await getActionValues(getUrlParamValue(ASSET_ID_PARAM), setStep, entityToUploadComposable)
+      switch (actions.value.type) {
+        case UploadModalAction.edit_upload:
+          console.log(`ACTION is edit`, actions.value)
+          actions.value.upload !== null ? setUploadState(actions.value.upload) : null
+          stepDone.value = true
+          break
+        default:
+          // UploadModalAction.new_upload
+          console.log(`ACTION is upload`, actions.value)
+          break
+      }
+      isLoading.value = false
+    }
+
     const init = () => {
       if (userStore.hasUser) {
         newInit(userStore.user.value.email)
         openCloseUpload(`show`)
-        setSteps()
-        getActionValues(getUrlParamValue(ASSET_ID_PARAM), setStep)
+        prepareWizardData()
       } else router.go(-1)
     }
 
@@ -135,6 +157,9 @@ export default defineComponent({
       stepDone,
       TOTAL_STEPS,
       canShowStep,
+      isLoading,
+      isModeEdit,
+      isModeUploadNew,
     }
   },
 })

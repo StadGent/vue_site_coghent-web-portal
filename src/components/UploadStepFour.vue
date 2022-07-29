@@ -12,7 +12,7 @@
             <h4 class="font-semibold text-lg">{{ meta.value }}</h4>
           </div>
           <div>
-            <h4 class="text-base font-normal mb-2 text-touchtable-dark opacity-50">{{ t(`myWorks.upload.stepFour.relations`) }}</h4>
+            <h4 v-if="uploadState.relations.length >= 1" class="text-base font-normal mb-2 text-touchtable-dark opacity-50">{{ t(`myWorks.upload.stepFour.relations`) }}</h4>
             <div class="flex flex-row flex-wrap gap-2">
               <p v-for="relation of uploadState.relations" :key="relation.key" class="mr-2 bg-tag-neutral flex items-center px-2 py-1">
                 {{ relation.value }}

@@ -1,4 +1,5 @@
-import { ref } from 'vue'
+import { apolloClient } from '@/app'
+import { ref, watch } from 'vue'
 
 export enum UploadModalAction {
   new_upload = 'new_upload',
@@ -8,20 +9,43 @@ export enum UploadModalAction {
 const uploadWizard = () => {
   const ASSET_ID_PARAM = 'asset'
   const TOTAL_STEPS = 6
+  const isModeEdit = ref<boolean>(false)
+  const isModeUploadNew = ref<boolean>(true)
 
   const definedActions = {
     [UploadModalAction.new_upload]: {
+      type: UploadModalAction.new_upload,
       steps: [...Array(TOTAL_STEPS).keys()].map((i) => i + 1),
+      upload: null
     },
     [UploadModalAction.edit_upload]: {
-      steps: [2, 3, 4],
+      type: UploadModalAction.edit_upload,
+      steps: [2, 3, 4, 5, 6],
+      upload: null
     },
   }
 
   const actions = ref<any>(definedActions['new_upload'])
 
-  const getActionValues = (_asset: string | null, _setStep: any) => {
-    _asset !== null ? (actions.value = definedActions['edit_upload']) : null
+  watch(() => actions.value.type, (type) => {
+    switch (type) {
+      case UploadModalAction.edit_upload:
+        isModeEdit.value = true
+        isModeUploadNew.value = false
+        break
+      default:
+        isModeEdit.value = false
+        isModeUploadNew.value = true
+    }
+  })
+
+  const getActionValues = async (_asset: string | null, _setStep: any, _getUploadComposable: any) => {
+    if (_asset) {
+      actions.value = definedActions['edit_upload']
+      const comp = await _getUploadComposable(_asset, apolloClient)
+      actions.value.upload = comp
+      console.log(`ASSET ID`, _asset);
+    }
     _setStep(actions.value.steps[0])
   }
 
@@ -35,6 +59,8 @@ const uploadWizard = () => {
     getActionValues,
     actions,
     canShowStep,
+    isModeEdit,
+    isModeUploadNew,
   }
 }
 
