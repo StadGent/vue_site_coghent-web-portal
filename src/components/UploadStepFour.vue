@@ -3,7 +3,7 @@
     <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepFour.title') }}</h1>
     <div class="w-full h-full flex flex-col pb-8 mt-8 items-center overflow-y-scroll">
       <div class="w-4/5 bg-text-white py-4 px-8 flex flex-row text-left">
-        <div class="w-2/5 flex flex-grow justify-center items-center py-8">
+        <div class="w-2/5 flex flex-grow justify-center items-start py-8">
           <img :src="setMediafile()" alt="" />
         </div>
         <div class="w-3/5 flex flex-grow flex-col text-left p-8">

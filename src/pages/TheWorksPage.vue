@@ -21,7 +21,7 @@
   </section>
 </template>
 <script lang="ts">
-import { apolloClient, router } from '@/app'
+import { apolloClient, iiif, router } from '@/app'
 import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '@/components/ProfileListItem.vue'
 import uploadWizard from '@/composables/uploadWizard'
 import { useUpload, CircleLoader } from 'coghent-vue-3-component-library'
@@ -45,8 +45,9 @@ export default defineComponent({
     const uploadRoute = `/upload`
     const myWorks = ref<Array<ProfileListItemInfo>>([])
     const isLoading = ref<boolean>(false)
-    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, entityToUploadComposable } = useUpload()
+    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
+    const { generateUrl } = iiif
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
@@ -62,6 +63,7 @@ export default defineComponent({
             dateCreated: '24 februari 2020',
             onClickUrl: `upload?${ASSET_ID_PARAM}=${asset.id}`,
             pictureUrl: getMediafileLink(mediafiles),
+            // pictureUrl: generateUrl(getFilename(mediafiles[0] ? mediafiles[0] : null), 'full', 48),
             status: publicationStatus ? publicationStatus.value : null,
             type: ProfileListItemType.uploadedWork,
           } as ProfileListItemInfo)
