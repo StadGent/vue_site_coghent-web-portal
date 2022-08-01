@@ -82,7 +82,7 @@ export default defineComponent({
     const showPrevious = ref<'visible' | 'invisible'>(`invisible`)
     const steps = ref<Array<string>>([])
     const stepDone = ref<boolean>(false)
-    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep, actions, isModeEdit, isModeUploadNew, showPreviousButton } = uploadWizard()
+    const { TOTAL_STEPS, ASSET_ID_PARAM, getActionValues, canShowStep, assetId, isModeEdit, isModeUploadNew, showPreviousButton } = uploadWizard()
 
     watch(modalState, (state: string) => {
       state === 'show' ? document.body.classList.add('overflow-y-hidden') : null
@@ -94,7 +94,7 @@ export default defineComponent({
 
       if (_step === 5) {
         isModeUploadNew.value === true ? await upload(apolloClient) : null
-        isModeEdit.value === true ? await updateAsset(apolloClient) : null
+        isModeEdit.value === true ? await updateAsset(assetId.value, apolloClient) : null
         nextStep()
       }
     })

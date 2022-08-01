@@ -36,6 +36,7 @@ const uploadWizard = () => {
   }
 
   const actions = ref<any>(definedActions['new_upload'])
+  const assetId = ref<null | string>(null)
 
   watch(() => actions.value.type, (type) => {
     switch (type) {
@@ -51,6 +52,7 @@ const uploadWizard = () => {
 
   const getActionValues = async (_asset: string | null, _setStep: any, _getUploadComposable: any) => {
     if (_asset) {
+      assetId.value = _asset
       actions.value = definedActions['edit_upload']
       const comp = await _getUploadComposable(_asset, apolloClient)
       console.log({ comp });
@@ -88,6 +90,7 @@ const uploadWizard = () => {
     TOTAL_STEPS,
     getActionValues,
     actions,
+    assetId,
     canShowStep,
     isModeEdit,
     isModeUploadNew,
