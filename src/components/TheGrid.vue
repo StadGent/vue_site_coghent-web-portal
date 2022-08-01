@@ -132,6 +132,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      console.log(route)
       if (route.query.touch) {
         queryEnabled.value = false
         getActiveBox().then((result) => {
