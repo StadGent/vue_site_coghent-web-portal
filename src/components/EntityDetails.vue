@@ -52,14 +52,23 @@
             <baseIcon icon="download" />
           </a> -->
         </div>
-        <!-- <SpeechBubble
-          v-for="(testimoni, index) in testimonies"
-          :key="testimoni.name"
-          :cardDetails="testimoni"
-          color="#FDC20B"
-          :alignment="index % 2 == 0 ? 'Left' : 'Right'"
-          @receivedLike="updateTestimoni"
-        ></SpeechBubble> -->
+        <div v-if="useTestimoniFeature">
+          <div class="flex justify-between items-center">
+            <h2 class="font-bold">{{ t('details.testimoni') }}</h2>
+            <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimoni')" :on-click="writeTestimoni" />
+          </div>
+          <div v-if="isWritingTestimoni" class="flex mt-4">
+            <BaseInput styling="w-full" icon="send" :placeholder="t('details.testimoniPlaceholder')" @submitField="createNewTestimoni" />
+          </div>
+          <SpeechBubble
+            v-for="(testimoni, index) in testimonies"
+            :key="testimoni.name"
+            :cardDetails="testimoni"
+            color="#FDC20B"
+            :alignment="index % 2 == 0 ? 'Left' : 'Right'"
+            @receivedLike="updateTestimoni"
+          ></SpeechBubble>
+        </div>
       </div>
     </CardComponent>
     <section v-if="relatedItemIds.length > 0" class="col-span-2">
@@ -74,14 +83,28 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useQuery } from '@vue/apollo-composable'
-import { GetEntityByIdDocument, TheCarousel, CardComponent, BaseButton, SpeechBubble, ImageSource, getFileNameByMimeType, TestimoniCard, BaseIcon } from 'coghent-vue-3-component-library'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import {
+  GetEntityByIdDocument,
+  TheCarousel,
+  CardComponent,
+  BaseButton,
+  SpeechBubble,
+  ImageSource,
+  getFileNameByMimeType,
+  TestimoniCard,
+  BaseIcon,
+  BaseInput,
+  CreateTestimoniDocument,
+  EntityInfo,
+  EntityTypes,
+} from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
-import { iiif } from '@/app'
+import { iiif, useTestimoniFeature } from '@/app'
 
 type TypeObject = {
   id: string
@@ -111,14 +134,17 @@ export default defineComponent({
     TheCarousel,
     BaseButton,
     BreadCrumbs,
+    BaseInput,
     // BaseIcon,
-    // SpeechBubble,
+    SpeechBubble,
   },
   setup: () => {
     const id = ref<string>(asString(useRoute().params['entityID']))
     const router = useRouter()
     const route = useRoute()
+    const baseTestimoni = ref<typeof EntityInfo>({ title: 'Testimoni', description: '', type: EntityTypes.Contains })
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
+    const { mutate } = useMutation(CreateTestimoniDocument)
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
@@ -134,6 +160,7 @@ export default defineComponent({
       { id: '2', name: 'Johan Patoor', date: '2 mei 2021', content: 'Daz werd oorspronkelijk ontworpen door een marketing bureau uit Antwer...', likes: 7 },
     ])
     const carouselPictureIndex = ref<number>(0)
+    const isWritingTestimoni = ref<boolean>(false)
 
     watch(
       () => route.fullPath,
@@ -238,6 +265,18 @@ export default defineComponent({
       testimoniToUpdate.likes++
     }
 
+    const writeTestimoni = () => {
+      isWritingTestimoni.value = !isWritingTestimoni.value
+    }
+
+    const createNewTestimoni = (body: string) => {
+      if (body.length >= 4) {
+        baseTestimoni.value.description = body
+        isWritingTestimoni.value = false
+        mutate({ entityInfo: baseTestimoni.value, assetId: id.value })
+      }
+    }
+
     const { t } = useI18n()
 
     return {
@@ -261,6 +300,10 @@ export default defineComponent({
       generateUrl,
       setPictureIndex,
       carouselPictureIndex,
+      writeTestimoni,
+      isWritingTestimoni,
+      createNewTestimoni,
+      useTestimoniFeature,
     }
   },
 })

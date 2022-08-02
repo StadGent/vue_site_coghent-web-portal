@@ -2,7 +2,7 @@ import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '
 import { createSSRApp, ref } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
-import { createUploadLink } from 'apollo-upload-client';
+import { createUploadLink } from 'apollo-upload-client'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { OpenIdConnectClient } from 'session-vue-3-oidc-library'
 import 'coghent-vue-3-component-library/lib/index.css'
@@ -31,6 +31,7 @@ export const storyboxCount = ref<number>(0)
 export const useAuthFeature = ref<boolean>(false)
 export const useStoryboxFeature = ref<boolean>(false)
 export const useGoogleFeature = ref<boolean>(false)
+export const useTestimoniFeature = ref<boolean>(false)
 //
 
 export default async function (authenticated: boolean) {
@@ -42,6 +43,7 @@ export default async function (authenticated: boolean) {
 
   useAuthFeature.value = configStore.config.value.features?.login ? configStore.config.value.features?.login : false
   useStoryboxFeature.value = configStore.config.value.features?.storybox ? configStore.config.value.features?.storybox : false
+  useTestimoniFeature.value = configStore.config.value.features.testimoni ? configStore.config.value.features.testimoni : false
   useGoogleFeature.value = configStore.config.value.features?.googleTags ? configStore.config.value.features?.googleTags : false
   const app = createSSRApp(App)
   const head = createHead()
