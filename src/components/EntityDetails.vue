@@ -2,7 +2,7 @@
   <!-- main-->
   <bread-crumbs class="mx-4 sm:mx-0" />
   <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
-    <section class="flex items-center justify-between px-10 mb-5 sm:mb-0">
+    <section class="flex justify-between px-10 mb-5 sm:mb-0">
       <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
       <the-carousel
         v-if="!loading && carouselFiles"
@@ -52,21 +52,22 @@
             <baseIcon icon="download" />
           </a> -->
         </div>
-        <div v-if="useTestimoniFeature">
+        <div v-if="useTestimonyFeature && !loading">
           <div class="flex justify-between items-center">
-            <h2 class="font-bold">{{ t('details.testimoni') }}</h2>
-            <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimoni')" :on-click="writeTestimoni" />
+            <h2 class="font-bold">{{ t('details.testimony') }}</h2>
+            <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" :on-click="writeTestimony" />
           </div>
-          <div v-if="isWritingTestimoni" class="flex mt-4">
-            <BaseInput styling="w-full" icon="send" :placeholder="t('details.testimoniPlaceholder')" @submitField="createNewTestimoni" />
+          <div v-if="loadingNewTestimony" class="w-full flex justify-center py-8"><CircleLoader /></div>
+          <div v-if="isWritingTestimony" class="flex mt-4">
+            <BaseInput styling="w-full" icon="send" :placeholder="t('details.testimonyPlaceholder')" @submitField="createNewTestimony" />
           </div>
           <SpeechBubble
-            v-for="(testimoni, index) in testimonies"
-            :key="testimoni.name"
-            :cardDetails="testimoni"
+            v-for="(testimony, index) in testimonies"
+            :key="testimony.name"
+            :cardDetails="testimony"
             color="#FDC20B"
             :alignment="index % 2 == 0 ? 'Left' : 'Right'"
-            @receivedLike="updateTestimoni"
+            @receivedLike="updateTestimony"
           ></SpeechBubble>
         </div>
       </div>
@@ -92,19 +93,23 @@ import {
   SpeechBubble,
   ImageSource,
   getFileNameByMimeType,
-  TestimoniCard,
+  TestimonyCard,
   BaseIcon,
   BaseInput,
-  CreateTestimoniDocument,
+  CreateTestimonyDocument,
   EntityInfo,
   EntityTypes,
+  Entity,
+  TestimoniCard,
+  CircleLoader,
 } from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
 import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
-import { iiif, useTestimoniFeature } from '@/app'
+import { iiif, useTestimonyFeature } from '@/app'
+import { UserStore } from '../stores/UserStore'
 
 type TypeObject = {
   id: string
@@ -137,14 +142,15 @@ export default defineComponent({
     BaseInput,
     // BaseIcon,
     SpeechBubble,
+    CircleLoader,
   },
   setup: () => {
     const id = ref<string>(asString(useRoute().params['entityID']))
     const router = useRouter()
     const route = useRoute()
-    const baseTestimoni = ref<typeof EntityInfo>({ title: 'Testimoni', description: '', type: EntityTypes.Contains })
+    const baseTestimony = ref<typeof EntityInfo>({ title: 'Testimony', description: '', type: EntityTypes.Contains })
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
-    const { mutate } = useMutation(CreateTestimoniDocument)
+    const { mutate, loading: loadingNewTestimony } = useMutation(CreateTestimonyDocument)
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
@@ -155,12 +161,9 @@ export default defineComponent({
     const { openDetailsModal, setEntity } = useDetailsModal()
     const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const { addPageToHistory, history } = useHistory()
-    const testimonies = ref<typeof TestimoniCard[]>([
-      { id: '1', name: 'Hilde Vercauteren', date: '2 mei 2021', content: 'Mijn grootouders hadden dat vroeger ook altijd staan. Ze wilden niets anders...', likes: 3 },
-      { id: '2', name: 'Johan Patoor', date: '2 mei 2021', content: 'Daz werd oorspronkelijk ontworpen door een marketing bureau uit Antwer...', likes: 7 },
-    ])
+    const testimonies = ref<typeof TestimonyCard[]>([])
     const carouselPictureIndex = ref<number>(0)
-    const isWritingTestimoni = ref<boolean>(false)
+    const isWritingTestimony = ref<boolean>(false)
 
     watch(
       () => route.fullPath,
@@ -172,8 +175,27 @@ export default defineComponent({
       { immediate: true }
     )
 
+    const parseTestimonyCards = (testimonies: typeof Entity[]): typeof TestimoniCard[] => {
+      const testimonyCards: typeof TestimoniCard[] = []
+      if (testimonies) {
+        testimonies.forEach((testimony: typeof Entity) => {
+          const card: typeof TestimoniCard = {
+            id: testimony.id,
+            name: testimony.user,
+            date: new Date(testimony.date[0].value).toDateString(),
+            content: testimony.description[0].value,
+            likes: testimony.likes[0].value,
+          }
+          testimonyCards.push(card)
+        })
+      }
+      return testimonyCards
+    }
+
     const setEntityInformation = (queryResult: any) => {
       if (queryResult.Entity) {
+        testimonies.value = parseTestimonyCards(queryResult.Entity.testimonies)
+
         const photosArray: typeof ImageSource[] = []
         mediaFiles.value = queryResult.Entity?.mediafiles
         queryResult.Entity?.mediafiles.forEach((value: any) => {
@@ -260,20 +282,20 @@ export default defineComponent({
       carouselPictureIndex.value = newIndex
     }
 
-    const updateTestimoni = (testimoni: typeof TestimoniCard) => {
-      const testimoniToUpdate = testimonies.value.find((element: typeof TestimoniCard) => element.id == testimoni.id)
-      testimoniToUpdate.likes++
+    const updateTestimony = (testimony: typeof TestimonyCard) => {
+      const testimonyToUpdate = testimonies.value.find((element: typeof TestimonyCard) => element.id == testimony.id)
+      testimonyToUpdate.likes++
     }
 
-    const writeTestimoni = () => {
-      isWritingTestimoni.value = !isWritingTestimoni.value
+    const writeTestimony = () => {
+      isWritingTestimony.value = !isWritingTestimony.value
     }
 
-    const createNewTestimoni = (body: string) => {
+    const createNewTestimony = (body: string) => {
       if (body.length >= 4) {
-        baseTestimoni.value.description = body
-        isWritingTestimoni.value = false
-        mutate({ entityInfo: baseTestimoni.value, assetId: id.value })
+        baseTestimony.value.description = body
+        isWritingTestimony.value = false
+        mutate({ entityInfo: baseTestimony.value, assetId: id.value })
       }
     }
 
@@ -296,14 +318,16 @@ export default defineComponent({
       goToRelation,
       relatedItemIds,
       testimonies,
-      updateTestimoni,
+      updateTestimony,
       generateUrl,
       setPictureIndex,
       carouselPictureIndex,
-      writeTestimoni,
-      isWritingTestimoni,
-      createNewTestimoni,
-      useTestimoniFeature,
+      writeTestimony,
+      isWritingTestimony,
+      createNewTestimony,
+      useTestimonyFeature,
+      UserStore,
+      loadingNewTestimony,
     }
   },
 })

@@ -35,9 +35,9 @@
   "details": {
     "discover": "Ontdek ook andere gerelateerde werken",
     "more": "Meer info over dit werk",
-    "testimoni": "Praat mee:",
-    "addTestimoni": "Vertel hier iets over",
-    "testimoniPlaceholder": "Deel hier jouw reactie",
+    "testimony": "Praat mee:",
+    "addTestimony": "Vertel hier iets over",
+    "testimonyPlaceholder": "Deel hier jouw reactie",
     "modal": {
       "link": "Link naar object kopiëren",
       "edit": "Informatie wijzigen of aanvullen",

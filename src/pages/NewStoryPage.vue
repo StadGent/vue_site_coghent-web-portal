@@ -27,7 +27,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
-import { apolloClient, router, storyboxCount } from '@/app'
+import { apolloClient, router } from '@/app'
 import { StoryboxBuild, StoryBoxState, BoxVisitCode, useStoryBox } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
