@@ -37,7 +37,7 @@
                 </div>
                 <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
                   <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
-                    {{ asset.title[0] ? asset.title[0].value : 'asset' }}
+                    {{ asset.title[0] ? stripUserUploadPrefix(asset.title[0].value) : 'asset' }}
                   </h1>
                   <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
                 </div>
@@ -90,6 +90,7 @@ import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
 import { KeyValuePair } from 'coghent-vue-3-component-library'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
+import { useUpload } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   components: { BaseIcon, BaseDropDown },
@@ -106,6 +107,7 @@ export default defineComponent({
     const assets = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assets)
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
     const draggingAssetComesBelow = ref<string | null>(null)
+    const { stripUserUploadPrefix } = useUpload()
 
     const deleteAsset = async (_asset: typeof Entity) => {
       const index = assets.value.indexOf(_asset)
@@ -212,6 +214,7 @@ export default defineComponent({
       assets,
       assetTimings,
       draggingAssetComesBelow,
+      stripUserUploadPrefix,
     }
   },
 })

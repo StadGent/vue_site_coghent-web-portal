@@ -66,6 +66,7 @@ export default defineComponent({
             // pictureUrl: generateUrl(getFilename(mediafiles[0] ? mediafiles[0] : null), 'full', 48),
             status: publicationStatus ? publicationStatus.value : null,
             type: ProfileListItemType.uploadedWork,
+            entity: asset,
           } as ProfileListItemInfo)
         }
       }

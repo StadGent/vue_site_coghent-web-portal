@@ -1,47 +1,70 @@
 <template>
   <section
     @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
-    :class="`${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 p-4 mb-4 w-full ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
+    :class="`${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
   >
-    <div v-if="profileListItemInfo.pictureUrl" class="flex items-center mr-4 w-12 h-12 md:w-24 md:h-24">
-      <img :src="profileListItemInfo.pictureUrl" />
+    <div class="w-full flex sm:flex-row flex-col-reverse">
+      <div v-if="profileListItemInfo.pictureUrl" class="flex items-center w-full justify-center my-4 px-6 sm:pl-4 sm:pr-2 md:w-40">
+        <img :src="profileListItemInfo.pictureUrl" />
+      </div>
+      <div class="w-full p-4">
+        <div class="flex flex-col sm:flex-row sm:justify-between pb-2">
+          <h2 class="font-bold cursor-pointer" @click="router.push(workLinks.visit)">{{ profileListItemInfo.title }}</h2>
+          <div v-if="showWorksFeature" class="my-4 sm:my-0 mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="tagInfo.style">
+            <div :class="tagInfo.style" class="mr-2 rounded-full h-2 w-2"></div>
+            {{ tagInfo.title }}
+          </div>
+          <div v-if="showStoryFeature">
+            <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent=""
+              ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
+            /></story-edit-dropdown>
+          </div>
+        </div>
+        <div class="pb-2">
+          <p>{{ profileListItemInfo.description }}</p>
+        </div>
+        <div class="text-tag-selected text-opacity-50 flex justify-between">
+          <div v-if="profileListItemInfo.dateCreated">
+            <p>{{ t('profile.storybox.creation-date') + profileListItemInfo.dateCreated }}</p>
+          </div>
+          <div v-if="profileListItemInfo.code && showStoryFeature">
+            <p>{{ t('profile.storybox.code') + profileListItemInfo.code }}</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="w-full">
-      <div class="flex justify-between pb-2">
-        <h2 class="font-bold">{{ profileListItemInfo.title }}</h2>
-        <div v-if="showWorksFeature" class="mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="getTagInfo().style">
-          <div :class="getTagInfo().style" class="mr-2 rounded-full h-2 w-2"></div>
-          {{ getTagInfo().title }}
-        </div>
-        <div v-if="showStoryFeature">
-          <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent=""
-            ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
-          /></story-edit-dropdown>
-        </div>
-      </div>
-      <div class="pb-2">
-        <p>{{ profileListItemInfo.description }}</p>
-      </div>
-      <div class="text-tag-selected text-opacity-50 flex justify-between">
-        <div v-if="profileListItemInfo.dateCreated">
-          <p>{{ t('profile.storybox.creation-date') + profileListItemInfo.dateCreated }}</p>
-        </div>
-        <div v-if="profileListItemInfo.code && showStoryFeature">
-          <p>{{ t('profile.storybox.code') + profileListItemInfo.code }}</p>
-        </div>
-      </div>
+    <div class="grid grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3 items-center cursor-pointer bg-background-dark bg-opacity-75" v-if="showWorksFeature">
+      <BaseIcon id="edit" :icon="'edit'" class="p-4 flex justify-center items-center stroke-current text-text-white" @click="router.push(workLinks.edit)" />
+      <span :class="[assetIsAddedToStoryBox === true ? 'bg-accent-purple bg-opacity-90' : '']" class="h-full flex items-center justify-center">
+        <AddAssetToStoryboxDropdown
+          :skidding="0"
+          :distance="0"
+          :placement="'auto'"
+          :trigger="openStoryboxes"
+          :entity="profileListItemInfo.entity"
+          @click="() => (openStoryboxes = !openStoryboxes)"
+          @addToStorybox="(ids) => addAssetToStorybox(ids)"
+        >
+          <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" class="p-4 flex justify-center items-center stroke-current text-text-white" />
+        </AddAssetToStoryboxDropdown>
+      </span>
+      <BaseIcon id="delete" :icon="'delete'" class="p-4 flex justify-center items-center stroke-current text-text-red" />
     </div>
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import StoryEditDropdown from './StoryEditDropdown.vue'
 import { PublicationStatus } from 'coghent-vue-3-component-library'
 import { Publication } from 'coghent-vue-3-component-library'
-import { router } from '@/app'
+import { apolloClient, router } from '@/app'
+import uploadWizard from '@/composables/uploadWizard'
+import AddAssetToStoryboxDropdown from '@/components/AddAssetToStoryboxDropdown.vue'
+import { StoryBoxState, useStorybox } from 'coghent-vue-3-component-library'
+import { Entity } from 'coghent-vue-3-component-library'
 
 export enum ProfileListItemType {
   story,
@@ -58,11 +81,12 @@ export type ProfileListItemInfo = {
   pictureUrl?: string
   status?: string
   type: ProfileListItemType
+  entity?: typeof Entity
 }
 
 export default defineComponent({
   name: 'ProfileListItem',
-  components: { BaseButton, StoryEditDropdown },
+  components: { BaseButton, StoryEditDropdown, BaseIcon, AddAssetToStoryboxDropdown },
   props: {
     profileListItemInfo: {
       type: Object as PropType<ProfileListItemInfo>,
@@ -74,20 +98,38 @@ export default defineComponent({
     const showStoryFeature = ref<boolean>(false)
     const showWorksFeature = ref<boolean>(false)
     const isClickable = ref<boolean>(false)
+    const openStoryboxes = ref<boolean>(false)
+    const assetIsAddedToStoryBox = ref<boolean>(false)
+    const workLinks = ref<any>()
+    const { ASSET_ID_PARAM } = uploadWizard()
+    const tagInfo = ref<{ title: string; style: string } | null>(null)
 
+    // General use
     const checkCardType = () => {
       if (props.profileListItemInfo.type === ProfileListItemType.story) {
         showStoryFeature.value = true
         isClickable.value = true
+        workLinks.value = {
+          edit: null,
+          visit: props.profileListItemInfo.onClickUrl,
+        }
       }
       if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
         showWorksFeature.value = true
-        isClickable.value = true
+        isClickable.value = false
+        workLinks.value = {
+          edit: `upload?${ASSET_ID_PARAM}=${props.profileListItemInfo.id}`,
+          visit:
+            tagInfo.value!.title === `In behandeling` && props.profileListItemInfo.id !== undefined
+              ? `upload?${ASSET_ID_PARAM}=${props.profileListItemInfo.id}`
+              : `/entity/${props.profileListItemInfo.entity.object_id}`,
+        }
       }
     }
 
+    // Use for works
     const getTagInfo = () => {
-      const info = {
+      tagInfo.value = {
         style: '',
         title: '',
       }
@@ -100,27 +142,61 @@ export default defineComponent({
         }
         switch (activeKey) {
           case Publication.Validate:
-            info.title = 'In behandeling'
-            info.style = 'bg-accent-orange text-accent-orange'
+            tagInfo.value.title = 'In behandeling'
+            tagInfo.value.style = 'bg-accent-orange text-accent-orange'
             break
           case Publication.Public:
-            info.title = 'Gepubliceerd'
-            info.style = 'bg-accent-lightGreen text-accent-lightGreen'
+            tagInfo.value.title = 'Gepubliceerd'
+            tagInfo.value.style = 'bg-accent-lightGreen text-accent-lightGreen'
             break
         }
       }
-      return info
+      return tagInfo.value
     }
 
-    checkCardType()
+    const checkAssetIsInAStorybox = async () => {
+      new Promise((resolve, reject) => {
+        for (const box of StoryBoxState.value.storyboxes) {
+          const found = useStorybox(apolloClient).assetIsInStorybox(props.profileListItemInfo.entity, box.id)
+          found && found.key ? resolve(true) : null
+        }
+        resolve(false)
+      }).then((val) => {
+        assetIsAddedToStoryBox.value = val as boolean
+      })
+    }
+
+    const addAssetToStorybox = async (_storyBoxIds: Array<string>) => {
+      for (const _box of StoryBoxState.value.storyboxes) {
+        if (_storyBoxIds.includes(_box.id)) {
+          await useStorybox(apolloClient).assetToStorybox(_box.id, props.profileListItemInfo.id)
+        }
+      }
+      await useStorybox(apolloClient).getStoryboxes()
+      checkAssetIsInAStorybox()
+    }
+
+    const init = () => {
+      if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
+        checkAssetIsInAStorybox()
+        getTagInfo()
+      }
+      checkCardType()
+    }
+
+    init()
 
     return {
       t,
       showStoryFeature,
       showWorksFeature,
-      getTagInfo,
+      tagInfo,
       router,
       isClickable,
+      workLinks,
+      openStoryboxes,
+      addAssetToStorybox,
+      assetIsAddedToStoryBox,
     }
   },
 })
