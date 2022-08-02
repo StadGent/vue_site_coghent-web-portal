@@ -23,7 +23,7 @@
             :draggable="canDrag"
           >
             <div :id="asset.id">
-              <div :id="asset.id" class="rounded-md w-full bg-background-light flex flex-cols py-2">
+              <div :id="asset.id" class="rounded-md w-full bg-background-light flex flex-cols py-2" :class="entityIsPublic(asset) === false ? 'opacity-50' : ''">
                 <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="dragEnd">
                   <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
                 </p>
@@ -36,26 +36,33 @@
                   />
                 </div>
                 <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
-                  <h1 :id="asset.id" class="text-lg font-bold hover:underline cursor-pointer" @click="() => router.push(`/entity/${asset.id}`)">
+                  <h1
+                    :id="asset.id"
+                    class="text-lg font-bold"
+                    :class="entityIsPublic(asset) === true ? 'hover:underline cursor-pointer' : ''"
+                    @click="() => (entityIsPublic(asset) === true ? router.push(`/entity/${asset.id}`) : null)"
+                  >
                     {{ asset.title[0] ? stripUserUploadPrefix(asset.title[0].value) : 'asset' }}
                   </h1>
                   <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
                 </div>
-                <div :id="asset.id" class="invisible w-20 flex items-center justify-center items-row-reverse cursor-pointer">
+                <div :id="asset.id" class="hidden w-20 flex items-center justify-center items-row-reverse cursor-pointer">
                   <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
                 </div>
-                <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer">
-                  <BaseDropDown
-                    :number-step="5"
-                    :number-max="60"
-                    :active="Number(setAssetTiming(asset))"
-                    :style="`p-1.5 rounded-md ml-2 w-16 mr-2 bg-text-white`"
-                    @selected="(option) => updateAssetTiming(asset, option)"
-                  />
-                </div>
-                <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
-                  <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
-                </div>
+                <span v-if="entityIsPublic(asset) === true" class="flex flex-row">
+                  <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer">
+                    <BaseDropDown
+                      :number-step="5"
+                      :number-max="60"
+                      :active="Number(setAssetTiming(asset))"
+                      :style="`p-1.5 rounded-md ml-2 w-16 mr-2 bg-text-white`"
+                      @selected="(option) => updateAssetTiming(asset, option)"
+                    />
+                  </div>
+                  <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
+                    <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
+                  </div>
+                </span>
               </div>
             </div>
             <div v-if="draggingAssetComesBelow === asset.id && draggingAssetComesBelow != startDragItem && canDrag === true" class="my-1.5 h-1 bg-background-dark w-full"></div>
@@ -91,6 +98,7 @@ import { router } from '@/app'
 import { KeyValuePair } from 'coghent-vue-3-component-library'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useUpload } from 'coghent-vue-3-component-library'
+import { entityIsPublic } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   components: { BaseIcon, BaseDropDown },
@@ -215,6 +223,7 @@ export default defineComponent({
       assetTimings,
       draggingAssetComesBelow,
       stripUserUploadPrefix,
+      entityIsPublic,
     }
   },
 })
