@@ -102,6 +102,7 @@ import {
   Entity,
   TestimoniCard,
   CircleLoader,
+  UpdateEntityDocument,
 } from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
@@ -150,7 +151,8 @@ export default defineComponent({
     const route = useRoute()
     const baseTestimony = ref<typeof EntityInfo>({ title: 'Testimony', description: '', type: EntityTypes.Contains })
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
-    const { mutate, loading: loadingNewTestimony } = useMutation(CreateTestimonyDocument)
+    const { mutate: createTestimony, loading: loadingNewTestimony } = useMutation(CreateTestimonyDocument)
+    const { mutate: updateEntity } = useMutation(UpdateEntityDocument)
     const selectedImageIndex = ref<Number>(0)
     const selectedImageMetaData = ref<any | undefined>()
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
@@ -285,6 +287,10 @@ export default defineComponent({
     const updateTestimony = (testimony: typeof TestimonyCard) => {
       const testimonyToUpdate = testimonies.value.find((element: typeof TestimonyCard) => element.id == testimony.id)
       testimonyToUpdate.likes++
+      const testimonyEntity = JSON.parse(JSON.stringify(result.value.Entity.testimonies.find((element: typeof Entity) => element.id == testimony.id)))
+      const newMetadata = [{ key: testimonyEntity.likes[0].key, value: testimonyToUpdate.likes.toString() }]
+      console.log(newMetadata)
+      updateEntity({ id: testimony.id, metadata: newMetadata, relations: [] })
     }
 
     const writeTestimony = () => {
@@ -295,7 +301,7 @@ export default defineComponent({
       if (body.length >= 4) {
         baseTestimony.value.description = body
         isWritingTestimony.value = false
-        mutate({ entityInfo: baseTestimony.value, assetId: id.value })
+        createTestimony({ entityInfo: baseTestimony.value, assetId: id.value })
       }
     }
 
