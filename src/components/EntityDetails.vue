@@ -302,7 +302,7 @@ export default defineComponent({
     }
 
     const createNewTestimony = (body: string) => {
-      if (body.length >= 4) {
+      if (body.length >= 4 && userStore.hasUser) {
         baseTestimony.value.description = body
         isWritingTestimony.value = false
         createTestimony({ entityInfo: baseTestimony.value, assetId: id.value })
