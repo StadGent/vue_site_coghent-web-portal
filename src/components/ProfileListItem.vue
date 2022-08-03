@@ -69,6 +69,7 @@ import { Entity } from 'coghent-vue-3-component-library'
 export enum ProfileListItemType {
   story,
   uploadedWork,
+  testimony,
 }
 
 export type ProfileListItemInfo = {
@@ -123,6 +124,14 @@ export default defineComponent({
             tagInfo.value!.title === `In behandeling` && props.profileListItemInfo.id !== undefined
               ? `upload?${ASSET_ID_PARAM}=${props.profileListItemInfo.id}`
               : `/entity/${props.profileListItemInfo.entity.object_id}`,
+        }
+      }
+      if (props.profileListItemInfo.type === ProfileListItemType.testimony) {
+        showStoryFeature.value = false
+        isClickable.value = false
+        workLinks.value = {
+          edit: null,
+          visit: props.profileListItemInfo.onClickUrl,
         }
       }
     }
