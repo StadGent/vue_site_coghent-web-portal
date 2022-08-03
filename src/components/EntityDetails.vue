@@ -111,6 +111,7 @@ import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
 import { iiif, useTestimonyFeature } from '@/app'
 import { UserStore } from '../stores/UserStore'
+import StoreFactory from '@/stores/StoreFactory'
 
 type TypeObject = {
   id: string
@@ -166,6 +167,7 @@ export default defineComponent({
     const testimonies = ref<typeof TestimonyCard[]>([])
     const carouselPictureIndex = ref<number>(0)
     const isWritingTestimony = ref<boolean>(false)
+    const userStore = StoreFactory.get(UserStore)
 
     watch(
       () => route.fullPath,
@@ -285,12 +287,14 @@ export default defineComponent({
     }
 
     const updateTestimony = (testimony: typeof TestimonyCard) => {
-      const testimonyToUpdate = testimonies.value.find((element: typeof TestimonyCard) => element.id == testimony.id)
-      testimonyToUpdate.likes++
-      const testimonyEntity = JSON.parse(JSON.stringify(result.value.Entity.testimonies.find((element: typeof Entity) => element.id == testimony.id)))
-      const newMetadata = [{ key: testimonyEntity.likes[0].key, value: testimonyToUpdate.likes.toString() }]
-      console.log(newMetadata)
-      updateEntity({ id: testimony.id, metadata: newMetadata, relations: [] })
+      if (userStore.hasUser) {
+        const testimonyToUpdate = testimonies.value.find((element: typeof TestimonyCard) => element.id == testimony.id)
+        testimonyToUpdate.likes++
+        const testimonyEntity = JSON.parse(JSON.stringify(result.value.Entity.testimonies.find((element: typeof Entity) => element.id == testimony.id)))
+        const newMetadata = [{ key: testimonyEntity.likes[0].key, value: testimonyToUpdate.likes.toString() }]
+        console.log(newMetadata)
+        updateEntity({ id: testimony.id, metadata: newMetadata, relations: [] })
+      }
     }
 
     const writeTestimony = () => {
