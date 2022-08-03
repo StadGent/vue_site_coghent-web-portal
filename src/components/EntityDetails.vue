@@ -1,7 +1,7 @@
 <template>
   <!-- main-->
   <bread-crumbs class="mx-4 sm:mx-0" />
-  <div class="sm:grid sm:grid-cols-2 mt-20 flex-col">
+  <div class="lg:grid lg:grid-cols-2 mt-20 flex-col">
     <section class="flex justify-between px-10 mb-5 sm:mb-0">
       <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
       <the-carousel
