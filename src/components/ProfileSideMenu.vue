@@ -53,6 +53,7 @@ export default defineComponent({
       { i18nTitle: 'profile.details', link: '/profile' },
       { i18nTitle: 'profile.stories', link: '/mystories' },
       // { i18nTitle: 'profile.works', link: '/myworks' },
+      { i18nTitle: 'profile.testimonies', link: '/mytestimonies' },
     ])
     const { t } = useI18n()
 

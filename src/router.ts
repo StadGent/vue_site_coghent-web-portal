@@ -14,6 +14,7 @@ import TheLoginPage from './pages/TheLoginPage.vue'
 import TheWorksPage from './pages/TheWorksPage.vue'
 import TheVisitPage from './pages/TheVisitPage.vue'
 import TheUploadPage from './pages/TheUploadPage.vue'
+import TheTestimonyPage from './pages/TheTestimonyPage.vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
 
@@ -29,13 +30,14 @@ const routes = [
   { path: '/entity/not-found', component: EntityNotFound },
   { path: '/creator/:creatorID', component: CreatorDetails },
   { path: '/relation/:relationID', component: RelationDetail },
-  { path: '/visit/:visitCode', component: TheVisitPage, meta: { requiresAuth: true } },
+  { path: '/visit/:visitCode', component: TheVisitPage, meta: { requiresAuth: false } },
   { path: '/pavilion', component: ThePavilion },
-  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
-  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: true } },
-  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: true } },
+  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: false } },
+  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: false } },
+  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: false } },
   { path: '/mystories/:storyboxId', component: TheStoryboxPage, meta: { requiresAuth: true } },
   { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: true } },
+  { path: '/mytestimonies', component: TheTestimonyPage, meta: { requiresAuth: true } },
   { path: '/upload', component: TheUploadPage, meta: { requiresAuth: true } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
