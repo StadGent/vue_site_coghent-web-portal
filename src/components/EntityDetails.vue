@@ -150,7 +150,7 @@ export default defineComponent({
     const id = ref<string>(asString(useRoute().params['entityID']))
     const router = useRouter()
     const route = useRoute()
-    const baseTestimony = ref<typeof EntityInfo>({ title: 'Testimony', description: '', type: EntityTypes.Contains })
+    const baseTestimony = ref<typeof EntityInfo>({ title: 'Testimony', description: '', type: EntityTypes.Testimony })
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
     const { mutate: createTestimony, loading: loadingNewTestimony } = useMutation(CreateTestimonyDocument)
     const { mutate: updateEntity } = useMutation(UpdateEntityDocument)
