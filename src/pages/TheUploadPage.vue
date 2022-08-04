@@ -94,7 +94,7 @@ export default defineComponent({
 
       if (_step === 5) {
         isModeUploadNew.value === true ? await upload(apolloClient) : null
-        isModeEdit.value === true ? await updateAsset(assetId.value, apolloClient) : null
+        isModeEdit.value === true ? await updateAsset(assetId.value, 'updated', apolloClient) : null
         nextStep()
       }
     })

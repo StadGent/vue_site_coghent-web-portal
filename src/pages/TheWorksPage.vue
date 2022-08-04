@@ -45,7 +45,7 @@ export default defineComponent({
     const uploadRoute = `/upload`
     const myWorks = ref<Array<ProfileListItemInfo>>([])
     const isLoading = ref<boolean>(false)
-    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename } = useUpload()
+    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
 
@@ -56,17 +56,19 @@ export default defineComponent({
           let title = getMetadataOfTypeFromEntity(asset, 'title')
           let maker = getMetadataOfTypeFromEntity(asset, 'maker')
           let publicationStatus = getMetadataOfTypeFromEntity(asset, 'publication_status')
+          let userAction = getMetadataOfTypeFromEntity(asset, 'user_action')
           myWorks.value.push({
             id: asset.id,
             title: title ? stripUserUploadPrefix(title.value) : 'Title placeholder',
             description: maker ? maker.value : 'Onbekend',
-            dateCreated: '24 februari 2020',
+            // dateCreated: '24 februari 2020',
             onClickUrl: `upload?${ASSET_ID_PARAM}=${asset.id}`,
             pictureUrl: getMediafileLink(mediafiles),
             // pictureUrl: generateUrl(getFilename(mediafiles[0] ? mediafiles[0] : null), 'full', 48),
             status: publicationStatus ? publicationStatus.value : null,
             type: ProfileListItemType.uploadedWork,
             entity: asset,
+            action: userAction ? userAction.value : 'updated',
           } as ProfileListItemInfo)
         }
       }

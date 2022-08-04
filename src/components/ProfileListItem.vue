@@ -1,7 +1,9 @@
 <template>
   <section
     @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
-    :class="`${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
+    :class="`${isLoading ? 'animate-pulse opacity-30' : ''} ${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${
+      profileListItemInfo.pictureUrl ? 'flex' : ''
+    }`"
   >
     <div class="w-full flex sm:flex-row flex-col-reverse">
       <div v-if="profileListItemInfo.pictureUrl" class="flex items-center w-full justify-center my-4 px-6 sm:pl-4 sm:pr-2 md:w-40">
@@ -9,7 +11,7 @@
       </div>
       <div class="w-full p-4">
         <div class="flex flex-col sm:flex-row sm:justify-between pb-2">
-          <h2 class="font-bold cursor-pointer" @click="router.push(workLinks.visit)">{{ profileListItemInfo.title }}</h2>
+          <h2 class="font-bold" :class="[itemAction === 'deleted' ? '' : 'cursor-pointer']" @click="itemAction === 'deleted' ? null : router.push(workLinks.visit)">{{ profileListItemInfo.title }}</h2>
           <div v-if="showWorksFeature" class="my-4 sm:my-0 mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="tagInfo.style">
             <div :class="tagInfo.style" class="mr-2 rounded-full h-2 w-2"></div>
             {{ tagInfo.title }}
@@ -34,7 +36,34 @@
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3 items-center cursor-pointer bg-background-dark bg-opacity-75" v-if="showWorksFeature">
+    <div
+      class="grid items-center cursor-pointer bg-background-dark bg-opacity-75"
+      :class="[itemAction === 'deleted' ? 'grid-cols-1' : 'grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3']"
+      v-if="showWorksFeature"
+    >
+      <BaseIcon v-if="itemAction !== 'deleted'" id="edit" :icon="'edit'" class="p-4 flex justify-center items-center stroke-current text-text-white" @click="router.push(workLinks.edit)" />
+      <span v-if="itemAction !== 'deleted'" :class="[assetIsAddedToStoryBox === true ? 'bg-accent-purple bg-opacity-90' : '']" class="h-full flex items-center justify-center">
+        <AddAssetToStoryboxDropdown
+          :skidding="0"
+          :distance="0"
+          :placement="'auto'"
+          :trigger="openStoryboxes"
+          :entity="profileListItemInfo.entity"
+          @click="() => (openStoryboxes = !openStoryboxes)"
+          @addToStorybox="(ids) => addAssetToStorybox(ids)"
+        >
+          <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" class="p-4 flex justify-center items-center stroke-current text-text-white" />
+        </AddAssetToStoryboxDropdown>
+      </span>
+      <BaseIcon
+        id="delete"
+        :icon="[itemAction === 'deleted' ? 'newItem' : 'delete']"
+        :class="[itemAction === 'deleted' ? 'text-text-white' : 'text-text-red']"
+        class="p-4 flex justify-center items-center stroke-current"
+        @click="() => deleteRestoreAsset()"
+      />
+    </div>
+    <!-- <div class="grid grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3 items-center cursor-pointer bg-background-dark bg-opacity-75" v-if="showWorksFeature">
       <BaseIcon id="edit" :icon="'edit'" class="p-4 flex justify-center items-center stroke-current text-text-white" @click="router.push(workLinks.edit)" />
       <span :class="[assetIsAddedToStoryBox === true ? 'bg-accent-purple bg-opacity-90' : '']" class="h-full flex items-center justify-center">
         <AddAssetToStoryboxDropdown
@@ -49,13 +78,19 @@
           <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" class="p-4 flex justify-center items-center stroke-current text-text-white" />
         </AddAssetToStoryboxDropdown>
       </span>
-      <BaseIcon id="delete" :icon="'delete'" class="p-4 flex justify-center items-center stroke-current text-text-red" />
-    </div>
+      <BaseIcon
+        id="delete"
+        :icon="[itemAction === 'deleted' ? 'newItem' : 'delete']"
+        :class="[itemAction === 'deleted' ? 'text-text-white' : 'text-text-red']"
+        class="p-4 flex justify-center items-center stroke-current"
+        @click="() => deleteRestoreAsset()"
+      />
+    </div> -->
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import StoryEditDropdown from './StoryEditDropdown.vue'
@@ -66,6 +101,8 @@ import uploadWizard from '@/composables/uploadWizard'
 import AddAssetToStoryboxDropdown from '@/components/AddAssetToStoryboxDropdown.vue'
 import { StoryBoxState, useStorybox, Entity, DeleteEntityDocument } from 'coghent-vue-3-component-library'
 import { useMutation } from '@vue/apollo-composable'
+import { useUpload, UserAction } from 'coghent-vue-3-component-library'
+import { uploadState } from 'coghent-vue-3-component-library'
 
 export enum ProfileListItemType {
   story,
@@ -77,18 +114,24 @@ export type ProfileListItemInfo = {
   id: string
   title: string
   description: string
-  dateCreated: string
+  dateCreated?: string
   onClickUrl: string
   code?: string
   pictureUrl?: string
   status?: string
   type: ProfileListItemType
   entity?: typeof Entity
+  action?: typeof UserAction
 }
 
 export default defineComponent({
   name: 'ProfileListItem',
-  components: { BaseButton, StoryEditDropdown, BaseIcon, AddAssetToStoryboxDropdown },
+  components: {
+    BaseButton,
+    StoryEditDropdown,
+    BaseIcon,
+    AddAssetToStoryboxDropdown,
+  },
   props: {
     profileListItemInfo: {
       type: Object as PropType<ProfileListItemInfo>,
@@ -106,7 +149,10 @@ export default defineComponent({
     const assetIsAddedToStoryBox = ref<boolean>(false)
     const workLinks = ref<any>()
     const { ASSET_ID_PARAM } = uploadWizard()
+    const { updateAsset, entityToUploadComposable, getAction } = useUpload()
     const tagInfo = ref<{ title: string; style: string } | null>(null)
+    const itemAction = ref<typeof UserAction | null>(props.profileListItemInfo.action)
+    const isLoading = ref<boolean>(false)
 
     // General use
     const checkCardType = () => {
@@ -163,6 +209,10 @@ export default defineComponent({
             tagInfo.value.style = 'bg-accent-lightGreen text-accent-lightGreen'
             break
         }
+        if (itemAction.value === 'deleted') {
+          tagInfo.value!.title = 'Verwijderd'
+          tagInfo.value!.style = 'bg-text-red text-text-red'
+        }
       }
       return tagInfo.value
     }
@@ -188,6 +238,23 @@ export default defineComponent({
       await useStorybox(apolloClient).getStoryboxes()
       checkAssetIsInAStorybox()
     }
+
+    const deleteRestoreAsset = async () => {
+      isLoading.value = true
+      await entityToUploadComposable(props.profileListItemInfo.entity.id, apolloClient)
+      let action: typeof UserAction = 'updated'
+      if (itemAction.value) {
+        if (itemAction.value === 'deleted') action = 'updated'
+        if (itemAction.value === 'updated') action = 'deleted'
+      }
+      await updateAsset(props.profileListItemInfo.id, action, apolloClient)
+      await entityToUploadComposable(props.profileListItemInfo.entity.id, apolloClient)
+      itemAction.value = action // HACK:
+      isLoading.value = false
+    }
+    watch(itemAction, () => {
+      getTagInfo()
+    })
 
     const init = () => {
       if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
@@ -216,6 +283,9 @@ export default defineComponent({
       addAssetToStorybox,
       assetIsAddedToStoryBox,
       deleteEntity,
+      deleteRestoreAsset,
+      itemAction,
+      isLoading,
     }
   },
 })
