@@ -19,6 +19,7 @@
               ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
             /></story-edit-dropdown>
           </div>
+          <div v-if="directDeleteFeature" @click.stop.prevent=""><BaseButton custom-icon="delete" :no-margin="true" custom-style="ghost-black" :icon-shown="true" @click="deleteEntity" /></div>
         </div>
         <div class="pb-2">
           <p>{{ profileListItemInfo.description }}</p>
@@ -63,8 +64,8 @@ import { Publication } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import uploadWizard from '@/composables/uploadWizard'
 import AddAssetToStoryboxDropdown from '@/components/AddAssetToStoryboxDropdown.vue'
-import { StoryBoxState, useStorybox } from 'coghent-vue-3-component-library'
-import { Entity } from 'coghent-vue-3-component-library'
+import { StoryBoxState, useStorybox, Entity, DeleteEntityDocument } from 'coghent-vue-3-component-library'
+import { useMutation } from '@vue/apollo-composable'
 
 export enum ProfileListItemType {
   story,
@@ -94,10 +95,12 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['deleteItem'],
+  setup(props, { emit }) {
     const { t } = useI18n()
     const showStoryFeature = ref<boolean>(false)
     const showWorksFeature = ref<boolean>(false)
+    const directDeleteFeature = ref<boolean>(false)
     const isClickable = ref<boolean>(false)
     const openStoryboxes = ref<boolean>(false)
     const assetIsAddedToStoryBox = ref<boolean>(false)
@@ -129,6 +132,7 @@ export default defineComponent({
       if (props.profileListItemInfo.type === ProfileListItemType.testimony) {
         showStoryFeature.value = false
         isClickable.value = true
+        directDeleteFeature.value = true
         workLinks.value = {
           edit: null,
           visit: props.profileListItemInfo.onClickUrl,
@@ -195,10 +199,15 @@ export default defineComponent({
 
     init()
 
+    const deleteEntity = () => {
+      emit('deleteItem', props.profileListItemInfo.id)
+    }
+
     return {
       t,
       showStoryFeature,
       showWorksFeature,
+      directDeleteFeature,
       tagInfo,
       router,
       isClickable,
@@ -206,6 +215,7 @@ export default defineComponent({
       openStoryboxes,
       addAssetToStorybox,
       assetIsAddedToStoryBox,
+      deleteEntity,
     }
   },
 })
