@@ -57,7 +57,7 @@ export default defineComponent({
       () => testimonies.value,
       () => {
         if (testimonies.value) {
-          testimonyList.value = []
+          testimonyList.value = parseListItem(testimonies.value.GetTestimoniesOfUser)
         }
       },
       { immediate: true }
