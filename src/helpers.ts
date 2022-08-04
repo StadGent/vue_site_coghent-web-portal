@@ -7,6 +7,10 @@ type WeightedArrayConfigForArray<T> = {
   probability: number | '*'
 }
 
+export const parseDateAsLocaleString = (date: Date): string => {
+  return date.toLocaleDateString('nl-BE')
+}
+
 export const randomizer = <T extends string>(input: Record<T, WeightedArrayConfig>): T | undefined => {
   let pickedValue: T | undefined = undefined
   let i,

@@ -108,6 +108,9 @@
         "code": "Code van je box bezoek",
         "submit": "Verhaal toevoegen"
       }
+    },
+    "testimony": {
+      "noTestimonies": "Je hebt nog geen getuigenissen"
     }
   },
   "visit": {

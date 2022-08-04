@@ -112,6 +112,7 @@ import { useDetailsModal } from './DetailsModal.vue'
 import { iiif, useTestimonyFeature } from '@/app'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '@/stores/StoreFactory'
+import { parseDateAsLocaleString } from '@/helpers'
 
 type TypeObject = {
   id: string
@@ -186,7 +187,7 @@ export default defineComponent({
           const card: typeof TestimoniCard = {
             id: testimony.id,
             name: testimony.user,
-            date: new Date(testimony.date[0].value).toDateString(),
+            date: parseDateAsLocaleString(new Date(testimony.date[0].value)),
             content: testimony.description[0].value,
             likes: testimony.likes[0].value,
           }

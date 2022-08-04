@@ -6,6 +6,9 @@
       <div v-if="loadingTestimonies && testimonyList.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
         <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
       </div>
+      <div v-if="!loadingTestimonies && testimonyList.length === 0" class="flex items-center flex-col w-full h-full">
+        <h1 class="h-fit mt-12 text-xl">{{ t('profile.testimony.noTestimonies') }}</h1>
+      </div>
     </section>
   </section>
 </template>
@@ -14,9 +17,10 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '../components/ProfileListItem.vue'
-import { GetTestimoniesOfUserDocument } from 'coghent-vue-3-component-library'
+import { GetTestimoniesOfUserDocument, Entity, CircleLoader, Relation, RelationType } from 'coghent-vue-3-component-library'
 import { useQuery } from '@vue/apollo-composable'
-import { Entity, CircleLoader } from 'coghent-vue-3-component-library'
+import { parseDateAsLocaleString } from '@/helpers'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'TheTestimonyPage',
@@ -24,6 +28,7 @@ export default defineComponent({
   setup() {
     const testimonyList = ref<typeof Entity[]>([])
     const { result: testimonies, refetch: refetchTestimonies, loading: loadingTestimonies } = useQuery(GetTestimoniesOfUserDocument)
+    const { t } = useI18n()
 
     const parseListItem = (items: typeof Entity[]): ProfileListItemInfo[] => {
       const listItems: ProfileListItemInfo[] = []
@@ -33,8 +38,8 @@ export default defineComponent({
             id: item.id,
             title: item.user,
             description: item.description[0].value,
-            dateCreated: new Date(item.date[0].value).toDateString(),
-            onClickUrl: '',
+            dateCreated: parseDateAsLocaleString(new Date(item.date[0].value)),
+            onClickUrl: item.relations[0]?.key.replace('entities/', '/entity/'),
             type: ProfileListItemType.testimony,
             entity: item,
           }
@@ -52,13 +57,13 @@ export default defineComponent({
       () => testimonies.value,
       () => {
         if (testimonies.value) {
-          testimonyList.value = parseListItem(testimonies.value.GetTestimoniesOfUser)
+          testimonyList.value = []
         }
       },
       { immediate: true }
     )
 
-    return { testimonyList, loadingTestimonies }
+    return { testimonyList, loadingTestimonies, t }
   },
 })
 </script>

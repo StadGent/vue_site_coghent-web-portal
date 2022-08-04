@@ -128,7 +128,7 @@ export default defineComponent({
       }
       if (props.profileListItemInfo.type === ProfileListItemType.testimony) {
         showStoryFeature.value = false
-        isClickable.value = false
+        isClickable.value = true
         workLinks.value = {
           edit: null,
           visit: props.profileListItemInfo.onClickUrl,
