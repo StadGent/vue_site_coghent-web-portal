@@ -2,7 +2,7 @@
   <section class="md:flex md:mt-4 gap-8">
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
-      <profile-list-item v-for="testimonyListItem of testimonyList" :key="testimonyListItem.id" :profile-list-item-info="testimonyListItem" />
+      <profile-list-item v-for="testimonyListItem of testimonyList" :key="testimonyListItem.id" :profile-list-item-info="testimonyListItem" @deleteItem="deleteTestimony" />
       <div v-if="loadingTestimonies && testimonyList.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
         <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
       </div>
@@ -17,8 +17,8 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '../components/ProfileListItem.vue'
-import { GetTestimoniesOfUserDocument, Entity, CircleLoader, Relation, RelationType } from 'coghent-vue-3-component-library'
-import { useQuery } from '@vue/apollo-composable'
+import { GetTestimoniesOfUserDocument, Entity, CircleLoader, Relation, RelationType, DeleteEntityDocument } from 'coghent-vue-3-component-library'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { parseDateAsLocaleString } from '@/helpers'
 import { useI18n } from 'vue-i18n'
 
@@ -29,6 +29,7 @@ export default defineComponent({
     const testimonyList = ref<typeof Entity[]>([])
     const { result: testimonies, refetch: refetchTestimonies, loading: loadingTestimonies } = useQuery(GetTestimoniesOfUserDocument)
     const { t } = useI18n()
+    const { mutate: deleteItem } = useMutation(DeleteEntityDocument)
 
     const parseListItem = (items: typeof Entity[]): ProfileListItemInfo[] => {
       const listItems: ProfileListItemInfo[] = []
@@ -63,7 +64,12 @@ export default defineComponent({
       { immediate: true }
     )
 
-    return { testimonyList, loadingTestimonies, t }
+    const deleteTestimony = (testimonyId: string) => {
+      testimonyList.value = testimonyList.value.filter((listItem: ProfileListItemInfo) => listItem.id != testimonyId)
+      deleteItem({ id: testimonyId })
+    }
+
+    return { testimonyList, loadingTestimonies, t, deleteTestimony }
   },
 })
 </script>
