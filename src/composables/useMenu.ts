@@ -6,6 +6,7 @@ export type MenuItem = {
   link: string
   localLink: boolean
   requireAuth: boolean
+  isVisible: boolean
 }
 
 const useMenu = () => {
@@ -17,6 +18,7 @@ const useMenu = () => {
       link: `/home`,
       localLink: true,
       requireAuth: false,
+      isVisible: true,
     },
     {
       id: `CoGent-box`,
@@ -24,6 +26,7 @@ const useMenu = () => {
       link: `https://www.collectie.gent/cogent-box`,
       localLink: false,
       requireAuth: false,
+      isVisible: true,
     },
     {
       id: `Over het project`,
@@ -31,6 +34,7 @@ const useMenu = () => {
       link: `https://www.collectie.gent/over-het-project`,
       localLink: false,
       requireAuth: false,
+      isVisible: true,
     },
     {
       id: `Storybox`,
@@ -38,6 +42,23 @@ const useMenu = () => {
       link: `/myStories`,
       localLink: true,
       requireAuth: true,
+      isVisible: true,
+    },
+    {
+      id: `Works`,
+      title: t(`profile.works`),
+      link: `/myworks`,
+      localLink: true,
+      requireAuth: true,
+      isVisible: true,
+    },
+    {
+      id: `Testimoni`,
+      title: t(`profile.testimonies`),
+      link: `/mytestimonies`,
+      localLink: true,
+      requireAuth: true,
+      isVisible: false,
     },
   ]
   const bottomMobileItems: Array<MenuItem> = [
@@ -47,6 +68,7 @@ const useMenu = () => {
       link: `/profile`,
       localLink: true,
       requireAuth: true,
+      isVisible: true,
     },
   ]
 
@@ -57,6 +79,7 @@ const useMenu = () => {
       link: `https://www.collectie.gent/cogent-box`,
       localLink: false,
       requireAuth: false,
+      isVisible: true,
     },
     {
       id: `Over het project`,
@@ -64,6 +87,7 @@ const useMenu = () => {
       link: `https://www.collectie.gent/over-het-project`,
       localLink: false,
       requireAuth: false,
+      isVisible: true,
     },
   ]
 

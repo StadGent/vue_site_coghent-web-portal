@@ -85,6 +85,15 @@ export default defineComponent({
       return filtered
     }
 
+    const filterItemsOnVisibility = (_menutItems: Array<MenuItem>) => {
+      let filtered = []
+      for (const item of _menutItems) {
+        item.isVisible === true ? filtered.push(item) : null
+      }
+
+      return filtered
+    }
+
     watch(menuIsVisible, (isOpen: boolean) => {
       if (isOpen === true) {
         menuItems.value = filterItemsOnAuth(menu.mobileItems)
@@ -92,10 +101,14 @@ export default defineComponent({
       }
     })
 
-    onMounted(() => {
+    const init = () => {
       menuItems.value = filterItemsOnAuth(menu.mobileItems)
+      menuItems.value = filterItemsOnVisibility(menu.mobileItems)
       menuItemsBottom.value = filterItemsOnAuth(menu.bottomMobileItems)
-    })
+      menuItemsBottom.value = filterItemsOnVisibility(menu.bottomMobileItems)
+    }
+
+    init()
 
     return {
       t,
