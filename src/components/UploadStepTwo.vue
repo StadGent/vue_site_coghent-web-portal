@@ -6,7 +6,7 @@
         v-for="option of options"
         :key="option.title"
         :class="[option.selected === true ? 'border-2 border-accent-purple' : '']"
-        class="my-6 bg-text-white p-4 flex flex-col text-center"
+        class="my-6 bg-text-white p-4 flex flex-col text-center shadow-md	"
         @click="setSelectedOption(option)"
       >
         <div class="h-full flex justify-center items-center">

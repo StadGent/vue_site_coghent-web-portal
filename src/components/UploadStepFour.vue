@@ -2,7 +2,7 @@
   <div class="m-8 h-full flex text-center items-center flex-col">
     <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepFour.title') }}</h1>
     <div class="w-full h-full flex flex-col pb-8 mt-8 items-center overflow-y-scroll">
-      <div class="w-4/5 bg-text-white w-full py-4 px-4 lg:px-8 flex flex-col items-center lg:items-start lg:flex-row text-left mb-6">
+      <div class="w-4/5 bg-text-white w-full py-4 px-4 lg:px-8 flex flex-col items-center lg:items-start lg:flex-row text-left mb-6 shadow-md">
         <div class="w-2/5 flex flex-grow justify-center items-start py-8">
           <img :src="setMediafile()" alt="" />
         </div>

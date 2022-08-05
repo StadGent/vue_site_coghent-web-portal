@@ -18,7 +18,7 @@
         <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
       </section>
     </span>
-    <div class="absolute bottom-16 right-8 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
+    <div class="lg:hidden absolute bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
       <BaseIcon icon="newItem" class="stroke-current p-1 cursor-pointer text-text-white" @click="() => router.push(`/upload`)" />
     </div>
   </section>
