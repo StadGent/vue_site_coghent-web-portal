@@ -1,6 +1,6 @@
 <template>
   <section class="flex md:mt-16 gap-8 flex-col">
-    <div class="md:visible invisible pb-4 flex justify-end">
+    <div class="pb-4 flex justify-end">
       <base-button class="text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
     </div>
     <span class="flex flex-col md:flex-row">

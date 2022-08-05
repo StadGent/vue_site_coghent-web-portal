@@ -1,18 +1,20 @@
 <template>
   <div class="h-full p-8 flex text-center flex-col">
     <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepOne.title') }}</h1>
-    <div ref="dropzoneContainer" class="h-full m-8 bg-text-white border-2 border-black border-dashed flex flex-col justify-center items-center">
-      <span v-if="addedFiles === 0">
-        <h2 class="font-normal text-2xl mb-4">{{ t(`myWorks.upload.stepOne.sleep`) }}</h2>
+    <div ref="dropzoneContainer" class="h-full m-8 bg-text-white border-2 border-black border-dashed flex justify-center items-center" @click="(event) => openFileExplorer(event)">
+      <div v-if="addedFiles === 0" class="grid grid-cols-1 grid-rows-3">
+        <h2 class="invisible sm:visible font-normal text-2xl mb-4">{{ t(`myWorks.upload.stepOne.sleep`) }}</h2>
+        <div class="visble sm:invisible w-full flex justify-center items-center">
+          <BaseIcon icon="upload" class="stroke-current p-4 cursor-pointer" />
+        </div>
         <base-button
           :text="t('myWorks.upload.stepOne.uploadFromComputer')"
-          :on-click="(event) => openFileExplorer(event)"
           custom-style="ghost-purple"
           :icon-shown="true"
           custom-icon="upload"
-          class="px-2 mx-3 ml-3 justify-center"
+          class="invisible sm:visible px-2 mx-3 ml-3 justify-center"
         />
-      </span>
+      </div>
     </div>
   </div>
 
