@@ -63,29 +63,6 @@
         @click="() => deleteRestoreAsset()"
       />
     </div>
-    <!-- <div class="grid grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3 items-center cursor-pointer bg-background-dark bg-opacity-75" v-if="showWorksFeature">
-      <BaseIcon id="edit" :icon="'edit'" class="p-4 flex justify-center items-center stroke-current text-text-white" @click="router.push(workLinks.edit)" />
-      <span :class="[assetIsAddedToStoryBox === true ? 'bg-accent-purple bg-opacity-90' : '']" class="h-full flex items-center justify-center">
-        <AddAssetToStoryboxDropdown
-          :skidding="0"
-          :distance="0"
-          :placement="'auto'"
-          :trigger="openStoryboxes"
-          :entity="profileListItemInfo.entity"
-          @click="() => (openStoryboxes = !openStoryboxes)"
-          @addToStorybox="(ids) => addAssetToStorybox(ids)"
-        >
-          <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" class="p-4 flex justify-center items-center stroke-current text-text-white" />
-        </AddAssetToStoryboxDropdown>
-      </span>
-      <BaseIcon
-        id="delete"
-        :icon="[itemAction === 'deleted' ? 'newItem' : 'delete']"
-        :class="[itemAction === 'deleted' ? 'text-text-white' : 'text-text-red']"
-        class="p-4 flex justify-center items-center stroke-current"
-        @click="() => deleteRestoreAsset()"
-      />
-    </div> -->
   </section>
 </template>
 
@@ -99,10 +76,8 @@ import { Publication } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import uploadWizard from '@/composables/uploadWizard'
 import AddAssetToStoryboxDropdown from '@/components/AddAssetToStoryboxDropdown.vue'
-import { StoryBoxState, useStorybox, Entity, DeleteEntityDocument } from 'coghent-vue-3-component-library'
-import { useMutation } from '@vue/apollo-composable'
+import { StoryBoxState, useStorybox, Entity } from 'coghent-vue-3-component-library'
 import { useUpload, UserAction } from 'coghent-vue-3-component-library'
-import { uploadState } from 'coghent-vue-3-component-library'
 
 export enum ProfileListItemType {
   story,
