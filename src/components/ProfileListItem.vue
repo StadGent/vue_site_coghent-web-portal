@@ -11,7 +11,7 @@
       </div>
       <div class="w-full p-4">
         <div class="flex flex-col sm:flex-row sm:justify-between pb-2">
-          <h2 class="font-bold" :class="[itemAction === 'deleted' ? '' : 'cursor-pointer']" @click="itemAction === 'deleted' ? null : router.push(workLinks.visit)">{{ profileListItemInfo.title }}</h2>
+          <h2 class="font-bold" :class="[itemAction === 'deleted' ? '' : 'cursor-pointer']" @click="itemAction === 'deleted' ? null : router.push(links.visit)">{{ profileListItemInfo.title }}</h2>
           <div v-if="showWorksFeature" class="my-4 sm:my-0 mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="tagInfo.style">
             <div :class="tagInfo.style" class="mr-2 rounded-full h-2 w-2"></div>
             {{ tagInfo.title }}
@@ -36,48 +36,29 @@
         </div>
       </div>
     </div>
-    <div
-      class="grid items-center cursor-pointer bg-background-dark bg-opacity-75"
-      :class="[itemAction === 'deleted' ? 'grid-cols-1' : 'grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3']"
+    <MyWorksActions
       v-if="showWorksFeature"
-    >
-      <BaseIcon v-if="itemAction !== 'deleted'" id="edit" :icon="'edit'" class="p-4 flex justify-center items-center stroke-current text-text-white" @click="router.push(workLinks.edit)" />
-      <span v-if="itemAction !== 'deleted'" :class="[assetIsAddedToStoryBox === true ? 'bg-accent-purple bg-opacity-90' : '']" class="h-full flex items-center justify-center">
-        <AddAssetToStoryboxDropdown
-          :skidding="0"
-          :distance="0"
-          :placement="'auto'"
-          :trigger="openStoryboxes"
-          :entity="profileListItemInfo.entity"
-          @click="() => (openStoryboxes = !openStoryboxes)"
-          @addToStorybox="(ids) => addAssetToStorybox(ids)"
-        >
-          <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" class="p-4 flex justify-center items-center stroke-current text-text-white" />
-        </AddAssetToStoryboxDropdown>
-      </span>
-      <BaseIcon
-        id="delete"
-        :icon="[itemAction === 'deleted' ? 'newItem' : 'delete']"
-        :class="[itemAction === 'deleted' ? 'text-text-white' : 'text-text-red']"
-        class="p-4 flex justify-center items-center stroke-current"
-        @click="() => deleteRestoreAsset()"
-      />
-    </div>
+      :myWorksItem="profileListItemInfo"
+      v-model:tagInfo="tagInfo"
+      v-model:isLoading="isLoading"
+      @updateTag="() => getTagInfo()"
+      v-model:itemAction="itemAction"
+    />
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from 'vue'
-import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
+import { BaseButton } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import StoryEditDropdown from './StoryEditDropdown.vue'
 import { PublicationStatus } from 'coghent-vue-3-component-library'
 import { Publication } from 'coghent-vue-3-component-library'
-import { apolloClient, router } from '@/app'
+import { router } from '@/app'
+import { Entity } from 'coghent-vue-3-component-library'
+import { UserAction } from 'coghent-vue-3-component-library'
+import MyWorksActions from '@/components/MyWorksActions.vue'
 import uploadWizard from '@/composables/uploadWizard'
-import AddAssetToStoryboxDropdown from '@/components/AddAssetToStoryboxDropdown.vue'
-import { StoryBoxState, useStorybox, Entity } from 'coghent-vue-3-component-library'
-import { useUpload, UserAction } from 'coghent-vue-3-component-library'
 
 export enum ProfileListItemType {
   story,
@@ -99,13 +80,20 @@ export type ProfileListItemInfo = {
   action?: typeof UserAction
 }
 
+export type ActionLinks = {
+  visit?: string
+  edit?: string
+  delete?: string
+}
+
+export type TagInfo = { title: string; style: string }
+
 export default defineComponent({
   name: 'ProfileListItem',
   components: {
     BaseButton,
     StoryEditDropdown,
-    BaseIcon,
-    AddAssetToStoryboxDropdown,
+    MyWorksActions,
   },
   props: {
     profileListItemInfo: {
@@ -122,19 +110,18 @@ export default defineComponent({
     const isClickable = ref<boolean>(false)
     const openStoryboxes = ref<boolean>(false)
     const assetIsAddedToStoryBox = ref<boolean>(false)
-    const workLinks = ref<any>()
-    const { ASSET_ID_PARAM } = uploadWizard()
-    const { updateAsset, entityToUploadComposable, getAction } = useUpload()
-    const tagInfo = ref<{ title: string; style: string } | null>(null)
-    const itemAction = ref<typeof UserAction | null>(props.profileListItemInfo.action)
+    const links = ref<any>()
+    const tagInfo = ref<TagInfo | null>(null)
     const isLoading = ref<boolean>(false)
+    const itemAction = ref<typeof UserAction>(props.profileListItemInfo.action)
+    const { ASSET_ID_PARAM } = uploadWizard()
 
     // General use
     const checkCardType = () => {
       if (props.profileListItemInfo.type === ProfileListItemType.story) {
         showStoryFeature.value = true
         isClickable.value = true
-        workLinks.value = {
+        links.value = {
           edit: null,
           visit: props.profileListItemInfo.onClickUrl,
         }
@@ -142,7 +129,7 @@ export default defineComponent({
       if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
         showWorksFeature.value = true
         isClickable.value = false
-        workLinks.value = {
+        links.value = {
           edit: `upload?${ASSET_ID_PARAM}=${props.profileListItemInfo.id}`,
           visit:
             tagInfo.value!.title === `In behandeling` && props.profileListItemInfo.id !== undefined
@@ -154,7 +141,7 @@ export default defineComponent({
         showStoryFeature.value = false
         isClickable.value = true
         directDeleteFeature.value = true
-        workLinks.value = {
+        links.value = {
           edit: null,
           visit: props.profileListItemInfo.onClickUrl,
         }
@@ -184,60 +171,29 @@ export default defineComponent({
             tagInfo.value.style = 'bg-accent-lightGreen text-accent-lightGreen'
             break
         }
-        if (itemAction.value === 'deleted') {
-          tagInfo.value!.title = 'Verwijderd'
-          tagInfo.value!.style = 'bg-text-red text-text-red'
-        }
+
+        setCustomWorksTag()
       }
       return tagInfo.value
     }
 
-    const checkAssetIsInAStorybox = async () => {
-      new Promise((resolve, reject) => {
-        for (const box of StoryBoxState.value.storyboxes) {
-          const found = useStorybox(apolloClient).assetIsInStorybox(props.profileListItemInfo.entity, box.id)
-          found && found.key ? resolve(true) : null
-        }
-        resolve(false)
-      }).then((val) => {
-        assetIsAddedToStoryBox.value = val as boolean
-      })
-    }
-
-    const addAssetToStorybox = async (_storyBoxIds: Array<string>) => {
-      for (const _box of StoryBoxState.value.storyboxes) {
-        if (_storyBoxIds.includes(_box.id)) {
-          await useStorybox(apolloClient).assetToStorybox(_box.id, props.profileListItemInfo.id)
-        }
+    const setCustomWorksTag = () => {
+      if (itemAction.value === 'deleted') {
+        tagInfo.value = {
+          title: `Verwijderd`,
+          style: `bg-text-red text-text-red`,
+        } as TagInfo
       }
-      await useStorybox(apolloClient).getStoryboxes()
-      checkAssetIsInAStorybox()
     }
-
-    const deleteRestoreAsset = async () => {
-      isLoading.value = true
-      await entityToUploadComposable(props.profileListItemInfo.entity.id, apolloClient)
-      let action: typeof UserAction = 'updated'
-      if (itemAction.value) {
-        if (itemAction.value === 'deleted') action = 'updated'
-        if (itemAction.value === 'updated') action = 'deleted'
-      }
-      await updateAsset(props.profileListItemInfo.id, action, apolloClient)
-      await entityToUploadComposable(props.profileListItemInfo.entity.id, apolloClient)
-      itemAction.value = action // HACK:
-      isLoading.value = false
-    }
-    watch(itemAction, () => {
-      getTagInfo()
-    })
 
     const init = () => {
       if (props.profileListItemInfo.type === ProfileListItemType.uploadedWork) {
-        checkAssetIsInAStorybox()
         getTagInfo()
       }
       checkCardType()
     }
+
+    watch(tagInfo, () => checkCardType())
 
     init()
 
@@ -253,14 +209,13 @@ export default defineComponent({
       tagInfo,
       router,
       isClickable,
-      workLinks,
+      links,
       openStoryboxes,
-      addAssetToStorybox,
       assetIsAddedToStoryBox,
       deleteEntity,
-      deleteRestoreAsset,
-      itemAction,
       isLoading,
+      getTagInfo,
+      itemAction,
     }
   },
 })
