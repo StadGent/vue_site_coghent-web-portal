@@ -1,12 +1,12 @@
 <template>
-  <div class="h-full p-8 flex text-center flex-col items-center">
-    <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepTwo.title') }}</h1>
-    <div class="h-full w-full grid grid-cols-2 gap-4 my-8">
+  <div class="h-full pt-6 px-6 flex text-center flex-col items-center">
+    <h1 class="flex flex-wrap font-bold text-4xl pb-4">{{ t('myWorks.upload.stepTwo.title') }}</h1>
+    <div class="h-full w-full pb-4 grid grid-cols-1 lg:grid-cols-2  lg:gap-4 overflow-y-scroll">
       <div
         v-for="option of options"
         :key="option.title"
         :class="[option.selected === true ? 'border-2 border-accent-purple' : '']"
-        class="bg-text-white p-4 flex flex-col text-center"
+        class="my-6 bg-text-white p-4 flex flex-col text-center"
         @click="setSelectedOption(option)"
       >
         <div class="h-full flex justify-center items-center">

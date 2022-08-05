@@ -15,9 +15,9 @@
         </div>
         <UploadDone v-if="currentUploadStep === TOTAL_STEPS && canShowStep(TOTAL_STEPS)" />
       </div>
-      <div class="grid grid-cols-1 grid-rows-2 gap-6 pb-6 sm:gap-0 block sm:flex sm:flex-rows sm:px-8 h-1/5 items-center bg-background-light">
-        <base-button :class="showPrevious" class="order-2 sm:order-first ml-6" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
-        <StepProgress class="order-1 sm:order-2" :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
+      <div class="z-10 grid grid-cols-1 grid-rows-2 gap-6 pb-6 lg:pb-0 lg:gap-0 block lg:flex lg:flex-rows lg:px-8 h-1/5 items-center bg-background-light">
+        <base-button :class="showPrevious" class="order-2 lg:order-first ml-6" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
+        <StepProgress class="order-1 lg:order-2 col-span-1" :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
         <span class="order-last mr-6">
           <base-button
             v-if="currentUploadStep < 4"

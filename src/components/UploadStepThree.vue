@@ -1,9 +1,9 @@
 <template>
   <div class="m-8 h-full flex text-center items-center flex-col">
     <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepThree.title') }}</h1>
-    <div class="w-full h-full grid grid-cols-2 gap-4 py-8 overflow-y-scroll">
+    <div class="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 py-8 overflow-y-scroll">
       <div class="bg-text-white py-4 px-8 flex flex-col text-left">
-        <h2 class="font-bold text-lg mb-4">{{ t('myWorks.upload.stepThree.metadata.title') }}</h2>
+        <h2 class="font-bold text-lg mb-4 pb-4">{{ t('myWorks.upload.stepThree.metadata.title') }}</h2>
         <span class="pr-4 overflow-y-auto">
           <div v-for="question of metadata" :key="question.text" class="flex flex-col my-4" @change="updateMetadata">
             <label class="block text-base font-normal mb-2" :for="question.text"> {{ question.text }} </label>
