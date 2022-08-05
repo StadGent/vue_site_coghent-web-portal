@@ -15,22 +15,22 @@
         </div>
         <UploadDone v-if="currentUploadStep === TOTAL_STEPS && canShowStep(TOTAL_STEPS)" />
       </div>
-      <div class="block flex flex-rows px-8 mt-4 h-1/5 items-center bg-background-light">
-        <base-button :class="showPrevious" class="my-8" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
-        <div class="w-full h-full flex items-center">
-          <StepProgress :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
-        </div>
-        <base-button
-          v-if="currentUploadStep < 4"
-          class="my-8"
-          :on-click="() => (stepDone === true ? nextStep() : null)"
-          :custom-style="stepDone === true ? 'primary' : 'primaryUnavailable'"
-          :icon-shown="false"
-          :text="t(`flow.next`)"
-        ></base-button>
-        <base-button v-if="currentUploadStep === 4 && isModeUploadNew === true" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.upload`)"></base-button>
-        <base-button v-if="currentUploadStep === 4 && isModeEdit === true" class="my-8" :on-click="nextStep" :icon-shown="false" :text="t(`flow.update`)"></base-button>
-        <base-button v-if="currentUploadStep === TOTAL_STEPS" class="my-8" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
+      <div class="grid grid-cols-1 grid-rows-2 gap-6 pb-6 sm:gap-0 block sm:flex sm:flex-rows sm:px-8 h-1/5 items-center bg-background-light">
+        <base-button :class="showPrevious" class="order-2 sm:order-first ml-6" :on-click="previousStep" :icon-shown="false" custom-style="secondary" :text="t(`flow.previous`)"></base-button>
+        <StepProgress class="order-1 sm:order-2" :steps="steps" :show-titles="true" :current-step="currentUploadStep" :current-status="'inProgress'" />
+        <span class="order-last mr-6">
+          <base-button
+            v-if="currentUploadStep < 4"
+            class=""
+            :on-click="() => (stepDone === true ? nextStep() : null)"
+            :custom-style="stepDone === true ? 'primary' : 'primaryUnavailable'"
+            :icon-shown="false"
+            :text="t(`flow.next`)"
+          ></base-button>
+          <base-button v-if="currentUploadStep === 4 && isModeUploadNew === true" :on-click="nextStep" :icon-shown="false" :text="t(`flow.upload`)"></base-button>
+          <base-button v-if="currentUploadStep === 4 && isModeEdit === true" :on-click="nextStep" :icon-shown="false" :text="t(`flow.update`)"></base-button>
+          <base-button v-if="currentUploadStep === TOTAL_STEPS" :on-click="closeWizard" :icon-shown="false" :text="t(`flow.close`)"></base-button>
+        </span>
       </div>
     </div>
   </BaseModal>
@@ -91,7 +91,7 @@ export default defineComponent({
 
     watch(currentUploadStep, async (_step: number) => {
       showPreviousButton(_step) ? (showPrevious.value = 'visible') : (showPrevious.value = 'invisible')
-
+      console.log(`show previous`, showPrevious.value)
       if (_step === 5) {
         isModeUploadNew.value === true ? await upload(apolloClient) : null
         isModeEdit.value === true ? await updateAsset(assetId.value, 'updated', apolloClient) : null
@@ -163,8 +163,20 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="css" scoped >
 .height90 {
   min-height: 90%;
 }
+/* .progressAndAction {
+  display: grid;
+}
+
+@media screen and (max-width: 640px) {
+  .progressAndAction:nth-child(0) {
+    order: 2;
+  }
+  .progressAndAction:nth-child(2) {
+    order: 1;
+  }
+} */
 </style>

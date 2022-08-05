@@ -24,7 +24,7 @@ const uploadWizard = () => {
     [UploadModalAction.new_upload]: {
       type: UploadModalAction.new_upload,
       steps: [...Array(TOTAL_STEPS).keys()].map((i) => i + 1),
-      showPreviousInSteps: [2, 3, 4, 5],
+      showPreviousInSteps: [3, 4, 5],
       upload: null
     },
     [UploadModalAction.edit_upload]: {
