@@ -1,7 +1,7 @@
 <template>
   <section class="flex md:mt-16 gap-8 flex-col">
     <div class="pb-4 flex justify-end">
-      <base-button class="text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
+      <base-button class="uploadButton text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
     </div>
     <span class="flex flex-col md:flex-row">
       <profile-side-menu />
@@ -18,13 +18,16 @@
         <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
       </section>
     </span>
+    <div class="absolute bottom-16 right-8 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
+      <BaseIcon icon="newItem" class="stroke-current p-1 cursor-pointer text-text-white" @click="() => router.push(`/upload`)" />
+    </div>
   </section>
 </template>
 <script lang="ts">
 import { apolloClient, iiif, router } from '@/app'
 import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '@/components/ProfileListItem.vue'
 import uploadWizard from '@/composables/uploadWizard'
-import { useUpload, CircleLoader } from 'coghent-vue-3-component-library'
+import { useUpload, CircleLoader, BaseIcon } from 'coghent-vue-3-component-library'
 import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { BaseButton } from 'coghent-vue-3-component-library'
@@ -39,6 +42,7 @@ export default defineComponent({
     ProfileListItem,
     BaseButton,
     CircleLoader,
+    BaseIcon,
   },
   setup() {
     const { t } = useI18n()
@@ -93,3 +97,15 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+.uploadButton {
+  display: all;
+}
+
+@media screen and (max-width: 992px) {
+  .uploadButton {
+    display: none;
+  }
+}
+</style>
