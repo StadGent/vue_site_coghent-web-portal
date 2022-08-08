@@ -10,6 +10,7 @@
         :infotext="t('main.info')"
         :mediafiles="mediaFiles"
         :is-touch="route.query.touch ? true : false"
+        :mediafileUrl="mediafileUrl"
         @opening-ccmodal="openCCModal"
         @currentPictureIndex="setPictureIndex"
       />
@@ -110,6 +111,7 @@ import { useI18n } from 'vue-i18n'
 import { useCCModal } from './CreativeModal.vue'
 import { useDetailsModal } from './DetailsModal.vue'
 import { iiif, useTestimonyFeature } from '@/app'
+import { ConfigStore } from '../stores/ConfigStore'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '@/stores/StoreFactory'
 import { parseDateAsLocaleString } from '@/helpers'
@@ -169,6 +171,8 @@ export default defineComponent({
     const carouselPictureIndex = ref<number>(0)
     const isWritingTestimony = ref<boolean>(false)
     const userStore = StoreFactory.get(UserStore)
+    const configStore = StoreFactory.get(ConfigStore)
+    const mediafileUrl = configStore.config.value.graphQlLink.replace('graphql', 'mediafile')
 
     watch(
       () => route.fullPath,
@@ -339,6 +343,7 @@ export default defineComponent({
       useTestimonyFeature,
       UserStore,
       loadingNewTestimony,
+      mediafileUrl,
     }
   },
 })
