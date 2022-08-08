@@ -57,12 +57,15 @@ export default defineComponent({
       type: Object as PropType<typeof UserAction>,
       required: true,
     },
+    links: {
+      type: Object as PropType<ActionLinks>,
+      required: true,
+    },
   },
   emits: [`updateTag`, `update:isLoading`, `update:tagInfo`, `update:itemAction`],
   setup(props, { emit }) {
     const assetIsAddedToStoryBox = ref<boolean>(false)
     const openStoryboxes = ref<boolean>(false)
-    const links = ref<ActionLinks | null>(null)
     const { updateAsset, entityToUploadComposable } = useUpload()
 
     const checkAssetIsInAStorybox = async () => {
@@ -115,7 +118,6 @@ export default defineComponent({
       deleteRestoreAsset,
       addAssetToStorybox,
       openStoryboxes,
-      links,
       assetIsAddedToStoryBox,
     }
   },

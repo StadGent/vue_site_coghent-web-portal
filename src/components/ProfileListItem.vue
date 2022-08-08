@@ -39,6 +39,7 @@
     <MyWorksActions
       v-if="showWorksFeature"
       :myWorksItem="profileListItemInfo"
+      :links="links"
       v-model:tagInfo="tagInfo"
       v-model:isLoading="isLoading"
       @updateTag="() => getTagInfo()"
