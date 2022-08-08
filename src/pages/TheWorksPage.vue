@@ -9,7 +9,7 @@
         <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
           <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         </div>
-        <div v-if="!isLoading && myWorks.length === 0" class="flex items-center flex-col w-full h-full">
+        <div v-if="(!isLoading && myWorks.length === 0) || myWorks === null" class="flex items-center flex-col w-full h-full">
           <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`myWorks.upload.noItems`) }}</h1>
           <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
             <base-button v-show="false" :text="t('flow.upload')" :on-click="() => router.push(`/upload`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
@@ -81,7 +81,11 @@ export default defineComponent({
     const init = async () => {
       isLoading.value = true
       const entitiesResults = await getAllUploads(apolloClient)
-      await prepareCards(entitiesResults.results)
+      if (entitiesResults !== null) {
+        await prepareCards(entitiesResults.results)
+      } else {
+        myWorks.value = []
+      }
       isLoading.value = false
     }
 
