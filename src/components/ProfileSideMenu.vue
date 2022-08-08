@@ -1,5 +1,5 @@
 <template>
-  <div class="md:bg-background-medium flex p-8 flex-col w-full md:w-2/6 page-height break-all">
+  <div class="md:bg-background-medium max-h-screen flex p-8 flex-col w-full md:w-2/6 page-height break-all">
     <div class="flex flex-col justify-between pb-4">
       <div class="flex justify-between items-center">
         <h2 v-if="user != null" class="mt-5 font-bold text-4xl">{{ t(`profile.greeting`) }}<br />{{ user.preferred_username }}!</h2>
