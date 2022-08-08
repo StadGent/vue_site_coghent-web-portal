@@ -32,6 +32,7 @@ export const useAuthFeature = ref<boolean>(false)
 export const useStoryboxFeature = ref<boolean>(false)
 export const useGoogleFeature = ref<boolean>(false)
 export const useTestimonyFeature = ref<boolean>(false)
+export const useWorksFeature = ref<boolean>(false)
 //
 
 export default async function (authenticated: boolean) {
@@ -45,6 +46,7 @@ export default async function (authenticated: boolean) {
   useStoryboxFeature.value = configStore.config.value.features?.storybox ? configStore.config.value.features?.storybox : false
   useTestimonyFeature.value = configStore.config.value.features.testimony ? configStore.config.value.features.testimony : false
   useGoogleFeature.value = configStore.config.value.features?.googleTags ? configStore.config.value.features?.googleTags : false
+  useWorksFeature.value = configStore.config.value.features?.myWorks ? configStore.config.value.features?.myWorks : false
   const app = createSSRApp(App)
   const head = createHead()
   const userStore = StoreFactory.get(UserStore)

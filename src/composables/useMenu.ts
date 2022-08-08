@@ -1,3 +1,4 @@
+import { useTestimonyFeature, useWorksFeature, useStoryboxFeature } from '@/app'
 import { useI18n } from 'vue-i18n'
 
 export type MenuItem = {
@@ -7,6 +8,7 @@ export type MenuItem = {
   localLink: boolean
   requireAuth: boolean
   isVisible: boolean
+  linkIsActive?: boolean
 }
 
 const useMenu = () => {
@@ -38,11 +40,11 @@ const useMenu = () => {
     },
     {
       id: `Storybox`,
-      title: t(`buttons.storybox`),
+      title: t(`profile.stories`),
       link: `/myStories`,
       localLink: true,
       requireAuth: true,
-      isVisible: true,
+      isVisible: useStoryboxFeature.value,
     },
     {
       id: `Works`,
@@ -50,7 +52,7 @@ const useMenu = () => {
       link: `/myworks`,
       localLink: true,
       requireAuth: true,
-      isVisible: true,
+      isVisible: useWorksFeature.value,
     },
     {
       id: `Testimoni`,
@@ -58,7 +60,7 @@ const useMenu = () => {
       link: `/mytestimonies`,
       localLink: true,
       requireAuth: true,
-      isVisible: false,
+      isVisible: useTestimonyFeature.value,
     },
   ]
   const bottomMobileItems: Array<MenuItem> = [
@@ -91,10 +93,50 @@ const useMenu = () => {
     },
   ]
 
+  const profileSideMenuItems: Array<MenuItem> = [
+    {
+      id: `Details`,
+      title: t(`profile.details`),
+      link: `/profile`,
+      localLink: true,
+      requireAuth: true,
+      isVisible: true,
+      linkIsActive: false,
+    },
+    {
+      id: `Storybox`,
+      title: t(`profile.stories`),
+      link: `/mystories`,
+      localLink: true,
+      requireAuth: true,
+      isVisible: useStoryboxFeature.value,
+      linkIsActive: false,
+    },
+    {
+      id: `Works`,
+      title: t(`profile.works`),
+      link: `/myworks`,
+      localLink: true,
+      requireAuth: true,
+      isVisible: useWorksFeature.value,
+      linkIsActive: false,
+    },
+    {
+      id: `Testimoni`,
+      title: t(`profile.testimonies`),
+      link: `/mytestimonies`,
+      localLink: true,
+      requireAuth: true,
+      isVisible: useTestimonyFeature.value,
+      linkIsActive: false,
+    },
+  ]
+
   return {
     mobileItems,
     bottomMobileItems,
     headerItems,
+    profileSideMenuItems,
   }
 }
 
