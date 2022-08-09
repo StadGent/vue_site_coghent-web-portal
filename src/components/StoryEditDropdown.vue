@@ -46,7 +46,7 @@ export default defineComponent({
       const visiter = await useStorybox(apolloClient).getVisiterFromFrame(props.storyBoxInfo.id)
       visiter ? (code = visiter.code) : (code = undefined)
       if (code === undefined) {
-        const visiter = await useStorybox(apolloClient).linkFrameToStoryAndCreateVisiter(props.storyBoxInfo.id)
+        const visiter = await useStorybox(apolloClient).publishStorybox(props.storyBoxInfo.id)
         code = visiter.code
       }
       setQRCodeModalCode(code as string)
