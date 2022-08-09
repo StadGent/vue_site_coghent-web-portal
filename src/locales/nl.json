@@ -10,7 +10,13 @@
     "empty": "Zoekopdracht gaf geen resultaten",
     "more": "Lees meer",
     "info": "Meer info >",
-    "results": "Aantal resultaten:"
+    "results": "Aantal resultaten:",
+    "tooltips":{
+      "login": {
+        "title": "Je bent nog niet aangemeld",
+        "description": "Meld jezelf eerst aan om verder te gaan"
+      }
+    }
   },
   "header": {
     "discover": "Ontdek de collectie",
