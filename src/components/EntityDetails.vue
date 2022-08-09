@@ -54,8 +54,8 @@
           </a> -->
         </div>
         <div v-if="useTestimonyFeature && !loading">
-          <div class="flex justify-between items-center">
-            <h2 class="font-bold">{{ t('details.testimony') }}</h2>
+          <div class="flex flex-col sm:flex-row  sm:justify-between items-center">
+            <h2 class="font-bold mb-4 sm:mb-0">{{ t('details.testimony') }}</h2>
             <tool-tip :title="t('main.tooltips.login.title')" :description="t('main.tooltips.login.description')" placement="bottom">
               <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" @click="writeTestimony" />
             </tool-tip>
