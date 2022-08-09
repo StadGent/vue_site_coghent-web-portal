@@ -37,7 +37,7 @@ export const useWorksFeature = ref<boolean>(false)
 
 export default async function (authenticated: boolean) {
   console.log(`>web-portal updated session to v0.1.7`)
-  console.log(`>web-portal updated CL to v0.1.106`)
+  console.log(`>web-portal updated CL to v0.1.122`)
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
