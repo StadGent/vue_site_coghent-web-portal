@@ -12,7 +12,7 @@
         <div v-if="(!isLoading && myWorks.length === 0) || myWorks === null" class="flex items-center flex-col w-full h-full">
           <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`myWorks.upload.noItems`) }}</h1>
           <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
-            <base-button v-show="false" :text="t('flow.upload')" :on-click="() => router.push(`/upload`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="mx-3 ml-3" />
+            <base-button v-show="false" :text="t('flow.upload')" :on-click="() => router.push(`/upload`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
           </div>
         </div>
         <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />

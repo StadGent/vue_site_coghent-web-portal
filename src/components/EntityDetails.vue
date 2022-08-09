@@ -56,7 +56,7 @@
         <div v-if="useTestimonyFeature && !loading">
           <div class="flex justify-between items-center">
             <h2 class="font-bold">{{ t('details.testimony') }}</h2>
-            <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" :on-click="writeTestimony" class="px-4" />
+            <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" :on-click="writeTestimony" />
           </div>
           <div v-if="loadingNewTestimony" class="w-full flex justify-center py-8"><CircleLoader /></div>
           <div v-if="isWritingTestimony" class="flex mt-4">
