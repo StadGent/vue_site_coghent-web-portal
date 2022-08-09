@@ -56,7 +56,9 @@
         <div v-if="useTestimonyFeature && !loading">
           <div class="flex justify-between items-center">
             <h2 class="font-bold">{{ t('details.testimony') }}</h2>
-            <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" :on-click="writeTestimony" />
+            <tool-tip :title="t('main.tooltips.login.title')" :description="t('main.tooltips.login.description')" placement="bottom">
+              <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" @click="writeTestimony" />
+            </tool-tip>
           </div>
           <div v-if="loadingNewTestimony" class="w-full flex justify-center py-8"><CircleLoader /></div>
           <div v-if="isWritingTestimony" class="flex mt-4">
@@ -115,6 +117,7 @@ import { ConfigStore } from '../stores/ConfigStore'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '@/stores/StoreFactory'
 import { parseDateAsLocaleString } from '@/helpers'
+import ToolTip, { useTooltip } from './ToolTip.vue'
 
 type TypeObject = {
   id: string
@@ -148,6 +151,7 @@ export default defineComponent({
     // BaseIcon,
     SpeechBubble,
     CircleLoader,
+    ToolTip,
   },
   setup: () => {
     const id = ref<string>(asString(useRoute().params['entityID']))
@@ -170,6 +174,7 @@ export default defineComponent({
     const testimonies = ref<typeof TestimonyCard[]>([])
     const carouselPictureIndex = ref<number>(0)
     const isWritingTestimony = ref<boolean>(false)
+    const { updateToolTipShownState, toolTipState } = useTooltip()
     const userStore = StoreFactory.get(UserStore)
     const configStore = StoreFactory.get(ConfigStore)
     const mediafileUrl = configStore.config.value.graphQlLink.replace('graphql', 'mediafile')
@@ -226,7 +231,7 @@ export default defineComponent({
         })
         carouselFiles.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl, fallBackUrl: noImageUrl }] : photosArray
 
-        // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex]
+        // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex
 
         const typeArray: any[] = []
         // queryResult.data.Entity?.metadata.forEach((value: any) => {
@@ -303,11 +308,15 @@ export default defineComponent({
     }
 
     const writeTestimony = () => {
-      isWritingTestimony.value = !isWritingTestimony.value
+      if (userStore.hasUser) {
+        isWritingTestimony.value = !isWritingTestimony.value
+      } else {
+        updateToolTipShownState(true)
+      }
     }
 
     const createNewTestimony = (body: string) => {
-      if (body.length >= 4 && userStore.hasUser) {
+      if (body.length >= 4) {
         baseTestimony.value.description = body
         isWritingTestimony.value = false
         createTestimony({ entityInfo: baseTestimony.value, assetId: id.value })
@@ -344,6 +353,7 @@ export default defineComponent({
       UserStore,
       loadingNewTestimony,
       mediafileUrl,
+      toolTipState,
     }
   },
 })
