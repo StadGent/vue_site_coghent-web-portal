@@ -40,7 +40,7 @@
                 <base-button text="Lees meer" custom-style="ghost-white" :icon-shown="true" :icon-left="false" custom-icon="arrowRightLine" />
 
                 <div v-if="!route.query.touch" @click.prevent="() => copyUrl(entity.id)">
-                  <base-button class="z-10 w-0 mt-3 ml-3" custom-style="secondary-round" :icon-shown="true" custom-icon="link" />
+                  <base-button class="z-10 mt-3 ml-3 justify-center" custom-style="secondary-round" :icon-shown="true" custom-icon="link" :noMargin="true" />
                 </div>
               </div>
             </span>

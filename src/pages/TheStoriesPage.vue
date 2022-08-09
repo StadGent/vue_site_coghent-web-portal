@@ -39,7 +39,7 @@
       <div v-if="!loading && storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
         <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`storybox.noStories`) }}</h1>
         <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
-          <base-button :text="t('storybox.createNew')" :on-click="() => router.push(`/mystories/new`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
+          <base-button :text="t('storybox.createNew')" :on-click="() => router.push(`/mystories/new`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="mx-3 ml-3" />
         </div>
       </div>
       <profile-list-item v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :v-show="storyBoxItems.length > 0 && !loading" :profile-list-item-info="storyBoxItem" />
