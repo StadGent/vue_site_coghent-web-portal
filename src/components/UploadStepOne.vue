@@ -55,22 +55,24 @@ export default defineComponent({
     const filesUploaded = ref<boolean>(false)
     const configStore = StoreFactory.get(ConfigStore)
     const dropzone = ref<Dropzone | null>(null)
-    const MAX_FILES = 1
+    const MAX_FILES = ref<number>(1)
+    const MAX_FILE_SIZE = ref<number>(200000000)
+    const ACCEPTED_FILE_EXTENSIONS = ref<string>(`.png, .tif, .jpg`)
+
     const { setBase64Image, setFile } = useUpload()
 
     const createDropzone = () => {
       if (dropzoneContainer.value != null) {
-        let acceptedFiles = `.png, .tif, .jpg`
-        configStore.config.value.acceptedUploadFiles ? (acceptedFiles = configStore.config.value.acceptedUploadFiles) : null
         dropzone.value === null
           ? (dropzone.value = new Dropzone(dropzoneContainer.value, {
               url: 'upload/dropzone',
               autoProcessQueue: true,
-              acceptedFiles: acceptedFiles,
+              acceptedFiles: ACCEPTED_FILE_EXTENSIONS.value,
               previewTemplate: dropzonePreviewContainer.value?.outerHTML,
               uploadMultiple: false,
               parallelUploads: 2,
-              maxFiles: MAX_FILES,
+              maxFiles: MAX_FILES.value,
+              maxFilesize: MAX_FILE_SIZE.value,
             }))
           : null
 
@@ -81,32 +83,36 @@ export default defineComponent({
         dropzone.value.on(`complete`, (val) => {
           for (const file of dropzone.value!.files) {
             file.accepted === false ? dropzone.value!.removeFile(file) : null
+            file.size > MAX_FILE_SIZE.value ? dropzone.value!.removeFile(file) : null
           }
           addedFiles.value = dropzone.value!.files.length
-          addedFiles.value === MAX_FILES ? (filesUploaded.value = true) : null
+          addedFiles.value === MAX_FILES.value ? (filesUploaded.value = true) : null
         })
       }
     }
 
     watch(addedFiles, (files) => {
-      if (files === MAX_FILES) {
+      if (files === MAX_FILES.value) {
         dropzone.value?.disable()
         setFile(dropzone.value!.files[0])
         setBase64Image(uploadState.file.dataURL ? uploadState.file.dataURL : null)
-        emit(`stepDone`, files === MAX_FILES)
+        emit(`stepDone`, files === MAX_FILES.value)
       } else {
         dropzone.value?.enable()
-        emit(`stepDone`, files === MAX_FILES)
+        emit(`stepDone`, files === MAX_FILES.value)
       }
     })
 
     const openFileExplorer = (event: any) => {
-      if (dropzoneContainer.value != null && addedFiles.value < MAX_FILES) {
+      if (dropzoneContainer.value != null && addedFiles.value < MAX_FILES.value) {
         dropzoneContainer.value.click()
       }
     }
 
     const init = () => {
+      configStore.config.value.upload.maxFileSizeBytes ? (MAX_FILE_SIZE.value = configStore.config.value.upload.maxFileSizeBytes) : null
+      configStore.config.value.upload.acceptedUploadFiles ? (ACCEPTED_FILE_EXTENSIONS.value = configStore.config.value.upload.acceptedUploadFiles) : null
+      configStore.config.value.upload.maxFiles ? (MAX_FILES.value = configStore.config.value.upload.maxFiles) : null
       createDropzone()
     }
 
