@@ -12,7 +12,7 @@
       <div class="w-full p-4">
         <div class="flex flex-col sm:flex-row sm:justify-between pb-2">
           <h2 class="font-bold" :class="[itemAction === 'deleted' ? '' : 'cursor-pointer']" @click="itemAction === 'deleted' ? null : router.push(links.visit)">{{ profileListItemInfo.title }}</h2>
-          <div v-if="showWorksFeature" class="my-4 sm:my-0 mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="tagInfo.style">
+          <div v-if="showWorksFeature" class="my-4 sm:my-0 sm:mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="tagInfo.style">
             <div :class="tagInfo.style" class="mr-2 rounded-full h-2 w-2"></div>
             {{ tagInfo.title }}
           </div>
