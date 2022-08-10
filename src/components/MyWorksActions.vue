@@ -1,6 +1,12 @@
 <template>
   <div class="grid items-center cursor-pointer bg-background-dark bg-opacity-75" :class="[itemAction === 'deleted' ? 'grid-cols-1' : 'grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3']">
-    <BaseIcon v-if="itemAction !== 'deleted'" id="edit" :icon="'edit'" class="p-4 flex justify-center items-center stroke-current text-text-white" @click="router.push(links.edit)" />
+    <BaseIcon
+      v-if="itemAction !== 'deleted'"
+      id="edit"
+      :icon="'edit'"
+      class="p-4 flex justify-center items-center stroke-current text-text-white"
+      @click="() => (isLoading ? null : router.push(links.edit))"
+    />
     <span v-if="itemAction !== 'deleted'" :class="[assetIsAddedToStoryBox === true ? 'bg-accent-purple bg-opacity-90' : '']" class="h-full flex items-center justify-center">
       <AddAssetToStoryboxDropdown
         :skidding="0"
@@ -8,7 +14,7 @@
         :placement="'auto'"
         :trigger="openStoryboxes"
         :entity="myWorksItem.entity"
-        @click="() => (openStoryboxes = !openStoryboxes)"
+        @click="() => (isLoading ? null : (openStoryboxes = !openStoryboxes))"
         @addToStorybox="(ids) => addAssetToStorybox(ids)"
       >
         <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" class="p-4 flex justify-center items-center stroke-current text-text-white" />
@@ -19,7 +25,7 @@
       :icon="[itemAction === 'deleted' ? 'newItem' : 'delete']"
       :class="[itemAction === 'deleted' ? 'text-text-white' : 'text-text-red']"
       class="p-4 flex justify-center items-center stroke-current"
-      @click="() => deleteRestoreAsset()"
+      @click="() => (isLoading ? null : deleteRestoreAsset())"
     />
   </div>
 </template>
