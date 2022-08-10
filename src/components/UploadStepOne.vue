@@ -1,6 +1,6 @@
 <template>
   <div class="h-full p-8 flex text-center flex-col">
-    <h1 class="flex flex-wrap font-bold text-4xl">{{ t('myWorks.upload.stepOne.title') }}</h1>
+    <h1 class="font-bold text-4xl">{{ t('myWorks.upload.stepOne.title') }}</h1>
     <div ref="dropzoneContainer" class="h-full m-8 bg-text-white border-2 border-black border-dashed flex justify-center items-center" @click="(event) => openFileExplorer(event)">
       <div v-if="addedFiles === 0" class="grid grid-cols-1 grid-rows-3">
         <h2 class="invisible sm:visible font-normal text-2xl mb-4">{{ t(`myWorks.upload.stepOne.sleep`) }}</h2>
