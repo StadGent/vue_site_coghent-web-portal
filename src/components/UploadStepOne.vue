@@ -2,7 +2,8 @@
   <div class="h-full p-8 flex text-center flex-col">
     <h1 class="font-bold text-4xl">{{ t('myWorks.upload.stepOne.title') }}</h1>
     <div ref="dropzoneContainer" class="h-full m-8 bg-text-white border-2 border-black border-dashed flex justify-center items-center" @click="(event) => openFileExplorer(event)">
-      <div v-if="addedFiles === 0" class="grid grid-cols-1 grid-rows-3">
+      <div v-if="isLoading === true" class="z-20 flex justify-center items-center ml-3 w-full absolute"><CircleLoader /></div>
+      <div v-if="addedFiles === 0 && isLoading === false" class="grid grid-cols-1 grid-rows-3">
         <h2 class="invisible sm:visible font-normal text-2xl mb-4">{{ t(`myWorks.upload.stepOne.sleep`) }}</h2>
         <div class="visble sm:invisible w-full flex justify-center items-center">
           <BaseIcon icon="upload" class="stroke-current p-4 cursor-pointer" />
@@ -34,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseIcon, CircleLoader } from 'coghent-vue-3-component-library'
 import Dropzone from 'dropzone'
 import StoreFactory from '@/stores/StoreFactory'
 import { ConfigStore } from '@/stores/ConfigStore'
@@ -45,6 +46,7 @@ export default defineComponent({
   components: {
     BaseButton,
     BaseIcon,
+    CircleLoader,
   },
   emits: ['stepDone'],
   setup(props, { emit }) {
@@ -58,6 +60,7 @@ export default defineComponent({
     const MAX_FILES = ref<number>(1)
     const MAX_FILE_SIZE = ref<number>(200000000)
     const ACCEPTED_FILE_EXTENSIONS = ref<string>(`.png, .tif, .jpg`)
+    const isLoading = ref<boolean>(true)
 
     const { setBase64Image, setFile } = useUpload()
 
@@ -75,11 +78,13 @@ export default defineComponent({
               maxFilesize: MAX_FILE_SIZE.value,
             }))
           : null
-
+        isLoading.value = false
         dropzone.value.on(`removedfile`, (val) => {
           addedFiles.value = dropzone.value!.files.length
         })
-
+        dropzone.value.on(`processing`, (val) => {
+          isLoading.value = true
+        })
         dropzone.value.on(`complete`, (val) => {
           for (const file of dropzone.value!.files) {
             file.accepted === false ? dropzone.value!.removeFile(file) : null
@@ -87,6 +92,7 @@ export default defineComponent({
           }
           addedFiles.value = dropzone.value!.files.length
           addedFiles.value === MAX_FILES.value ? (filesUploaded.value = true) : null
+          isLoading.value = false
         })
       }
     }
@@ -129,6 +135,7 @@ export default defineComponent({
       addedFiles,
       openFileExplorer,
       filesUploaded,
+      isLoading,
     }
   },
 })
