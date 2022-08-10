@@ -104,6 +104,10 @@ export default defineComponent({
       (isTriggered) => _init_()
     )
 
+    watch(userStoryboxes, () => {
+      checkIfStoryBoxesCanBeAdded()
+    })
+
     return {
       canAddToStoryboxes,
       userStoryboxes,
