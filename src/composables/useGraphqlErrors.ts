@@ -1,4 +1,5 @@
 import { ErrorResponse } from '@apollo/client/link/error'
+import { GraphQLError } from 'graphql/error'
 
 const useGraphqlErrors = (_errorResponse: ErrorResponse) => {
   const checkForUnauthorized = () => {
@@ -7,12 +8,20 @@ const useGraphqlErrors = (_errorResponse: ErrorResponse) => {
     if (gqlErrors) {
       authErrors = gqlErrors.map((error) => {
         if (error.extensions) {
+          if (storyboxForbidden(error)) return true
           if (error.extensions?.statusCode === 401) return true
           if (error.extensions?.response && error.extensions?.response.status && error.extensions?.response.status === 401) return true
         }
       })
     }
     return authErrors.some((errors) => errors)
+  }
+
+  const storyboxForbidden = (error: GraphQLError) => {
+    const checks: Array<boolean> = []
+    checks.push(error.extensions?.response && error.extensions?.response.status && error.extensions?.response.status === 400)
+    checks.push(error.extensions?.response && error.extensions?.response.body.message && error.extensions?.response.body.message === 'You must be logged in to access this feature')
+    return checks.some(check => check === true)
   }
 
   const logFormattedErrors = () => {
