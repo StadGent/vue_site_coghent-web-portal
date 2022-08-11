@@ -40,7 +40,7 @@ const routes = [
   { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: true } },
   { path: '/mytestimonies', component: TheTestimonyPage, meta: { requiresAuth: true } },
   { path: '/upload', component: TheUploadPage, meta: { requiresAuth: true } },
-  { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
+  { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
 ]
 
 export const { checkRouteOnRequireAuth } = routerHelper()
@@ -57,9 +57,6 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
-      if (auth.user != null && !userStore.hasUser) {
-        userStore.setUser(auth.user)
-      }
       checkRouteOnRequireAuth(to)
       if (routeRequiresAuth.value === true) {
         await auth.assertIsAuthenticated(to.fullPath, next)

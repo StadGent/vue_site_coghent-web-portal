@@ -14,31 +14,31 @@ import { router, useSessionAuth } from '@/app'
 export default defineComponent({
   components: {},
   setup() {
-    const userStore = StoreFactory.get(UserStore)
+    // const userStore = StoreFactory.get(UserStore)
 
-    const { refetch } = useQuery<any>(GetMeDocument, {})
+    // const { refetch } = useQuery<any>(GetMeDocument, {})
 
-    const getMe = (_authCode: string) => {
-      refetch({ accessToken: _authCode })
-        ?.then((result) => {
-          const data = result.data
-          if (data) {
-            userStore.setUser(data.User)
-            router.go(-1)
-          }
-        })
-        .catch((error) => {
-          fetch('/api/logout')
-          router.push('/')
-        })
-    }
+    // const getMe = (_authCode: string) => {
+    //   refetch({ accessToken: _authCode })
+    //     ?.then((result) => {
+    //       const data = result.data
+    //       if (data) {
+    //         userStore.setUser(data.User)
+    //         router.go(-1)
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       fetch('/api/logout')
+    //       router.push('/')
+    //     })
+    // }
 
-    onMounted(async () => {
-      if (useSessionAuth != null) {
-        await useSessionAuth.redirectToLogin()
-        getMe(useSessionAuth.authCode)
-      }
-    })
+    // onMounted(async () => {
+    //   if (useSessionAuth != null) {
+    //     await useSessionAuth.redirectToLogin()
+    //     getMe(useSessionAuth.authCode)
+    //   }
+    // })
 
     return {}
   },
