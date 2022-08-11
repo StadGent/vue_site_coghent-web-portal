@@ -1,5 +1,5 @@
 import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
-import { createSSRApp, ref, watch } from 'vue'
+import { createSSRApp, ref } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
 import { createUploadLink } from 'apollo-upload-client'
@@ -20,13 +20,14 @@ import useGraphqlErrors from './composables/useGraphqlErrors'
 import FloatingVue from 'floating-vue'
 import { Dropdown, VClosePopper } from 'floating-vue'
 import 'floating-vue/dist/style.css'
-import { routeRequiresAuth } from './composables/helper.router'
+import authHelper, { routeRequiresAuth } from './composables/helper.auth'
 
 export let iiif: any
 export let router: Router
 export let apolloClient: ApolloClient<NormalizedCacheObject>
 export let useSessionAuth: typeof OpenIdConnectClient | null
 export const storyboxCount = ref<number>(0)
+export const { checkRouteOnRequireAuth, setAuthenticatedUser } = authHelper()
 
 // Features
 export const useAuthFeature = ref<boolean>(false)
@@ -111,9 +112,14 @@ export default async function (authenticated: boolean) {
     cache: new InMemoryCache(),
   })
 
-  if (useAuthFeature.value === true && useSessionAuth && authCode.value !== null) {
-    await useSessionAuth.processAuthCode(authCode.value, router as any)
-    authCode.value = null
+  if (useAuthFeature.value === true && useSessionAuth) {
+    if (authCode.value !== null) {
+      await useSessionAuth.processAuthCode(authCode.value, router as any)
+      authCode.value = null
+
+    }
+    await useSessionAuth.verifyServerAuth()
+    setAuthenticatedUser(useSessionAuth)
   }
 
   if (useAuthFeature.value === true) {

@@ -15,9 +15,8 @@ import TheWorksPage from './pages/TheWorksPage.vue'
 import TheVisitPage from './pages/TheVisitPage.vue'
 import TheUploadPage from './pages/TheUploadPage.vue'
 import TheTestimonyPage from './pages/TheTestimonyPage.vue'
-import { UserStore } from './stores/UserStore'
-import StoreFactory from './stores/StoreFactory'
-import routerHelper, { routeRequiresAuth } from '@/composables/helper.router'
+import { routeRequiresAuth } from '@/composables/helper.auth'
+import { checkRouteOnRequireAuth, setAuthenticatedUser } from './app'
 
 const isServer = typeof window === 'undefined'
 
@@ -43,10 +42,8 @@ const routes = [
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
 ]
 
-export const { checkRouteOnRequireAuth } = routerHelper()
 
 export default function (auth: any) {
-  const userStore = StoreFactory.get(UserStore)
   const router = createRouter({
     routes,
     history: createWebHistory(process.env.BASE_URL),
@@ -60,15 +57,10 @@ export default function (auth: any) {
       checkRouteOnRequireAuth(to)
       if (routeRequiresAuth.value === true) {
         await auth.assertIsAuthenticated(to.fullPath, next)
-        if (auth.user != null && !userStore.hasUser) {
-          userStore.setUser(auth.user)
-        }
       } else {
         return next()
       }
-      if (auth.user != null && !userStore.hasUser) {
-        userStore.setUser(auth.user)
-      }
+      setAuthenticatedUser(auth)
     })
   }
   return router
