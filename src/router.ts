@@ -17,6 +17,7 @@ import TheUploadPage from './pages/TheUploadPage.vue'
 import TheTestimonyPage from './pages/TheTestimonyPage.vue'
 import { UserStore } from './stores/UserStore'
 import StoreFactory from './stores/StoreFactory'
+import routerHelper, { routeRequiresAuth } from '@/composables/helper.router'
 
 const isServer = typeof window === 'undefined'
 
@@ -32,15 +33,17 @@ const routes = [
   { path: '/relation/:relationID', component: RelationDetail },
   { path: '/visit/:visitCode', component: TheVisitPage, meta: { requiresAuth: false } },
   { path: '/pavilion', component: ThePavilion },
-  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: false } },
-  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: false } },
-  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: false } },
+  { path: '/profile', component: TheProfilePage, meta: { requiresAuth: true } },
+  { path: '/mystories', component: TheStoriesPage, meta: { requiresAuth: true } },
+  { path: '/mystories/new', component: NewStoryPage, meta: { requiresAuth: true } },
   { path: '/mystories/:storyboxId', component: TheStoryboxPage, meta: { requiresAuth: true } },
   { path: '/myworks', component: TheWorksPage, meta: { requiresAuth: true } },
   { path: '/mytestimonies', component: TheTestimonyPage, meta: { requiresAuth: true } },
   { path: '/upload', component: TheUploadPage, meta: { requiresAuth: true } },
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: false } },
 ]
+
+export const { checkRouteOnRequireAuth } = routerHelper()
 
 export default function (auth: any) {
   const userStore = StoreFactory.get(UserStore)
@@ -54,14 +57,18 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
-      await auth.verifyServerAuth()
       if (auth.user != null && !userStore.hasUser) {
         userStore.setUser(auth.user)
       }
-      if (!to.matched.some((route) => route.meta.requiresAuth)) {
+      checkRouteOnRequireAuth(to)
+      if (routeRequiresAuth.value === true) {
+        await auth.assertIsAuthenticated(to.fullPath, next)
+        if (auth.user != null && !userStore.hasUser) {
+          userStore.setUser(auth.user)
+        }
+      } else {
         return next()
       }
-      await auth.assertIsAuthenticated(to.fullPath, next)
       if (auth.user != null && !userStore.hasUser) {
         userStore.setUser(auth.user)
       }

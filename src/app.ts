@@ -1,5 +1,5 @@
 import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
-import { createSSRApp, ref } from 'vue'
+import { createSSRApp, ref, watch } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
 import { createUploadLink } from 'apollo-upload-client'
@@ -20,6 +20,7 @@ import useGraphqlErrors from './composables/useGraphqlErrors'
 import FloatingVue from 'floating-vue'
 import { Dropdown, VClosePopper } from 'floating-vue'
 import 'floating-vue/dist/style.css'
+import { routeRequiresAuth } from './composables/helper.router'
 
 export let iiif: any
 export let router: Router
@@ -87,7 +88,7 @@ export default async function (authenticated: boolean) {
     return forward(operation)
   })
   const userLink = new ApolloLink((operation, forward) => {
-    if (useAuthFeature.value === true && useSessionAuth != null) {
+    if (useAuthFeature.value === true && useSessionAuth != null && routeRequiresAuth.value === true) {
       new Promise(async (resolve, reject) => {
         await fetch(`/api/me`).then(async (response) => {
           if (response.status === 200) {
