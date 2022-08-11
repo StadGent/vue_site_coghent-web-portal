@@ -43,6 +43,8 @@ export default async function (authenticated: boolean) {
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
 
+  const authCode = ref<string | null>(null)
+
   useAuthFeature.value = configStore.config.value.features?.login ? configStore.config.value.features?.login : false
   useStoryboxFeature.value = configStore.config.value.features?.storybox ? configStore.config.value.features?.storybox : false
   useTestimonyFeature.value = configStore.config.value.features.testimony ? configStore.config.value.features.testimony : false
@@ -57,7 +59,7 @@ export default async function (authenticated: boolean) {
     if (useSessionAuth.user?.value != null) {
       userStore.setUser(useSessionAuth.user.value)
     }
-    useSessionAuth.authCode = new URLSearchParams(window.location.search).get('code')
+    authCode.value = new URLSearchParams(window.location.search).get('code')
 
     userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user) : null)
   }
@@ -109,8 +111,9 @@ export default async function (authenticated: boolean) {
     cache: new InMemoryCache(),
   })
 
-  if (useAuthFeature.value === true && useSessionAuth && useSessionAuth.authCode != null) {
-    await useSessionAuth.processAuthCode(useSessionAuth.authCode, router as any)
+  if (useAuthFeature.value === true && useSessionAuth && authCode.value !== null) {
+    await useSessionAuth.processAuthCode(authCode.value, router as any)
+    authCode.value = null
   }
 
   if (useAuthFeature.value === true) {
