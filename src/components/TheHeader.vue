@@ -82,10 +82,11 @@ import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
 import { BaseButton } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
-import { apolloClient, router, useAuthFeature, useStoryboxFeature } from '@/app'
+import { apolloClient, router } from '@/app'
 import { storyboxCount } from '@/app'
 import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 import useMenu from '@/composables/useMenu'
+import { useAuthFeature, useStoryboxFeature } from '@/stores/ConfigStore'
 
 export default defineComponent({
   name: 'TheHeader',

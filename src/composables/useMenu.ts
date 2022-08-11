@@ -1,4 +1,4 @@
-import { useTestimonyFeature, useWorksFeature, useStoryboxFeature } from '@/app'
+import { useTestimonyFeature, useWorksFeature, useStoryboxFeature } from '@/stores/ConfigStore'
 import { useI18n } from 'vue-i18n'
 
 export type MenuItem = {

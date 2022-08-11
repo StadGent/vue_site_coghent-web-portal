@@ -20,7 +20,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import TheHeader from '@/components/TheHeader.vue'
 import { useHead } from '@vueuse/head'
-import { ConfigStore } from './stores/ConfigStore'
+import { ConfigStore, useGoogleFeature } from './stores/ConfigStore'
 import StoreFactory from './stores/StoreFactory'
 import CreativeModal from './components/CreativeModal.vue'
 import DetailsModal from './components/DetailsModal.vue'
@@ -28,7 +28,6 @@ import DisclaimerPopUp from './components/DisclaimerPopUp.vue'
 import DisclaimerButton from './components/DisclaimerButton.vue'
 import TheFooter from './components/TheFooter.vue'
 import MobileMenu from './components/MobileMenu.vue'
-import { useGoogleFeature, useStoryboxFeature } from './app'
 import { addGoogleData } from '@/composables/gtm'
 
 export default defineComponent({
@@ -74,7 +73,6 @@ export default defineComponent({
     return {
       t,
       route,
-      useStoryboxFeature,
       mobileMenuIsOpen,
     }
   },

@@ -171,7 +171,7 @@ import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
-import { apolloClient, iiif, useGoogleFeature, useStoryboxFeature } from '@/app'
+import { apolloClient, iiif } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { useHistory } from './BreadCrumbs.vue'
@@ -180,6 +180,7 @@ import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { HeadAttrs, useHead } from '@vueuse/head'
 import { getFirstValueOfPropertyFromEntity, Entity, getFirstMediafileWithFilelocationOfEntity, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
+import { useGoogleFeature, useStoryboxFeature } from '@/stores/ConfigStore'
 
 export type DetailsModalType = {
   state: ModalState

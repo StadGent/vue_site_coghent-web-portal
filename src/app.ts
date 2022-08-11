@@ -10,7 +10,7 @@ import i18n from './i18n'
 import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 import StoreFactory from './stores/StoreFactory'
-import { ConfigStore } from './stores/ConfigStore'
+import { ConfigStore, useAuthFeature } from './stores/ConfigStore'
 import { createHead } from '@vueuse/head'
 import { useIIIF } from 'coghent-vue-3-component-library'
 import { Router } from 'vue-router'
@@ -29,28 +29,16 @@ export let useSessionAuth: typeof OpenIdConnectClient | null
 export const storyboxCount = ref<number>(0)
 export const { checkRouteOnRequireAuth, setAuthenticatedUser } = authHelper()
 
-// Features
-export const useAuthFeature = ref<boolean>(false)
-export const useStoryboxFeature = ref<boolean>(false)
-export const useGoogleFeature = ref<boolean>(false)
-export const useTestimonyFeature = ref<boolean>(false)
-export const useWorksFeature = ref<boolean>(false)
-//
-
 export default async function (authenticated: boolean) {
   console.log(`>web-portal updated session to v0.1.7`)
   console.log(`>web-portal updated CL to v0.1.122`)
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
+  configStore.setFeatureFlags()
 
   const authCode = ref<string | null>(null)
 
-  useAuthFeature.value = configStore.config.value.features?.login ? configStore.config.value.features?.login : false
-  useStoryboxFeature.value = configStore.config.value.features?.storybox ? configStore.config.value.features?.storybox : false
-  useTestimonyFeature.value = configStore.config.value.features.testimony ? configStore.config.value.features.testimony : false
-  useGoogleFeature.value = configStore.config.value.features?.googleTags ? configStore.config.value.features?.googleTags : false
-  useWorksFeature.value = configStore.config.value.features?.myWorks ? configStore.config.value.features?.myWorks : false
   const app = createSSRApp(App)
   const head = createHead()
   const userStore = StoreFactory.get(UserStore)
