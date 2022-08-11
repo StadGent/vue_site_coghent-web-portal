@@ -1,5 +1,5 @@
 import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
-import { createSSRApp, ref } from 'vue'
+import { createSSRApp, ref, watch } from 'vue'
 import App from './App.vue'
 import createRouter from './router'
 import { createUploadLink } from 'apollo-upload-client'
@@ -27,7 +27,7 @@ export let router: Router
 export let apolloClient: ApolloClient<NormalizedCacheObject>
 export let useSessionAuth: typeof OpenIdConnectClient | null
 export const storyboxCount = ref<number>(0)
-export const { checkRouteOnRequireAuth, setAuthenticatedUser } = authHelper()
+export const { checkRouteOnRequireAuth, setAuthenticatedUser, reactOnIsAuthenticated } = authHelper()
 
 export default async function (authenticated: boolean) {
   console.log(`>web-portal updated session to v0.1.7`)
@@ -44,14 +44,13 @@ export default async function (authenticated: boolean) {
   const userStore = StoreFactory.get(UserStore)
 
   if (useAuthFeature.value === true) {
-    useSessionAuth != null ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
-    if (useSessionAuth.user?.value != null) {
-      userStore.setUser(useSessionAuth.user.value)
-    }
+    useSessionAuth ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
     authCode.value = new URLSearchParams(window.location.search).get('code')
-
-    userStore.setUser(useSessionAuth.user ? JSON.parse(useSessionAuth.user) : null)
   }
+
+  watch(useSessionAuth.isAuthenticated, (isAuthenticated: boolean) => {
+    reactOnIsAuthenticated(useSessionAuth, isAuthenticated)
+  })
 
   iiif = useIIIF(configStore.config.value.iiifLink)
 
@@ -63,13 +62,15 @@ export default async function (authenticated: boolean) {
     // errorHandler.logFormattedErrors() // DEV:
     if (useAuthFeature.value === true && errorHandler.checkForUnauthorized() === true) {
       console.log(`NEEDS LOGIN`)
-      new Promise(async (resolve, reject) => {
-        await fetch('/api/logout')
-        useSessionAuth.resetAuthProperties()
-        userStore.setUser(null)
-        resolve
-      })
-      router.push(`/`)
+      console.log(`router.currentRoute.value`, router.currentRoute.value)
+      alert(`needs login`)
+      // new Promise(async (resolve, reject) => {
+      //   await fetch('/api/logout')
+      //   useSessionAuth.resetAuthProperties()
+      //   userStore.setUser(null)
+      //   resolve
+      // })
+      // router.push(`/`)
     }
   })
 
@@ -80,14 +81,14 @@ export default async function (authenticated: boolean) {
   })
   const userLink = new ApolloLink((operation, forward) => {
     if (useAuthFeature.value === true && useSessionAuth != null && routeRequiresAuth.value === true) {
-      new Promise(async (resolve, reject) => {
-        await fetch(`/api/me`).then(async (response) => {
-          if (response.status === 200) {
-            useSessionAuth.user = await response.json()
-            userStore.hasUser ? null : userStore.setUser(useSessionAuth.user)
-          } else resolve
-        })
-      })
+      // new Promise(async (resolve, reject) => {
+      //   await fetch(`/api/me`).then(async (response) => {
+      //     if (response.status === 200) {
+      //       useSessionAuth.user = await response.json()
+      //       userStore.hasUser ? null : userStore.setUser(useSessionAuth.user)
+      //     } else resolve
+      //   })
+      // })
     }
 
     return forward(operation)
@@ -104,10 +105,10 @@ export default async function (authenticated: boolean) {
     if (authCode.value !== null) {
       await useSessionAuth.processAuthCode(authCode.value, router as any)
       authCode.value = null
-
+    } else {
+      await useSessionAuth.verifyServerAuth()
     }
-    await useSessionAuth.verifyServerAuth()
-    setAuthenticatedUser(useSessionAuth)
+    routeRequiresAuth.value === true ? await useSessionAuth.verifyServerAuth() : null
   }
 
   if (useAuthFeature.value === true) {

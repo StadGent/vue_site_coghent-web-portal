@@ -16,7 +16,7 @@ import TheVisitPage from './pages/TheVisitPage.vue'
 import TheUploadPage from './pages/TheUploadPage.vue'
 import TheTestimonyPage from './pages/TheTestimonyPage.vue'
 import { routeRequiresAuth } from '@/composables/helper.auth'
-import { checkRouteOnRequireAuth, setAuthenticatedUser } from './app'
+import { checkRouteOnRequireAuth } from './app'
 
 const isServer = typeof window === 'undefined'
 
@@ -60,7 +60,6 @@ export default function (auth: any) {
       } else {
         return next()
       }
-      setAuthenticatedUser(auth)
     })
   }
   return router

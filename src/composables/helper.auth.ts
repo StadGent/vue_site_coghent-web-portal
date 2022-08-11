@@ -1,3 +1,4 @@
+import { router } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
 import { ref, watch } from 'vue'
@@ -14,14 +15,24 @@ const authHelper = () => {
   }
 
   const setAuthenticatedUser = (_auth: any) => {
-    if (_auth.user != null && !userStore.hasUser) {
+    if (_auth.user) {
       userStore.setUser(_auth.user)
+    }
+  }
+
+  const reactOnIsAuthenticated = (_auth: any, _isAuthenticated: boolean) => {
+    if (_isAuthenticated === true && !userStore.hasUser) {
+      setAuthenticatedUser(_auth)
+    } else if (_isAuthenticated === false) {
+      userStore.setUser(null)
+      if (routeRequiresAuth.value === true) router.push(`/`)
     }
   }
 
   return {
     checkRouteOnRequireAuth,
     setAuthenticatedUser,
+    reactOnIsAuthenticated,
   }
 }
 
