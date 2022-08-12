@@ -77,8 +77,10 @@ export default defineComponent({
       if (formValid.value) {
         if (hasBoxCode.value === true) {
           const newFrame = await useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
-          if (newFrame === null) {
-            codeInputError.value = t('storybox.new.linkedCode')
+          if (newFrame.errors?.length) {
+            if (newFrame.errors[0].extensions.response.body.message == 'Code has already been linked') {
+              codeInputError.value = t('storybox.new.linkedCode')
+            }
           } else {
             router.push(`/mystories`)
           }
