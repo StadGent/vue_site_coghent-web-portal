@@ -169,7 +169,7 @@
       "codeLength": "Code moet 8 karakters bevatten",
       "nameLength": "Naam moet minimum 5 karakters bevatten",
       "codeDoesNotExist": "Code bestaat niet",
-      "linkedCode": "Deze is al gelinkt aan een gebruiker"
+      "linkedCode": "Deze code bestaat niet of is reeds gelinkt aan een gebruiker"
     },
     "selectFrame": "Selecteer het verhaal dat je wilt aanpassen",
     "story": {
