@@ -29,7 +29,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['update'],
+  setup(props, { emit }) {
     const canRunDeleteQuery = ref<true | false>(false)
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
@@ -57,8 +58,7 @@ export default defineComponent({
       new Promise(async (res, rej) => {
         useStorybox(apolloClient).deleteStoryBoxes([props.storyBoxInfo.id])
         await mutate({ id: props.storyBoxInfo.id })
-        storyboxDataIsUpdated.value = true
-        res
+        emit(`update`)
       })
     }
 

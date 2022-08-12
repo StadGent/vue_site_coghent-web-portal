@@ -17,7 +17,7 @@
             {{ tagInfo.title }}
           </div>
           <div v-if="showStoryFeature">
-            <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent=""
+            <story-edit-dropdown :story-box-info="profileListItemInfo" @click.stop.prevent="" @update="update"
               ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
             /></story-edit-dropdown>
           </div>
@@ -102,7 +102,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['deleteItem'],
+  emits: ['deleteItem', 'update'],
   setup(props, { emit }) {
     const { t } = useI18n()
     const showStoryFeature = ref<boolean>(false)
@@ -202,6 +202,8 @@ export default defineComponent({
       emit('deleteItem', props.profileListItemInfo.id)
     }
 
+    const update = () => emit(`update`)
+
     return {
       t,
       showStoryFeature,
@@ -217,6 +219,7 @@ export default defineComponent({
       isLoading,
       getTagInfo,
       itemAction,
+      update,
     }
   },
 })
