@@ -100,7 +100,7 @@ const useMenu = () => {
       link: `/profile`,
       localLink: true,
       requireAuth: true,
-      isVisible: true,
+      isVisible: false,
       linkIsActive: false,
     },
     {
