@@ -41,7 +41,6 @@ export default async function (authenticated: boolean) {
 
   const app = createSSRApp(App)
   const head = createHead()
-  const userStore = StoreFactory.get(UserStore)
 
   if (useAuthFeature.value === true) {
     useSessionAuth ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
@@ -57,20 +56,14 @@ export default async function (authenticated: boolean) {
   router = createRouter(useSessionAuth != null ? useSessionAuth : null)
 
   const graphqlErrorInterceptor = onError((error) => {
-    // console.log({ error }) // DEV:
     const errorHandler = useGraphqlErrors(error)
     // errorHandler.logFormattedErrors() // DEV:
     if (useAuthFeature.value === true && errorHandler.checkForUnauthorized() === true) {
-      console.log(`NEEDS LOGIN`)
-      console.log(`router.currentRoute.value`, router.currentRoute.value)
-      alert(`needs login`)
-      // new Promise(async (resolve, reject) => {
-      //   await fetch('/api/logout')
-      //   useSessionAuth.resetAuthProperties()
-      //   userStore.setUser(null)
-      //   resolve
-      // })
-      // router.push(`/`)
+      if (useSessionAuth.isAuthenticated.value) {
+        return error.forward(error.operation)
+      } else {
+        router.push(`/`)
+      }
     }
   })
 
@@ -79,25 +72,11 @@ export default async function (authenticated: boolean) {
     // console.log('GRAPHQL call => ', operation.operationName) //DEV:
     return forward(operation)
   })
-  const userLink = new ApolloLink((operation, forward) => {
-    if (useAuthFeature.value === true && useSessionAuth != null && routeRequiresAuth.value === true) {
-      // new Promise(async (resolve, reject) => {
-      //   await fetch(`/api/me`).then(async (response) => {
-      //     if (response.status === 200) {
-      //       useSessionAuth.user = await response.json()
-      //       userStore.hasUser ? null : userStore.setUser(useSessionAuth.user)
-      //     } else resolve
-      //   })
-      // })
-    }
-
-    return forward(operation)
-  })
 
   const graphqlLink = createUploadLink({ uri: config.graphQlLink || '/api/graphql' })
 
   apolloClient = new ApolloClient({
-    link: graphqlErrorInterceptor.concat(graphqlRequestIntercepter.concat(userLink.concat(graphqlLink))),
+    link: graphqlErrorInterceptor.concat(graphqlRequestIntercepter.concat(graphqlLink)),
     cache: new InMemoryCache(),
   })
 
