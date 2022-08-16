@@ -39,7 +39,7 @@
             {{ metaData.label }}
           </div>
         </div>
-        <div v-if="result" class="flex items-center justify-between">
+        <div v-if="result" class="flex items-center justify-between py-4">
           <base-button
             v-if="carouselFiles"
             class="inline⁻block w-max ml-3 mt-3 hover:underline"
@@ -49,12 +49,12 @@
             :icon-shown="true"
             :on-click="openDetailsModal"
           />
-          <!-- <a class="bg-background-light rounded-full p-4" :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')" target="_blank" download>
+          <a v-if="isDownloadable" class="bg-background-light rounded-full p-4" :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')" target="_blank" download>
             <baseIcon icon="download" />
-          </a> -->
+          </a>
         </div>
         <div v-if="useTestimonyFeature && !loading">
-          <div class="flex flex-col sm:flex-row  sm:justify-between items-center">
+          <div class="flex flex-col sm:flex-row sm:justify-between items-center">
             <h2 class="font-bold mb-4 sm:mb-0">{{ t('details.testimony') }}</h2>
             <tool-tip :title="t('main.tooltips.login.title')" :description="t('main.tooltips.login.description')" placement="bottom">
               <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" @click="writeTestimony" />
@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import {
@@ -148,7 +148,7 @@ export default defineComponent({
     BaseButton,
     BreadCrumbs,
     BaseInput,
-    // BaseIcon,
+    BaseIcon,
     SpeechBubble,
     CircleLoader,
     ToolTip,
@@ -161,8 +161,6 @@ export default defineComponent({
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
     const { mutate: createTestimony, loading: loadingNewTestimony } = useMutation(CreateTestimonyDocument)
     const { mutate: updateEntity } = useMutation(UpdateEntityDocument)
-    const selectedImageIndex = ref<Number>(0)
-    const selectedImageMetaData = ref<any | undefined>()
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
     const mediaFiles = ref<any | undefined>()
     const types = ref<any[] | undefined>()
@@ -178,6 +176,14 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const configStore = StoreFactory.get(ConfigStore)
     const mediafileUrl = configStore.config.value.graphQlLink.replace('graphql', 'mediafile')
+
+    const isDownloadable = computed(() => {
+      if (mediaFiles.value && carouselPictureIndex.value !== undefined) {
+        return mediaFiles.value[carouselPictureIndex.value].metadata.find((data: any) => data.key == 'publication_status').value !== 'beschermd' ? true : false
+      } else {
+        return false
+      }
+    })
 
     watch(
       () => route.fullPath,
@@ -230,8 +236,6 @@ export default defineComponent({
           }
         })
         carouselFiles.value = photosArray.length === 0 ? [{ imageUrl: noImageUrl, infoJson: noImageUrl, fallBackUrl: noImageUrl }] : photosArray
-
-        // selectedImage.value = queryResult.data.Entity?.mediafiles[selectedImageIndex
 
         const typeArray: any[] = []
         // queryResult.data.Entity?.metadata.forEach((value: any) => {
@@ -332,8 +336,6 @@ export default defineComponent({
       types,
       openCCModal,
       openDetailsModal,
-      selectedImageIndex,
-      selectedImageMetaData,
       mediaFiles,
       router,
       loading,
@@ -354,6 +356,7 @@ export default defineComponent({
       loadingNewTestimony,
       mediafileUrl,
       toolTipState,
+      isDownloadable,
     }
   },
 })
