@@ -30,8 +30,8 @@ export const storyboxCount = ref<number>(0)
 export const { checkRouteOnRequireAuth, setAuthenticatedUser, reactOnIsAuthenticated } = authHelper()
 
 export default async function (authenticated: boolean) {
-  console.log(`>web-portal updated session to v0.1.7`)
-  console.log(`>web-portal updated CL to v0.1.122`)
+  console.log(`>web-portal updated session to v0.1.8`)
+  console.log(`>web-portal updated CL to v0.1.127`)
   const configStore = StoreFactory.get(ConfigStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
