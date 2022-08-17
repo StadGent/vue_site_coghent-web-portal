@@ -11,6 +11,14 @@ export const parseDateAsLocaleString = (date: Date): string => {
   return date.toLocaleDateString('nl-BE')
 }
 
+export const setKeyAsId = (key: string): string => {
+  return key.includes('entities/') ? key.replace('entities/', '') : key
+}
+
+export const setIdAsKey = (id: string): string => {
+  return id.includes('entities/') ? id : 'entities/' + id
+}
+
 export const randomizer = <T extends string>(input: Record<T, WeightedArrayConfig>): T | undefined => {
   let pickedValue: T | undefined = undefined
   let i,

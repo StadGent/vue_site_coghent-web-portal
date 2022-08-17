@@ -180,6 +180,7 @@ import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { HeadAttrs, useHead } from '@vueuse/head'
 import { getFirstValueOfPropertyFromEntity, Entity, getFirstMediafileWithFilelocationOfEntity, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
+import { setKeyAsId } from '../helpers'
 import { useGoogleFeature, useStoryboxFeature } from '@/stores/ConfigStore'
 
 export type DetailsModalType = {
@@ -250,6 +251,12 @@ export const useDetailsModal = () => {
     return newTypes
   }
 
+  const removeDuplicateObjectsFromArray = (array: Array<any>): Array<any> => {
+    const ids = array.map((o) => setKeyAsId(o.id))
+    const filtered = array.filter(({ id }, index) => !ids.includes(setKeyAsId(id), index + 1))
+    return filtered
+  }
+
   const setEntity = (data: any) => {
     if (!data) return
     entity.value = data
@@ -259,7 +266,9 @@ export const useDetailsModal = () => {
     const objectNamesData = useFilter().getMetadataCollectionByLabel(objectNameData, 'objectnaam')
     objectNames.value = useFilter().getObjectNames(objectNamesData)
     const newTypes = createTypesFromMetadata(objectNamesData)
-    entity.value.types = entity.value.types.concat(newTypes)
+    entity.value.types = removeDuplicateObjectsFromArray(entity.value.types.concat(newTypes))
+    entity.value.type
+    console.log(entity.value)
   }
 
   return {
@@ -433,6 +442,7 @@ export default defineComponent({
     }
 
     const filterAllData = (_entity: NestedDataObject) => {
+      // debugger
       let entity = {} as NestedDataObject
       Object.assign(entity, _entity)
       const parentLabels = ['vervaardiging.plaats', 'Collectie.naam', 'MaterieelDing.beheerder']
