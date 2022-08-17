@@ -15,8 +15,8 @@ import TheWorksPage from './pages/TheWorksPage.vue'
 import TheVisitPage from './pages/TheVisitPage.vue'
 import TheUploadPage from './pages/TheUploadPage.vue'
 import TheTestimonyPage from './pages/TheTestimonyPage.vue'
-import { routeRequiresAuth } from '@/composables/helper.auth'
-import { checkRouteOnRequireAuth } from './app'
+import { queryParamsToDelete, routeRequiresAuth } from '@/composables/helper.auth'
+import { checkRouteOnRequireAuth, removeParametFromQueryParams } from './app'
 
 const isServer = typeof window === 'undefined'
 
@@ -54,6 +54,7 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
+      to.query = removeParametFromQueryParams(to.query, queryParamsToDelete)
       checkRouteOnRequireAuth(to)
       if (routeRequiresAuth.value === true) {
         await auth.assertIsAuthenticated(to.fullPath, next)

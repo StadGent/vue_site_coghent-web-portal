@@ -1,10 +1,11 @@
 import { router } from '@/app'
 import StoreFactory from '@/stores/StoreFactory'
 import { UserStore } from '@/stores/UserStore'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { RouteLocationNormalized } from 'vue-router'
 
 export const routeRequiresAuth = ref<boolean>(false)
+export const queryParamsToDelete = ['session_state', 'code']
 
 const authHelper = () => {
   const userStore = StoreFactory.get(UserStore)
@@ -29,10 +30,20 @@ const authHelper = () => {
     }
   }
 
+  const removeParametFromQueryParams = (_query: any, _params: Array<string>) => {
+    const updatedQuery = {} as any
+    let key: keyof typeof _query
+    for (key in _query) {
+      !_params.includes(key) ? updatedQuery[key] = _query[key] : null
+    }
+    return updatedQuery
+  }
+
   return {
     checkRouteOnRequireAuth,
     setAuthenticatedUser,
     reactOnIsAuthenticated,
+    removeParametFromQueryParams,
   }
 }
 
