@@ -27,7 +27,7 @@ export let router: Router
 export let apolloClient: ApolloClient<NormalizedCacheObject>
 export let useSessionAuth: typeof OpenIdConnectClient | null
 export const storyboxCount = ref<number>(0)
-export const { checkRouteOnRequireAuth, setAuthenticatedUser, reactOnIsAuthenticated } = authHelper()
+export const { checkRouteOnRequireAuth, setAuthenticatedUser, reactOnIsAuthenticated, removeParametFromQueryParams } = authHelper()
 
 export default async function (authenticated: boolean) {
   console.log(`>web-portal updated session to v0.1.8`)
@@ -59,9 +59,7 @@ export default async function (authenticated: boolean) {
     const errorHandler = useGraphqlErrors(error)
     // errorHandler.logFormattedErrors() // DEV:
     if (useAuthFeature.value === true && errorHandler.checkForUnauthorized() === true) {
-      if (useSessionAuth.isAuthenticated.value) {
-        return error.forward(error.operation)
-      } else {
+      if (!useSessionAuth.isAuthenticated.value) {
         router.push(`/`)
       }
     }
