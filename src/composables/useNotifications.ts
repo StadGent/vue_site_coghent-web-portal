@@ -60,3 +60,20 @@ const useNotifications = () => {
 }
 
 export const notification = useNotifications()
+
+// Upload errors
+export const upload_max_size_exceeded = (_allowedSize: number, _size: number) => {
+  notification.add({
+    type: 'error',
+    subject: `File size`,
+    message: `The file size ${(_size / 1000000).toFixed(2)}MB is to big. We accept files up to ${_allowedSize / 1000000}MB.`
+  } as Notification)
+}
+
+export const upload_unsupported_file_extension = (_allowed_extensions: string) => {
+  notification.add({
+    type: 'error',
+    subject: `File extension`,
+    message: `You can only upload files with extension ${_allowed_extensions}`
+  } as Notification)
+}

@@ -40,6 +40,7 @@ import Dropzone from 'dropzone'
 import StoreFactory from '@/stores/StoreFactory'
 import { ConfigStore } from '@/stores/ConfigStore'
 import { uploadState, useUpload } from 'coghent-vue-3-component-library'
+import { upload_max_size_exceeded, upload_unsupported_file_extension } from '@/composables/useNotifications'
 
 export default defineComponent({
   name: 'UploadStepOne',
@@ -79,6 +80,12 @@ export default defineComponent({
             }))
           : null
         isLoading.value = false
+        dropzone.value.on(`addedfile`, (file) => {
+          if (file.size > MAX_FILE_SIZE.value || file.accepted === false) {
+            file.size > MAX_FILE_SIZE.value ? upload_max_size_exceeded(MAX_FILE_SIZE.value, file.size) : null
+            dropzone.value!.removeFile(file)
+          }
+        })
         dropzone.value.on(`removedfile`, (val) => {
           addedFiles.value = dropzone.value!.files.length
         })
@@ -88,7 +95,7 @@ export default defineComponent({
         dropzone.value.on(`complete`, (val) => {
           for (const file of dropzone.value!.files) {
             file.accepted === false ? dropzone.value!.removeFile(file) : null
-            file.size > MAX_FILE_SIZE.value ? dropzone.value!.removeFile(file) : null
+            file.accepted === false ? upload_unsupported_file_extension(ACCEPTED_FILE_EXTENSIONS.value) : null
           }
           addedFiles.value = dropzone.value!.files.length
           addedFiles.value === MAX_FILES.value ? (filesUploaded.value = true) : null
