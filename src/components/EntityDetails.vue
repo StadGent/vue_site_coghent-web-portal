@@ -106,6 +106,7 @@ import {
   TestimoniCard,
   CircleLoader,
   UpdateEntityDocument,
+  GetTestimoniesOfAssetDocument,
 } from 'coghent-vue-3-component-library'
 import BreadCrumbs, { useHistory } from './BreadCrumbs.vue'
 import TheGrid from './TheGrid.vue'
@@ -159,7 +160,8 @@ export default defineComponent({
     const route = useRoute()
     const baseTestimony = ref<typeof EntityInfo>({ title: 'Testimony', description: '', type: EntityTypes.Testimony })
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
-    const { mutate: createTestimony, loading: loadingNewTestimony } = useMutation(CreateTestimonyDocument)
+    const { onResult: onTestimonyResult } = useQuery(GetTestimoniesOfAssetDocument, { assetId: id.value })
+    const { mutate: createTestimony, loading: loadingNewTestimony, onDone: onCreatedTestimony } = useMutation(CreateTestimonyDocument)
     const { mutate: updateEntity } = useMutation(UpdateEntityDocument)
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
     const mediaFiles = ref<any | undefined>()
@@ -268,6 +270,14 @@ export default defineComponent({
       }
     )
 
+    onTestimonyResult((res) => {
+      testimonies.value = parseTestimonyCards(res.data.GetTestimoniesOfAsset)
+    })
+
+    onCreatedTestimony((res) => {
+      testimonies.value = parseTestimonyCards(res.data.CreateTestimony)
+    })
+
     const filterDuplicateTypes = (_relations: Array<TypeObject>) => {
       let myRelations: Array<TypeObject> = []
       Object.assign(myRelations, _relations)
@@ -323,7 +333,7 @@ export default defineComponent({
       if (body.length >= 4) {
         baseTestimony.value.description = body
         isWritingTestimony.value = false
-        createTestimony({ entityInfo: baseTestimony.value, assetId: id.value })
+        createTestimony({ entityInfo: baseTestimony.value, assetId: result.value.Entity.id })
       }
     }
 
