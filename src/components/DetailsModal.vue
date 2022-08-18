@@ -131,33 +131,7 @@
         </section>
       </section>
     </section>
-    <section id="footer" class="flex items-stretch z-50 bg-background-light justify-evenly p-2 lg:p-10 shadow-2xl sticky bottom-0 w-full lg:pb-6">
-      <div class="mx-3 align-center">
-        <base-button
-          class="w-12 h-12 stroke-current text-text-black inline-block lg:hidden"
-          :on-click="() => copyUrl(entity.id)"
-          custom-style="secondary-round"
-          custom-icon="link"
-          :icon-shown="true"
-        />
-        <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
-        <div v-if="userStore.hasUser" class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
-        <base-button class="hidden w-12 h-12 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
-        <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
-      </div>
-      <div v-if="canAddToStoryBox === true" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2" />
-      <div v-if="canAddToStoryBox === true" class="mx-3 align-center">
-        <AddAssetToStoryboxDropdown :trigger="storyboxDdOpen" :entity="entity" @click="() => (storyboxDdOpen = !storyboxDdOpen)" @addToStorybox="(ids) => addAssetToStorybox(ids)">
-          <base-button :text="t('buttons.addToStorybox')" custom-style="ghost-purple" :icon-shown="true" :custom-icon="assetIsInAStorybox ? `check` : `storybox`" class="px-2 hidden lg:flex" />
-          <base-button
-            custom-style="secondary-round"
-            :icon-shown="true"
-            :custom-icon="assetIsInAStorybox ? `check` : `storybox`"
-            class="w-12 h-12 stroke-current text-accent-purple inline-block lg:hidden"
-          />
-        </AddAssetToStoryboxDropdown>
-      </div>
-    </section>
+    <entity-actions :entity="entity" />
   </BaseModal>
 </template>
 
@@ -171,15 +145,11 @@ import { useCCModal } from './CreativeModal.vue'
 import useClipboard from 'vue-clipboard3'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
-import { apolloClient, iiif } from '@/app'
-import StoreFactory from '@/stores/StoreFactory'
-import { UserStore } from '@/stores/UserStore'
+import { iiif } from '@/app'
 import { useHistory } from './BreadCrumbs.vue'
-import AddAssetToStoryboxDropdown from './AddAssetToStoryboxDropdown.vue'
-import { StoryBoxState } from 'coghent-vue-3-component-library'
-import { useStorybox } from 'coghent-vue-3-component-library'
+import EntityActions from './EntityActions.vue'
 import { HeadAttrs, useHead } from '@vueuse/head'
-import { getFirstValueOfPropertyFromEntity, Entity, getFirstMediafileWithFilelocationOfEntity, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
+import { getFirstValueOfPropertyFromEntity, getFirstMediafileWithFilelocationOfEntity, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
 import { setKeyAsId } from '../helpers'
 import { useGoogleFeature, useStoryboxFeature } from '@/stores/ConfigStore'
 
@@ -268,7 +238,6 @@ export const useDetailsModal = () => {
     const newTypes = createTypesFromMetadata(objectNamesData)
     entity.value.types = removeDuplicateObjectsFromArray(entity.value.types.concat(newTypes))
     entity.value.type
-    console.log(entity.value)
   }
 
   return {
@@ -289,29 +258,22 @@ export default defineComponent({
     CopyrightTab,
     LazyLoadImage,
     BaseMetaData,
-    AddAssetToStoryboxDropdown,
+    EntityActions,
   },
   setup(props) {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()
     let IIIfImageUrl: string = ''
     const { openCCModal } = useCCModal()
-    const { toClipboard } = useClipboard()
     const { generateUrl, generateInfoUrl, noImageUrl, audioUrl } = iiif
     const router = useRouter()
     const route = useRoute()
     const { history } = useHistory()
-    const userStore = StoreFactory.get(UserStore)
     const { openMediaModal, setMediaModalImageUrl, setMediaModalFile } = useMediaModal()
     const head = reactive<Array<HeadAttrs>>([])
-    const assetIsInAStorybox = ref<boolean>(false)
-    const storyboxDdOpen = ref<boolean>(false)
-    const canAddToStoryBox = ref<boolean>(false)
 
     useHead({ meta: head })
 
     watch(entity, async () => {
-      canAddToStoryBox.value = await checkForValidStoryboxAsset(entity.value, entity.value.primary_mediafile)
-      await checkAssetIsInAStorybox()
       if (useGoogleFeature.value === true) {
         let title = getFirstValueOfPropertyFromEntity(entity.value, `title`)
         let description = getFirstValueOfPropertyFromEntity(entity.value, `description`)
@@ -338,57 +300,10 @@ export default defineComponent({
       }
     })
 
-    watch(DetailsModalState, (_modal) => {
-      _modal.state === 'show' ? checkAssetIsInAStorybox() : null
-    })
-
-    const checkForValidStoryboxAsset = async (_entity: typeof Entity, _filename: string | undefined): Promise<boolean> => {
-      const checks: Array<boolean> = []
-      useStoryboxFeature.value === true && userStore.hasUser && entity ? checks.push(true) : checks.push(false)
-      if (!checks.includes(false)) {
-        const mediaTypeForPrimaryFile = await getMediaTypeByfilename(entity.value, entity.value.primary_mediafile)
-        mediaTypeForPrimaryFile !== null && mediaTypeForPrimaryFile.image && mediaTypeForPrimaryFile.image === true ? checks.push(true) : checks.push(false)
-      }
-      return !checks.some((_check) => _check === false)
-    }
-
-    const checkAssetIsInAStorybox = async () => {
-      new Promise((resolve, reject) => {
-        for (const box of StoryBoxState.value.storyboxes) {
-          const found = useStorybox(apolloClient).assetIsInStorybox(entity.value, box.id)
-          found && found.key ? resolve(true) : null
-        }
-        resolve(false)
-      }).then((val) => {
-        assetIsInAStorybox.value = val as boolean
-      })
-    }
-
     const handleMediaModal = (filename: string, mediaFile: typeof MediaFile) => {
       setMediaModalImageUrl(generateInfoUrl(filename, 'full'))
       setMediaModalFile(mediaFile)
       openMediaModal()
-    }
-
-    const addAssetToStorybox = async (_storyBoxIds: Array<string>) => {
-      for (const _box of StoryBoxState.value.storyboxes) {
-        if (_storyBoxIds.includes(_box.id)) {
-          await useStorybox(apolloClient).assetToStorybox(_box.id, entity.value.id)
-          console.log(`Added to box`, _box.id)
-        }
-      }
-      await useStorybox(apolloClient).getStoryboxes()
-      checkAssetIsInAStorybox()
-    }
-
-    const copyUrl = async (id: String) => {
-      console.log('copyurl', id)
-      try {
-        var url = window.location.href
-        await toClipboard(url)
-      } catch (e) {
-        console.error(e)
-      }
     }
 
     const openNewCCModal = () => {
@@ -507,7 +422,6 @@ export default defineComponent({
       t,
       openNewCCModal,
       LazyLoadImage,
-      copyUrl,
       generateUrl,
       generateInfoUrl,
       router,
@@ -518,17 +432,12 @@ export default defineComponent({
       collectieNaam,
       objectNames,
       route,
-      addAssetToStorybox,
-      userStore,
       itemsInBasket,
       goToRelation,
       noImageUrl,
       useStoryboxFeature,
       handleMediaModal,
       audioUrl,
-      assetIsInAStorybox,
-      storyboxDdOpen,
-      canAddToStoryBox,
     }
   },
   methods: {
