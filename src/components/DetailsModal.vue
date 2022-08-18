@@ -131,7 +131,6 @@
         </section>
       </section>
     </section>
-    <entity-actions :entity="entity" />
   </BaseModal>
 </template>
 
@@ -146,7 +145,6 @@ import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
 import { iiif } from '@/app'
 import { useHistory } from './BreadCrumbs.vue'
-import EntityActions from './EntityActions.vue'
 import { HeadAttrs, useHead } from '@vueuse/head'
 import { getFirstValueOfPropertyFromEntity, getFirstMediafileWithFilelocationOfEntity } from 'coghent-vue-3-component-library'
 import { setKeyAsId } from '../helpers'
@@ -257,7 +255,6 @@ export default defineComponent({
     CopyrightTab,
     LazyLoadImage,
     BaseMetaData,
-    EntityActions,
   },
   setup(props) {
     const { closeDetailsModal, DetailsModalState } = useDetailsModal()

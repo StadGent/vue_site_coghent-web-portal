@@ -1,20 +1,25 @@
 <template>
   <!-- main-->
   <bread-crumbs class="mx-4 sm:mx-0" />
-  <div class="lg:grid lg:grid-cols-2 mt-20 flex-col">
-    <section class="flex justify-between px-10 mb-5 sm:mb-0">
-      <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
-      <the-carousel
-        v-if="!loading && carouselFiles"
-        :source="carouselFiles"
-        :infotext="t('main.info')"
-        :mediafiles="mediaFiles"
-        :is-touch="route.query.touch ? true : false"
-        :mediafile-url="mediafileUrl"
-        @opening-ccmodal="openCCModal"
-        @currentPictureIndex="setPictureIndex"
-      />
-    </section>
+  <entity-actions class="hidden mb-4 mt-10 lg:inline-flex" v-if="result && result.Entity" :entity="result.Entity" />
+  <div class="lg:grid lg:grid-cols-2 flex-col mt-8">
+    <span>
+      <section class="flex justify-between px-10 mb-5 sm:mb-0">
+        <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
+        <the-carousel
+          v-if="!loading && carouselFiles"
+          :source="carouselFiles"
+          :infotext="t('main.info')"
+          :mediafiles="mediaFiles"
+          :is-touch="route.query.touch ? true : false"
+          :mediafile-url="mediafileUrl"
+          @opening-ccmodal="openCCModal"
+          @currentPictureIndex="setPictureIndex"
+        />
+      </section>
+      <entity-actions class="my-10 lg:hidden" v-if="result && result.Entity" :entity="result.Entity" />
+    </span>
+
     <CardComponent :large="true" class="mx-2 md:mx-4 sm:mx-0">
       <div class="flex bg-background-medium px-0 md:px-10 py-10" :class="{ [`animate-pulse h-80 justify-center items-center flex-col overflow-hidden`]: loading, [`flex-col`]: !loading }">
         <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -121,6 +126,7 @@ import { UserStore } from '../stores/UserStore'
 import StoreFactory from '@/stores/StoreFactory'
 import { parseDateAsLocaleString } from '@/helpers'
 import ToolTip, { useTooltip } from './ToolTip.vue'
+import EntityActions from './EntityActions.vue'
 
 type TypeObject = {
   id: string
@@ -155,6 +161,7 @@ export default defineComponent({
     SpeechBubble,
     CircleLoader,
     ToolTip,
+    EntityActions,
   },
   setup: () => {
     const id = ref<string>(asString(useRoute().params['entityID']))

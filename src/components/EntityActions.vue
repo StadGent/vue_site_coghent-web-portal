@@ -1,5 +1,5 @@
 <template>
-  <section id="footer" class="flex items-stretch z-50 bg-background-light justify-evenly p-2 lg:p-10 shadow-2xl sticky bottom-0 w-full lg:pb-6">
+  <section class="flex flex-row items-stretch bg-background-light justify-evenly p-2 w-full">
     <div class="mx-3 align-center">
       <base-button class="w-12 h-12 stroke-current text-text-black inline-block lg:hidden" :on-click="() => copyUrl(entity.id)" custom-style="secondary-round" custom-icon="link" :icon-shown="true" />
       <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
