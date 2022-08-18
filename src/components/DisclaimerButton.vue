@@ -7,7 +7,7 @@
         fill="currentColor"
       />
     </svg>
-    <base-button class="absolute bottom-3 left-4" custom-style="round-white" custom-icon="bigInfo" :icon-shown="true" :on-click="openDisclaimerModal" />
+    <base-button class="relative -top-28 -right-16" custom-style="round-white" custom-icon="bigInfo" :icon-shown="true" :on-click="openDisclaimerModal" />
   </div>
 </template>
 
