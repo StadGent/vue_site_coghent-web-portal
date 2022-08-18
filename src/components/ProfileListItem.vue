@@ -1,9 +1,9 @@
 <template>
   <section
-    @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
     :class="`${isLoading ? 'animate-pulse opacity-30' : ''} ${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${
       profileListItemInfo.pictureUrl ? 'flex' : ''
     }`"
+    @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
   >
     <div class="w-full flex sm:flex-row flex-col-reverse">
       <div v-if="profileListItemInfo.pictureUrl" class="flex items-center w-full justify-center my-4 px-6 sm:pl-4 sm:pr-2 md:w-40">
@@ -38,12 +38,12 @@
     </div>
     <MyWorksActions
       v-if="showWorksFeature"
-      :myWorksItem="profileListItemInfo"
-      :links="links"
       v-model:tagInfo="tagInfo"
       v-model:isLoading="isLoading"
-      @updateTag="() => getTagInfo()"
       v-model:itemAction="itemAction"
+      :my-works-item="profileListItemInfo"
+      :links="links"
+      @updateTag="() => getTagInfo()"
     />
   </section>
 </template>

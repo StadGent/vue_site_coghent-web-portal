@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="w-full flex justify-end">
-        <BaseButton :text="t('storybox.download')" :iconShown="false" :onClick="convertHtmlToPdf" />
+        <BaseButton :text="t('storybox.download')" :icon-shown="false" :on-click="convertHtmlToPdf" />
       </div>
     </div>
   </BaseModal>

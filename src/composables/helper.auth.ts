@@ -34,7 +34,7 @@ const authHelper = () => {
     const updatedQuery = {} as any
     let key: keyof typeof _query
     for (key in _query) {
-      !_params.includes(key) ? updatedQuery[key] = _query[key] : null
+      !_params.includes(key) ? (updatedQuery[key] = _query[key]) : null
     }
     return updatedQuery
   }

@@ -10,7 +10,7 @@
         :infotext="t('main.info')"
         :mediafiles="mediaFiles"
         :is-touch="route.query.touch ? true : false"
-        :mediafileUrl="mediafileUrl"
+        :mediafile-url="mediafileUrl"
         @opening-ccmodal="openCCModal"
         @currentPictureIndex="setPictureIndex"
       />
@@ -67,7 +67,7 @@
           <SpeechBubble
             v-for="(testimony, index) in testimonies"
             :key="testimony.name"
-            :cardDetails="testimony"
+            :card-details="testimony"
             color="#FDC20B"
             :alignment="index % 2 == 0 ? 'Left' : 'Right'"
             @receivedLike="updateTestimonyLikes"

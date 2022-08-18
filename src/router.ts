@@ -42,7 +42,6 @@ const routes = [
   { path: '/login', component: TheLoginPage, meta: { requiresAuth: true } },
 ]
 
-
 export default function (auth: any) {
   const router = createRouter({
     routes,

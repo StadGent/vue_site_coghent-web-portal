@@ -10,7 +10,7 @@
           @updatedMetadata="(metadata) => (uploadState.metadata = metadata)"
         />
         <UploadStepFour v-if="currentUploadStep === 4 || (currentUploadStep === 5 && canShowStep(4))" />
-        <div class="h-full w-full flex justify-center items-center absolute z-20 top-0 left-0 bg-background-dark opacity-50" v-if="showLoader()">
+        <div v-if="showLoader()" class="h-full w-full flex justify-center items-center absolute z-20 top-0 left-0 bg-background-dark opacity-50">
           <CircleLoader />
         </div>
         <UploadDone v-if="currentUploadStep === TOTAL_STEPS && canShowStep(TOTAL_STEPS)" />
@@ -163,7 +163,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css" scoped >
+<style lang="css" scoped>
 .height90 {
   min-height: 90%;
 }

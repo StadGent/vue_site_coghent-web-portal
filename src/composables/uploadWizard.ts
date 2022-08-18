@@ -25,39 +25,42 @@ const uploadWizard = () => {
       type: UploadModalAction.new_upload,
       steps: [...Array(TOTAL_STEPS).keys()].map((i) => i + 1),
       showPreviousInSteps: [3, 4, 5],
-      upload: null
+      upload: null,
     },
     [UploadModalAction.edit_upload]: {
       type: UploadModalAction.edit_upload,
       steps: [3, 4, 5, 6],
       showPreviousInSteps: [4, 5],
-      upload: null
+      upload: null,
     },
   }
 
   const actions = ref<any>(definedActions['new_upload'])
   const assetId = ref<null | string>(null)
 
-  watch(() => actions.value.type, (type) => {
-    switch (type) {
-      case UploadModalAction.edit_upload:
-        isModeEdit.value = true
-        isModeUploadNew.value = false
-        break
-      default:
-        isModeEdit.value = false
-        isModeUploadNew.value = true
+  watch(
+    () => actions.value.type,
+    (type) => {
+      switch (type) {
+        case UploadModalAction.edit_upload:
+          isModeEdit.value = true
+          isModeUploadNew.value = false
+          break
+        default:
+          isModeEdit.value = false
+          isModeUploadNew.value = true
+      }
     }
-  })
+  )
 
   const getActionValues = async (_asset: string | null, _setStep: any, _getUploadComposable: any) => {
     if (_asset) {
       assetId.value = _asset
       actions.value = definedActions['edit_upload']
       const comp = await _getUploadComposable(_asset, apolloClient)
-      console.log({ comp });
+      console.log({ comp })
       actions.value.upload = comp
-      console.log(`ASSET ID`, _asset);
+      console.log(`ASSET ID`, _asset)
     }
     _setStep(actions.value.steps[0])
   }
@@ -74,7 +77,7 @@ const uploadWizard = () => {
     const { t } = useI18n()
     const metadata: Array<any> = []
     const metaTags: Array<typeof MetaKey> = ['title', 'description', 'maker', 'periode']
-    for (let index = 1;index <= 4;index++) {
+    for (let index = 1; index <= 4; index++) {
       const match = uploadState.metadata.find((meta: typeof Metadata) => meta.key === metaTags[index - 1])
       metadata.push({
         text: t(`myWorks.upload.stepThree.metadata.q${index}`),

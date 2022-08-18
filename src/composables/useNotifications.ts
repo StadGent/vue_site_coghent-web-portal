@@ -10,9 +10,7 @@ export type Notification = {
   timestamp?: number
 }
 
-export const notificationsQue = ref<Array<Notification>>([
-
-])
+export const notificationsQue = ref<Array<Notification>>([])
 
 watch(notificationsQue, () => {
   if (notificationsQue.value.length >= 1) {
@@ -21,7 +19,6 @@ watch(notificationsQue, () => {
 })
 
 const useNotifications = () => {
-
   const DEFAULT_NOTIFICATION_TIME_MS = 4000
 
   const notifications = ref<Array<Notification>>(notificationsQue.value)
@@ -55,8 +52,6 @@ const useNotifications = () => {
     notifications,
     startCountdown,
   }
-
-
 }
 
 export const notification = useNotifications()
@@ -66,7 +61,7 @@ export const upload_max_size_exceeded = (_allowedSize: number, _size: number) =>
   notification.add({
     type: 'error',
     subject: `File size`,
-    message: `The file size ${(_size / 1000000).toFixed(2)}MB is to big. We accept files up to ${_allowedSize / 1000000}MB.`
+    message: `The file size ${(_size / 1000000).toFixed(2)}MB is to big. We accept files up to ${_allowedSize / 1000000}MB.`,
   } as Notification)
 }
 
@@ -74,6 +69,6 @@ export const upload_unsupported_file_extension = (_allowed_extensions: string) =
   notification.add({
     type: 'error',
     subject: `File extension`,
-    message: `You can only upload files with extension ${_allowed_extensions}`
+    message: `You can only upload files with extension ${_allowed_extensions}`,
   } as Notification)
 }

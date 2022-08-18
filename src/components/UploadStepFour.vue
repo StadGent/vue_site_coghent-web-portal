@@ -7,7 +7,7 @@
           <img :src="setMediafile()" alt="" />
         </div>
         <div class="w-3/5 flex flex-grow flex-col text-left p-8 w-full">
-          <div class="flex flex-col mb-4" v-for="meta of metadata" :key="meta.key">
+          <div v-for="meta of metadata" :key="meta.key" class="flex flex-col mb-4">
             <p class="text-base font-normal mb-2 text-touchtable-dark opacity-50">{{ meta.text }}</p>
             <h4 class="font-semibold text-lg">{{ meta.answer !== null ? meta.answer : t('details.modal.unknown') }}</h4>
           </div>

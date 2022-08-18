@@ -41,7 +41,7 @@
                   class="absolute top-5 z-20 mt-3 ml-3"
                   custom-style="secondary-round"
                   custom-icon="fullscreen"
-                  :noMargin="true"
+                  :no-margin="true"
                   :icon-shown="true"
                   @click="handleMediaModal(photo.transcode_filename || photo.filename, entity.mediafiles[index])"
                 />
@@ -142,14 +142,13 @@ import { useI18n } from 'vue-i18n'
 import { ModalState } from './base/Modal.vue'
 import { BaseButton, CopyrightTab, LazyLoadImage, BaseMetaData, BaseModal, useMediaModal, MediaFile, Metadata, MetadataCollection, Relation } from 'coghent-vue-3-component-library'
 import { useCCModal } from './CreativeModal.vue'
-import useClipboard from 'vue-clipboard3'
 import useFilter from '@/composables/useFilter'
 import { itemsInBasket } from '@/composables/useStoryBox'
 import { iiif } from '@/app'
 import { useHistory } from './BreadCrumbs.vue'
 import EntityActions from './EntityActions.vue'
 import { HeadAttrs, useHead } from '@vueuse/head'
-import { getFirstValueOfPropertyFromEntity, getFirstMediafileWithFilelocationOfEntity, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
+import { getFirstValueOfPropertyFromEntity, getFirstMediafileWithFilelocationOfEntity } from 'coghent-vue-3-component-library'
 import { setKeyAsId } from '../helpers'
 import { useGoogleFeature, useStoryboxFeature } from '@/stores/ConfigStore'
 
