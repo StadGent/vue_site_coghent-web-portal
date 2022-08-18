@@ -70,7 +70,7 @@
             :cardDetails="testimony"
             color="#FDC20B"
             :alignment="index % 2 == 0 ? 'Left' : 'Right'"
-            @receivedLike="updateTestimony"
+            @receivedLike="updateTestimonyLikes"
           ></SpeechBubble>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default defineComponent({
     const route = useRoute()
     const baseTestimony = ref<typeof EntityInfo>({ title: 'Testimony', description: '', type: EntityTypes.Testimony })
     const { result, loading, refetch } = useQuery(GetEntityByIdDocument, { id: id.value })
-    const { onResult: onTestimonyResult } = useQuery(GetTestimoniesOfAssetDocument, { assetId: id.value })
+    const { onResult: onTestimonyResult, refetch: refetchTestimony } = useQuery(GetTestimoniesOfAssetDocument, { assetId: id.value })
     const { mutate: createTestimony, loading: loadingNewTestimony, onDone: onCreatedTestimony } = useMutation(CreateTestimonyDocument)
     const { mutate: updateEntity } = useMutation(UpdateEntityDocument)
     const carouselFiles = ref<typeof ImageSource[] | undefined>()
@@ -216,8 +216,7 @@ export default defineComponent({
 
     const setEntityInformation = (queryResult: any) => {
       if (queryResult.Entity) {
-        testimonies.value = parseTestimonyCards(queryResult.Entity.testimonies)
-
+        refetchTestimony(queryResult.Entity.id)
         const photosArray: typeof ImageSource[] = []
         mediaFiles.value = queryResult.Entity?.mediafiles
         queryResult.Entity?.mediafiles.forEach((value: any) => {
@@ -310,13 +309,12 @@ export default defineComponent({
       carouselPictureIndex.value = newIndex
     }
 
-    const updateTestimony = (testimony: typeof TestimonyCard) => {
+    const updateTestimonyLikes = (testimony: typeof TestimonyCard) => {
       if (userStore.hasUser) {
         const testimonyToUpdate = testimonies.value.find((element: typeof TestimonyCard) => element.id == testimony.id)
         testimonyToUpdate.likes++
-        const testimonyEntity = JSON.parse(JSON.stringify(result.value.Entity.testimonies.find((element: typeof Entity) => element.id == testimony.id)))
-        const newMetadata = [{ key: testimonyEntity.likes[0].key, value: testimonyToUpdate.likes.toString() }]
-        console.log(newMetadata)
+        const testimonyEntity = JSON.parse(JSON.stringify(testimonies.value.find((element: typeof Entity) => element.id == testimony.id)))
+        const newMetadata = [{ key: 'likes', value: testimonyToUpdate.likes.toString() }]
         updateEntity({ id: testimony.id, metadata: newMetadata, relations: [] })
       }
     }
@@ -354,7 +352,7 @@ export default defineComponent({
       goToRelation,
       relatedItemIds,
       testimonies,
-      updateTestimony,
+      updateTestimonyLikes,
       generateUrl,
       setPictureIndex,
       carouselPictureIndex,
