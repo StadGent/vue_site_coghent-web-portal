@@ -70,7 +70,7 @@ const useMenu = () => {
     {
       id: `Profiel`,
       title: userStore.hasUser ? userStore.user.value.name : t(`buttons.login`),
-      link: userStore.hasUser ? `/profile` : '/login',
+      link: userStore.hasUser ? `/mystories` : '/login',
       localLink: true,
       requireAuth: true,
       isVisible: true,
