@@ -1,4 +1,6 @@
 import { useTestimonyFeature, useWorksFeature, useStoryboxFeature } from '@/stores/ConfigStore'
+import StoreFactory from '@/stores/StoreFactory'
+import { UserStore } from '@/stores/UserStore'
 import { useI18n } from 'vue-i18n'
 
 export type MenuItem = {
@@ -12,6 +14,7 @@ export type MenuItem = {
 }
 
 const useMenu = () => {
+  const userStore = StoreFactory.get(UserStore)
   const { t } = useI18n()
   const mobileItems: Array<MenuItem> = [
     {
@@ -44,7 +47,7 @@ const useMenu = () => {
       link: `/myStories`,
       localLink: true,
       requireAuth: true,
-      isVisible: useStoryboxFeature.value,
+      isVisible: useStoryboxFeature.value && userStore.hasUser,
     },
     {
       id: `Works`,
@@ -52,7 +55,7 @@ const useMenu = () => {
       link: `/myworks`,
       localLink: true,
       requireAuth: true,
-      isVisible: useWorksFeature.value,
+      isVisible: useWorksFeature.value && userStore.hasUser,
     },
     {
       id: `Testimoni`,
@@ -60,14 +63,14 @@ const useMenu = () => {
       link: `/mytestimonies`,
       localLink: true,
       requireAuth: true,
-      isVisible: useTestimonyFeature.value,
+      isVisible: useTestimonyFeature.value && userStore.hasUser,
     },
   ]
   const bottomMobileItems: Array<MenuItem> = [
     {
       id: `Profiel`,
-      title: t(`header.profile`),
-      link: `/profile`,
+      title: userStore.hasUser ? userStore.user.value.name : t(`buttons.login`),
+      link: userStore.hasUser ? `/profile` : '/login',
       localLink: true,
       requireAuth: true,
       isVisible: true,

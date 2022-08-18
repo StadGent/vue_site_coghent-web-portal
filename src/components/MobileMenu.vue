@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import useMenu, { MenuItem } from '@/composables/useMenu'
 import { router } from '@/app'
@@ -106,6 +106,9 @@ export default defineComponent({
       menuItems.value = filterItemsOnVisibility(menu.mobileItems)
       menuItemsBottom.value = filterItemsOnAuth(menu.bottomMobileItems)
       menuItemsBottom.value = filterItemsOnVisibility(menu.bottomMobileItems)
+      console.log(`userStore`, userStore.hasUser)
+      console.log(`userStore`, userStore.user.value)
+      console.log(`userStore`, userStore.user.name)
     }
 
     init()

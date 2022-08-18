@@ -47,17 +47,19 @@
       </div>
     </div>
 
-    <div v-if="useAuthFeature === true" class="flex ml-3">
+    <div v-if="useAuthFeature === true" class="hidden sm:inline-flex flex ml-3">
       <div v-if="!isMobile" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
-      <base-button v-if="!route.query.touch && !userStore.hasUser" :text="t('buttons.login')" :on-click="goToLoginPage" custom-style="primary" :icon-shown="false" class="px-2 mx-1 mb-2 flex-grow-0" />
-      <base-button
-        v-if="userStore.hasUser"
-        :text="t(`profile.greeting`) + `,  ` + user.preferred_username"
-        :on-click="goToProfilePage"
-        custom-style="ghost-purple"
-        :icon-shown="false"
-        class="px-2 mx-1"
-      />
+      <span class="hidden sm:inline-flex">
+        <base-button
+          v-if="!route.query.touch && !userStore.hasUser"
+          :text="t('buttons.login')"
+          :on-click="goToLoginPage"
+          custom-style="primary"
+          :icon-shown="false"
+          class="px-2 mx-1 mb-2 flex-grow-0"
+        />
+        <base-button v-if="userStore.hasUser" :text="t(`profile.greeting`) + `,  ` + user.name" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
+      </span>
       <base-button
         v-if="userStore.hasUser && useStoryboxFeature && !isMobile && !route.query.touch"
         :has-badge="true"
@@ -67,7 +69,7 @@
         custom-style="ghost-purple"
         :icon-shown="true"
         custom-icon="storybox"
-        class="px-2 mx-3 ml-3"
+        class="px-2 mx-3 ml-3 hidden lg:inline-flex"
       />
     </div>
   </div>
