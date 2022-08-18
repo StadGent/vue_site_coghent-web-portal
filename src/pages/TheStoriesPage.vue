@@ -18,7 +18,7 @@
   <section class="md:flex md:mt-4 gap-8">
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
-      <div class="w-full flex justify-end mb-2">
+      <div class="w-full flex justify-end mb-8 sm:mb-0">
         <VDropdown
           ><BaseButton class="block md:hidden" custom-icon="newItem" custom-style="square-icon" :icon-shown="true" :no-margin="true" />
           <template #popper>
