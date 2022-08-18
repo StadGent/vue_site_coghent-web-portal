@@ -21,6 +21,7 @@ import FloatingVue from 'floating-vue'
 import { Dropdown, VClosePopper } from 'floating-vue'
 import 'floating-vue/dist/style.css'
 import authHelper, { routeRequiresAuth } from './composables/helper.auth'
+import { notification } from './composables/useNotifications'
 
 export let iiif: any
 export let router: Router
@@ -41,6 +42,8 @@ export default async function (authenticated: boolean) {
 
   const app = createSSRApp(App)
   const head = createHead()
+
+  notification.clearAll()
 
   if (useAuthFeature.value === true) {
     useSessionAuth ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))

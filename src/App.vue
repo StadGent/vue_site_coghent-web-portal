@@ -3,6 +3,7 @@
   <div class="bg-background-light font-body pt-6 flex flex-col items-center overflow-x-hidden">
     <div class="container min-h-screen">
       <the-header @isOpen="(status) => (mobileMenuIsOpen = status)" />
+      <notification />
       <router-view />
       <mobile-menu v-if="mobileMenuIsOpen === true" @isOpen="(status) => (mobileMenuIsOpen = status)" />
       <details-modal />
@@ -29,10 +30,11 @@ import DisclaimerButton from './components/DisclaimerButton.vue'
 import TheFooter from './components/TheFooter.vue'
 import MobileMenu from './components/MobileMenu.vue'
 import { addGoogleData } from '@/composables/gtm'
+import Notification from '@/components/Notification.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu },
+  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
