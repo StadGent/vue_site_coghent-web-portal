@@ -116,11 +116,24 @@ export default defineComponent({
     const draggingAssetComesBelow = ref<string | null>(null)
     const { stripUserUploadPrefix } = useUpload()
     const assetTimingPresent = ref<boolean>(false)
+    const backupAssets = ref<Array<typeof Entity>>([])
 
     const deleteAsset = async (_asset: typeof Entity) => {
-      const index = assets.value.indexOf(_asset)
-      assets.value = deleteFromArray(assets.value, index)
-      StoryBoxState.value.activeStorybox.assets = assets.value
+      backupAssets.value = StoryBoxState.value.activeStorybox.assets
+      const index = assets.value.map((asset) => asset.id === _asset.id).indexOf(true)
+      console.log(`Index of deleted asset`, index)
+      console.log(`Asset at index`, assets.value[index])
+      if (index !== -1) {
+        StoryBoxState.value.activeStorybox.assets = deleteFromArray(assets.value, index)
+        StoryBoxState.value.activeStorybox.assets = assets.value
+      } else {
+        console.log(`Couldn't delete asset`, _asset)
+        StoryBoxState.value.activeStorybox.assets = assets.value
+        console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, StoryBoxState.value.activeStorybox.assets)
+        console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, assets.value)
+        console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, backupAssets.value)
+        StoryBoxState.value.activeStorybox.assets = backupAssets.value
+      }
     }
 
     const deleteFromArray = (_array: Array<any>, _index: number) => {
@@ -210,7 +223,7 @@ export default defineComponent({
     watch(
       () => StoryBoxState.value.activeStorybox.assetTimings,
       (timings) => {
-        StoryBoxState.value.activeStorybox.assetTimings !== undefined ? (assetTimingPresent.value = true) : (assetTimingPresent.value = false)
+        StoryBoxState.value.activeStorybox.assetTimings !== undefined ? (assetTimingPresent.value = true) : null
       }
     )
 
