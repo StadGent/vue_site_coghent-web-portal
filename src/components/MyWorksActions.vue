@@ -17,7 +17,7 @@
         @click="() => (isLoading ? null : (openStoryboxes = !openStoryboxes))"
         @addToStorybox="(ids) => addAssetToStorybox(ids)"
       >
-        <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" :class="[assetIsAddedToStoryBox === true ? 'text-accent-purple' : 'text-text-white']" class="row-span-1 h-full p-4 flex justify-center items-center stroke-current" />
+        <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" :class="[assetIsAddedToStoryBox === true ? 'text-accent-purple bg-text-white' : 'text-text-white']" class="row-span-1 h-full p-4 flex justify-center items-center stroke-current" />
       </AddAssetToStoryboxDropdown>
     </span>
     <BaseIcon
