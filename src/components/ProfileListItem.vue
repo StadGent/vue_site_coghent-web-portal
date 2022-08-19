@@ -7,7 +7,7 @@
   >
     <div class="w-full flex sm:flex-row flex-col-reverse">
       <div v-if="profileListItemInfo.pictureUrl" class="flex items-center w-full justify-center my-4 px-6 sm:pl-4 sm:pr-2 md:w-40">
-        <img :src="profileListItemInfo.pictureUrl" />
+        <img class="h-full object-contain" :src="profileListItemInfo.pictureUrl" />
       </div>
       <div class="w-full p-4">
         <div class="flex flex-col sm:flex-row sm:justify-between pb-2">

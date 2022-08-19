@@ -15,7 +15,7 @@
             <base-button v-show="false" :text="t('flow.upload')" :on-click="() => router.push(`/upload`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
           </div>
         </div>
-        <profile-list-item v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
+        <profile-list-item class="h-40" v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
       </section>
     </span>
     <div class="lg:hidden fixed bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
