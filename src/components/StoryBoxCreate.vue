@@ -49,8 +49,8 @@
                 <div :id="asset.id" class="hidden w-20 flex items-center justify-center items-row-reverse cursor-pointer">
                   <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
                 </div>
-                <span v-if="entityIsPublic(asset) === true" class="flex flex-row">
-                  <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer">
+                <span class="flex flex-row">
+                  <div v-if="entityIsPublic(asset) === true && assetTimingPresent === true" :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer">
                     <BaseDropDown
                       :number-step="5"
                       :number-max="60"
@@ -90,12 +90,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { BaseIcon, BaseDropDown } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
-import { KeyValuePair } from 'coghent-vue-3-component-library'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useUpload } from 'coghent-vue-3-component-library'
 import { entityIsPublic } from 'coghent-vue-3-component-library'
@@ -108,7 +107,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const { t } = useI18n()
     const startDragItem = ref<string>('')
     const canDrag = ref<boolean>(false)
@@ -116,6 +115,7 @@ export default defineComponent({
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
     const draggingAssetComesBelow = ref<string | null>(null)
     const { stripUserUploadPrefix } = useUpload()
+    const assetTimingPresent = ref<boolean>(false)
 
     const deleteAsset = async (_asset: typeof Entity) => {
       const index = assets.value.indexOf(_asset)
@@ -193,9 +193,9 @@ export default defineComponent({
 
     const setAssetTiming = (_asset: typeof Entity) => {
       let returnValue = null
-      StoryBoxState.value.activeStorybox.assetTimings.map((_pair: typeof KeyValuePair) => {
+      for (const _pair of StoryBoxState.value.activeStorybox.assetTimings) {
         if (_pair.key === _asset.id) returnValue = _pair.value
-      })
+      }
       return returnValue
     }
 
@@ -206,6 +206,13 @@ export default defineComponent({
         }
       }
     }
+
+    watch(
+      () => StoryBoxState.value.activeStorybox.assetTimings,
+      (timings) => {
+        StoryBoxState.value.activeStorybox.assetTimings !== undefined ? (assetTimingPresent.value = true) : (assetTimingPresent.value = false)
+      }
+    )
 
     return {
       t,
@@ -224,6 +231,7 @@ export default defineComponent({
       draggingAssetComesBelow,
       stripUserUploadPrefix,
       entityIsPublic,
+      assetTimingPresent,
     }
   },
 })
