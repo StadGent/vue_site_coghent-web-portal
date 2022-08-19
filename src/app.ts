@@ -34,6 +34,7 @@ export default async function (authenticated: boolean) {
   console.log(`>web-portal updated session to v0.1.8`)
   console.log(`>web-portal updated CL to v0.1.127`)
   const configStore = StoreFactory.get(ConfigStore)
+  const userStore = StoreFactory.get(UserStore)
   const config = await fetch('../config.json').then((r) => r.json())
   configStore.setConfig(config)
   configStore.setFeatureFlags()
@@ -46,7 +47,8 @@ export default async function (authenticated: boolean) {
   notification.clearAll()
 
   if (useAuthFeature.value === true) {
-    useSessionAuth ? useSessionAuth : (useSessionAuth = new OpenIdConnectClient(config.oidc))
+    useSessionAuth = new OpenIdConnectClient(config.oidc)
+    console.log(`CREATED new session`)
     authCode.value = new URLSearchParams(window.location.search).get('code')
   }
 
@@ -57,16 +59,18 @@ export default async function (authenticated: boolean) {
   iiif = useIIIF(configStore.config.value.iiifLink)
 
   router = createRouter(useSessionAuth != null ? useSessionAuth : null)
-
+  // console.log(`origin location`, `${window.location.origin}/`)
   const graphqlErrorInterceptor = onError((error) => {
     const errorHandler = useGraphqlErrors(error)
     // errorHandler.logFormattedErrors() // DEV:
     if (useAuthFeature.value === true && errorHandler.checkForUnauthorized() === true) {
       if (!useSessionAuth.isAuthenticated.value) {
-        router.push(`/`)
+        useSessionAuth = null
+        userStore.setUser(null)
+          router.push(`/`)
+        }
       }
-    }
-  })
+    })
 
   // DEV: see what calls are happening from graphql in the browser console
   const graphqlRequestIntercepter = new ApolloLink((operation, forward) => {
