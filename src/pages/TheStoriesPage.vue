@@ -1,8 +1,11 @@
 <template>
   <QRCodeModal />
   <div class="w-full flex justify-end">
-    <VDropdown
-      ><BaseButton class="hidden md:block" custom-icon="newItem" custom-style="square-icon" :icon-shown="true" :no-margin="true" />
+    <VDropdown>
+      <div class="pb-4 flex justify-end mt-4">
+        <base-button class="uploadButton text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t('storybox.createNew')"></base-button>
+      </div>
+      <!-- <BaseButton class="hidden md:block" custom-icon="newItem" custom-style="square-icon" :icon-shown="true" :no-margin="true" /> -->
       <template #popper>
         <div class="grid grid-cols-2 font-bold text-center gap-2 p-2">
           <router-link to="/mystories/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
@@ -38,9 +41,6 @@
       </div>
       <div v-if="!loading && storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
         <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`storybox.noStories`) }}</h1>
-        <div class="flex justify-center items-center h-full lg:mt-0 mt-8">
-          <base-button :text="t('storybox.createNew')" :on-click="() => router.push(`/mystories/new`)" custom-style="primary" :icon-shown="true" custom-icon="newItem" class="px-2 mx-3 ml-3" />
-        </div>
       </div>
       <profile-list-item v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :v-show="storyBoxItems.length > 0 && !loading" :profile-list-item-info="storyBoxItem" @update="getStoryBoxes" />
     </section>
