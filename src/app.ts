@@ -48,7 +48,6 @@ export default async function (authenticated: boolean) {
 
   if (useAuthFeature.value === true) {
     useSessionAuth = new OpenIdConnectClient(config.oidc)
-    console.log(`CREATED new session`)
     authCode.value = new URLSearchParams(window.location.search).get('code')
   }
 
@@ -59,7 +58,6 @@ export default async function (authenticated: boolean) {
   iiif = useIIIF(configStore.config.value.iiifLink)
 
   router = createRouter(useSessionAuth != null ? useSessionAuth : null)
-  // console.log(`origin location`, `${window.location.origin}/`)
   const graphqlErrorInterceptor = onError((error) => {
     const errorHandler = useGraphqlErrors(error)
     // errorHandler.logFormattedErrors() // DEV:
@@ -67,10 +65,11 @@ export default async function (authenticated: boolean) {
       if (!useSessionAuth.isAuthenticated.value) {
         useSessionAuth = null
         userStore.setUser(null)
-          router.push(`/`)
-        }
+        fetch('api/logout')
+        router.push(`/`)
       }
-    })
+    }
+  })
 
   // DEV: see what calls are happening from graphql in the browser console
   const graphqlRequestIntercepter = new ApolloLink((operation, forward) => {
