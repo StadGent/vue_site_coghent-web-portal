@@ -1,6 +1,6 @@
 <template>
   <div id="modals" />
-  <div class="bg-background-light font-body pt-6 flex flex-col items-center overflow-x-hidden">
+  <div class="bg-background-light font-body pt-6 flex flex-col items-center overflow-x-hidden relative">
     <div class="container min-h-screen">
       <the-header @isOpen="(status) => (mobileMenuIsOpen = status)" />
       <notification />
