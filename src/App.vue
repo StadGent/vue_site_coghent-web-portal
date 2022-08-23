@@ -5,7 +5,9 @@
       <the-header @isOpen="(status) => (mobileMenuIsOpen = status)" />
       <notification />
       <router-view />
-      <mobile-menu v-if="mobileMenuIsOpen === true" @isOpen="(status) => (mobileMenuIsOpen = status)" />
+      <transition>
+        <mobile-menu v-if="mobileMenuIsOpen === true" @isOpen="(status) => (mobileMenuIsOpen = status)" />
+      </transition>
       <details-modal />
       <creative-modal />
       <disclaimer-button v-if="!route.query.touch && !useStoryboxFeature" />
@@ -81,4 +83,14 @@ export default defineComponent({
 })
 </script>
 
-<style></style>
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  transform: translateX(-100%);
+}
+</style>
