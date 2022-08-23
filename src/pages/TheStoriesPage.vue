@@ -22,8 +22,10 @@
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
       <div class="w-full flex justify-end mb-8 sm:mb-0">
-        <VDropdown
-          ><BaseButton class="block md:hidden" custom-icon="newItem" custom-style="square-icon" :icon-shown="true" :no-margin="true" />
+        <VDropdown>
+          <div class="lg:hidden fixed bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
+            <BaseIcon icon="newItem" class="stroke-current p-1 cursor-pointer text-text-white" />
+          </div>
           <template #popper>
             <div class="grid grid-cols-2 font-bold text-center gap-2 p-2">
               <router-link to="/mystories/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
@@ -51,7 +53,7 @@
 import ProfileListItem, { ProfileListItemInfo, ProfileListItemType } from '@/components/ProfileListItem.vue'
 import { defineComponent, ref, watch } from 'vue'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
-import { BaseButton, useStorybox } from 'coghent-vue-3-component-library'
+import { BaseButton, useStorybox, BaseIcon } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import { useI18n } from 'vue-i18n'
 import { StoryBoxState, CircleLoader } from 'coghent-vue-3-component-library'
@@ -62,7 +64,7 @@ import QRCodeModal from '../components/QRCodeModal.vue'
 
 export default defineComponent({
   name: 'TheStoriesPage',
-  components: { ProfileSideMenu, ProfileListItem, BaseButton, CircleLoader, QRCodeModal },
+  components: { ProfileSideMenu, ProfileListItem, BaseButton, CircleLoader, QRCodeModal, BaseIcon },
   setup() {
     const { t } = useI18n()
     const storyBoxItems = ref<ProfileListItemInfo[]>([])

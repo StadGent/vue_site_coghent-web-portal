@@ -1,7 +1,7 @@
 <template>
   <div class="md:bg-background-medium max-h-screen flex p-8 flex-col w-full md:w-2/6 page-height break-all">
     <div class="flex flex-col justify-between pb-4">
-      <div class="flex justify-between items-center flex-col-reverse lg:flex-col">
+      <div class="flex justify-between items-end flex-col-reverse lg:flex-col">
         <h2 v-if="user != null" class="mt-5 font-bold text-4xl">{{ t(`profile.greeting`) }}<br />{{ user.name }}!</h2>
         <base-button
           class="md:hidden block w-8 h-8 bg-neutral-0 rounded-full flex justify-center"
