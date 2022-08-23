@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0 mx-5">
+  <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0 sm:mx-5">
     <div class="flex gap-8">
       <div class="flex flex-col items-center">
         <a class="flex items-center sm:ml-0 ml-3 group" @click="checkAction">
