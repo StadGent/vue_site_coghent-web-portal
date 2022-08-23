@@ -1,16 +1,18 @@
 <template>
   <div class="md:bg-background-medium max-h-screen flex p-8 flex-col w-full md:w-2/6 page-height break-all">
     <div class="flex flex-col justify-between pb-4">
-      <div class="flex justify-between items-end flex-col-reverse lg:flex-col">
+      <div class="flex justify-between flex-col-reverse lg:flex-col">
         <h2 v-if="user != null" class="mt-5 font-bold text-4xl">{{ t(`profile.greeting`) }}<br />{{ user.name }}!</h2>
-        <base-button
-          class="md:hidden block w-8 h-8 bg-neutral-0 rounded-full flex justify-center"
-          :on-click="logout"
-          custom-style="ghost-black"
-          :icon-shown="true"
-          :no-margin="true"
-          custom-icon="logout"
-        />
+        <div class="w-full flex justify-end">
+          <base-button
+            class="md:hidden block w-8 h-8 bg-neutral-0 rounded-full flex justify-center"
+            :on-click="logout"
+            custom-style="ghost-black"
+            :icon-shown="true"
+            :no-margin="true"
+            custom-icon="logout"
+          />
+        </div>
       </div>
       <section class="flex md:block whitespace-nowrap overflow-scroll h-24 md:h-auto no-scrollbar h-full">
         <router-link v-for="(page, index) in pages" :key="index" :to="page.link" class="pr-4 md:pr-0" @click="changeActivePage(index)">
