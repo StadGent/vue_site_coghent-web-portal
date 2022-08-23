@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0 sm:mx-5">
-    <div class="flex gap-8">
+    <div class="flex gap-2 xl:gap-8">
       <div class="flex flex-col items-center">
         <a class="flex items-center sm:ml-0 ml-3 group" @click="checkAction">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div v-if="useAuthFeature === true" class="hidden sm:inline-flex flex ml-3">
+    <div v-if="useAuthFeature === true" class="hidden sm:inline-flex flex ml-3 mt-5">
       <div v-if="!isMobile" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
       <span class="hidden sm:inline-flex">
         <base-button
