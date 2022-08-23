@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed -top-16 -right-12 text-accent-yellow">
+  <div class="fixed -top-16 -right-14 text-accent-yellow">
     <svg width="120" height="119" viewBox="0 0 120 119" class="" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         opacity="1"
@@ -7,7 +7,7 @@
         fill="currentColor"
       />
     </svg>
-    <base-button class="relative -top-28 -right-16" custom-style="round-white" custom-icon="bigInfo" :icon-shown="true" :on-click="openDisclaimerModal" />
+    <base-button class="relative -top-14 -right-4" custom-style="round-white" custom-icon="bigInfo" :icon-shown="true" :on-click="openDisclaimerModal" />
   </div>
 </template>
 
