@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute -top-16 -right-14 text-accent-yellow">
+  <div class="absolute overflow-x-hidden -top-16 -right-14 text-accent-yellow">
     <svg width="120" height="119" viewBox="0 0 120 119" class="" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         opacity="1"
