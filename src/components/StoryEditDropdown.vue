@@ -4,7 +4,7 @@
     <template #popper>
       <div><BaseButton custom-style="storybox-black" :text="t('storybox.edit')" custom-icon="edit" :icon-shown="true" @click="editStory" /></div>
       <div><BaseButton v-close-popper custom-style="storybox-black" :text="t('storybox.showQR')" custom-icon="qrCode" :icon-shown="true" @click="openQR" /></div>
-      <div><BaseButton custom-style="storybox-red" :text="t('storybox.delete')" custom-icon="wasteBasket" :icon-shown="true" @click="deleteStory" /></div>
+      <div><BaseButton v-close-popper custom-style="storybox-red" :text="t('storybox.delete')" custom-icon="wasteBasket" :icon-shown="true" @click="handleConfirmationModal" /></div>
     </template>
   </VDropdown>
 </template>
@@ -19,6 +19,7 @@ import { useMutation } from '@vue/apollo-composable'
 import { DeleteEntityDocument, storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { useQRCodeModal } from './QRCodeModal.vue'
+import { useConfirmationModal } from './ConfirmationModal.vue'
 
 export default defineComponent({
   name: 'StoryEditDropdown',
@@ -35,6 +36,7 @@ export default defineComponent({
     const { t } = useI18n()
     const { toClipboard } = useClipboard()
     const { openQRCodeModal, setQRCodeModalCode } = useQRCodeModal()
+    const { openConfirmationModal, setConfirmationCallback } = useConfirmationModal()
 
     const { mutate } = useMutation(DeleteEntityDocument)
 
@@ -62,11 +64,17 @@ export default defineComponent({
       })
     }
 
+    const handleConfirmationModal = () => {
+      setConfirmationCallback(deleteStory)
+      openConfirmationModal()
+    }
+
     return {
       editStory,
       deleteStory,
       t,
       openQR,
+      handleConfirmationModal,
     }
   },
 })
