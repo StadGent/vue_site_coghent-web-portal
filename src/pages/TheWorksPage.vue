@@ -1,7 +1,7 @@
 <template>
   <section class="flex lg:gap-8 flex-col">
-    <div class="pb-4 flex justify-end mt-4 ">
-      <base-button class="uploadButton text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
+    <div class="pb-4 flex justify-end mt-4">
+      <base-button class="hidden md:flex text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
     </div>
     <span class="flex flex-col md:flex-row">
       <profile-side-menu />
@@ -18,7 +18,7 @@
         <profile-list-item class="sm:h-40" v-for="(work, index) in myWorks" :key="index" :profile-list-item-info="work" />
       </section>
     </span>
-    <div class="lg:hidden fixed bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
+    <div class="md:hidden fixed bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
       <BaseIcon icon="newItem" class="stroke-current p-1 cursor-pointer text-text-white" @click="() => router.push(`/upload`)" />
     </div>
   </section>
@@ -101,15 +101,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-.uploadButton {
-  display: all;
-}
-
-@media screen and (max-width: 992px) {
-  .uploadButton {
-    display: none;
-  }
-}
-</style>
