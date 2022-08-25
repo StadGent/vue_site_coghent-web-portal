@@ -19,7 +19,7 @@
         <div class="h-fit">
           <h2 class="font-bold text-lg mt-2">{{ option.title }}</h2>
           <p class="font-normal text-base mt-6">{{ option.info }}</p>
-          <p class="font-normal text-sm italic mt-14">{{ option.disclaimer }}</p>
+          <p v-html="option.disclaimer" class="font-normal text-sm italic mt-14"></p>
         </div>
       </div>
     </div>
