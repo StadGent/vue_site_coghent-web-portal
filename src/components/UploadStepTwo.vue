@@ -6,7 +6,7 @@
         v-for="option of options"
         :key="option.title"
         :class="[option.selected === true ? 'border-2 border-accent-purple' : '']"
-        class="my-6 bg-text-white p-4 flex flex-col text-center shadow-md"
+        class="my-6 bg-text-white p-4 flex flex-col text-center shadow-md cursor-pointer"
         @click="setSelectedOption(option)"
       >
         <div class="h-full flex justify-center items-center">
@@ -19,7 +19,10 @@
         <div class="h-fit">
           <h2 class="font-bold text-lg mt-2">{{ option.title }}</h2>
           <p class="font-normal text-base mt-6">{{ option.info }}</p>
-          <p v-html="option.disclaimer" class="font-normal text-sm italic mt-14"></p>
+          <div class="flex">
+            <input class="mx-2" v-show="option.selected" type="checkbox" :name="option.title" v-model="disclaimerCheckboxState" />
+            <p v-html="option.disclaimer" class="font-normal text-sm italic mt-14"></p>
+          </div>
         </div>
       </div>
     </div>
@@ -29,7 +32,7 @@
 <script lang="ts">
 import { useUpload } from 'coghent-vue-3-component-library'
 import { Rights } from 'coghent-vue-3-component-library'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const styleButton = {
@@ -53,6 +56,7 @@ export default defineComponent({
     const { t } = useI18n()
     const options = ref<Array<UploadOption>>([])
     const { setCreator, rightIsSet } = useUpload()
+    const disclaimerCheckboxState = ref<boolean>(false)
 
     const setOptions = () => {
       options.value.push({
@@ -75,16 +79,32 @@ export default defineComponent({
       for (const [index, option] of options.value.entries()) {
         _option.title === option.title ? (options.value[index].selected = true) : (options.value[index].selected = false)
       }
-      setCreator(_option.license)
+      if (disclaimerCheckboxState.value) {
+        setCreator(_option.license)
+      }
+      disclaimerCheckboxState.value = false
     }
+
+    const changeCreator = (option: UploadOption) => {
+      console.log(option)
+    }
+
+    watch(
+      () => disclaimerCheckboxState.value,
+      () => {
+        console.log(disclaimerCheckboxState.value)
+      }
+    )
 
     setOptions()
 
     return {
       t,
       setSelectedOption,
+      changeCreator,
       options,
       styleButton,
+      disclaimerCheckboxState,
     }
   },
 })
