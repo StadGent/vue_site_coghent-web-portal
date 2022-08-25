@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { BaseIcon, BaseDropDown } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
@@ -127,16 +127,11 @@ export default defineComponent({
     const deleteAsset = async (_asset: typeof Entity) => {
       fallBackDeleteAsset()
       const index = assets.value.map((asset) => asset.id === _asset.id).indexOf(true)
-      console.log(`Index of deleted asset`, index)
-      console.log(`Asset at index`, assets.value[index])
       if (index !== -1) {
         StoryBoxState.value.activeStorybox.assets = deleteFromArray(assets.value, index)
         StoryBoxState.value.activeStorybox.assets = assets.value
       } else {
-        console.log(`Couldn't delete asset`, _asset)
         StoryBoxState.value.activeStorybox.assets = assets.value
-        console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, StoryBoxState.value.activeStorybox.assets)
-        console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, assets.value)
       }
     }
 
@@ -234,13 +229,8 @@ export default defineComponent({
     watch(
       () => props.loading,
       (isLoading) => {
-        console.log(`is loading`, isLoading)
         if (isLoading === false) {
-          console.log(`Creating the component for the user`)
-          console.log(`init`)
-          console.log(`init | assets.value`, assets.value)
           assets.value = StoryBoxState.value.activeStorybox.assets
-          console.log(`step one | assets.value`, assets.value)
         }
       }
     )
