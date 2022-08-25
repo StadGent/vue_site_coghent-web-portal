@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, onMounted, onUpdated, ref, watch } from 'vue'
 import { BaseIcon, BaseDropDown } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
@@ -111,15 +111,21 @@ export default defineComponent({
     const { t } = useI18n()
     const startDragItem = ref<string>('')
     const canDrag = ref<boolean>(false)
-    const assets = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assets)
+    const assets = ref<Array<typeof Entity>>([])
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
     const draggingAssetComesBelow = ref<string | null>(null)
     const { stripUserUploadPrefix } = useUpload()
     const assetTimingPresent = ref<boolean>(false)
-    const backupAssets = ref<Array<typeof Entity>>([])
+
+    const fallBackDeleteAsset = () => {
+      if (assets.value === undefined || assets.value.length <= 0) {
+        console.log(`Using fallback to reset the assets use in the component to the activestorybox assets`)
+        assets.value = StoryBoxState.value.activeStorybox.assets
+      }
+    }
 
     const deleteAsset = async (_asset: typeof Entity) => {
-      backupAssets.value = StoryBoxState.value.activeStorybox.assets
+      fallBackDeleteAsset()
       const index = assets.value.map((asset) => asset.id === _asset.id).indexOf(true)
       console.log(`Index of deleted asset`, index)
       console.log(`Asset at index`, assets.value[index])
@@ -131,8 +137,6 @@ export default defineComponent({
         StoryBoxState.value.activeStorybox.assets = assets.value
         console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, StoryBoxState.value.activeStorybox.assets)
         console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, assets.value)
-        console.log(`Couldn't delete  StoryBoxState.value.activeStorybox.assets`, backupAssets.value)
-        StoryBoxState.value.activeStorybox.assets = backupAssets.value
       }
     }
 
@@ -224,6 +228,20 @@ export default defineComponent({
       () => StoryBoxState.value.activeStorybox.assetTimings,
       (timings) => {
         StoryBoxState.value.activeStorybox.assetTimings !== undefined ? (assetTimingPresent.value = true) : null
+      }
+    )
+
+    watch(
+      () => props.loading,
+      (isLoading) => {
+        console.log(`is loading`, isLoading)
+        if (isLoading === false) {
+          console.log(`Creating the component for the user`)
+          console.log(`init`)
+          console.log(`init | assets.value`, assets.value)
+          assets.value = StoryBoxState.value.activeStorybox.assets
+          console.log(`step one | assets.value`, assets.value)
+        }
       }
     )
 
