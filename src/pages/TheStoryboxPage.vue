@@ -48,20 +48,20 @@ export default defineComponent({
     const { t } = useI18n()
     const closeWindow = ref<string>('show')
     const loading = ref<boolean>(false)
-    const frames = ref<Array<typeof Entity>>([
-      // { id: 'First storybox', title: [{ value: 'frametitle' }] },
-      // { id: 'Second storybox', title: [{ value: 'frametitle' }] },
-    ])
+    const frames = ref<Array<typeof Entity>>([])
 
     onMounted(async () => {
       const storyboxId = router.currentRoute.value.params.storyboxId
       if (storyboxId) {
+        loading.value = true
+        await useStorybox(apolloClient).refreshGetStoryboxesWhenEmpty()
         frames.value = StoryBoxState.value.storyboxes
         storyboxCount.value = StoryBoxState.value.count
         loading.value = true
         await useStorybox(apolloClient).createStoryboxFromEntity(storyboxId)
         loading.value = false
-      } else router.push('/mystories')
+      }
+      StoryBoxState.value.activeStorybox ? null : router.push('/mystories')
     })
 
     document.body.classList.add('overflow-y-hidden')
@@ -73,7 +73,6 @@ export default defineComponent({
     }
 
     const save = async () => {
-      console.log(`useStoryBox.saveFrame()`, StoryBoxState.value.activeStorybox)
       await useStorybox(apolloClient).createNew()
       close()
     }
