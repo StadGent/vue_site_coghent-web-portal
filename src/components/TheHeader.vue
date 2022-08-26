@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div v-if="useAuthFeature === true" class="hidden sm:inline-flex flex ml-3 mt-5">
+    <div v-if="!route.query.touch && useAuthFeature === true" class="hidden sm:inline-flex flex ml-3 mt-5">
       <div v-if="!isMobile" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
       <span class="hidden sm:inline-flex">
         <base-button
