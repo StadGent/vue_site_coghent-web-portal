@@ -51,6 +51,7 @@
                 </div>
                 <span class="flex flex-row">
                   <div v-if="entityIsPublic(asset) === true && assetTimingPresent === true" :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer">
+                    <p class="text-xs" :title="t('storybox.assets.showTimeToolTip')">{{ t('storybox.assets.showTime') }}</p>
                     <BaseDropDown
                       :number-step="5"
                       :number-max="60"

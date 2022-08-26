@@ -1,5 +1,5 @@
 <template>
-  <VDropdown v-model:shown="toolTipState.shown" :placement="placement" :triggers="[]" auto-hide>
+  <VDropdown v-model:shown="toolTipState.shown" :placement="placement" :triggers="triggers" auto-hide>
     <slot></slot>
     <template #popper>
       <div class="p-4">
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 
 type ToolTipState = {
   shown: boolean
@@ -42,6 +42,10 @@ export default defineComponent({
     placement: {
       type: String,
       required: false,
+    },
+    triggers: {
+      type: Array as PropType<String[]>,
+      default: () => [],
     },
   },
   setup(props) {

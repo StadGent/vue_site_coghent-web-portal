@@ -167,7 +167,9 @@
       "selectedAssetsInfo": "Versleep de foto’s om de volgorde te veranderen waarin ze te zien zullen zijn. Dit kan van belang zijn voor het verhaal dat je vertelt. Aan de hand van de cijfers kan je ook in de teskt verwijzen naar een bepaald werk.",
       "addMore": "Voeg nog meer werken toe aan je verhaal!",
       "search": "Zelf een werk toevoegen",
-      "collection": "Zoeken in de collectie"
+      "collection": "Zoeken in de collectie",
+      "showTime": "Tonen gedurende:",
+      "showTimeToolTip": "Wanneer het verhaal in de cogent box bekeken wordt zal dit asset gedurende het geselecteerde aantal seconden getoond worden"
     },
     "new": {
       "onlyNumbers": "Gelieve enkel nummers in te voeren",
