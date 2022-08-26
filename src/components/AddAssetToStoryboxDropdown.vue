@@ -4,8 +4,10 @@
     <template #popper>
       <div class="p-4">
         <div v-for="(storybox, index) in userStoryboxes" v-show="userStoryboxes.length" :key="index" @change="setStatusForStorybox(storybox)">
-          <input :id="storybox.id" v-model="storybox.checked" type="checkbox" :value="storybox.name" :disabled="storybox.added" />
-          <label :for="index" class="p-2">{{ storybox.name }}</label>
+          <label :for="storybox.id" class="p-2">
+            <input :id="storybox.id" v-model="storybox.checked" type="checkbox" :value="storybox.name" :disabled="storybox.added" />
+            {{ storybox.name }}</label
+          >
         </div>
         <div v-if="!userStoryboxes.length">
           <p class="text-center">{{ t('details.modal.createStorybox') }}</p>
