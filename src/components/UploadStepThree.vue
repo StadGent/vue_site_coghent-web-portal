@@ -26,7 +26,7 @@
             :placeholder="t(`myWorks.upload.stepThree.relation.search`)"
             @change="updatedRelations"
           />
-          <ul v-if="dropdownResults.length >= 1 && relationSearch.length" class="px-2">
+          <ul v-if="dropdownResults.length >= 1 && relationSearch.length" class="px-2 max-h-20 overflow-y-scroll">
             <li v-for="item of dropdownResults" :key="item" class="bg-background-medium text-left flex items-center h-8 px-4 py-1 hover:bg-background-dark" @click="addToRelations(item)">
               {{ item.value }}
             </li>
