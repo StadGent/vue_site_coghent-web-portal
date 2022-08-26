@@ -89,7 +89,8 @@ export default defineComponent({
       () => disclaimerCheckboxState.value,
       () => {
         setAgreedToDisclaimer(disclaimerCheckboxState.value)
-      }
+      },
+      { immediate: true }
     )
 
     setOptions()
