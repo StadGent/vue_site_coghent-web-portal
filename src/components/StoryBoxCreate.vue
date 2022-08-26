@@ -23,44 +23,46 @@
             :draggable="canDrag"
           >
             <div :id="asset.id">
-              <div :id="asset.id" class="rounded-md w-full bg-background-light flex flex-cols py-2" :class="entityIsPublic(asset) === false ? 'opacity-50' : ''">
-                <p :id="asset.id" class="w-28 lg:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="dragEnd">
-                  <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
-                </p>
-                <div :id="asset.id" class="w-28 flex justify-center items-center">
-                  <img
-                    v-if="asset.mediafiles"
-                    :id="asset.id"
-                    class="w-16 h-16 object-scale-down"
-                    :src="asset.mediafiles[0] && asset.mediafiles[0].thumbnail_file_location ? asset.mediafiles[0].thumbnail_file_location : `/no-image.png`"
-                  />
+              <div :id="asset.id" class="block md:flex rounded-md w-full bg-background-light" :class="entityIsPublic(asset) === false ? 'opacity-50' : ''">
+                <div class="flex flex-row w-full py-2">
+                  <p :id="asset.id" class="w-16 md:w-20 flex items-center justify-center cursor-move" @mousedown="() => (canDrag = true)" @mouseleave="dragEnd">
+                    <base-icon :id="asset.id" :icon="'dragAndDrop'" class="stroke-current" />
+                  </p>
+                  <div :id="asset.id" class="w-28 flex justify-center items-center">
+                    <img
+                      v-if="asset.mediafiles"
+                      :id="asset.id"
+                      class="w-16 h-16 object-scale-down"
+                      :src="asset.mediafiles[0] && asset.mediafiles[0].thumbnail_file_location ? asset.mediafiles[0].thumbnail_file_location : `/no-image.png`"
+                    />
+                  </div>
+                  <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
+                    <h1
+                      :id="asset.id"
+                      class="text-sm md:text-lg font-bold"
+                      :class="entityIsPublic(asset) === true ? 'hover:underline cursor-pointer' : ''"
+                      @click="() => (entityIsPublic(asset) === true ? router.push(`/entity/${asset.id}`) : null)"
+                    >
+                      {{ asset.title[0] ? stripUserUploadPrefix(asset.title[0].value) : 'asset' }}
+                    </h1>
+                    <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
+                  </div>
+                  <div :id="asset.id" class="hidden flex items-center justify-center items-row-reverse cursor-pointer">
+                    <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
+                  </div>
                 </div>
-                <div :id="asset.id" class="flex flex-col justify-center w-full px-2">
-                  <h1
-                    :id="asset.id"
-                    class="text-lg font-bold"
-                    :class="entityIsPublic(asset) === true ? 'hover:underline cursor-pointer' : ''"
-                    @click="() => (entityIsPublic(asset) === true ? router.push(`/entity/${asset.id}`) : null)"
-                  >
-                    {{ asset.title[0] ? stripUserUploadPrefix(asset.title[0].value) : 'asset' }}
-                  </h1>
-                  <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
-                </div>
-                <div :id="asset.id" class="hidden w-20 flex items-center justify-center items-row-reverse cursor-pointer">
-                  <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
-                </div>
-                <span class="flex flex-row">
-                  <div v-if="entityIsPublic(asset) === true && assetTimingPresent === true" :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer">
+                <span class="flex flex-row justify-end w-full py-2">
+                  <div v-if="entityIsPublic(asset) === true && assetTimingPresent === true" :id="asset.id" class="flex items-center justify-center items-row-reverse cursor-pointer">
                     <p class="text-xs" :title="t('storybox.assets.showTimeToolTip')">{{ t('storybox.assets.showTime') }}</p>
                     <BaseDropDown
                       :number-step="5"
                       :number-max="60"
                       :active="Number(setAssetTiming(asset))"
-                      :style="`p-1.5 rounded-md ml-2 w-16 mr-2 bg-text-white`"
+                      :style="`p-1.5 rounded-md ml-2 mr-2 bg-text-white`"
                       @selected="(option) => updateAssetTiming(asset, option)"
                     />
                   </div>
-                  <div :id="asset.id" class="w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
+                  <div :id="asset.id" class="w-10 md:w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
                     <base-icon :id="asset.id" :icon="'wasteBasket'" class="stroke-current" />
                   </div>
                 </span>
