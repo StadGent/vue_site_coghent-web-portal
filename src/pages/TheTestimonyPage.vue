@@ -21,6 +21,7 @@ import { GetTestimoniesOfUserDocument, Entity, CircleLoader, Relation, RelationT
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { parseDateAsLocaleString } from '@/helpers'
 import { useI18n } from 'vue-i18n'
+import { iiif } from '@/app'
 
 export default defineComponent({
   name: 'TheTestimonyPage',
@@ -28,6 +29,7 @@ export default defineComponent({
   setup() {
     const testimonyList = ref<typeof Entity[]>([])
     const { result: testimonies, refetch: refetchTestimonies, loading: loadingTestimonies } = useQuery(GetTestimoniesOfUserDocument)
+    const { generateUrl, generateInfoUrl, noImageUrl } = iiif
     const { t } = useI18n()
     const { mutate: deleteItem } = useMutation(DeleteEntityDocument)
 
@@ -38,8 +40,9 @@ export default defineComponent({
           console.log(item)
           const listItem: ProfileListItemInfo = {
             id: item.id,
-            title: item.user,
+            title: item.linkedParentEntity.title[0].value,
             description: item.description[0].value,
+            pictureUrl: generateUrl(item.linkedParentEntity.primary_transcode, 'full'),
             dateCreated: parseDateAsLocaleString(new Date(item.date[0].value)),
             onClickUrl: item.relations[0]?.key.replace('entities/', '/entity/'),
             type: ProfileListItemType.testimony,
