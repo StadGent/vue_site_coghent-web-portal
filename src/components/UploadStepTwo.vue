@@ -55,7 +55,7 @@ export default defineComponent({
   setup() {
     const { t } = useI18n()
     const options = ref<Array<UploadOption>>([])
-    const { setCreator, rightIsSet } = useUpload()
+    const { setCreator, rightIsSet, setAgreedToDisclaimer } = useUpload()
     const disclaimerCheckboxState = ref<boolean>(false)
 
     const setOptions = () => {
@@ -85,14 +85,10 @@ export default defineComponent({
       disclaimerCheckboxState.value = false
     }
 
-    const changeCreator = (option: UploadOption) => {
-      console.log(option)
-    }
-
     watch(
       () => disclaimerCheckboxState.value,
       () => {
-        console.log(disclaimerCheckboxState.value)
+        setAgreedToDisclaimer(disclaimerCheckboxState.value)
       }
     )
 
@@ -101,7 +97,6 @@ export default defineComponent({
     return {
       t,
       setSelectedOption,
-      changeCreator,
       options,
       styleButton,
       disclaimerCheckboxState,

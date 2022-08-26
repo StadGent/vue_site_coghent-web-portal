@@ -106,6 +106,13 @@ export default defineComponent({
       }
     )
 
+    watch(
+      () => uploadState.agreedToDisclaimer,
+      (agreed) => {
+        agreed ? (stepDone.value = true) : (stepDone.value = false)
+      }
+    )
+
     const setSteps = () => {
       steps.value.push(`${t(`myWorks.upload.steps.stepOne`)}`)
       steps.value.push(`${t(`myWorks.upload.steps.stepTwo`)}`)
