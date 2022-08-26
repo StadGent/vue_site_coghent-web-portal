@@ -109,7 +109,9 @@ export default defineComponent({
     watch(
       () => [uploadState.agreedToDisclaimer, currentUploadStep.value],
       () => {
-        uploadState.agreedToDisclaimer && currentUploadStep.value === 2 ? (stepDone.value = true) : (stepDone.value = false)
+        if (currentUploadStep === 2) {
+          uploadState.agreedToDisclaimer ? (stepDone.value = true) : (stepDone.value = false)
+        }
       },
       { immediate: true }
     )
