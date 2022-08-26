@@ -1,5 +1,12 @@
 <template>
-  <BaseModal :modal-state="closeWindow" :large="true" class="py-16 z-40" :scroll="true" @hide-modal="close">
+  <div class="relative">
+    <confirmation-modal
+      :modalText="t('storybox.closeConfirmation.confirmationText')"
+      :confirmButtonText="t('storybox.closeConfirmation.yes')"
+      :declineButtonText="t('storybox.closeConfirmation.no')"
+    />
+  </div>
+  <BaseModal customZIndex="z-40" :modal-state="closeWindow" :large="true" :scroll="true" @hide-modal="confirmClose">
     <div v-if="loading" class="h-full p-8 flex flex-col bg-background-light opacity-70 flex-grow absolute top-0 w-full justify-center items-center overflow-hidden">
       <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
     </div>
@@ -19,7 +26,7 @@
         </div>
         <story-box-create v-if="StoryBoxState.activeStorybox != null" :loading="loading" />
         <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end mt-4">
-          <base-button :text="t('storybox.story.close')" :on-click="() => close()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
+          <base-button :text="t('storybox.story.close')" :on-click="() => confirmClose()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
           <base-button :text="t('storybox.story.save')" :on-click="() => save()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
         </div>
       </div>
@@ -33,6 +40,7 @@ import { useI18n } from 'vue-i18n'
 import { apolloClient, router, storyboxCount } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity, useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
+import ConfirmationModal, { useConfirmationModal } from '../components/ConfirmationModal.vue'
 
 export enum Language {
   'DUTCH' = 'Nederlands',
@@ -43,12 +51,13 @@ export enum Language {
 }
 
 export default defineComponent({
-  components: { BaseButton, BaseModal, StoryBoxCreate, CircleLoader },
+  components: { BaseButton, BaseModal, StoryBoxCreate, CircleLoader, ConfirmationModal },
   setup() {
     const { t } = useI18n()
     const closeWindow = ref<string>('show')
     const loading = ref<boolean>(false)
     const frames = ref<Array<typeof Entity>>([])
+    const { openConfirmationModal, setConfirmationCallback } = useConfirmationModal()
 
     onMounted(async () => {
       const storyboxId = router.currentRoute.value.params.storyboxId
@@ -66,6 +75,11 @@ export default defineComponent({
 
     document.body.classList.add('overflow-y-hidden')
 
+    const confirmClose = () => {
+      setConfirmationCallback(close)
+      openConfirmationModal()
+    }
+
     const close = () => {
       closeWindow.value = 'hide'
       document.body.classList.remove('overflow-y-hidden')
@@ -81,7 +95,7 @@ export default defineComponent({
       document.body.classList.remove('overflow-y-hidden')
     })
 
-    return { t, closeWindow, save, close, frames, loading, StoryBoxState }
+    return { t, closeWindow, save, close, frames, loading, StoryBoxState, confirmClose }
   },
 })
 </script>

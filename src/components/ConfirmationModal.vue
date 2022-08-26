@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :modal-state="ConfirmationModalState.state" @hide-modal="closeConfirmationModal" :showCloseButton="false"
+  <BaseModal customZIndex="z-50" :modal-state="ConfirmationModalState.state" @hide-modal="closeConfirmationModal" :showCloseButton="false"
     ><section class="p-4">
       <p class="text-xl mb-6">{{ modalText }}</p>
       <div class="flex justify-evenly">

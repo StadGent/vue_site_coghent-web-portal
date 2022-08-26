@@ -162,6 +162,11 @@
       "yes": "Ja, verwijder dit verhaal",
       "no": "Neen"
     },
+    "closeConfirmation": {
+      "confirmationText": "Ben je zeker dat je wilt stoppen met bewerken?",
+      "yes": "Ja, maak mijn veranderingen ongedaan",
+      "no": "Neen"
+    },
     "assets": {
       "title": "Geselecteerde werken",
       "selectedAssetsInfo": "Versleep de foto’s om de volgorde te veranderen waarin ze te zien zullen zijn. Dit kan van belang zijn voor het verhaal dat je vertelt. Aan de hand van de cijfers kan je ook in de teskt verwijzen naar een bepaald werk.",
