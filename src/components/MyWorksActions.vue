@@ -28,7 +28,7 @@
     <BaseIcon
       id="delete"
       :icon="[itemAction === 'deleted' ? 'newItem' : 'delete']"
-      :class="[itemAction === 'deleted' ? 'text-text-white' : 'text-text-red']"
+      :class="[itemAction === 'deleted' ? 'text-accent-purple' : 'text-text-red']"
       class="row-span-1 h-full p-4 flex justify-center items-center stroke-current"
       @click="() => (isLoading ? null : deleteRestoreAsset())"
     />
