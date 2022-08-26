@@ -1,8 +1,8 @@
 <template>
   <!-- main-->
   <bread-crumbs class="mx-4 sm:mx-0" />
-  <entity-actions class="hidden mb-4 mt-10 lg:inline-flex" v-if="result && result.Entity" :entity="result.Entity" />
-  <div class="lg:grid lg:grid-cols-2 flex-col mt-8">
+  <entity-actions class="hidden mt-10 lg:inline-flex" v-if="result && result.Entity" :entity="result.Entity" />
+  <div class="lg:grid lg:grid-cols-2 flex-col mt-4">
     <span>
       <section class="flex justify-between px-10 mb-5 sm:mb-0">
         <div v-show="loading" class="h-80 animate-pulse bg-background-medium rounded-md shadow w-full" />
