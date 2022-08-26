@@ -10,7 +10,7 @@
         <img class="h-full object-contain" :src="profileListItemInfo.pictureUrl" />
       </div>
       <div class="w-full p-4">
-        <div class="flex flex-col sm:flex-row sm:justify-between pb-2">
+        <div class="flex flex-row justify-between pb-2">
           <h2 class="font-bold" :class="[itemAction === 'deleted' ? '' : 'cursor-pointer']" @click="itemAction === 'deleted' ? null : router.push(links.visit)">{{ profileListItemInfo.title }}</h2>
           <div v-if="showWorksFeature" class="my-4 sm:my-0 sm:mr-8 px-4 py-0.5 bg-opacity-20 text-opacity-100 font-bold text-sm flex flex-row items-center" :class="tagInfo.style">
             <div :class="tagInfo.style" class="mr-2 rounded-full h-2 w-2"></div>
@@ -21,7 +21,9 @@
               ><BaseButton custom-icon="threedots" :no-margin="true" custom-style="ghost-black" :icon-shown="true"
             /></story-edit-dropdown>
           </div>
-          <div v-if="directDeleteFeature" @click.stop.prevent=""><BaseButton custom-icon="delete" :no-margin="true" custom-style="ghost-black" :icon-shown="true" @click="deleteEntity" /></div>
+          <div class="flex justify-end px-2" v-if="directDeleteFeature" @click.stop.prevent="">
+            <BaseButton custom-icon="delete" :no-margin="true" custom-style="ghost-black" :icon-shown="true" @click="deleteEntity" />
+          </div>
         </div>
         <div class="pb-2">
           <p>{{ profileListItemInfo.description }}</p>
