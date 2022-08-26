@@ -1,10 +1,10 @@
 <template>
-  <div class="grid items-center cursor-pointer bg-accent-purple bg-opacity-75" :class="[itemAction === 'deleted' ? 'grid-cols-1' : 'grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3']">
+  <div class="grid items-center cursor-pointer bg-background-medium bg-opacity-75" :class="[itemAction === 'deleted' ? 'grid-cols-1' : 'grid-cols-3 grid-row-1 sm:grid-cols-1 sm:grid-row-3']">
     <BaseIcon
       v-if="itemAction !== 'deleted'"
       id="edit"
       :icon="'edit'"
-      class="row-span-1 h-full p-4 flex justify-center items-center stroke-current text-text-white"
+      class="row-span-1 h-full p-4 flex justify-center items-center stroke-current text-accent-purple"
       @click="() => (isLoading ? null : router.push(links.edit))"
     />
     <span v-if="itemAction !== 'deleted'" :class="[assetIsAddedToStoryBox === true ? 'bg-opacity-90 bg-text-white' : '']" class="h-full flex items-center justify-center">
@@ -17,7 +17,12 @@
         @click="() => (isLoading ? null : (openStoryboxes = !openStoryboxes))"
         @addToStorybox="(ids) => addAssetToStorybox(ids)"
       >
-        <BaseIcon id="storybox" :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'" :class="[assetIsAddedToStoryBox === true ? 'text-accent-purple bg-text-white' : 'text-text-white']" class="row-span-1 h-full p-4 flex justify-center items-center stroke-current" />
+        <BaseIcon
+          id="storybox"
+          :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'"
+          :class="[assetIsAddedToStoryBox === true ? 'text-text-white bg-accent-purple' : 'text-accent-purple']"
+          class="row-span-1 h-full p-4 flex justify-center items-center stroke-current"
+        />
       </AddAssetToStoryboxDropdown>
     </span>
     <BaseIcon
