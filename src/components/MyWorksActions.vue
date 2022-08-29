@@ -30,7 +30,7 @@
       :icon="itemAction === 'deleted' ? 'undo' : 'delete'"
       :class="itemAction === 'deleted' ? 'text-accent-purple' : 'text-text-red'"
       class="row-span-1 h-full p-4 flex justify-center items-end stroke-current"
-      @click="() => (isLoading ? null : openConfirmationModal())"
+      @click="() => (isLoading ? null : openConfirm())"
     />
   </div>
 </template>
@@ -122,9 +122,13 @@ export default defineComponent({
       emit(`update:isLoading`, false)
     }
 
+    const openConfirm = () => {
+      setConfirmationCallback(deleteRestoreAsset)
+      deleteRestoreAsset()
+    }
+
     const init = () => {
       checkAssetIsInAStorybox()
-      setConfirmationCallback(deleteRestoreAsset)
     }
 
     init()
@@ -137,6 +141,7 @@ export default defineComponent({
       openStoryboxes,
       assetIsAddedToStoryBox,
       openConfirmationModal,
+      openConfirm,
     }
   },
 })
