@@ -124,7 +124,7 @@ export default defineComponent({
 
     const openConfirm = () => {
       setConfirmationCallback(deleteRestoreAsset)
-      deleteRestoreAsset()
+      openConfirmationModal()
     }
 
     const init = () => {
