@@ -30,7 +30,7 @@
       :icon="itemAction === 'deleted' ? 'undo' : 'delete'"
       :class="itemAction === 'deleted' ? 'text-accent-purple' : 'text-text-red'"
       class="row-span-1 h-full p-4 flex justify-center items-end stroke-current"
-      @click="() => (isLoading ? null : openConfirm())"
+      @click="() => (isLoading ? null : itemAction === 'deleted' ? deleteRestoreAsset() : openConfirm())"
     />
   </div>
 </template>
