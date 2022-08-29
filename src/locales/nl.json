@@ -203,6 +203,13 @@
     }
   },
   "myWorks": {
+    "overview": {
+      "deleteConfirmation":{
+        "confirmationText": "Ben je zeker dat je dit asset wilt verwijderen?",
+        "yes": "Ja, verwijder dit asset",
+        "no": "Neen"
+      }
+    },
     "upload": {
       "noItems": "Upload je eigen werken en draag zo bij aan de collectie!",
       "title": "Upload",

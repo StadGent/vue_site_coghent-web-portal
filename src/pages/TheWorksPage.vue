@@ -1,4 +1,9 @@
 <template>
+  <ConfirmationModal
+    :modalText="t('myWorks.overview.deleteConfirmation.confirmationText')"
+    :confirmButtonText="t('myWorks.overview.deleteConfirmation.yes')"
+    :declineButtonText="t('myWorks.overview.deleteConfirmation.no')"
+  />
   <section class="flex lg:gap-8 flex-col">
     <div class="pb-4 flex justify-end mt-4">
       <base-button class="hidden md:flex text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t(`myWorks.upload.title`)"></base-button>
@@ -34,6 +39,7 @@ import { BaseButton } from 'coghent-vue-3-component-library'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
+import ConfirmationModal from '../components/ConfirmationModal.vue'
 
 export default defineComponent({
   name: 'TheWorksPage',
@@ -43,6 +49,7 @@ export default defineComponent({
     BaseButton,
     CircleLoader,
     BaseIcon,
+    ConfirmationModal,
   },
   setup() {
     const { t } = useI18n()

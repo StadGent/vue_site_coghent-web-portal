@@ -27,10 +27,10 @@
     </span>
     <BaseIcon
       id="delete"
-      :icon="[itemAction === 'deleted' ? 'undo' : 'delete']"
-      :class="[itemAction === 'deleted' ? 'text-accent-purple' : 'text-text-red']"
+      :icon="itemAction === 'deleted' ? 'undo' : 'delete'"
+      :class="itemAction === 'deleted' ? 'text-accent-purple' : 'text-text-red'"
       class="row-span-1 h-full p-4 flex justify-center items-end stroke-current"
-      @click="() => (isLoading ? null : deleteRestoreAsset())"
+      @click="() => (isLoading ? null : openConfirmationModal())"
     />
   </div>
 </template>
@@ -44,6 +44,8 @@ import { ActionLinks, ProfileListItemInfo, TagInfo } from '@/components/ProfileL
 import AddAssetToStoryboxDropdown from '@/components/AddAssetToStoryboxDropdown.vue'
 import { UserAction } from 'coghent-vue-3-component-library'
 import { useUpload } from 'coghent-vue-3-component-library'
+import { useConfirmationModal } from './ConfirmationModal.vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'MyWorksActions',
@@ -78,6 +80,8 @@ export default defineComponent({
     const assetIsAddedToStoryBox = ref<boolean>(false)
     const openStoryboxes = ref<boolean>(false)
     const { updateAsset, entityToUploadComposable } = useUpload()
+    const { openConfirmationModal, setConfirmationCallback } = useConfirmationModal()
+    const { t } = useI18n()
 
     const checkAssetIsInAStorybox = async () => {
       new Promise((resolve, reject) => {
@@ -120,16 +124,19 @@ export default defineComponent({
 
     const init = () => {
       checkAssetIsInAStorybox()
+      setConfirmationCallback(deleteRestoreAsset)
     }
 
     init()
 
     return {
+      t,
       router,
       deleteRestoreAsset,
       addAssetToStorybox,
       openStoryboxes,
       assetIsAddedToStoryBox,
+      openConfirmationModal,
     }
   },
 })
