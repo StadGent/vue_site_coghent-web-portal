@@ -58,7 +58,14 @@
           :icon-shown="false"
           class="px-2 mx-1 mb-2 flex-grow-0"
         />
-        <base-button v-if="userStore.hasUser" :text="t(`profile.greeting`) + `,  ` + user.name" :on-click="goToProfilePage" custom-style="ghost-purple" :icon-shown="false" class="px-2 mx-1" />
+        <base-button
+          v-if="userStore.hasUser"
+          :text="t(`profile.greeting`) + `,  ` + user.given_name || user.name"
+          :on-click="goToProfilePage"
+          custom-style="ghost-purple"
+          :icon-shown="false"
+          class="px-2 mx-1"
+        />
       </span>
       <base-button
         v-if="userStore.hasUser && useStoryboxFeature && !isMobile && !route.query.touch"
@@ -106,7 +113,6 @@ export default defineComponent({
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
     const userStore = StoreFactory.get(UserStore)
     const user: typeof User = userStore.user
-    console.log(isTouchActive.value)
 
     watch(
       () => route.path,
