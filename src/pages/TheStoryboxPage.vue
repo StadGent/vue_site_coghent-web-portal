@@ -15,10 +15,11 @@
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
         <div class="flex flex-col lg:flex-row">
           <div class="mb-4 lg:my-0 w-full">
-            <p class="text-lg my-2 font-bold">{{ t('storybox.step2.storyTitle') }}</p>
+            <input-label :label="t('storybox.step2.storyTitle')" labelFor="storyboxTitle" :inputIsRequired="true" />
             <input
               class="bg-background-light h-10 w-full p-2"
               type="text"
+              id="storyboxTitle"
               :value="StoryBoxState.activeStorybox != null ? StoryBoxState.activeStorybox.title : ''"
               @change="(event) => (StoryBoxState.activeStorybox != null ? (StoryBoxState.activeStorybox.title = event.target.value) : '')"
             />
@@ -41,6 +42,7 @@ import { apolloClient, router, storyboxCount } from '@/app'
 import StoryBoxCreate from '@/components/StoryBoxCreate.vue'
 import { Entity, useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 import ConfirmationModal, { useConfirmationModal } from '../components/ConfirmationModal.vue'
+import InputLabel from '../components/InputLabel.vue'
 
 export enum Language {
   'DUTCH' = 'Nederlands',
@@ -51,7 +53,7 @@ export enum Language {
 }
 
 export default defineComponent({
-  components: { BaseButton, BaseModal, StoryBoxCreate, CircleLoader, ConfirmationModal },
+  components: { BaseButton, BaseModal, StoryBoxCreate, CircleLoader, ConfirmationModal, InputLabel },
   setup() {
     const { t } = useI18n()
     const closeWindow = ref<string>('show')

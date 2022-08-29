@@ -1,19 +1,19 @@
 <template>
   <section class="w-full md:w-3/5 p-8 md:p-0">
     <div v-if="hasBoxCode" class="flex flex-col py-2">
-      <label class="font-bold mb-2" for="storyCode">{{ t('profile.storybox.create.code') }}</label
-      ><input id="storyCode" v-model="storyCode" type="text" maxlength="8" minlength="8" required />
+      <input-label :label="t('profile.storybox.create.code')" labelFor="storyCode" :inputIsRequired="true" />
+      <input id="storyCode" v-model="storyCode" type="text" maxlength="8" minlength="8" required />
       <p v-if="codeInputError" class="text-text-red text-xs h-4">{{ codeInputError }}</p>
       <BoxVisitCode class="mt-8" :code="storyCode" />
     </div>
     <div v-if="!hasBoxCode" class="flex flex-col py-2">
-      <label class="font-bold mb-2" for="storyName">{{ t('profile.storybox.create.name') }}</label
-      ><input id="storyName" v-model="storyName" type="text" required />
+      <input-label :label="t('profile.storybox.create.name')" labelFor="storyName" :inputIsRequired="true" />
+      <input id="storyName" v-model="storyName" type="text" required />
       <p v-if="nameInputError" class="text-text-red text-xs h-4">{{ nameInputError }}</p>
     </div>
     <div v-if="!hasBoxCode" class="flex flex-col py-2">
-      <label class="font-bold mb-2" for="storyDescription">{{ t('profile.storybox.create.description') }}</label
-      ><textarea id="storyDescripton" v-model="storyDescription" class="h-24" type="text" />
+      <input-label :label="t('profile.storybox.create.description')" labelFor="storyDescriptio" :inputIsRequired="false" />
+      <textarea id="storyDescripton" v-model="storyDescription" class="h-24" type="text" />
     </div>
     <div class="w-full flex justify-end mt-4">
       <BaseButton :custom-style="!formValid ? 'primaryUnavailable' : 'primary'" :on-click="save" class="max-w-max" :text="t('profile.storybox.create.submit')" />
@@ -29,10 +29,11 @@ import { BaseButton } from 'coghent-vue-3-component-library'
 import { useStorybox } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import { StoryboxBuild, StoryBoxState, BoxVisitCode, useStoryBox } from 'coghent-vue-3-component-library'
+import InputLabel from '../components/InputLabel.vue'
 
 export default defineComponent({
   name: 'NewStoryPage',
-  components: { BaseButton, BoxVisitCode },
+  components: { BaseButton, BoxVisitCode, InputLabel },
   props: {},
   setup() {
     const route = useRoute()

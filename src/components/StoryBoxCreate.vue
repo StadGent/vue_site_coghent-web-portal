@@ -80,10 +80,11 @@
         </div>
       </div>
       <div class="lg:w-1/3 w-full my-4 lg:my-0">
-        <h1 class="text-lg my-2 font-bold">{{ t('storybox.story.title') }}</h1>
+        <InputLabel :label="t('storybox.story.title')" :labelFor="storyDescription" :inputIsRequired="false" />
         <textarea
           :placeholder="t('storybox.story.storyPlaceholder')"
           class="w-full lg:h-5/6 h-48 bg-background-light p-4"
+          id="storyDesctiption"
           :value="StoryBoxState.activeStorybox.description"
           @change="updateDescription"
         ></textarea>
@@ -101,9 +102,10 @@ import { router } from '@/app'
 import { StoryBoxState } from 'coghent-vue-3-component-library'
 import { useUpload } from 'coghent-vue-3-component-library'
 import { entityIsPublic } from 'coghent-vue-3-component-library'
+import InputLabel from './InputLabel.vue'
 
 export default defineComponent({
-  components: { BaseIcon, BaseDropDown },
+  components: { BaseIcon, BaseDropDown, InputLabel },
   props: {
     loading: {
       type: Boolean,
