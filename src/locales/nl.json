@@ -116,7 +116,12 @@
       }
     },
     "testimony": {
-      "noTestimonies": "Je hebt nog geen getuigenissen"
+      "noTestimonies": "Je hebt nog geen getuigenissen",
+      "deleteConfirmation": {
+        "confirmationText": "Ben je zeker dat je deze getuigenis wilt verwijderen?",
+        "yes":"Ja, verwijder deze getuigenis",
+        "no": "Neen"
+      }
     }
   },
   "visit": {

@@ -60,6 +60,7 @@ export default defineComponent({
       () => route.path,
       (path) => {
         const activePage: MenuItem | undefined = pages.value.find((page: MenuItem) => page.link == path)
+        console.log(activePage)
         if (activePage) {
           const activePageIndex: number = pages.value.indexOf(activePage)
           pages.value[activePageIndex].linkIsActive = true

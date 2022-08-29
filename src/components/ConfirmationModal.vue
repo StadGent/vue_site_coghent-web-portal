@@ -19,16 +19,22 @@ import { useI18n } from 'vue-i18n'
 type ConfirmationModalType = {
   state: ModalState
   confirmationCallback: Function | undefined
+  confirmationEntityId: string | undefined
 }
 
 const ConfirmationModalState = ref<ConfirmationModalType>({
   state: 'hide',
   confirmationCallback: undefined,
+  confirmationEntityId: undefined,
 })
 
 export const useConfirmationModal = () => {
   const updateConfirmationModal = (ConfirmationModalInput: ModalState) => {
     ConfirmationModalState.value.state = ConfirmationModalInput
+  }
+
+  const setConfirmationEntityId = (id: string) => {
+    ConfirmationModalState.value.confirmationEntityId = id
   }
 
   const setConfirmationCallback = (callback: Function) => {
@@ -44,6 +50,7 @@ export const useConfirmationModal = () => {
   }
   return {
     setConfirmationCallback,
+    setConfirmationEntityId,
     closeConfirmationModal,
     openConfirmationModal,
     ConfirmationModalState,
