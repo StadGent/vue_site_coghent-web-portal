@@ -41,6 +41,7 @@ import StoreFactory from '@/stores/StoreFactory'
 import { ConfigStore } from '@/stores/ConfigStore'
 import { uploadState, useUpload } from 'coghent-vue-3-component-library'
 import { upload_max_size_exceeded, upload_unsupported_file_extension } from '@/composables/useNotifications'
+import { apolloClient } from '@/app'
 
 export default defineComponent({
   name: 'UploadStepOne',
@@ -60,10 +61,10 @@ export default defineComponent({
     const dropzone = ref<Dropzone | null>(null)
     const MAX_FILES = ref<number>(1)
     const MAX_FILE_SIZE = ref<number>(200000000)
-    const ACCEPTED_FILE_EXTENSIONS = ref<string>(`.png, .tif, .jpg`)
+    const ACCEPTED_FILE_EXTENSIONS = ref<string>(`.png, .tif, .jpg, .jpeg`)
     const isLoading = ref<boolean>(true)
 
-    const { setBase64Image, setFile } = useUpload()
+    const { setBase64Image, setFile, detectDuplicate } = useUpload()
 
     const createDropzone = () => {
       if (dropzoneContainer.value != null) {
@@ -97,6 +98,7 @@ export default defineComponent({
             file.accepted === false ? dropzone.value!.removeFile(file) : null
             file.accepted === false ? upload_unsupported_file_extension(ACCEPTED_FILE_EXTENSIONS.value) : null
           }
+          detectDuplicate(apolloClient, val.dataURL?.split(',')[1])
           addedFiles.value = dropzone.value!.files.length
           addedFiles.value === MAX_FILES.value ? (filesUploaded.value = true) : null
           isLoading.value = false
