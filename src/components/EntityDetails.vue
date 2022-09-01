@@ -225,7 +225,7 @@ export default defineComponent({
 
     const setEntityInformation = (queryResult: any) => {
       if (queryResult.Entity) {
-        refetchTestimony(queryResult.Entity.id)
+        refetchTestimony()
         const photosArray: typeof ImageSource[] = []
         mediaFiles.value = queryResult.Entity?.mediafiles
         queryResult.Entity?.mediafiles.forEach((value: any) => {
