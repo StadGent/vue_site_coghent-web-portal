@@ -19,8 +19,8 @@
       >
         <BaseIcon
           id="storybox"
-          :icon="assetIsAddedToStoryBox === true ? 'check' : 'storybox'"
-          :class="[assetIsAddedToStoryBox === true ? 'text-text-white bg-accent-purple' : 'text-accent-purple']"
+          :icon="assetIsAddedToStoryBox.length ? 'check' : 'storybox'"
+          :class="[assetIsAddedToStoryBox.length ? 'text-text-white bg-accent-purple' : 'text-accent-purple']"
           class="row-span-1 h-full p-4 flex justify-center items-center stroke-current"
         />
       </AddAssetToStoryboxDropdown>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, onMounted, PropType, ref } from 'vue'
 import { BaseIcon } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import { StoryBoxState, useStorybox } from 'coghent-vue-3-component-library'
@@ -46,6 +46,8 @@ import { UserAction } from 'coghent-vue-3-component-library'
 import { useUpload } from 'coghent-vue-3-component-library'
 import { useConfirmationModal } from './ConfirmationModal.vue'
 import { useI18n } from 'vue-i18n'
+import { Entity } from 'coghent-vue-3-component-library'
+import { Relation } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'MyWorksActions',
@@ -77,22 +79,19 @@ export default defineComponent({
   },
   emits: [`updateTag`, `update:isLoading`, `update:tagInfo`, `update:itemAction`],
   setup(props, { emit }) {
-    const assetIsAddedToStoryBox = ref<boolean>(false)
+    const assetIsAddedToStoryBox = ref<string[]>([])
     const openStoryboxes = ref<boolean>(false)
     const { updateAsset, entityToUploadComposable } = useUpload()
     const { openConfirmationModal, setConfirmationCallback } = useConfirmationModal()
     const { t } = useI18n()
 
     const checkAssetIsInAStorybox = async () => {
-      new Promise((resolve, reject) => {
-        for (const box of StoryBoxState.value.storyboxes) {
-          const found = useStorybox(apolloClient).assetIsInStorybox(props.myWorksItem.entity, box.id)
-          found && found.key ? resolve(true) : null
-        }
-        resolve(false)
-      }).then((val) => {
-        assetIsAddedToStoryBox.value = val as boolean
-      })
+      const presentBoxIds: string[] = []
+      for (const box of StoryBoxState.value.storyboxes) {
+        const found = useStorybox(apolloClient).assetIsInStorybox(props.myWorksItem.entity, box.id)
+        found && found.key ? presentBoxIds.push(box.id) : null
+      }
+      assetIsAddedToStoryBox.value = presentBoxIds
     }
 
     const addAssetToStorybox = async (_storyBoxIds: Array<string>) => {
@@ -107,6 +106,14 @@ export default defineComponent({
       emit(`update:isLoading`, false)
     }
 
+    const deleteAssetFromStoryboxes = () => {
+      assetIsAddedToStoryBox.value.forEach(async (boxid) => {
+        await useStorybox(apolloClient).createStoryboxFromEntity(boxid)
+        StoryBoxState.value.activeStorybox.assets = StoryBoxState.value.activeStorybox.assets.filter((asset: typeof Entity) => asset.id !== props.myWorksItem.id)
+        useStorybox(apolloClient).createNew()
+      })
+    }
+
     const deleteRestoreAsset = async () => {
       emit(`update:isLoading`, true)
       await entityToUploadComposable(props.myWorksItem.entity.id, apolloClient)
@@ -114,6 +121,10 @@ export default defineComponent({
       if (props.itemAction) {
         if (props.itemAction === 'deleted') action = 'updated'
         if (props.itemAction === 'updated') action = 'deleted'
+      }
+      checkAssetIsInAStorybox()
+      if (action == 'deleted') {
+        deleteAssetFromStoryboxes()
       }
       await updateAsset(props.myWorksItem.id, action, apolloClient)
       await entityToUploadComposable(props.myWorksItem.entity.id, apolloClient)
@@ -127,11 +138,10 @@ export default defineComponent({
       openConfirmationModal()
     }
 
-    const init = () => {
+    onMounted(async () => {
+      await useStorybox(apolloClient).getStoryboxes()
       checkAssetIsInAStorybox()
-    }
-
-    init()
+    })
 
     return {
       t,
