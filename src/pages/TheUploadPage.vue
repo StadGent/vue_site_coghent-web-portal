@@ -126,7 +126,7 @@ export default defineComponent({
     const closeWizard = () => {
       setStatus(UploadStatus.Waiting)
       openCloseUpload('hide')
-      router.push(`myWorks`)
+      router.push(`mijnobjecten`)
     }
 
     const prepareWizardData = () => {
