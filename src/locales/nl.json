@@ -243,9 +243,9 @@
         "metadata": {
           "title": "Informatie die we heel graag kennen",
           "q1": "(Originele) titel van het werk",
-          "q2": "Beschrijving (waarover gaat het werk, wat is er afgebeeld,...)",
-          "q3": "Wie heeft het werk gemaakt (fotograaf, kunstenaar,...)?",
-          "q4": "Wanneer is het werk gemaakt (datum, periode,...)?"
+          "q2": "Beschrijving (waarover gaat dit object, wat is er afgebeeld, …)",
+          "q3": "Wie heeft het object gemaakt( fotograaf, kunstenaar, …)?",
+          "q4": "Wanneer is het object gemaakt (datum, periode, …)?"
         },
         "relation": {
           "title": "Voeg tags toe aan het object",
@@ -264,8 +264,8 @@
       },
       "steps": {
         "stepOne": "Bestand opladen",
-        "stepTwo": "Object verifiëren",
-        "stepThree": "Details aanvullen",
+        "stepTwo": "Details aanvullen",
+        "stepThree": "Object verifiëren",
         "stepFour": "Verzenden"
       }
     }
