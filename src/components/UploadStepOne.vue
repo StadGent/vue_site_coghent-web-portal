@@ -98,7 +98,13 @@ export default defineComponent({
             file.accepted === false ? dropzone.value!.removeFile(file) : null
             file.accepted === false ? upload_unsupported_file_extension(ACCEPTED_FILE_EXTENSIONS.value) : null
           }
-          detectDuplicate(apolloClient, val.dataURL?.split(',')[1])
+
+          const reader = new FileReader()
+          reader.onloadend = function () {
+            detectDuplicate(apolloClient, reader.result)
+          }
+
+          reader.readAsBinaryString(val)
           addedFiles.value = dropzone.value!.files.length
           addedFiles.value === MAX_FILES.value ? (filesUploaded.value = true) : null
           isLoading.value = false
