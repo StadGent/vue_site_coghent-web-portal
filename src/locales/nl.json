@@ -92,7 +92,7 @@
     "greeting": "Hoi",
     "details": "Account details",
     "stories": "Mijn verhalen",
-    "works": "Mijn werken",
+    "works": "Mijn objecten",
     "testimonies": "Mijn getuigenissen",
     "picture": "Profielfoto",
     "username": "Gebruikersnaam",
@@ -216,10 +216,10 @@
       }
     },
     "upload": {
-      "noItems": "Upload je eigen werken en draag zo bij aan de collectie!",
+      "noItems": "Upload je eigen objecten en draag zo bij aan de collectie!",
       "title": "Upload",
       "stepOne": {
-        "title": "Fijn dat je wil bijdragen aan onze collectie! We zijn benieuwd naar jouw werk...",
+        "title": "Fijn dan je wil bijdragen aan onze collectie! We zijn benieuwd naar jouw object…",
         "sleep": "Sleep je bestand in dit venster",
         "uploadFromComputer": "Of upload vanop je computer"
       },
@@ -239,16 +239,16 @@
         }
       },
       "stepThree": {
-        "title": "Ken je meer gegevens over de oorspronkelijke maker van het werk?",
+        "title": "Ken je meer gegevens over de oorspronkelijke maker van het object?",
         "metadata": {
           "title": "Informatie die we heel graag kennen",
-          "q1": "(Originele) title van het werk",
+          "q1": "(Originele) titel van het werk",
           "q2": "Beschrijving (waarover gaat het werk, wat is er afgebeeld,...)",
           "q3": "Wie heeft het werk gemaakt (fotograaf, kunstenaar,...)?",
           "q4": "Wanneer is het werk gemaakt (datum, periode,...)?"
         },
         "relation": {
-          "title": "Voeg relaties toe aan je werk, locaties, objecten, ...",
+          "title": "Voeg tags toe aan het object",
           "search": "zoek relaties",
           "relations": "Relaties"
         }
@@ -264,9 +264,9 @@
       },
       "steps": {
         "stepOne": "Bestand opladen",
-        "stepTwo": "Werk verifiëren",
+        "stepTwo": "Object verifiëren",
         "stepThree": "Details aanvullen",
-        "stepFour": "Controle voor verzenden"
+        "stepFour": "Verzenden"
       }
     }
   },

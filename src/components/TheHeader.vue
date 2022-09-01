@@ -137,11 +137,11 @@ export default defineComponent({
     }
 
     const goToProfilePage = () => {
-      router.push({ path: '/mystories', query: route.query })
+      router.push({ path: '/mijnverhalen', query: route.query })
     }
 
     const goToVerhalenBox = () => {
-      router.push({ path: '/mystories', query: route.query })
+      router.push({ path: '/mijnverhalen', query: route.query })
     }
 
     const checkAction = () => {

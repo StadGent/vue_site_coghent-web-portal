@@ -12,10 +12,10 @@
       </div>
       <template #popper>
         <div class="grid grid-cols-2 font-bold text-center gap-2 p-2">
-          <router-link to="/mystories/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
+          <router-link to="/mijnverhalen/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
             ><p>{{ t('profile.storybox.create.create-storybox') }}</p></router-link
           >
-          <router-link :to="{ path: '/mystories/new', query: { code: true } }" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer">
+          <router-link :to="{ path: '/mijnverhalen/new', query: { code: true } }" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer">
             <p>{{ t('profile.storybox.create.create-storybox-with-code') }}</p></router-link
           >
         </div>
@@ -32,10 +32,10 @@
           </div>
           <template #popper>
             <div class="grid grid-cols-2 font-bold text-center gap-2 p-2">
-              <router-link to="/mystories/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
+              <router-link to="/mijnverhalen/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
                 ><p>{{ t('profile.storybox.create.create-storybox') }}</p></router-link
               >
-              <router-link :to="{ path: '/mystories/new', query: { code: true } }" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer">
+              <router-link :to="{ path: '/mijnverhalen/new', query: { code: true } }" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer">
                 <p>{{ t('profile.storybox.create.create-storybox-with-code') }}</p></router-link
               >
             </div>
@@ -98,7 +98,7 @@ export default defineComponent({
           title: title ? title.value : _box.id,
           description: description ? description.value : '',
           code: undefined,
-          onClickUrl: `/mystories/${_box.id}`,
+          onClickUrl: `/mijnverhalen/${_box.id}`,
           type: ProfileListItemType.story,
         } as ProfileListItemInfo)
       }

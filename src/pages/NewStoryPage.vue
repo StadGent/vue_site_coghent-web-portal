@@ -80,7 +80,7 @@ export default defineComponent({
           const newFrame = useStorybox(apolloClient).linkBoxCodeToUser(String(storyCode.value))
           newFrame
             .then(() => {
-              router.push('/mystories')
+              router.push('/mijnverhalen')
             })
             .catch((err: Error) => {
               codeInputError.value = t('storybox.new.linkedCode')
@@ -92,7 +92,7 @@ export default defineComponent({
             description: storyDescription.value,
           } as typeof StoryboxBuild
           await useStorybox(apolloClient).createNew()
-          router.push(`/mystories`)
+          router.push(`/mijnverhalen`)
         }
       }
     }

@@ -44,7 +44,7 @@ const useMenu = () => {
     {
       id: `Storybox`,
       title: t(`profile.stories`),
-      link: `/myStories`,
+      link: `/mijnverhalen`,
       localLink: true,
       requireAuth: true,
       isVisible: useStoryboxFeature.value && userStore.hasUser,
@@ -52,7 +52,7 @@ const useMenu = () => {
     {
       id: `Works`,
       title: t(`profile.works`),
-      link: `/myworks`,
+      link: `/mijnobjecten`,
       localLink: true,
       requireAuth: true,
       isVisible: useWorksFeature.value && userStore.hasUser,
@@ -60,7 +60,7 @@ const useMenu = () => {
     {
       id: `Testimoni`,
       title: t(`profile.testimonies`),
-      link: `/mytestimonies`,
+      link: `/mijngetuigenissen`,
       localLink: true,
       requireAuth: true,
       isVisible: useTestimonyFeature.value && userStore.hasUser,
@@ -70,7 +70,7 @@ const useMenu = () => {
     {
       id: `Profiel`,
       title: userStore.hasUser ? userStore.user.value.name : t(`buttons.login`),
-      link: userStore.hasUser ? `/mystories` : '/login',
+      link: userStore.hasUser ? `/mijnverhalen` : '/login',
       localLink: true,
       requireAuth: true,
       isVisible: true,
@@ -109,7 +109,7 @@ const useMenu = () => {
     {
       id: `Storybox`,
       title: t(`profile.stories`),
-      link: `/mystories`,
+      link: `/mijnverhalen`,
       localLink: true,
       requireAuth: true,
       isVisible: useStoryboxFeature.value,
@@ -118,7 +118,7 @@ const useMenu = () => {
     {
       id: `Works`,
       title: t(`profile.works`),
-      link: `/myworks`,
+      link: `/mijnobjecten`,
       localLink: true,
       requireAuth: true,
       isVisible: useWorksFeature.value,
@@ -127,7 +127,7 @@ const useMenu = () => {
     {
       id: `Testimoni`,
       title: t(`profile.testimonies`),
-      link: `/mytestimonies`,
+      link: `/mijngetuigenissen`,
       localLink: true,
       requireAuth: true,
       isVisible: useTestimonyFeature.value,

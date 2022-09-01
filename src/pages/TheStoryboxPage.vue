@@ -72,7 +72,7 @@ export default defineComponent({
         await useStorybox(apolloClient).createStoryboxFromEntity(storyboxId)
         loading.value = false
       }
-      StoryBoxState.value.activeStorybox ? null : router.push('/mystories')
+      StoryBoxState.value.activeStorybox ? null : router.push('/mijnverhalen')
     })
 
     document.body.classList.add('overflow-y-hidden')
@@ -85,7 +85,7 @@ export default defineComponent({
     const close = () => {
       closeWindow.value = 'hide'
       document.body.classList.remove('overflow-y-hidden')
-      router.push({ path: '/mystories' })
+      router.push({ path: '/mijnverhalen' })
     }
 
     const save = async () => {

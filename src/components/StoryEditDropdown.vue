@@ -41,7 +41,7 @@ export default defineComponent({
     const { mutate } = useMutation(DeleteEntityDocument)
 
     const editStory = () => {
-      router.push(`/mystories/${props.storyBoxInfo.id}`)
+      router.push(`/mijnverhalen/${props.storyBoxInfo.id}`)
     }
 
     const openQR = async () => {
