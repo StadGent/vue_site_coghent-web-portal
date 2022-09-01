@@ -242,7 +242,7 @@
         "title": "Ken je meer gegevens over de oorspronkelijke maker van het object?",
         "metadata": {
           "title": "Informatie die we heel graag kennen",
-          "q1": "(Originele) titel van het werk",
+          "q1": "(Originele) titel van het object",
           "q2": "Beschrijving (waarover gaat dit object, wat is er afgebeeld, …)",
           "q3": "Wie heeft het object gemaakt( fotograaf, kunstenaar, …)?",
           "q4": "Wanneer is het object gemaakt (datum, periode, …)?"
@@ -254,12 +254,12 @@
         }
       },
       "stepFour":{
-        "title": "Kijk zeker nog even na of alle gegevens over het werk dat je wil bijdragen kloppen.",
+        "title": "Kijk zeker nog even na of alle gegevens over het object dat je wil bijdragen kloppen.",
         "relations": "Relaties"
       },
       "stepDone": {
         "title": "Bedankt voor je bijdrage aan onze collectie!",
-        "info": "We hebben alle gegevens goed ontvangen en kijken nu alles na. We sturen je een berichtje van zodra het werk goedgekeurd is en op de website staat. Het zou kunnen dat we nog contact opnemen voor extra informatie, nemen foto's, ...",
+        "info": "We hebben alle gegevens goed ontvangen en kijken nu alles na. We sturen je een berichtje van zodra het object goedgekeurd is en op de website staat. Het zou kunnen dat we nog contact opnemen voor extra informatie, nemen foto's, ...",
         "thanks":"Bedankt om onze collectie nog groter te maken!"
       },
       "steps": {
