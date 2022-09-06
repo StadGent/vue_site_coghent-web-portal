@@ -40,7 +40,7 @@ import Dropzone from 'dropzone'
 import StoreFactory from '@/stores/StoreFactory'
 import { ConfigStore } from '@/stores/ConfigStore'
 import { uploadState, useUpload } from 'coghent-vue-3-component-library'
-import { upload_max_size_exceeded, upload_unsupported_file_extension } from '@/composables/useNotifications'
+import { upload_max_size_exceeded, upload_unsupported_file_extension, upload_duplicate_detected } from '@/composables/useNotifications'
 import { apolloClient } from '@/app'
 
 export default defineComponent({
@@ -101,10 +101,15 @@ export default defineComponent({
 
           const reader = new FileReader()
           reader.onloadend = function () {
-            detectDuplicate(apolloClient, reader.result)
+            detectDuplicate(apolloClient, reader.result).catch(() => {
+              for (const file of dropzone.value!.files) {
+                dropzone.value!.removeFile(file)
+              }
+              upload_duplicate_detected()
+            })
           }
-
           reader.readAsBinaryString(val)
+
           addedFiles.value = dropzone.value!.files.length
           addedFiles.value === MAX_FILES.value ? (filesUploaded.value = true) : null
           isLoading.value = false

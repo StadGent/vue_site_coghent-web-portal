@@ -72,3 +72,11 @@ export const upload_unsupported_file_extension = (_allowed_extensions: string) =
     message: `You can only upload files with extension ${_allowed_extensions}`,
   } as Notification)
 }
+
+export const upload_duplicate_detected = () => {
+  notification.add({
+    type: 'error',
+    subject: `Duplicate file`,
+    message: `This file has been detected as duplicate`,
+  } as Notification)
+}
