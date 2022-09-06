@@ -17,12 +17,19 @@
             <base-icon :icon="social.icon" class="black" />
           </div>
         </div>
-        <ul v-if="!route.query.touch" class="mt-5 flex justify-center">
+        <ul v-if="!route.query.touch" class="m-2 md:m-5 w-full flex flex-col md:flex-row items-center justify-center">
           <li>
-            <a href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline mr-4 font-light"> {{ t('footer.cookie-policy') }}</a>
+            <a href="https://stad.gent/nl/gebruiksvoorwaarden-website-stad-gent" target="_blank" class="underline font-light"> {{ t('footer.user-agreement') }}</a>
           </li>
           <li>
-            <a href="https://static1.squarespace.com/static/5fb4f5b0509a072b93557287/t/6141f82d6a4c7d11931fd043/1631713326053/CoGhent+Privacy+Policy.pdf" target="_blank" class="underline font-light">
+            <a href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline md:ml-4 font-light"> {{ t('footer.cookie-policy') }}</a>
+          </li>
+          <li>
+            <a
+              href="https://static1.squarespace.com/static/5fb4f5b0509a072b93557287/t/6141f82d6a4c7d11931fd043/1631713326053/CoGhent+Privacy+Policy.pdf"
+              target="_blank"
+              class="underline md:ml-4 font-light"
+            >
               {{ t('footer.privacy-policy') }}</a
             >
           </li>
