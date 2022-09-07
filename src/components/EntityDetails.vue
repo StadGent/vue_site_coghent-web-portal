@@ -26,9 +26,12 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <h1 v-if="result" class="text-lg font-bold">
-          {{ result.Entity?.title[0]?.value }}
-        </h1>
+        <div v-if="result" class="flex justify-between items-center">
+          <h1 class="text-lg font-bold">
+            {{ result.Entity?.title[0]?.value }}
+          </h1>
+          <BaseIcon title="Melden kwetsende content" class="cursor-pointer" icon="alert" @click="openOffensiveContentModal" />
+        </div>
         <div v-if="result" class="pt-5 font-light">
           <p v-show="result.Entity?.description && result.Entity?.description[0]">
             {{ result.Entity?.description[0]?.value }}
@@ -127,6 +130,7 @@ import StoreFactory from '@/stores/StoreFactory'
 import { parseDateAsLocaleString } from '@/helpers'
 import ToolTip, { useTooltip } from './ToolTip.vue'
 import EntityActions from './EntityActions.vue'
+import { useOffensiveContentModal } from './OffensiveContentModal.vue'
 
 type TypeObject = {
   id: string
@@ -187,6 +191,7 @@ export default defineComponent({
     const userStore = StoreFactory.get(UserStore)
     const configStore = StoreFactory.get(ConfigStore)
     const mediafileUrl = configStore.config.value.graphQlLink.replace('graphql', 'mediafile')
+    const { openOffensiveContentModal } = useOffensiveContentModal()
 
     const isDownloadable = computed(() => {
       if (mediaFiles.value && carouselPictureIndex.value !== undefined) {
@@ -374,6 +379,7 @@ export default defineComponent({
       mediafileUrl,
       toolTipState,
       isDownloadable,
+      openOffensiveContentModal,
     }
   },
 })

@@ -8,6 +8,7 @@
       <transition>
         <mobile-menu v-if="mobileMenuIsOpen === true" @isOpen="(status) => (mobileMenuIsOpen = status)" />
       </transition>
+      <offensive-content-modal />
       <details-modal />
       <creative-modal />
       <disclaimer-button v-if="!route.query.touch && !useStoryboxFeature" />
@@ -33,10 +34,11 @@ import TheFooter from './components/TheFooter.vue'
 import MobileMenu from './components/MobileMenu.vue'
 import { addGoogleData } from '@/composables/gtm'
 import Notification from '@/components/Notification.vue'
+import OffensiveContentModal from './components/OffensiveContentModal.vue'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification },
+  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification, OffensiveContentModal },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
