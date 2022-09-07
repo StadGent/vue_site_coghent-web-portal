@@ -1,12 +1,12 @@
 <template>
   <div class="relative">
     <confirmation-modal
-      :modalText="t('storybox.closeConfirmation.confirmationText')"
-      :confirmButtonText="t('storybox.closeConfirmation.yes')"
-      :declineButtonText="t('storybox.closeConfirmation.no')"
+      :modal-text="t('storybox.closeConfirmation.confirmationText')"
+      :confirm-button-text="t('storybox.closeConfirmation.yes')"
+      :decline-button-text="t('storybox.closeConfirmation.no')"
     />
   </div>
-  <BaseModal customZIndex="z-40" :modal-state="closeWindow" :large="true" :scroll="true" @hide-modal="confirmClose">
+  <BaseModal custom-z-index="z-40" :modal-state="closeWindow" :large="true" :scroll="true" @hide-modal="confirmClose">
     <div v-if="loading" class="h-full p-8 flex flex-col bg-background-light opacity-70 flex-grow absolute top-0 w-full justify-center items-center overflow-hidden">
       <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
     </div>
@@ -15,18 +15,18 @@
         <h1 class="w-full flex justify-center text-4xl mb-4 font-bold">{{ t('storybox.title') }}</h1>
         <div class="flex flex-col lg:flex-row">
           <div class="mb-4 lg:my-0 w-full">
-            <input-label :label="t('storybox.step2.storyTitle')" labelFor="storyboxTitle" :inputIsRequired="true" />
+            <input-label :label="t('storybox.step2.storyTitle')" label-for="storyboxTitle" :input-is-required="true" />
             <input
+              id="storyboxTitle"
               class="bg-background-light h-10 w-full p-2"
               type="text"
-              id="storyboxTitle"
               :value="StoryBoxState.activeStorybox != null ? StoryBoxState.activeStorybox.title : ''"
               @change="(event) => (StoryBoxState.activeStorybox != null ? (StoryBoxState.activeStorybox.title = event.target.value) : '')"
             />
           </div>
         </div>
         <story-box-create v-if="StoryBoxState.activeStorybox != null" :loading="loading" />
-        <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end mt-4">
+        <div class="object-bottom w-full h-fit pb-8 flex flex-row place-content-end mt-4 sticky bottom-0">
           <base-button :text="t('storybox.story.close')" :on-click="() => confirmClose()" custom-style="secondary" :icon-shown="false" custom-icon="storybox" class="px-2 mx-3 ml-3" />
           <base-button :text="t('storybox.story.save')" :on-click="() => save()" :icon-shown="false" custom-icon="storybox" class="bg-accent-red px-2 mx-3 ml-3" />
         </div>
