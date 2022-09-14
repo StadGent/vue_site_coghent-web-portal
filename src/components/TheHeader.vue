@@ -39,7 +39,7 @@
       <div v-if="!route.query.touch && !isMobile" class="flex flex-row gap-8">
         <div v-for="menuItem of headerItems" :key="menuItem.title" class="group sm:flex flex-col items-center pt-8 md:pt-5 hidden">
           <a target="_blank" :href="menuItem.link" class="flex items-center">
-            <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline">
+            <h2 class="md:text-lg -mt-3 md:-mt-0 lg:mt-0 text-center group-hover:underline cursor-pointer">
               {{ menuItem.title }}
             </h2>
           </a>
