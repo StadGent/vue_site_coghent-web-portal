@@ -80,7 +80,7 @@ export default defineComponent({
           const found = getMetadataOfTypeFromEntity(entity, 'fullname')
           found ? (value = found.value) : null
         }
-        if (entity.type === 'thesaurus') {
+        if (entity.type === 'getty') {
           const found = getMetadataOfTypeFromEntity(entity, 'title')
           found ? (value = found.value) : null
         }
