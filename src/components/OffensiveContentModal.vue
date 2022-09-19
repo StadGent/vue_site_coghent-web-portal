@@ -2,9 +2,8 @@
   <BaseModal :modal-state="offensiveContentModalState.modalstate" @hide-modal="closeOffensiveContentModal"
     ><section class="p-4">
       <h1 class="text-xl font-bold">{{ t('details.offensiveContent.title') }}</h1>
-      <p>{{ t('details.offensiveContent.description') }}</p>
-    </section></BaseModal
-  >
+      <p v-html="t('details.offensiveContent.description')"></p></section
+  ></BaseModal>
 </template>
 
 <script lang="ts">
