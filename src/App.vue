@@ -15,6 +15,9 @@
       <disclaimer-pop-up v-if="!route.query.touch && !useStoryboxFeature" />
     </div>
     <the-footer />
+    <div v-if="route.query.touch && keyboardState.state === 'shown'" class="fixed bottom-0 w-full z-50">
+      <OnScreenKeyboard />
+    </div>
   </div>
 </template>
 
@@ -35,16 +38,19 @@ import MobileMenu from './components/MobileMenu.vue'
 import { addGoogleData } from '@/composables/gtm'
 import Notification from '@/components/Notification.vue'
 import OffensiveContentModal from './components/OffensiveContentModal.vue'
+import OnScreenKeyboard from './components/OnScreenKeyboard.vue'
+import { useOnScreenKeyboard } from './composables/useOnScreenKeyboard'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification, OffensiveContentModal },
+  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification, OffensiveContentModal, OnScreenKeyboard },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
     const indexValue: boolean | undefined = configStore.config.value.vueAppIndex
     const route = useRoute()
     const mobileMenuIsOpen = ref<boolean>(false)
+    const { keyboardState } = useOnScreenKeyboard()
 
     if (useGoogleFeature.value === true) {
       const gtmId = configStore.config.value.google?.tagManager
@@ -80,6 +86,7 @@ export default defineComponent({
       t,
       route,
       mobileMenuIsOpen,
+      keyboardState,
     }
   },
 })

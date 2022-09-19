@@ -5,7 +5,7 @@
       <span class="text-accent-purple">{{ t('main.rich') }}</span>
     </h1>
     <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
-      <div v-show="!route.query.touch" class="w-full sm:w-8/12">
+      <div class="w-full sm:w-8/12">
         <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
       </div>
       <div :class="route.query.touch ? 'transform scale-150' : 'lg:absolute lg:right-0'">
@@ -66,11 +66,13 @@ import { useHistory } from './BreadCrumbs.vue'
 import { useRouter, useRoute } from 'vue-router'
 import useClipboard from 'vue-clipboard3'
 import { iiif, storyboxCount } from '@/app'
-import { StoryBoxState } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'AssetGrid',
   components: { BaseSearch, TheMasonry, BaseButton, Filter },
+  data: () => ({
+    input: '',
+  }),
   props: {
     defaultSearchQuery: {
       type: String,
