@@ -101,11 +101,13 @@ export default defineComponent({
 
           const reader = new FileReader()
           reader.onloadend = function () {
-            detectDuplicate(apolloClient, reader.result).catch(() => {
-              for (const file of dropzone.value!.files) {
-                dropzone.value!.removeFile(file)
+            detectDuplicate(apolloClient, reader.result).catch((err: Error) => {
+              if (err.message.includes('409')) {
+                for (const file of dropzone.value!.files) {
+                  dropzone.value!.removeFile(file)
+                }
+                upload_duplicate_detected()
               }
-              upload_duplicate_detected()
             })
           }
           reader.readAsBinaryString(val)
