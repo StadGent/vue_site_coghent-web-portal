@@ -5,7 +5,7 @@
       <the-header @isOpen="(status) => (mobileMenuIsOpen = status)" />
       <notification />
       <router-view />
-      <transition>
+      <transition name="menu">
         <mobile-menu v-if="mobileMenuIsOpen === true" @isOpen="(status) => (mobileMenuIsOpen = status)" />
       </transition>
       <offensive-content-modal />
@@ -15,9 +15,11 @@
       <disclaimer-pop-up v-if="!route.query.touch && !useStoryboxFeature" />
     </div>
     <the-footer />
-    <div v-if="route.query.touch && keyboardState.state === 'shown'" class="fixed bottom-0 w-full z-50">
-      <OnScreenKeyboard />
-    </div>
+    <transition name="keyboard">
+      <div v-if="route.query.touch && keyboardState.state === 'shown'" class="fixed bottom-0 w-full z-50">
+        <OnScreenKeyboard />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -93,13 +95,23 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.v-enter-active,
-.v-leave-active {
+.menu-enter-active,
+.menu-leave-active {
   transition: transform 0.5s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
+.menu-enter-from,
+.menu-leave-to {
   transform: translateX(-100%);
+}
+
+.keyboard-enter-active,
+.keyboard-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.keyboard-enter-from,
+.keyboard-leave-to {
+  transform: translateY(100%);
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
-  <div :class="`${keyboardClass}`"></div>
+  <div :class="`${keyboardClass}`" @mousedown="preventFocus"></div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import Keyboard from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
-import { useOnScreenKeyboard } from '../composables/useOnScreenKeyboard'
+import { useOnScreenKeyboard, keyboard } from '../composables/useOnScreenKeyboard'
 
 export default defineComponent({
   name: 'OnScreenKeyboard',
@@ -19,45 +19,56 @@ export default defineComponent({
       type: String,
     },
   },
-  data: () => ({
-    keyboard: null,
-  }),
-  mounted() {
-    this.keyboard = new Keyboard(this.keyboardClass, {
-      onChange: this.onChange,
-      onKeyPress: this.onKeyPress,
-    })
-  },
-  methods: {
-    onChange(input) {
-      this.$emit('onChange', input)
-    },
-    onKeyPress(button) {
-      this.$emit('onKeyPress', button)
-
-      /**
-       * If you want to handle the shift and caps lock buttons
-       */
-      if (button === '{shift}' || button === '{lock}') this.handleShift()
-    },
-    handleShift() {
-      let currentLayout = this.keyboard.options.layoutName
-      let shiftToggle = currentLayout === 'default' ? 'shift' : 'default'
-
-      this.keyboard.setOptions({
-        layoutName: shiftToggle,
-      })
-    },
-  },
   watch: {
     input(input) {
-      this.keyboard.setInput(input)
+      keyboard.value.setInput(input)
     },
   },
-  setup: (props) => {
+  emits: ['onChange', 'onKeyPress'],
+  setup: (props, { emit }) => {
     const { keyboardState } = useOnScreenKeyboard()
 
-    return { keyboardState }
+    const preventFocus = (event) => {
+      event.preventDefault()
+    }
+
+    onMounted(() => {
+      const onChange = (input) => {
+        emit('onChange', input)
+        const inputEvent = new CustomEvent('virtualKeyboardEvent', { detail: { input } })
+        document.dispatchEvent(inputEvent)
+      }
+
+      const onKeyPress = (button) => {
+        emit('onKeyPress', button)
+
+        /**
+         * If you want to handle the shift and caps lock buttons
+         */
+        if (button === '{shift}' || button === '{lock}') handleShift()
+
+        if (button === '{enter}') {
+          useOnScreenKeyboard().hideKeyboard()
+        }
+      }
+
+      const handleShift = () => {
+        let currentLayout = keyboard.value.options.layoutName
+        let shiftToggle = currentLayout === 'default' ? 'shift' : 'default'
+
+        keyboard.value.setOptions({
+          layoutName: shiftToggle,
+        })
+      }
+
+      const keyboardObject = new Keyboard({
+        onChange: onChange,
+        onKeyPress: onKeyPress,
+      })
+      keyboard.value = keyboardObject
+    })
+
+    return { keyboardState, preventFocus, keyboard }
   },
 })
 </script>

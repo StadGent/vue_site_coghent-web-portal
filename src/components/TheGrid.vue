@@ -6,7 +6,7 @@
     </h1>
     <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
       <div class="w-full sm:w-8/12">
-        <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" />
+        <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" @focus="showKeyboard()" @blur="hideKeyboard()" />
       </div>
       <div :class="route.query.touch ? 'transform scale-150' : 'lg:absolute lg:right-0'">
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
@@ -66,6 +66,7 @@ import { useHistory } from './BreadCrumbs.vue'
 import { useRouter, useRoute } from 'vue-router'
 import useClipboard from 'vue-clipboard3'
 import { iiif, storyboxCount } from '@/app'
+import { useOnScreenKeyboard, keyboard } from '../composables/useOnScreenKeyboard'
 
 export default defineComponent({
   name: 'AssetGrid',
@@ -123,6 +124,7 @@ export default defineComponent({
     const queryEnabled = ref<boolean>(true)
     const { getActiveBox, activeBox } = useActiveBox()
     const { toClipboard } = useClipboard()
+    const { showKeyboard, hideKeyboard } = useOnScreenKeyboard()
 
     const getSelectedFilters = computed<string[]>(() => {
       if (props.defaultRelations?.length > 0 && selectedFilters.value.length === 0) {
@@ -134,7 +136,6 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      console.log(route)
       if (route.query.touch) {
         queryEnabled.value = false
         getActiveBox().then((result) => {
@@ -281,6 +282,11 @@ export default defineComponent({
       }
     }
 
+    document.addEventListener('virtualKeyboardEvent', (e) => {
+      //@ts-ignore
+      searchQueryForInput.value = e.detail.input
+    })
+
     return {
       t,
       limit,
@@ -303,6 +309,8 @@ export default defineComponent({
       clearHistory,
       route,
       copyUrl,
+      showKeyboard,
+      hideKeyboard,
     }
   },
 })

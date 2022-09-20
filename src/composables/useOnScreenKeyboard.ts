@@ -2,7 +2,9 @@ import { ref } from 'vue'
 
 type KeyboardState = 'shown' | 'hidden'
 
-const keyboardState = ref({ state: 'hidden', input: '' })
+const keyboardState = ref({ state: 'hidden' })
+
+export const keyboard = ref(undefined)
 
 export const useOnScreenKeyboard = () => {
   const changeKeyboardState = (state: KeyboardState) => {
@@ -10,6 +12,10 @@ export const useOnScreenKeyboard = () => {
   }
 
   const hideKeyboard = () => {
+    if (keyboard.value) {
+      //@ts-ignore
+      keyboard.value.clearInput()
+    }
     changeKeyboardState('hidden')
   }
 

@@ -57,7 +57,13 @@
             :icon-shown="true"
             :on-click="openDetailsModal"
           />
-          <a v-if="isDownloadable" class="bg-background-light rounded-full p-4" :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')" target="_blank" download>
+          <a
+            v-if="isDownloadable && !route.query.touch"
+            class="bg-background-light rounded-full p-4"
+            :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')"
+            target="_blank"
+            download
+          >
             <baseIcon icon="download" />
           </a>
         </div>
@@ -65,7 +71,7 @@
           <div class="flex justify-between items-center">
             <h2 class="font-bold mb-4 sm:mb-0">{{ t('details.testimony') }}</h2>
             <tool-tip :title="t('main.tooltips.login.title')" :description="t('main.tooltips.login.description')" placement="bottom">
-              <div class="w-auto">
+              <div v-if="!route.query.touch" class="w-auto">
                 <BaseButton custom-icon="talk" :icon-shown="true" custom-style="secondary" :text="t('details.addTestimony')" @click="writeTestimony" />
               </div>
             </tool-tip>
