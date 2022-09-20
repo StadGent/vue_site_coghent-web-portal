@@ -6,6 +6,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import Keyboard from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
+import layout from 'simple-keyboard-layouts/build/layouts/french'
 import { useOnScreenKeyboard, keyboard } from '../composables/useOnScreenKeyboard'
 
 export default defineComponent({
@@ -64,6 +65,10 @@ export default defineComponent({
       const keyboardObject = new Keyboard({
         onChange: onChange,
         onKeyPress: onKeyPress,
+        excludeFromLayout: {
+          default: ['@', '.com'],
+        },
+        ...layout,
       })
       keyboard.value = keyboardObject
     })
