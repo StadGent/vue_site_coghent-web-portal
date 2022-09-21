@@ -6,7 +6,15 @@
     </h1>
     <div v-show="defaultRelations.length === 0 && !noHeader" class="w-full py-6 flex flex-col lg:flex-row justify-center items-center relative">
       <div class="w-full sm:w-8/12">
-        <base-search v-model="searchQueryForInput" :loading="loading" :search-label="t('main.search')" @on-click="getData" @keyup.enter="getData" @focus="showKeyboard()" @blur="hideKeyboard()" />
+        <base-search
+          v-model="searchQueryForInput"
+          :loading="loading"
+          :search-label="t('main.search')"
+          @on-click="getData(true)"
+          @keyup.enter="getData(true)"
+          @focus="showKeyboard()"
+          @blur="hideKeyboard()"
+        />
       </div>
       <div :class="route.query.touch ? 'transform scale-150' : 'lg:absolute lg:right-0'">
         <base-button class="inline⁻block w-max ml-10" :text="t('buttons.surprise')" custom-style="ghost-black" custom-icon="surprise" :icon-shown="true" :on-click="() => resetQuery()" />
@@ -201,7 +209,7 @@ export default defineComponent({
       }
     })
 
-    const getData = () => {
+    const getData = (forSearch: boolean = false) => {
       if (searchQueryForQuery.value !== searchQueryForInput.value) {
         if (masonry.value && masonry.value.contructTiles) {
           masonry.value.contructTiles(limit, true)
@@ -212,6 +220,9 @@ export default defineComponent({
 
       if (searchQueryForQuery.value === '' && searchQueryForInput.value === '') {
         resetQuery()
+      }
+      if (forSearch) {
+        frameList.value = []
       }
     }
 
