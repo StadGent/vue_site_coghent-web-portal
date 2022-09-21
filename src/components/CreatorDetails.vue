@@ -70,7 +70,7 @@ export default defineComponent({
   setup: () => {
     const { t } = useI18n()
     const id = asString(useRoute().params['creatorID'])
-    const { result, onResult } = useQuery(GetCreatorByIdDocument, { id })
+    const { result, onResult, onError } = useQuery(GetCreatorByIdDocument, { id })
     const { result: additionalMetaDataResult, onResult: onAdditionalMetaDataResult, refetch: additionalMetaDataRefetch } = useQuery(GetEntityByIdDocument, { id: '' })
     const router = useRouter()
     const route = useRoute()
@@ -143,9 +143,11 @@ export default defineComponent({
             additionalMetaDataRefetch({ id })
           })
         }
-      } else {
-        router.push({ path: '/entity/not-found', query: route.query })
       }
+    })
+
+    onError(() => {
+      router.push({ path: '/entity/not-found', query: route.query })
     })
 
     onAdditionalMetaDataResult((queryResult) => {
