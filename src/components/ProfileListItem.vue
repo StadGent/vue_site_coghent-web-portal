@@ -161,6 +161,8 @@ export default defineComponent({
         for (const key of Object.values(Publication)) {
           if (props.profileListItemInfo.status === PublicationStatus[key as string]) {
             activeKey = key
+          } else if (props.profileListItemInfo.status === 'afgekeurd') {
+            activeKey = 'declined'
           }
         }
         switch (activeKey) {
@@ -171,6 +173,10 @@ export default defineComponent({
           case Publication.Public:
             tagInfo.value.title = 'Gepubliceerd'
             tagInfo.value.style = 'bg-accent-lightGreen text-accent-lightGreen'
+            break
+          case Publication.Declined:
+            tagInfo.value.title = 'Afgewezen'
+            tagInfo.value.style = 'bg-text-red text-text-red'
             break
         }
 
