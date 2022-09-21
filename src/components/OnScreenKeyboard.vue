@@ -71,6 +71,8 @@ export default defineComponent({
         ...layout,
       })
       keyboard.value = keyboardObject
+      const inputEvent = new CustomEvent('virtualKeyboardEvent', { detail: { input: '' } })
+      document.dispatchEvent(inputEvent)
     })
 
     return { keyboardState, preventFocus, keyboard }
