@@ -121,7 +121,7 @@ export default defineComponent({
     }
 
     onResult((queryResult: any) => {
-      if (!queryResult.error) {
+      if (!queryResult.error && queryResult.data.Entity) {
         const tempMetadata: Array<Metadata> = queryResult.data.Entity?.metadata
         metadata.value = tempMetadata.filter((item) => item.value != '')
         person.value = {
@@ -130,7 +130,6 @@ export default defineComponent({
         }
 
         getDataFromRelations(queryResult.data.Entity.relations, ['geslacht'])
-
         queryResult.data.Entity?.relations.forEach((relation: typeof Relation) => {
           if (relation.label == 'heeftGeboorte' || relation.label == 'heeftOverlijden') {
             additionalInfoIds.push(relation.key)
@@ -138,6 +137,7 @@ export default defineComponent({
         })
 
         if (additionalInfoIds) {
+          console.log(additionalInfoIds)
           additionalInfoIds.forEach((url) => {
             const id = url.replace('entities/', '')
             additionalMetaDataRefetch({ id })
@@ -154,9 +154,11 @@ export default defineComponent({
         const infoArray: Array<Metadata> = createObjectFromAdditionalData(entity)
 
         infoArray.forEach((info: Metadata) => {
-          if (person.value?.extraInfo) {
+          if (person.value?.extraInfo && !person.value.extraInfo.map((el) => el.key).includes(info.key)) {
+            console.log({ info })
             person.value?.extraInfo.push(info)
           } else if (person.value) {
+            console.log(metadata.value)
             person.value.extraInfo = metadata.value
           }
         })
