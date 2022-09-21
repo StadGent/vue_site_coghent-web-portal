@@ -137,7 +137,6 @@ export default defineComponent({
         })
 
         if (additionalInfoIds) {
-          console.log(additionalInfoIds)
           additionalInfoIds.forEach((url) => {
             const id = url.replace('entities/', '')
             additionalMetaDataRefetch({ id })
@@ -157,7 +156,6 @@ export default defineComponent({
 
         infoArray.forEach((info: Metadata) => {
           if (person.value?.extraInfo && !person.value.extraInfo.map((el) => el.key).includes(info.key)) {
-            console.log({ info })
             person.value?.extraInfo.push(info)
           } else if (person.value) {
             console.log(metadata.value)
