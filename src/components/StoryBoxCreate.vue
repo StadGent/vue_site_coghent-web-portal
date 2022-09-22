@@ -43,7 +43,7 @@
                       :class="entityIsPublic(asset) === true ? 'hover:underline cursor-pointer' : ''"
                       @click="() => (entityIsPublic(asset) === true ? router.push(`/entity/${asset.id}`) : null)"
                     >
-                      {{ asset.title[0] ? stripUserUploadPrefix(asset.title[0].value) : 'asset' }}
+                      {{ asset.title[0] ? asset.title[0].value : 'asset' }}
                     </h1>
                     <p :id="asset.id" class="text-sm invisible lg:visible">{{ asset.description[0] && asset.description[0].value != '' ? asset.description[0].value.substr(0, 50) + '..' : '' }}</p>
                   </div>
@@ -119,7 +119,6 @@ export default defineComponent({
     const assets = ref<Array<typeof Entity>>([])
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
     const draggingAssetComesBelow = ref<string | null>(null)
-    const { stripUserUploadPrefix } = useUpload()
     const assetTimingPresent = ref<boolean>(false)
 
     const fallBackDeleteAsset = () => {
@@ -255,7 +254,6 @@ export default defineComponent({
       assets,
       assetTimings,
       draggingAssetComesBelow,
-      stripUserUploadPrefix,
       entityIsPublic,
       assetTimingPresent,
     }

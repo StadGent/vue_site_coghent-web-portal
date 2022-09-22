@@ -70,7 +70,7 @@ export default defineComponent({
           let userAction = getMetadataOfTypeFromEntity(asset, 'user_action')
           myWorks.value.push({
             id: asset.id,
-            title: title ? stripUserUploadPrefix(title.value) : 'Title placeholder',
+            title: title ? title.value : 'Title placeholder',
             description: maker ? maker.value : 'Onbekend',
             // dateCreated: '24 februari 2020',
             onClickUrl: `upload?${ASSET_ID_PARAM}=${asset.id}`,
