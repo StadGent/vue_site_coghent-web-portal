@@ -228,6 +228,7 @@ export const useDetailsModal = () => {
     if (!data) return
     entity.value = data
     entity.value.metadataCollection = entity.value.metadataCollection.filter((collection: any) => collection.label != 'vervaardiger')
+    console.log(useFilter().removeMetadataCollectionByLabel(entity.value, ['publication_status']))
     collectieNaam.value = useFilter().getParentCollectionByNameIfTitle(entity.value, 'Collectie.naam')
     const objectNameData = useFilter().getDataOfCollection(entity.value, 'Entiteit.classificatie')
     const objectNamesData = useFilter().getMetadataCollectionByLabel(objectNameData, 'objectnaam')
