@@ -48,9 +48,8 @@ export default defineComponent({
          */
         if (button === '{shift}' || button === '{lock}') handleShift()
 
-        if (button === '{enter}') {
-          useOnScreenKeyboard().hideKeyboard()
-        }
+        const inputEvent = new CustomEvent('virtualKeyboardEvent', { detail: { input: button } })
+        document.dispatchEvent(inputEvent)
       }
 
       const handleShift = () => {

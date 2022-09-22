@@ -295,7 +295,14 @@ export default defineComponent({
 
     document.addEventListener('virtualKeyboardEvent', (e) => {
       //@ts-ignore
-      searchQueryForInput.value = e.detail.input
+      if (e.detail.input !== '{enter}') {
+        //@ts-ignore
+        searchQueryForInput.value = e.detail.input
+      } else {
+        frameList.value = []
+        getData()
+        hideKeyboard()
+      }
     })
 
     return {
