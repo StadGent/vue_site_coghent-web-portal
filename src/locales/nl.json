@@ -218,6 +218,12 @@
         "confirmationText": "Ben je zeker dat je dit asset wilt verwijderen?",
         "yes": "Ja, verwijder dit asset",
         "no": "Neen"
+      },
+      "statuses": {
+        "declined": "Afgewezen",
+        "public": "Gepubliceerd",
+        "validate": "In behandeling"
+
       }
     },
     "upload": {

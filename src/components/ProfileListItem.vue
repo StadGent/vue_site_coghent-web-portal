@@ -1,8 +1,8 @@
 <template>
   <section
-    :class="`${isLoading ? 'animate-pulse opacity-30' : ''} ${isClickable ? 'cursor-pointer' : ''} bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${
-      profileListItemInfo.pictureUrl ? 'flex' : ''
-    }`"
+    :class="`${isLoading ? 'animate-pulse opacity-30' : ''} ${isClickable ? 'cursor-pointer' : ''} ${
+      tagInfo.title === 'Afgewezen' ? 'opacity-50' : ''
+    } bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
     @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
   >
     <div class="w-full flex sm:flex-row flex-col-reverse">
@@ -39,7 +39,7 @@
       </div>
     </div>
     <MyWorksActions
-      v-if="showWorksFeature"
+      v-if="showWorksFeature && tagInfo.title !== 'Afgewezen'"
       v-model:tagInfo="tagInfo"
       v-model:isLoading="isLoading"
       v-model:itemAction="itemAction"
@@ -167,15 +167,15 @@ export default defineComponent({
         }
         switch (activeKey) {
           case Publication.Validate:
-            tagInfo.value.title = 'In behandeling'
+            tagInfo.value.title = t('myWorks.overview.statuses.validate')
             tagInfo.value.style = 'bg-accent-orange text-accent-orange'
             break
           case Publication.Public:
-            tagInfo.value.title = 'Gepubliceerd'
+            tagInfo.value.title = t('myWorks.overview.statuses.public')
             tagInfo.value.style = 'bg-accent-lightGreen text-accent-lightGreen'
             break
           case Publication.Declined:
-            tagInfo.value.title = 'Afgewezen'
+            tagInfo.value.title = t('myWorks.overview.statuses.declined')
             tagInfo.value.style = 'bg-text-red text-text-red'
             break
         }
