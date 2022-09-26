@@ -6,41 +6,21 @@
     :declineButtonText="t('storybox.deleteConfirmation.no')"
   />
   <div class="w-full flex justify-end">
-    <VDropdown>
-      <div class="pb-4 flex justify-end mt-4">
-        <base-button class="hidden md:flex text-text-white" :on-click="() => router.push(uploadRoute)" :icon-shown="true" custom-icon="newItem" :text="t('storybox.createNew')"></base-button>
-      </div>
-      <template #popper>
-        <div class="grid grid-cols-2 font-bold text-center gap-2 p-2">
-          <router-link to="/mijnverhalen/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
-            ><p>{{ t('profile.storybox.create.create-storybox') }}</p></router-link
-          >
-          <router-link :to="{ path: '/mijnverhalen/new', query: { code: true } }" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer">
-            <p>{{ t('profile.storybox.create.create-storybox-with-code') }}</p></router-link
-          >
-        </div>
-      </template>
-    </VDropdown>
+    <div class="pb-4 flex justify-end mt-4">
+      <router-link to="/mijnverhalen/new">
+        <base-button class="hidden md:flex text-text-white" :icon-shown="true" custom-icon="newItem" :text="t('storybox.createNew')"></base-button>
+      </router-link>
+    </div>
   </div>
   <section class="md:flex md:mt-4 gap-8">
     <profile-side-menu />
     <section class="w-full p-4 md:p-0">
       <div class="w-full flex justify-end mb-8 sm:mb-0">
-        <VDropdown>
-          <div class="md:hidden fixed bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
+        <div class="md:hidden fixed bottom-16 right-10 bg-accent-purple rounded-full p-4 flex justify-center items-center shadow-lg">
+          <router-link to="/mijnverhalen/new">
             <BaseIcon icon="newItem" class="stroke-current p-1 cursor-pointer text-text-white" />
-          </div>
-          <template #popper>
-            <div class="grid grid-cols-2 font-bold text-center gap-2 p-2">
-              <router-link to="/mijnverhalen/new" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer"
-                ><p>{{ t('profile.storybox.create.create-storybox') }}</p></router-link
-              >
-              <router-link :to="{ path: '/mijnverhalen/new', query: { code: true } }" class="flex items-center w-24 h-24 bg-background-dark p-2 cursor-pointer">
-                <p>{{ t('profile.storybox.create.create-storybox-with-code') }}</p></router-link
-              >
-            </div>
-          </template>
-        </VDropdown>
+          </router-link>
+        </div>
       </div>
       <div v-if="loading && storyBoxItems.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
         <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
