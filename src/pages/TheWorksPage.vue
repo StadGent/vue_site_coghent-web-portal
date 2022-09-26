@@ -73,7 +73,7 @@ export default defineComponent({
             title: title ? title.value : 'Title placeholder',
             description: maker ? maker.value : 'Onbekend',
             // dateCreated: '24 februari 2020',
-            onClickUrl: `upload?${ASSET_ID_PARAM}=${asset.id}`,
+            onClickUrl: '/entity/' + asset.id,
             pictureUrl: getMediafileLink(mediafiles),
             // pictureUrl: generateUrl(getFilename(mediafiles[0] ? mediafiles[0] : null), 'full', 48),
             status: publicationStatus ? publicationStatus.value : null,

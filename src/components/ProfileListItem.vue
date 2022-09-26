@@ -1,7 +1,7 @@
 <template>
   <section
     :class="`${isLoading ? 'animate-pulse opacity-30' : ''} ${isClickable ? 'cursor-pointer' : ''} ${
-      tagInfo.title === 'Afgewezen' ? 'opacity-50' : ''
+      taginfo && tagInfo.title === 'Afgewezen' ? 'opacity-50' : ''
     } bg-neutral-0 rounded-t-md sm:rounded-l-md mb-8 sm:mb-4 w-full flex-col sm:flex-row ${profileListItemInfo.pictureUrl ? 'flex' : ''}`"
     @click="isClickable ? router.push(profileListItemInfo.onClickUrl) : null"
   >
