@@ -198,6 +198,7 @@ export default defineComponent({
     const configStore = StoreFactory.get(ConfigStore)
     const mediafileUrl = configStore.config.value.graphQlLink.replace('graphql', 'mediafile')
     const { openOffensiveContentModal } = useOffensiveContentModal()
+    const { t } = useI18n()
 
     const isDownloadable = computed(() => {
       if (mediaFiles.value && carouselPictureIndex.value !== undefined) {
@@ -236,6 +237,7 @@ export default defineComponent({
 
     const setEntityInformation = (queryResult: any) => {
       if (queryResult.Entity) {
+        document.title = `De Collectie van de Gentenaar ${queryResult.Entity.title[0].value ? '| ' + queryResult.Entity.title[0].value : ''}`
         refetchTestimony()
         const photosArray: typeof ImageSource[] = []
         mediaFiles.value = queryResult.Entity?.mediafiles
@@ -354,8 +356,6 @@ export default defineComponent({
         createTestimony({ entityInfo: baseTestimony.value, assetId: result.value.Entity.id })
       }
     }
-
-    const { t } = useI18n()
 
     return {
       result,
