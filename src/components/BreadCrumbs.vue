@@ -2,8 +2,10 @@
   <div class="flex">
     <section class="flex items-center bg-background-medium w-min">
       <div @click="goToHomePage"><base-icon icon="home" class="p-2 purple cursor-pointer align-center" /></div>
-      <div @click="navigateToHistoryPage('backward')"><base-icon icon="arrowLeft" class="p-2 purple cursor-pointer" /></div>
-      <div @click="navigateToHistoryPage('forward')"><base-icon icon="arrowRight" class="p-2 purple cursor-pointer" /></div>
+      <div @click="navigateToHistoryPage('backward')"><base-icon icon="arrowLeft" :class="currentPageIndex - 1 != -1 ? 'p-2 purple cursor-pointer' : 'p-2 gray cursor-not-allowed blur-lg'" /></div>
+      <div @click="navigateToHistoryPage('forward')">
+        <base-icon icon="arrowRight" :class="currentPageIndex < history.length - 1 ? 'p-2 purple cursor-pointer' : 'p-2 gray cursor-not-allowed blur-lg'" />
+      </div>
     </section>
     <section class="flex">
       <div v-if="history.length >= 10" class="flex items-center">
@@ -59,7 +61,7 @@ export const useHistory = () => {
   }
 
   const navigateToHistoryPage = (action: string) => {
-    if (currentPage.value) {
+    if (currentPage.value && history.value.length > 1) {
       const pageIndex: number = history.value.indexOf(currentPage.value)
       router.push({ path: history.value[action == 'forward' ? pageIndex + 1 : pageIndex - 1].url, query: route.query })
     }
@@ -110,5 +112,8 @@ export default defineComponent({
 }
 .black {
   stroke: black;
+}
+.gray {
+  stroke: gray;
 }
 </style>
