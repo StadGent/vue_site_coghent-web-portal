@@ -2,7 +2,11 @@
   <VDropdown>
     <slot></slot>
     <template #popper>
-      <div><BaseButton custom-style="storybox-black" :text="t('storybox.edit')" custom-icon="edit" :icon-shown="true" @click="editStory" /></div>
+      <div>
+        <router-link :to="`/mijnverhalen/${storyBoxInfo.id}`" target="_blank"
+          ><BaseButton custom-style="storybox-black" :text="t('storybox.edit')" custom-icon="edit" :icon-shown="true"
+        /></router-link>
+      </div>
       <div><BaseButton v-close-popper custom-style="storybox-black" :text="t('storybox.showQR')" custom-icon="qrCode" :icon-shown="true" @click="openQR" /></div>
       <div><BaseButton v-close-popper custom-style="storybox-red" :text="t('storybox.delete')" custom-icon="wasteBasket" :icon-shown="true" @click="handleConfirmationModal" /></div>
     </template>
@@ -40,10 +44,6 @@ export default defineComponent({
 
     const { mutate } = useMutation(DeleteEntityDocument)
 
-    const editStory = () => {
-      router.push(`/mijnverhalen/${props.storyBoxInfo.id}`)
-    }
-
     const openQR = async () => {
       let code = props.storyBoxInfo.code
       const visiter = await useStorybox(apolloClient).getVisiterFromFrame(props.storyBoxInfo.id)
@@ -70,7 +70,6 @@ export default defineComponent({
     }
 
     return {
-      editStory,
       deleteStory,
       t,
       openQR,
