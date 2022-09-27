@@ -40,7 +40,7 @@
         <section>
           <p class="font-bold text-xl pb-4">{{ t('copyright.creativeCommonsTitle') }}</p>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-full md:w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/cc-zero.png" /></div>
+            <div class="w-full w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/cc-zero.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.CC0') }}</p>
               <p class="text-sm">
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-full md:w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/by-sa.png" /></div>
+            <div class="w-full w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/by-sa.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.CC-BY-SA') }}</p>
               <p class="text-sm">{{ t('copyright.CC-BY-SAText') }}</p>
