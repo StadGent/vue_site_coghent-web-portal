@@ -158,7 +158,6 @@ export default defineComponent({
           if (person.value?.extraInfo && !person.value.extraInfo.map((el) => el.key).includes(info.key)) {
             person.value?.extraInfo.push(info)
           } else if (person.value) {
-            console.log(metadata.value)
             person.value.extraInfo = metadata.value
           }
         })

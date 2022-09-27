@@ -31,8 +31,6 @@ export const storyboxCount = ref<number>(0)
 export const { checkRouteOnRequireAuth, setAuthenticatedUser, reactOnIsAuthenticated, removeParametFromQueryParams } = authHelper()
 
 export default async function (authenticated: boolean) {
-  console.log(`>web-portal updated session to v0.1.8`)
-  console.log(`>web-portal updated CL to v0.1.131`)
   const configStore = StoreFactory.get(ConfigStore)
   const userStore = StoreFactory.get(UserStore)
   const config = await fetch('../config.json').then((r) => r.json())

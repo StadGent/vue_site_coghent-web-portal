@@ -44,7 +44,6 @@ export default defineComponent({
       const listItems: ProfileListItemInfo[] = []
       if (listItems) {
         items.forEach((item: typeof Entity) => {
-          console.log(item)
           const listItem: ProfileListItemInfo = {
             id: item.id,
             title: item.linkedParentEntity.title[0].value,
