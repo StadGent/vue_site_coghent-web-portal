@@ -7,83 +7,119 @@
       <div class="px-12 space-y-6 mt-12 lg:px-36 sm:px-16 md:px-24">
         <div class="space-y-2">
           <p class="font-bold text-xl">{{ t('copyright.whatAreCC') }}</p>
-          <p class="text-sm">
-            {{ t('copyright.whatAreCCText') }}
-          </p>
+          <p v-html="t('copyright.whatAreCCText')" class="text-sm"></p>
         </div>
         <div class="space-y-2">
           <p class="font-bold text-xl">{{ t('copyright.whatAreRS') }}</p>
-          <p class="text-sm">
-            {{ t('copyright.whatAreRSText') }}
-          </p>
+          <p v-html="t('copyright.whatAreRSText')" class="text-sm"></p>
         </div>
         <div class="space-y-2">
           <p class="font-bold text-xl">{{ t('copyright.whatRSUsed') }}</p>
           <p class="text-sm">
             {{ t('copyright.whatRSUsedText') }}
           </p>
-          <p class="text-sm">{{ t('copyright.whatRSUsedTextLink1') }} <a href="https://creativecommons.org">https://creativecommons.org.</a></p>
-          <p class="text-sm">{{ t('copyright.whatRSUsedTextLink2') }} <a href="https://rightsstatements.org">https://rightsstatements.org.</a></p>
         </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pt-4">
-          <img class="w-48 h-16" src="../assets/publicdomain.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.PDM') }}</p>
-            <p class="text-sm">
-              {{ t('copyright.PDMText') }}
-            </p>
+        <div class="space-y-2">
+          <p class="font-bold text-xl">{{ t('copyright.whatIsReuse') }}</p>
+          <p class="text-sm">
+            {{ t('copyright.whatIsReuseText') }}
+          </p>
+        </div>
+        <section>
+          <p class="font-bold text-xl pb-4">{{ t('copyright.publicDomainTitle') }}</p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
+            <div class="w-1/5 flex items-center"><img class="w-ful" src="../assets/publicdomain.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.PDM') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.PDMText') }}
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
-          <img class="w-48 h-16" src="../assets/cc-zero.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.CC0') }}</p>
-            <p class="text-sm">
-              {{ t('copyright.CC0Text') }}
-            </p>
+        </section>
+        <section>
+          <p class="font-bold text-xl pb-4">{{ t('copyright.creativeCommonsTitle') }}</p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/cc-zero.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.CC0') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.CC0Text') }}
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
-          <img class="w-48 h-16" src="../assets/by-nc.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.CC-BY-NC') }}</p>
-            <p class="text-sm">{{ t('copyright.CC-BY-NCText') }}</p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/by-sa.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.CC-BY-SA') }}</p>
+              <p class="text-sm">{{ t('copyright.CC-BY-SAText') }}</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
-          <img class="w-48 h-16" src="../assets/by-nc-nd.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.CC-BY-NC-ND') }}</p>
-            <p class="text-sm">{{ t('copyright.CC-BY-NC-NDText') }}</p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/by-nc.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.CC-BY-NC') }}</p>
+              <p class="text-sm">{{ t('copyright.CC-BY-NCText') }}</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
-          <img class="w-48 h-12" src="../assets/InCopyright.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.InCopyright') }}</p>
-            <p class="text-sm">
-              {{ t('copyright.InCopyrightText') }}
-            </p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
+            <div class="w-1/5 flex items-center">
+              <img class="w-full" src="../assets/by-nc-nd.png" />
+            </div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.CC-BY-NC-ND') }}</p>
+              <p class="text-sm">{{ t('copyright.CC-BY-NC-NDText') }}</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10">
-          <img class="w-48 h-12" src="../assets/InCopyright-NonCommercial.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.InCopyrightNonCommercial') }}</p>
-            <p class="text-sm">
-              {{ t('copyright.InCopyrightNonCommercialText') }}
-            </p>
+        </section>
+        <section>
+          <p class="font-bold text-xl pb-4">{{ t('copyright.rightsStatementsTitle') }}</p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.InCopyright') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.InCopyrightText') }}
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
-          <img class="w-48 h-10" src="../assets/InCopyright-rightsholder.png" />
-          <div class="flex flex-col space-y-3">
-            <p class="font-bold">{{ t('copyright.InCopyrightUnknown') }}</p>
-            <p class="text-sm">
-              {{ t('copyright.InCopyrightUnknownText') }}
-            </p>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright-NonCommercial.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.InCopyrightNonCommercial') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.InCopyrightNonCommercialText') }}
+              </p>
+            </div>
           </div>
-        </div>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright-rightsholder.png" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.InCopyrightUnknown') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.InCopyrightUnknownText') }}
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/Copyright-Undetermined.svg" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.InCopyrightUndetermined') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.InCopyrightUndeterminedText') }}
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
+            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/NoKnownCopyright.svg" /></div>
+            <div class="w-4/5 flex flex-col space-y-3">
+              <p class="font-bold">{{ t('copyright.NoKnownCopyright') }}</p>
+              <p class="text-sm">
+                {{ t('copyright.NoKnownCopyrightText') }}
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </base-modal>
