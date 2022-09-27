@@ -28,7 +28,7 @@
         <section>
           <p class="font-bold text-xl pb-4">{{ t('copyright.publicDomainTitle') }}</p>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
-            <div class="w-1/5 flex items-center"><img class="w-ful" src="../assets/publicdomain.png" /></div>
+            <div class="w-full md:w-full md:w-1/5 flex items-center"><img class="w-ful" src="../assets/publicdomain.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.PDM') }}</p>
               <p class="text-sm">
@@ -40,7 +40,7 @@
         <section>
           <p class="font-bold text-xl pb-4">{{ t('copyright.creativeCommonsTitle') }}</p>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/cc-zero.png" /></div>
+            <div class="w-full md:w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/cc-zero.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.CC0') }}</p>
               <p class="text-sm">
@@ -49,21 +49,21 @@
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/by-sa.png" /></div>
+            <div class="w-full md:w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/by-sa.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.CC-BY-SA') }}</p>
               <p class="text-sm">{{ t('copyright.CC-BY-SAText') }}</p>
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/by-nc.png" /></div>
+            <div class="w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/by-nc.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.CC-BY-NC') }}</p>
               <p class="text-sm">{{ t('copyright.CC-BY-NCText') }}</p>
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
-            <div class="w-1/5 flex items-center">
+            <div class="w-full md:w-1/5 flex items-center">
               <img class="w-full" src="../assets/by-nc-nd.png" />
             </div>
             <div class="w-4/5 flex flex-col space-y-3">
@@ -75,7 +75,7 @@
         <section>
           <p class="font-bold text-xl pb-4">{{ t('copyright.rightsStatementsTitle') }}</p>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright.png" /></div>
+            <div class="w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.InCopyright') }}</p>
               <p class="text-sm">
@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright-NonCommercial.png" /></div>
+            <div class="w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright-NonCommercial.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.InCopyrightNonCommercial') }}</p>
               <p class="text-sm">
@@ -93,7 +93,7 @@
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright-rightsholder.png" /></div>
+            <div class="w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/InCopyright-rightsholder.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.InCopyrightUnknown') }}</p>
               <p class="text-sm">
@@ -102,7 +102,7 @@
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-4">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/Copyright-Undetermined.svg" /></div>
+            <div class="w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/Copyright-Undetermined.svg" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.InCopyrightUndetermined') }}</p>
               <p class="text-sm">
@@ -111,7 +111,7 @@
             </div>
           </div>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
-            <div class="w-1/5 flex items-center"><img class="w-full" src="../assets/NoKnownCopyright.svg" /></div>
+            <div class="w-full md:w-1/5 flex items-center"><img class="w-full" src="../assets/NoKnownCopyright.svg" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.NoKnownCopyright') }}</p>
               <p class="text-sm">
