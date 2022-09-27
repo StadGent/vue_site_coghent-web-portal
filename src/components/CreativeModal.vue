@@ -28,7 +28,7 @@
         <section>
           <p class="font-bold text-xl pb-4">{{ t('copyright.publicDomainTitle') }}</p>
           <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-10 pb-16">
-            <div class="w-full md:w-full md:w-1/5 flex items-center"><img class="w-ful" src="../assets/publicdomain.png" /></div>
+            <div class="w-full w-full md:w-1/5 flex items-center"><img class="w-ful" src="../assets/publicdomain.png" /></div>
             <div class="w-4/5 flex flex-col space-y-3">
               <p class="font-bold">{{ t('copyright.PDM') }}</p>
               <p class="text-sm">
