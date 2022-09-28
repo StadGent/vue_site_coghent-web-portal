@@ -1,8 +1,21 @@
 <template>
   <section class="flex flex-row items-stretch bg-background-light justify-evenly p-2 w-full">
     <div class="mx-3 align-center">
-      <base-button class="w-12 h-12 stroke-current text-text-black inline-block lg:hidden" :on-click="() => copyUrl(entity.id)" custom-style="secondary-round" custom-icon="link" :icon-shown="true" />
-      <base-button class="w-max hidden lg:flex" :text="t('details.modal.link')" :on-click="() => copyUrl(entity.id)" custom-style="ghost-black" custom-icon="link" :icon-shown="true" />
+      <base-button
+        class="w-12 h-12 stroke-current text-text-black inline-block lg:hidden"
+        :on-click="() => copyUrl(entity.id)"
+        custom-style="secondary-round"
+        :custom-icon="!isCopied ? 'link' : 'check'"
+        :icon-shown="true"
+      />
+      <base-button
+        class="w-max hidden lg:flex"
+        :text="t('details.modal.link')"
+        :on-click="() => copyUrl(entity.id)"
+        custom-style="ghost-black"
+        :custom-icon="!isCopied ? 'link' : 'check'"
+        :icon-shown="true"
+      />
       <div v-if="userStore.hasUser" class="hidden border-r-2 h-6 border-text-dark border-opacity-70 mx-6 hidden" />
       <base-button class="hidden w-12 h-12 stroke-current text-text-black inline-block lg:hidden" :on-click="onClick" custom-style="secondary-round" custom-icon="edit" :icon-shown="true" />
       <base-button class="hidden w-max hidden" :text="t('details.modal.edit')" :on-click="onClick" custom-style="ghost-black" custom-icon="edit" :icon-shown="true" />
@@ -23,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, watch } from 'vue'
+import { defineComponent, ref, PropType, watch, onMounted } from 'vue'
 import { Entity, BaseButton } from 'coghent-vue-3-component-library'
 import { StoryBoxState, useStorybox, getMediaTypeByfilename } from 'coghent-vue-3-component-library'
 import { apolloClient } from '@/app'
@@ -33,6 +46,7 @@ import StoreFactory from '@/stores/StoreFactory'
 import { useStoryboxFeature } from '@/stores/ConfigStore'
 import AddAssetToStoryboxDropdown from './AddAssetToStoryboxDropdown.vue'
 import { useI18n } from 'vue-i18n'
+import { onBeforeRouteUpdate } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -51,6 +65,7 @@ export default defineComponent({
     const storyboxDdOpen = ref<boolean>(false)
     const canAddToStoryBox = ref<boolean>(false)
     const { toClipboard } = useClipboard()
+    const isCopied = ref<boolean>(false)
     const userStore = StoreFactory.get(UserStore)
 
     const checkAssetIsInAStorybox = async () => {
@@ -97,10 +112,15 @@ export default defineComponent({
       try {
         var url = window.location.href
         await toClipboard(url)
+        isCopied.value = true
       } catch (e) {
         console.error(e)
       }
     }
+
+    onBeforeRouteUpdate(() => {
+      isCopied.value = false
+    })
 
     return {
       assetIsInAStorybox,
@@ -110,6 +130,7 @@ export default defineComponent({
       copyUrl,
       userStore,
       t,
+      isCopied,
     }
   },
 })
