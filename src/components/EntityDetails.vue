@@ -1,6 +1,6 @@
 <template>
   <!-- main-->
-  <bread-crumbs class="mx-4 sm:mx-0" />
+  <bread-crumbs class="mx-4 sm:mx-0" :class="loading ? 'animate-pulse' : ''" />
   <entity-actions class="hidden mt-10 lg:inline-flex" v-if="result && result.Entity" :entity="result.Entity" />
   <div class="lg:grid lg:grid-cols-2 flex-col mt-4">
     <span>
