@@ -4,7 +4,7 @@
       <div @click="goToHomePage"><base-icon icon="home" class="p-2 purple cursor-pointer align-center" /></div>
       <div @click="navigateToHistoryPage('backward')"><base-icon icon="arrowLeft" :class="currentPageIndex - 1 != -1 ? 'p-2 purple cursor-pointer' : 'p-2 gray cursor-not-allowed blur-lg'" /></div>
       <div @click="navigateToHistoryPage('forward')">
-        <base-icon icon="arrowRight" :class="currentPageIndex < history.length - 1 ? 'p-2 purple cursor-pointer' : 'p-2 gray cursor-not-allowed blur-lg'" />
+        <base-icon icon="arrowRight" :class="currentPageIndex < history.length - 1 ? 'p-2 purple cursor-pointer' : 'p-2 gray cursor-not-allowed'" />
       </div>
     </section>
     <section class="flex">
