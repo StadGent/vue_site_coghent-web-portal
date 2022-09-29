@@ -14,7 +14,7 @@
     "tooltips":{
       "login": {
         "title": "Je bent nog niet aangemeld",
-        "description": "Meld jezelf eerst aan om verder te gaan"
+        "description": "Log in om verder te gaan"
       }
     }
   },
