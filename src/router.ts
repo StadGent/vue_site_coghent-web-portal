@@ -3,7 +3,6 @@ import TheGrid from './components/TheGrid.vue'
 import EntityDetails from './components/EntityDetails.vue'
 import CreatorDetails from './components/CreatorDetails.vue'
 import RelationDetail from './components/RelationDetail.vue'
-
 import EntityNotFound from './components/EntityNotFound.vue'
 import ThePavilion from './pages/ThePavilion.vue'
 import TheProfilePage from './pages/TheProfilePage.vue'
@@ -16,7 +15,7 @@ import TheVisitPage from './pages/TheVisitPage.vue'
 import TheUploadPage from './pages/TheUploadPage.vue'
 import TheTestimonyPage from './pages/TheTestimonyPage.vue'
 import { queryParamsToDelete, routeRequiresAuth } from '@/composables/helper.auth'
-import { checkRouteOnRequireAuth, removeParametFromQueryParams } from './app'
+import { checkRouteOnRequireAuth, removeParametFromQueryParams, useSessionAuth } from './app'
 
 const isServer = typeof window === 'undefined'
 
@@ -53,12 +52,17 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
-      to.query = removeParametFromQueryParams(to.query, queryParamsToDelete)
       checkRouteOnRequireAuth(to)
+      to.query = removeParametFromQueryParams(to.query, queryParamsToDelete)
       if (routeRequiresAuth.value === true) {
         await auth.assertIsAuthenticated(to.fullPath, next)
       } else {
         return next()
+      }
+    })
+    router.afterEach((to, from, failure) => {
+      if (to.path !== '/login' && useSessionAuth) {
+        auth.changeRedirectRoute(to.path)
       }
     })
   }
