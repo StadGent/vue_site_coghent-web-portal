@@ -51,6 +51,9 @@
                     <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
                   </div>
                 </div>
+                <div class="p-4 flex items-center w-full">
+                  <textarea class="p-1 h-8 w-full h-full resize-none" maxlength="150" :placeholder="t('storybox.assets.customText')" />
+                </div>
                 <span class="flex flex-row justify-end w-full py-2">
                   <div v-if="entityIsPublic(asset) === true && assetTimingPresent === true" :id="asset.id" class="flex items-center justify-center items-row-reverse cursor-pointer">
                     <p class="text-xs" :title="t('storybox.assets.showTimeToolTip')">{{ t('storybox.assets.showTime') }}</p>
@@ -80,10 +83,10 @@
         </div>
       </div>
       <div class="lg:w-1/3 w-full my-4 lg:my-0">
-        <InputLabel :label="t('storybox.story.title')" :labelFor="storyDescription" :inputIsRequired="false" />
+        <InputLabel :label="t('storybox.story.title')" labelFor="storyDescription" :inputIsRequired="false" />
         <textarea
           :placeholder="t('storybox.story.storyPlaceholder')"
-          class="w-full lg:h-5/6 h-48 bg-background-light p-4"
+          class="w-full lg:h-5/6 h-48 bg-background-light p-4 resize-none"
           id="storyDesctiption"
           :value="StoryBoxState.activeStorybox.description"
           @change="updateDescription"
@@ -226,6 +229,7 @@ export default defineComponent({
     watch(
       () => StoryBoxState.value.activeStorybox.assetTimings,
       (timings) => {
+        console.log({ timings })
         StoryBoxState.value.activeStorybox.assetTimings !== undefined ? (assetTimingPresent.value = true) : null
       }
     )

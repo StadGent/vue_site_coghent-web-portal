@@ -63,7 +63,7 @@
       <base-button
         v-if="userStore.hasUser && useStoryboxFeature && !isMobile && !route.query.touch"
         :has-badge="true"
-        :badge-value="storyboxCount"
+        :badge-value="storyboxCount.toString()"
         :text="t('buttons.storybox')"
         :on-click="goToVerhalenBox"
         custom-style="ghost-purple"

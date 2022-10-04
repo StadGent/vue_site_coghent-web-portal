@@ -193,6 +193,7 @@
       "search": "Zelf een werk toevoegen",
       "collection": "Zoeken in de collectie",
       "showTime": "Tonen gedurende:",
+      "customText": "Geef hier een eigen beschrijving bij het beeld...",
       "showTimeToolTip": "Wanneer het verhaal in de cogent box bekeken wordt zal dit asset gedurende het geselecteerde aantal seconden getoond worden"
     },
     "new": {
