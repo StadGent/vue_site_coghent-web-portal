@@ -52,7 +52,12 @@
                   </div>
                 </div>
                 <div class="p-4 flex items-center w-full">
-                  <textarea class="p-1 h-8 w-full h-full resize-none" maxlength="150" :placeholder="t('storybox.assets.customText')" />
+                  <textarea
+                    class="p-1 h-8 w-full h-full resize-none"
+                    maxlength="150"
+                    :placeholder="t('storybox.assets.customText')"
+                    @change="(input) => updateAssetProperty(asset, input, 'description')"
+                  />
                 </div>
                 <span class="flex flex-row justify-end w-full py-2">
                   <div v-if="entityIsPublic(asset) === true && assetTimingPresent === true" :id="asset.id" class="flex items-center justify-center items-row-reverse cursor-pointer">
@@ -60,9 +65,9 @@
                     <BaseDropDown
                       :number-step="5"
                       :number-max="60"
-                      :active="Number(setAssetTiming(asset))"
+                      :active="Number(setAssetProperty(asset, 'timing'))"
                       :style="`p-1.5 rounded-md ml-2 mr-2 bg-text-white`"
-                      @selected="(option) => updateAssetTiming(asset, option)"
+                      @selected="(option) => updateAssetProperty(asset, Number(option).toFixed(), 'timing')"
                     />
                   </div>
                   <div :id="asset.id" class="w-10 md:w-28 flex items-center justify-center items-row-reverse cursor-pointer" @click="deleteAsset(asset)">
@@ -98,13 +103,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { BaseIcon, BaseDropDown } from 'coghent-vue-3-component-library'
-import { Entity } from 'coghent-vue-3-component-library'
+import { Entity, KeyValuePair, entityIsPublic, StoryBoxState, BaseIcon, BaseDropDown } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
-import { StoryBoxState } from 'coghent-vue-3-component-library'
-import { useUpload } from 'coghent-vue-3-component-library'
-import { entityIsPublic } from 'coghent-vue-3-component-library'
 import InputLabel from './InputLabel.vue'
 
 export default defineComponent({
@@ -121,6 +122,7 @@ export default defineComponent({
     const canDrag = ref<boolean>(false)
     const assets = ref<Array<typeof Entity>>([])
     const assetTimings = ref<Array<typeof Entity>>(StoryBoxState.value.activeStorybox.assetTimings)
+    const assetDescriptions = ref<typeof KeyValuePair[]>(StoryBoxState.value.activeStorybox.assetDescriptions)
     const draggingAssetComesBelow = ref<string | null>(null)
     const assetTimingPresent = ref<boolean>(false)
 
@@ -210,18 +212,20 @@ export default defineComponent({
       return updatedItems
     }
 
-    const setAssetTiming = (_asset: typeof Entity) => {
+    const setAssetProperty = (_asset: typeof Entity, _property: 'timing' | 'description') => {
       let returnValue = null
-      for (const _pair of StoryBoxState.value.activeStorybox.assetTimings) {
+      const propertyToChange = _property === 'timing' ? StoryBoxState.value.activeStorybox.assetTimings : StoryBoxState.value.activeStorybox.assetDescriptions
+      for (const _pair of propertyToChange) {
         if (_pair.key === _asset.id) returnValue = _pair.value
       }
       return returnValue
     }
 
-    const updateAssetTiming = (_asset: typeof Entity, _timing: number) => {
-      for (const _pair of StoryBoxState.value.activeStorybox.assetTimings) {
+    const updateAssetProperty = (_asset: typeof Entity, _propertyValue: number | string, _propertyName: 'timing' | 'description') => {
+      const propertyToChange = _propertyName === 'timing' ? StoryBoxState.value.activeStorybox.assetTimings : StoryBoxState.value.activeStorybox.assetDescriptions
+      for (const _pair of propertyToChange) {
         if (_pair.key === _asset.id) {
-          _pair.value = Number(_timing).toFixed()
+          _pair.value = _propertyValue
         }
       }
     }
@@ -229,7 +233,6 @@ export default defineComponent({
     watch(
       () => StoryBoxState.value.activeStorybox.assetTimings,
       (timings) => {
-        console.log({ timings })
         StoryBoxState.value.activeStorybox.assetTimings !== undefined ? (assetTimingPresent.value = true) : null
       }
     )
@@ -252,14 +255,15 @@ export default defineComponent({
       dragEnd,
       dragEnter,
       canDrag,
-      setAssetTiming,
-      updateAssetTiming,
+      setAssetProperty,
+      updateAssetProperty,
       StoryBoxState,
       assets,
       assetTimings,
       draggingAssetComesBelow,
       entityIsPublic,
       assetTimingPresent,
+      assetDescriptions,
     }
   },
 })
