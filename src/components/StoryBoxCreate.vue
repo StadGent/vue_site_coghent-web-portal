@@ -53,12 +53,13 @@
                 </div>
                 <div class="p-4 flex items-center w-full">
                   <textarea
-                    class="p-1 h-8 w-full h-full resize-none"
+                    :class="`p-1 h-8 w-full h-full resize-none`"
                     :id="'description-' + asset.id"
                     maxlength="150"
                     :placeholder="t('storybox.assets.customText')"
                     :value="setAssetProperty(asset, 'description')"
                     @input="(input) => updateAssetProperty(asset, input, 'description')"
+                    :disabled="entityIsPublic(asset) ? false : true"
                   />
                 </div>
                 <span class="flex flex-row justify-end w-full py-2">
