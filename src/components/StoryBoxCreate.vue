@@ -54,9 +54,11 @@
                 <div class="p-4 flex items-center w-full">
                   <textarea
                     class="p-1 h-8 w-full h-full resize-none"
+                    :id="'description-' + asset.id"
                     maxlength="150"
                     :placeholder="t('storybox.assets.customText')"
-                    @change="(input) => updateAssetProperty(asset, input, 'description')"
+                    :value="setAssetProperty(asset, 'description')"
+                    @input="(input) => updateAssetProperty(asset, input, 'description')"
                   />
                 </div>
                 <span class="flex flex-row justify-end w-full py-2">
@@ -215,8 +217,10 @@ export default defineComponent({
     const setAssetProperty = (_asset: typeof Entity, _property: 'timing' | 'description') => {
       let returnValue = null
       const propertyToChange = _property === 'timing' ? StoryBoxState.value.activeStorybox.assetTimings : StoryBoxState.value.activeStorybox.assetDescriptions
-      for (const _pair of propertyToChange) {
-        if (_pair.key === _asset.id) returnValue = _pair.value
+      if (propertyToChange) {
+        for (const _pair of propertyToChange) {
+          if (_pair.key === _asset.id) returnValue = _pair.value
+        }
       }
       return returnValue
     }
@@ -225,7 +229,7 @@ export default defineComponent({
       const propertyToChange = _propertyName === 'timing' ? StoryBoxState.value.activeStorybox.assetTimings : StoryBoxState.value.activeStorybox.assetDescriptions
       for (const _pair of propertyToChange) {
         if (_pair.key === _asset.id) {
-          _pair.value = _propertyValue
+          _pair.value = _propertyName === 'timing' ? _propertyValue : (document.getElementById(`description-${_asset.id}`) as HTMLTextAreaElement).value
         }
       }
     }
