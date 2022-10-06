@@ -127,7 +127,7 @@
               </div>
             </div>
           </div>
-          <div class="bg-background-medium">
+          <div v-if="entity.ldesResource" class="bg-background-medium">
             <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
               {{ t('details.modal.bron') }}
             </h3>
