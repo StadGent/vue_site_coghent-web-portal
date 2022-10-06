@@ -127,6 +127,15 @@
               </div>
             </div>
           </div>
+          <div class="bg-background-medium">
+            <h3 class="font-bold text-lg mt-5 mb-3 ml-8">
+              {{ t('details.modal.bron') }}
+            </h3>
+
+            <div class="ml-8 flex gap-3 mb-4 flex-wrap">
+              <a :href="entity.ldesResource" target="_blank" class="underline cursor-pointer">{{ entity.ldesResource }}</a>
+            </div>
+          </div>
           <!-- <span class="invisible flex flex-grow h-full" aria-hidden="true">&#8203;</span> -->
         </section>
       </section>
