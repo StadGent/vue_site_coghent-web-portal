@@ -2,7 +2,7 @@
   <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0 sm:mx-5">
     <div class="flex gap-2 xl:gap-8">
       <div class="flex flex-col items-center">
-        <a class="flex items-center sm:ml-0 ml-3 group" @click="checkAction">
+        <a class="flex items-center sm:ml-0 ml-3 group cursor-pointer" @click="checkAction">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" fill="#FDC20B" />
             <g filter="url(#filter0_i)">
