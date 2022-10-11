@@ -8,12 +8,10 @@ include:
     file: 'npm-pipeline.yml'
     ref: 'v1.4.2'
   - project: 'customers/coghent/infra/coghent-infra-gitlab-templates'
-    file    : 'web-dev-deploy.yml'
+    file    : 'web-to-coghent.yml'
     ref     : 'master'
     
 variables:
   CUSTOMER: 'coghent'
   APPLICATION: 'coghent-web-portal'
-  TERRAFORM_IMAGE: 'web-terraform'
-  TERRAFORM_TAG: 'latest'
-  SKIP_DEPLOY: 'true'
+  SKIP_DEPLOY: 'true' # This pipeline does not provide a deploy, if a deploy is needed, you can add it to the deploy targets mentioned in the includes
