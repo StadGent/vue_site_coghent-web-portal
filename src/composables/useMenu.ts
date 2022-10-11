@@ -89,7 +89,7 @@ const useMenu = () => {
     {
       id: `Over het project`,
       title: t(`header.about`),
-      link: `https://www.collectie.gent/over-het-project`,
+      link: `https://www.collectie.gent/collectie-van-de-gentenaar-online`,
       localLink: false,
       requireAuth: false,
       isVisible: true,
