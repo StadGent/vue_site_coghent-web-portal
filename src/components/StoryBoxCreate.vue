@@ -51,7 +51,7 @@
                     <base-icon :id="asset.id" :icon="'info'" class="stroke-current" @click="() => router.push(`/entity/${asset.id}`)" />
                   </div>
                 </div>
-                <div class="p-4 flex items-center w-full">
+                <div v-if="useCustomStorySubtitles" class="p-4 flex items-center w-full">
                   <textarea
                     :class="`p-1 h-8 w-full h-full resize-none`"
                     :id="'description-' + asset.id"
@@ -110,6 +110,7 @@ import { Entity, KeyValuePair, entityIsPublic, StoryBoxState, BaseIcon, BaseDrop
 import { useI18n } from 'vue-i18n'
 import { router } from '@/app'
 import InputLabel from './InputLabel.vue'
+import { useCustomStorySubtitles } from '../stores/ConfigStore'
 
 export default defineComponent({
   components: { BaseIcon, BaseDropDown, InputLabel },
@@ -269,6 +270,7 @@ export default defineComponent({
       entityIsPublic,
       assetTimingPresent,
       assetDescriptions,
+      useCustomStorySubtitles,
     }
   },
 })

@@ -6,6 +6,7 @@ export const useStoryboxFeature = ref<boolean>(false)
 export const useGoogleFeature = ref<boolean>(false)
 export const useTestimonyFeature = ref<boolean>(false)
 export const useWorksFeature = ref<boolean>(false)
+export const useCustomStorySubtitles = ref<boolean>(false)
 
 export class ConfigStore extends BaseStore {
   id = 'ConfigStore'
@@ -29,5 +30,6 @@ export class ConfigStore extends BaseStore {
     useTestimonyFeature.value = this.config.value.features.testimony ? this.config.value.features.testimony : false
     useGoogleFeature.value = this.config.value.features?.googleTags ? this.config.value.features?.googleTags : false
     useWorksFeature.value = this.config.value.features?.myWorks ? this.config.value.features?.myWorks : false
+    useCustomStorySubtitles.value = this.config.value.features?.customStorySubtitles ? this.config.value.features?.customStorySubtitles : false
   }
 }
