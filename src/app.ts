@@ -46,6 +46,7 @@ export default async function (authenticated: boolean) {
 
   if (useAuthFeature.value === true) {
     useSessionAuth = new OpenIdConnectClient(config.oidc)
+    useSessionAuth.changeRedirectRoute(window.location.origin + window.location.pathname)
     authCode.value = new URLSearchParams(window.location.search).get('code')
   }
 

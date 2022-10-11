@@ -33,7 +33,7 @@
     "openseadragon": "^2.4.2",
     "qrcode.vue": "^3.3.3",
     "seedrandom": "^3.0.5",
-    "session-vue-3-oidc-library": "0.1.19",
+    "session-vue-3-oidc-library": "0.1.31",
     "simple-keyboard": "^3.4.157",
     "simple-keyboard-layouts": "^3.1.186",
     "tiny-cookie": "^2.3.2",

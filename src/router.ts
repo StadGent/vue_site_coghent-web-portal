@@ -62,7 +62,7 @@ export default function (auth: any) {
     })
     router.afterEach((to, from, failure) => {
       if (to.path !== '/login' && useSessionAuth) {
-        auth.changeRedirectRoute(to.path)
+        auth.changeRedirectRoute(window.location.origin + window.location.pathname)
       }
     })
   }
