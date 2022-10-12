@@ -75,7 +75,6 @@ export const upload_unsupported_file_extension = (_allowed_extensions: string) =
 }
 
 export const upload_duplicate_detected = () => {
-  const { t } = useI18n()
   notification.add({
     type: 'error',
     subject: `Duplicate file`,
