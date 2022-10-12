@@ -18,7 +18,7 @@
       }
     },
     "notifications": {
-      "duplicateFile": "Dit bestand werd als dubbele gedetecteerd",
+      "duplicateFile": "Dit bestand werd als dubbel gedetecteerd",
       "wrongFormat": "Enkel bestanden met de volgende extenties kunnen worden geupload:"
     }
   },

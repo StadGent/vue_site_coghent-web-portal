@@ -62,16 +62,15 @@ export const upload_max_size_exceeded = (_allowedSize: number, _size: number) =>
   notification.add({
     type: 'error',
     subject: `File size`,
-    message: `The file size ${(_size / 1000000).toFixed(2)}MB is to big. We accept files up to ${_allowedSize / 1000000}MB.`,
+    message: `De bestandsgrote ${(_size / 1000000).toFixed(2)}MB is te groot. We accepteren bestanden tot ${_allowedSize / 1000000}MB.`,
   } as Notification)
 }
 
 export const upload_unsupported_file_extension = (_allowed_extensions: string) => {
-  const { t } = useI18n()
   notification.add({
     type: 'error',
     subject: `File extension`,
-    message: `${t('main.notifications.duplicateFile')} ${_allowed_extensions}`,
+    message: `Enkel bestanden met de volgende extenties kunnen worden geupload: ${_allowed_extensions}`,
   } as Notification)
 }
 
@@ -80,6 +79,6 @@ export const upload_duplicate_detected = () => {
   notification.add({
     type: 'error',
     subject: `Duplicate file`,
-    message: `${t('main.notifications.duplicateFile')}`,
+    message: `Dit bestand werd als dubbel gedetecteerd`,
   } as Notification)
 }
