@@ -16,6 +16,10 @@
         "title": "Je bent nog niet aangemeld",
         "description": "Log in om verder te gaan"
       }
+    },
+    "notifications": {
+      "duplicateFile": "Dit bestand werd als dubbele gedetecteerd",
+      "wrongFormat": "Enkel bestanden met de volgende extenties kunnen worden geupload:"
     }
   },
   "header": {

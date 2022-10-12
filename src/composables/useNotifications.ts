@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export type NotificationType = 'info' | 'warn' | 'error'
 
@@ -66,17 +67,19 @@ export const upload_max_size_exceeded = (_allowedSize: number, _size: number) =>
 }
 
 export const upload_unsupported_file_extension = (_allowed_extensions: string) => {
+  const { t } = useI18n()
   notification.add({
     type: 'error',
     subject: `File extension`,
-    message: `You can only upload files with extension ${_allowed_extensions}`,
+    message: `${t('main.notifications.duplicateFile')} ${_allowed_extensions}`,
   } as Notification)
 }
 
 export const upload_duplicate_detected = () => {
+  const { t } = useI18n()
   notification.add({
     type: 'error',
     subject: `Duplicate file`,
-    message: `This file has been detected as duplicate`,
+    message: `${t('main.notifications.duplicateFile')}`,
   } as Notification)
 }
