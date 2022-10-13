@@ -94,6 +94,14 @@ const useMenu = () => {
       requireAuth: false,
       isVisible: true,
     },
+    {
+      id: `Activiteiten`,
+      title: t(`header.activities`),
+      link: `https://www.collectie.gent/kalender`,
+      localLink: false,
+      requireAuth: false,
+      isVisible: true,
+    },
   ]
 
   const profileSideMenuItems: Array<MenuItem> = [
