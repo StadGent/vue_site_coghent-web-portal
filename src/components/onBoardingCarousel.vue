@@ -43,7 +43,7 @@ type CarouselState = {
 const carouselState = ref<CarouselState>({
   currentCarouselSlide: 1,
   carouselContent: [
-    { contentLocation: '/loginOnboarding.png', contentName: 'Login', contentDescription: 'main.onBoarding.login', descriptionLocation: 'top-20 right-0' },
+    { contentLocation: '/loginOnboarding.png', contentName: 'Aanmelden', contentDescription: 'main.onBoarding.login', descriptionLocation: 'top-20 right-0' },
     { contentLocation: '/loginOnboarding.png', contentName: 'Zoeken', contentDescription: 'main.onBoarding.search', descriptionLocation: 'top-28 right-0' },
     { contentLocation: '/storyboxOnboarding.png', contentName: 'Verhalen', contentDescription: 'main.onBoarding.storybox', descriptionLocation: 'top-20 right-0' },
     { contentLocation: '/storiesOnboarding.png', contentName: 'Ga aan de slag', contentDescription: 'main.onBoarding.stories', descriptionLocation: 'top-48 right-0' },
