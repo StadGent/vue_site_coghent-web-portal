@@ -72,7 +72,7 @@
         class="px-2 mx-3 ml-3 hidden lg:inline-flex"
       />
       <div class="flex justify-center items-center mx-4 stroke-gray cursor-pointer" @click="toggleOnBoarding">
-        <BaseIcon width="30" height="30" icon="help" />
+        <BaseIcon :width="30" :height="30" icon="help" />
       </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
   <BaseModal :large="true" modalState="show" @hide-modal="closeOnBoarding">
     <section v-if="carouselState.carouselContent" class="h-full w-full flex">
       <div class="w-1/12 h-full cursor-pointer absolute top-0 left-0 left-fade z-20 flex justify-center items-center" @click="previousCarouselSlide">
-        <BaseIcon icon="arrowLeftLine" height="24" width="24" class="stroke-black" />
+        <BaseIcon icon="arrowLeftLine" :height="24" :width="24" class="stroke-black" />
       </div>
       <div class="w-full h-full absolute top-0 left-0 flex justify-center">
         <transition-group :name="animationDirection">
@@ -17,7 +17,7 @@
         </transition-group>
       </div>
       <div class="w-1/12 h-full cursor-pointer absolute top-0 right-0 right-fade z-20 flex justify-center items-center" @click="nextCarouselSlide">
-        <BaseIcon icon="arrowRightLine" height="24" width="24" class="stroke-black" />
+        <BaseIcon icon="arrowRightLine" :height="24" :width="24" class="stroke-black" />
       </div>
     </section>
   </BaseModal>
