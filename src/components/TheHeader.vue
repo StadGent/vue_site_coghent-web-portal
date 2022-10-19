@@ -71,6 +71,9 @@
         custom-icon="storybox"
         class="px-2 mx-3 ml-3 hidden lg:inline-flex"
       />
+      <div class="flex justify-center items-center mx-4 stroke-gray cursor-pointer" @click="toggleOnBoarding">
+        <BaseIcon width="30" height="30" icon="help" />
+      </div>
     </div>
   </div>
   <div class="border-t-2 w-auto mb-5 border-background-dark mt-5 border-opacity-70" />
@@ -82,17 +85,18 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { UserStore } from '../stores/UserStore'
 import StoreFactory from '../stores/StoreFactory'
-import { BaseButton } from 'coghent-vue-3-component-library'
+import { BaseButton, BaseIcon } from 'coghent-vue-3-component-library'
 import { User } from 'coghent-vue-3-component-library'
 import { apolloClient, router } from '@/app'
 import { storyboxCount } from '@/app'
 import { useStorybox, StoryBoxState } from 'coghent-vue-3-component-library'
 import useMenu from '@/composables/useMenu'
 import { useAuthFeature, useStoryboxFeature } from '@/stores/ConfigStore'
+import { useOnBoarding } from '../composables/useOnBoarding'
 
 export default defineComponent({
   name: 'TheHeader',
-  components: { BaseButton },
+  components: { BaseButton, BaseIcon },
   setup(props, { emit }) {
     const route = useRoute()
     // const router = useRouter()
@@ -106,6 +110,7 @@ export default defineComponent({
     const isPavilionActive = ref<Boolean>(route.path === '/pavilion')
     const userStore = StoreFactory.get(UserStore)
     const user: typeof User = userStore.user
+    const { toggleOnBoarding } = useOnBoarding()
 
     watch(
       () => route.path,
@@ -168,9 +173,15 @@ export default defineComponent({
       checkAction,
       isMobile,
       headerItems,
+      toggleOnBoarding,
     }
   },
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.stroke-gray {
+  stroke: lightgrey;
+  opacity: 0.2;
+}
+</style>

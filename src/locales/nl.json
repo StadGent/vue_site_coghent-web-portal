@@ -20,6 +20,12 @@
     "notifications": {
       "duplicateFile": "Dit bestand werd als dubbel gedetecteerd",
       "wrongFormat": "Enkel bestanden met de volgende extenties kunnen worden geupload:"
+    },
+    "onBoarding": {
+      "login": "Meld je aan en beschik over je persoonlijke verhalenbox om zelf foto’s of informatie aan de collectie toe te voegen!",
+      "search": "Zoek op trefwoorden om de ‘Collectie van de Gentenaar’ te doorzoeken",
+      "storybox": "Via de verhalenbox kan je zelf foto’s, informatie of verhalen toevoegen aan de collectie",
+      "stories": "Je bent helemaal klaar om zelf objecten of reacties toe te voegen aan de Collectie van de Gentenaar! Veel plezier! Graag nog even de handleiding bekijken? Die vind je <a class='underline' href='https://www.collectie.gent/collectie-van-de-gentenaar-online' target='_blank'>hier</a>"
     }
   },
   "header": {

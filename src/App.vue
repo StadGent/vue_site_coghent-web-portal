@@ -13,6 +13,7 @@
       <creative-modal />
       <disclaimer-button v-if="!route.query.touch && !useStoryboxFeature" />
       <disclaimer-pop-up v-if="!route.query.touch && !useStoryboxFeature" />
+      <onBoardingCarousel v-if="onboardingState.onboardingShown" />
     </div>
     <the-footer />
     <transition name="keyboard">
@@ -42,10 +43,12 @@ import Notification from '@/components/Notification.vue'
 import OffensiveContentModal from './components/OffensiveContentModal.vue'
 import OnScreenKeyboard from './components/OnScreenKeyboard.vue'
 import { useOnScreenKeyboard } from './composables/useOnScreenKeyboard'
+import onBoardingCarousel from './components/onBoardingCarousel.vue'
+import { useOnBoarding } from './composables/useOnBoarding'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification, OffensiveContentModal, OnScreenKeyboard },
+  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification, OffensiveContentModal, OnScreenKeyboard, onBoardingCarousel },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
@@ -53,6 +56,7 @@ export default defineComponent({
     const route = useRoute()
     const mobileMenuIsOpen = ref<boolean>(false)
     const { keyboardState } = useOnScreenKeyboard()
+    const { onboardingState } = useOnBoarding()
 
     if (useGoogleFeature.value === true) {
       const gtmId = configStore.config.value.google?.tagManager
@@ -89,6 +93,7 @@ export default defineComponent({
       route,
       mobileMenuIsOpen,
       keyboardState,
+      onboardingState,
     }
   },
 })
