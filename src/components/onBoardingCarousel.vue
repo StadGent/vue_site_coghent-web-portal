@@ -4,16 +4,15 @@
       <div class="w-1/12 h-full cursor-pointer absolute top-0 left-0 left-fade z-20 flex justify-center items-center" @click="previousCarouselSlide">
         <BaseIcon icon="arrowLeftLine" :height="24" :width="24" class="stroke-black" />
       </div>
-      <div class="w-full h-full absolute top-0 left-0 flex justify-center">
+      <div>
         <transition-group :name="animationDirection">
-          <img
-            v-for="(content, index) in carouselState.carouselContent"
-            :key="index"
-            v-show="index + 1 === carouselState.currentCarouselSlide"
-            :src="content.contentLocation"
-            :alt="content.contentName"
-            class="max-h-full"
-          />
+          <div class="flex justify-center" v-for="(content, index) in carouselState.carouselContent" :key="index" v-show="index + 1 === carouselState.currentCarouselSlide">
+            <div :class="`absolute ${content.descriptionLocation} p-4 bg-white-see-trough max-w-md z-40`">
+              <h3 class="font-bold mb-2">{{ content.contentName }}</h3>
+              <p v-html="t(content.contentDescription)"></p>
+            </div>
+            <img :src="content.contentLocation" :alt="content.contentName" class="max-h-full" />
+          </div>
         </transition-group>
       </div>
       <div class="w-1/12 h-full cursor-pointer absolute top-0 right-0 right-fade z-20 flex justify-center items-center" @click="nextCarouselSlide">
@@ -27,11 +26,13 @@
 import { defineComponent, ref } from 'vue'
 import { useOnBoarding } from '../composables/useOnBoarding'
 import { BaseModal, BaseIcon } from 'coghent-vue-3-component-library'
+import { useI18n } from 'vue-i18n'
 
 type CarouselItem = {
   contentLocation: string
   contentName?: string
   contentDescription?: string
+  descriptionLocation?: string
 }
 
 type CarouselState = {
@@ -42,10 +43,10 @@ type CarouselState = {
 const carouselState = ref<CarouselState>({
   currentCarouselSlide: 1,
   carouselContent: [
-    { contentLocation: '/loginOnboarding.png', contentName: 'Login', contentDescription: 'main.onBoarding.login' },
-    { contentLocation: '/loginOnboarding.png', contentName: 'Search', contentDescription: 'main.onBoarding.search' },
-    { contentLocation: '/storyboxOnboarding.png', contentName: 'Storybox', contentDescription: 'main.onBoarding.storybox' },
-    { contentLocation: '/storiesOnboarding.png', contentName: 'Stories', contentDescription: 'main.onBoarding.stories' },
+    { contentLocation: '/loginOnboarding.png', contentName: 'Login', contentDescription: 'main.onBoarding.login', descriptionLocation: 'top-20 right-0' },
+    { contentLocation: '/loginOnboarding.png', contentName: 'Zoeken', contentDescription: 'main.onBoarding.search', descriptionLocation: 'top-28 right-0' },
+    { contentLocation: '/storyboxOnboarding.png', contentName: 'Verhalen', contentDescription: 'main.onBoarding.storybox', descriptionLocation: 'top-20 right-0' },
+    { contentLocation: '/storiesOnboarding.png', contentName: 'Ga aan de slag', contentDescription: 'main.onBoarding.stories', descriptionLocation: 'top-60 right-0' },
   ],
 })
 
@@ -90,8 +91,9 @@ export default defineComponent({
   setup() {
     const { closeOnBoarding } = useOnBoarding()
     const { carouselState, animationDirection, nextCarouselSlide, previousCarouselSlide } = useCarousel()
+    const { t } = useI18n()
 
-    return { closeOnBoarding, carouselState, nextCarouselSlide, previousCarouselSlide, animationDirection }
+    return { closeOnBoarding, carouselState, nextCarouselSlide, previousCarouselSlide, animationDirection, t }
   },
 })
 </script>
@@ -104,12 +106,12 @@ export default defineComponent({
 
 .next-enter-from {
   opacity: 0;
-  transform: translateX(-30%) translateY(0%);
+  transform: translateX(0%) translateY(0%);
 }
 
 .next-leave-to {
   opacity: 0;
-  transform: translateX(0%) translateY(0%);
+  transform: translateX(-30%) translateY(0%);
 }
 
 .next-leave-active {
@@ -123,12 +125,12 @@ export default defineComponent({
 
 .previous-enter-from {
   opacity: 0;
-  transform: translateX(30%) translateY(0%);
+  transform: translateX(0) translateY(0%);
 }
 
 .previous-leave-to {
   opacity: 0;
-  transform: translateX(0%) translateY(0%);
+  transform: translateX(30%) translateY(0%);
 }
 
 .previous-leave-active {
@@ -147,5 +149,9 @@ export default defineComponent({
 
 .stroke-black {
   stroke: black;
+}
+
+.bg-white-see-trough {
+  background-color: rgba(255, 255, 255, 0.9);
 }
 </style>
