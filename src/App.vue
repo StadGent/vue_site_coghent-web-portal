@@ -11,8 +11,8 @@
       <offensive-content-modal />
       <details-modal />
       <creative-modal />
-      <disclaimer-button v-if="!route.query.touch && !useStoryboxFeature" />
-      <disclaimer-pop-up v-if="!route.query.touch && !useStoryboxFeature" />
+      <disclaimer-button v-if="!route.query.touch" />
+      <disclaimer-pop-up v-if="!route.query.touch" />
       <onBoardingCarousel v-if="onboardingState.onboardingShown" />
     </div>
     <the-footer />
