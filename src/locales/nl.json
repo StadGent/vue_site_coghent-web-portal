@@ -26,6 +26,12 @@
       "search": "Zoek op trefwoorden om de ‘Collectie van de Gentenaar’ te doorzoeken",
       "storybox": "Via de verhalenbox kan je zelf foto’s, informatie of verhalen toevoegen aan de collectie",
       "stories": "Je bent helemaal klaar om zelf objecten of reacties toe te voegen aan de Collectie van de Gentenaar! Veel plezier! Graag nog even de handleiding bekijken? Die vind je <a class='underline' href='https://www.collectie.gent/collectie-van-de-gentenaar-online' target='_blank'>hier</a>"
+    },
+    "cookieConsent": {
+      "title": "Waarvoor gebruiken we cookies?",
+      "description": "We gebruiken cookies om verkeer en voorkeuren bij te houden, ter verbetering van de gebruikservaring, voor een juiste wisselwerking met sociale media en voor gerichtere communicatie. Je kunt op elk moment je voorkeuren aanpassen onderaan de pagina.",
+      "accept": "Alles accepteren",
+      "preferences": "Voorkeuren instellen"
     }
   },
   "header": {
@@ -39,7 +45,7 @@
   },
   "footer": {
     "eu-info": "Dit project wordt mee gefinancierd door het Europees Fonds voor Regionale Ontwikkeling via het initiatief Urban Innovative Actions (UIA)",
-    "cookie-policy": "cookie policy",
+    "cookie-policy": "cookie instellingen",
     "privacy-policy": "privacy policy",
     "user-agreement": "Gebruikersvoorwaarden"
   },

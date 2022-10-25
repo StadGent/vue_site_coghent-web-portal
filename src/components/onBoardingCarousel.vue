@@ -9,7 +9,7 @@
           <div class="flex justify-center" v-for="(content, index) in carouselState.carouselContent" :key="index" v-show="index + 1 === carouselState.currentCarouselSlide">
             <div :class="`absolute ${content.descriptionLocation} p-4 bg-white-see-trough max-w-md z-40`">
               <h3 class="font-bold mb-2">{{ content.contentName }}</h3>
-              <p v-html="t(content.contentDescription)"></p>
+              <p v-html="t('content.contentDescription')"></p>
             </div>
             <img :src="content.contentLocation" :alt="content.contentName" class="max-h-full" />
           </div>

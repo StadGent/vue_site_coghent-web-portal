@@ -22,7 +22,7 @@
             <a href="https://stad.gent/nl/gebruiksvoorwaarden-website-stad-gent" target="_blank" class="underline font-light"> {{ t('footer.user-agreement') }}</a>
           </li>
           <li>
-            <a href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline md:ml-4 font-light"> {{ t('footer.cookie-policy') }}</a>
+            <a @click="openMinimalConsentManager" href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline md:ml-4 font-light"> {{ t('footer.cookie-policy') }}</a>
           </li>
           <li>
             <a
@@ -45,6 +45,7 @@ import { CardComponent, BaseIcon } from 'coghent-vue-3-component-library'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import useSocials, { SocialLink } from '@/composables/useSocials'
+import { useCookieConsent } from 'coghent-vue-3-component-library'
 
 export default defineComponent({
   name: 'TheFooter',
@@ -56,14 +57,20 @@ export default defineComponent({
     const { t } = useI18n()
     const route = useRoute()
     const { all: allSocials } = useSocials()
+    const { showMinimal } = useCookieConsent()
 
     const toSocial = (_social: SocialLink) => window.open(_social.link, '_blank')
+
+    const openMinimalConsentManager = () => {
+      showMinimal()
+    }
 
     return {
       t,
       route,
       allSocials,
       toSocial,
+      openMinimalConsentManager,
     }
   },
 })

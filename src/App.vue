@@ -21,16 +21,25 @@
         <OnScreenKeyboard />
       </div>
     </transition>
+    <CookiePreferencesModal
+      ><template v-slot:logo><img src="./assets/coghent.svg" href="logo" /></template
+    ></CookiePreferencesModal>
+    <MinimalCookieConsent
+      :minimalCookieConsentTitle="t('main.cookieConsent.title')"
+      :minimalCookieConsentDescription="t('main.cookieConsent.description')"
+      :acceptText="t('main.cookieConsent.accept')"
+      :preferencesText="t('main.cookieConsent.preferences')"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import TheHeader from '@/components/TheHeader.vue'
 import { useHead } from '@vueuse/head'
-import { ConfigStore, useGoogleFeature } from './stores/ConfigStore'
+import { ConfigStore, useGoogleFeature, useStoryboxFeature } from './stores/ConfigStore'
 import StoreFactory from './stores/StoreFactory'
 import CreativeModal from './components/CreativeModal.vue'
 import DetailsModal from './components/DetailsModal.vue'
@@ -45,10 +54,26 @@ import OnScreenKeyboard from './components/OnScreenKeyboard.vue'
 import { useOnScreenKeyboard } from './composables/useOnScreenKeyboard'
 import onBoardingCarousel from './components/onBoardingCarousel.vue'
 import { useOnBoarding } from './composables/useOnBoarding'
+import { MinimalCookieConsent, CookiePreferencesModal, useCookieConsent } from 'coghent-vue-3-component-library'
+import { getCookie } from 'tiny-cookie'
 
 export default defineComponent({
   name: 'App',
-  components: { TheHeader, CreativeModal, DetailsModal, TheFooter, DisclaimerButton, DisclaimerPopUp, MobileMenu, Notification, OffensiveContentModal, OnScreenKeyboard, onBoardingCarousel },
+  components: {
+    TheHeader,
+    CreativeModal,
+    DetailsModal,
+    TheFooter,
+    DisclaimerButton,
+    DisclaimerPopUp,
+    MobileMenu,
+    Notification,
+    OffensiveContentModal,
+    OnScreenKeyboard,
+    onBoardingCarousel,
+    MinimalCookieConsent,
+    CookiePreferencesModal,
+  },
   setup: () => {
     const { t } = useI18n()
     const configStore = StoreFactory.get(ConfigStore)
@@ -57,12 +82,25 @@ export default defineComponent({
     const mobileMenuIsOpen = ref<boolean>(false)
     const { keyboardState } = useOnScreenKeyboard()
     const { onboardingState } = useOnBoarding()
+    const { setUsedCookies, closeConsentManager, setUserAcceptedCookies, cookieConsentState } = useCookieConsent()
+    const gtmId = configStore.config.value.google?.tagManager
+    const gaId = configStore.config.value.google?.analytics
+    const userCookiePreference = getCookie('_cookiePreferences')
 
-    if (useGoogleFeature.value === true) {
-      const gtmId = configStore.config.value.google?.tagManager
-      const gaId = configStore.config.value.google?.analytics
-      addGoogleData(gtmId, gaId)
+    if (userCookiePreference) {
+      const userAcceptedCookies = JSON.parse(userCookiePreference || '[]')
+      setUserAcceptedCookies(userAcceptedCookies)
+      closeConsentManager()
     }
+
+    setUsedCookies([
+      {
+        tag: '_ga',
+        name: 'Statistieken',
+        description:
+          'We gebruiken deze cookies om statische informatie over onze website te verstrekken - ze worden gebruikt voor prestatiemetingen en verbeteringen. Deze categorie wordt ook wel Analytics genoemd.',
+      },
+    ])
 
     if (route.query.touch) {
       // Disable rightclick if touchmode
@@ -88,12 +126,23 @@ export default defineComponent({
       ],
     })
 
+    watch(
+      () => cookieConsentState.value.userAcceptedCookies,
+      (userAcceptedCookies) => {
+        if (userAcceptedCookies.includes('_ga') && useGoogleFeature.value === true) {
+          addGoogleData(gtmId, gaId)
+        }
+      },
+      { immediate: true }
+    )
+
     return {
       t,
       route,
       mobileMenuIsOpen,
       keyboardState,
       onboardingState,
+      useStoryboxFeature,
     }
   },
 })
