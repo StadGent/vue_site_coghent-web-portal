@@ -29,7 +29,7 @@
     },
     "cookieConsent": {
       "title": "Waarvoor gebruiken we cookies?",
-      "description": "We gebruiken cookies om verkeer en voorkeuren bij te houden, ter verbetering van de gebruikservaring, voor een juiste wisselwerking met sociale media en voor gerichtere communicatie. Je kunt op elk moment je voorkeuren aanpassen onderaan de pagina.",
+      "description": "We gebruiken cookies om verkeer en voorkeuren bij te houden, ter verbetering van de gebruikservaring, voor een juiste wisselwerking met sociale media en voor gerichtere communicatie. Je kunt op elk moment je voorkeuren aanpassen onderaan de pagina. <a href='https://stad.gent/nl/cookiebeleid-stad-gent' target='_blank' class='underline cursor-pointer'>Info over het cookiebeleid.</a>",
       "accept": "Alles accepteren",
       "preferences": "Voorkeuren instellen"
     }

@@ -22,7 +22,7 @@
             <a href="https://stad.gent/nl/gebruiksvoorwaarden-website-stad-gent" target="_blank" class="underline font-light"> {{ t('footer.user-agreement') }}</a>
           </li>
           <li>
-            <a @click="openMinimalConsentManager" href="https://stad.gent/nl/cookiebeleid-stad-gent" target="_blank" class="underline md:ml-4 font-light"> {{ t('footer.cookie-policy') }}</a>
+            <p @click="openMinimalConsentManager" class="underline md:ml-4 font-light cursor-pointer">{{ t('footer.cookie-policy') }}</p>
           </li>
           <li>
             <a
