@@ -21,7 +21,7 @@
         <OnScreenKeyboard />
       </div>
     </transition>
-    <CookiePreferencesModal
+    <CookiePreferencesModal :preferenceModalTitle="t('main.cookieConsent.preferenceModalTitle')"
       ><template v-slot:logo><img src="./assets/coghent.svg" href="logo" /></template
     ></CookiePreferencesModal>
     <MinimalCookieConsent
@@ -56,6 +56,7 @@ import onBoardingCarousel from './components/onBoardingCarousel.vue'
 import { useOnBoarding } from './composables/useOnBoarding'
 import { MinimalCookieConsent, CookiePreferencesModal, useCookieConsent } from 'coghent-vue-3-component-library'
 import { getCookie } from 'tiny-cookie'
+import { usedCookies } from './composables/usedCookies'
 
 export default defineComponent({
   name: 'App',
@@ -93,14 +94,7 @@ export default defineComponent({
       closeConsentManager()
     }
 
-    setUsedCookies([
-      {
-        tag: '_ga',
-        name: 'Statistieken',
-        description:
-          'We gebruiken deze cookies om statische informatie over onze website te verstrekken - ze worden gebruikt voor prestatiemetingen en verbeteringen. Deze categorie wordt ook wel Analytics genoemd.',
-      },
-    ])
+    setUsedCookies(usedCookies)
 
     if (route.query.touch) {
       // Disable rightclick if touchmode
