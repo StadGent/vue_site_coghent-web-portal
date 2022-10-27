@@ -40,16 +40,17 @@ export class Pager {
   updateCount = (newCount: number): number => {
     this.currentPage.value = 1
     this.count.value = newCount
-    this.calculatePageAmount()
+    this.pageAmount.value = this.calculatePageAmount()
     return this.count.value
   }
 
   calculatePageAmount = (): number => {
+    let amount = 0
     if (this.count.value !== 0) {
-      this.pageAmount.value = Math.floor(this.count.value / this.limit.value)
+      amount = Math.floor(this.count.value / this.limit.value)
     } else {
-      this.pageAmount.value = 1
+      amount = 1
     }
-    return this.pageAmount.value
+    return amount
   }
 }
