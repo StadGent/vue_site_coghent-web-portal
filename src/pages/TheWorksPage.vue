@@ -61,7 +61,7 @@ export default defineComponent({
     const { getUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
-    const pager = new Pager(6)
+    const pager = ref(new Pager(6))
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
@@ -90,9 +90,9 @@ export default defineComponent({
 
     const init = async () => {
       isLoading.value = true
-      const entitiesResults = await getUploads(apolloClient, pager.limit, pager.skip)
+      const entitiesResults = await getUploads(apolloClient, pager.value.limit, pager.value.skip)
       if (entitiesResults !== null) {
-        pager.updateCount = entitiesResults.count
+        pager.value.updateCount(entitiesResults.count)
         await prepareCards(entitiesResults.results)
       } else {
         myWorks.value = []
