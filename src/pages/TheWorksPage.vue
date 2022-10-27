@@ -41,7 +41,7 @@ import { useUpload, CircleLoader, BaseIcon } from 'coghent-vue-3-component-libra
 import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { BaseButton } from 'coghent-vue-3-component-library'
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
@@ -104,6 +104,14 @@ export default defineComponent({
       }
       isLoading.value = false
     }
+
+    watch(
+      () => pager,
+      () => {
+        console.log(pager)
+      },
+      { immediate: true }
+    )
 
     init()
 
