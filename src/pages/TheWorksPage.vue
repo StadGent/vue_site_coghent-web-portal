@@ -56,9 +56,10 @@ export default defineComponent({
     const uploadRoute = `/upload`
     const myWorks = ref<Array<ProfileListItemInfo>>([])
     const isLoading = ref<boolean>(false)
-    const { getAllUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
+    const { getUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
+    const skip = ref<number>(0)
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
@@ -87,7 +88,7 @@ export default defineComponent({
 
     const init = async () => {
       isLoading.value = true
-      const entitiesResults = await getAllUploads(apolloClient)
+      const entitiesResults = await getUploads(apolloClient, undefined, skip.value)
       if (entitiesResults !== null) {
         await prepareCards(entitiesResults.results)
       } else {
