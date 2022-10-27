@@ -11,7 +11,7 @@
     <span class="flex flex-col md:flex-row">
       <profile-side-menu />
       <section class="w-full p-4 md:ml-8 md:p-0">
-        <div v-if="myWorks.length !== 0">{{ `${pager.currentPage} of ${pager.pageAmount}` }}</div>
+        <div v-if="myWorks.length !== 0 && pager.pageAmount > 1" class="w-full flex justify-end">{{ `${pager.currentPage} of ${pager.pageAmount}` }}</div>
         <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
           <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         </div>
