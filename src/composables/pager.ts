@@ -1,53 +1,55 @@
+import { Ref, ref } from 'vue'
+
 export class Pager {
-  limit: number
-  skip: number
-  count: number
-  currentPage: number
-  pageAmount: number
+  limit: Ref<number>
+  skip: Ref<number>
+  count: Ref<number>
+  currentPage: Ref<number>
+  pageAmount: Ref<number>
 
   constructor(limit: number, count: number = 0) {
-    this.limit = limit
-    this.skip = 0
-    this.count = count
-    this.currentPage = 1
-    this.pageAmount = this.calculatePageAmount()
+    this.limit = ref(limit)
+    this.skip = ref(0)
+    this.count = ref(count)
+    this.currentPage = ref(1)
+    this.pageAmount = ref(this.calculatePageAmount())
   }
 
   goToNextPage = (): number => {
-    if (this.currentPage < this.pageAmount) {
-      this.currentPage++
+    if (this.currentPage.value < this.pageAmount.value) {
+      this.currentPage.value++
     } else {
-      this.currentPage = 1
+      this.currentPage.value = 1
     }
-    this.skip = this.currentPage * this.limit
-    console.log(this.currentPage)
-    return this.currentPage
+    this.skip.value = this.currentPage.value * this.limit.value
+    console.log(this.currentPage.value)
+    return this.currentPage.value
   }
 
   goToPreviousPage = (): number => {
-    if (this.currentPage === 1) {
-      this.currentPage = this.pageAmount
+    if (this.currentPage.value === 1) {
+      this.currentPage.value = this.pageAmount.value
     } else {
-      this.currentPage--
+      this.currentPage.value--
     }
-    this.skip = this.currentPage * this.limit
+    this.skip.value = this.currentPage.value * this.limit.value
     console.log(this.currentPage)
-    return this.currentPage
+    return this.currentPage.value
   }
 
   updateCount = (newCount: number): number => {
-    this.currentPage = 1
-    this.count = newCount
+    this.currentPage.value = 1
+    this.count.value = newCount
     this.calculatePageAmount()
-    return this.count
+    return this.count.value
   }
 
   calculatePageAmount = (): number => {
-    if (this.count !== 0) {
-      this.pageAmount = Math.floor(this.count / this.limit)
+    if (this.count.value !== 0) {
+      this.pageAmount.value = Math.floor(this.count.value / this.limit.value)
     } else {
-      this.pageAmount = 1
+      this.pageAmount.value = 1
     }
-    return this.pageAmount
+    return this.pageAmount.value
   }
 }

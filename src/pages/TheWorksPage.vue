@@ -65,8 +65,7 @@ export default defineComponent({
     const { getUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
-    const pagerInit = new Pager(6)
-    const pager = reactive(pagerInit)
+    const pager = new Pager(6)
     //v-if="myWorks.length !== 0 && pager.pageAmount > 1"
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
