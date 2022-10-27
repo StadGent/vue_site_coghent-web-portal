@@ -11,6 +11,7 @@
     <span class="flex flex-col md:flex-row">
       <profile-side-menu />
       <section class="w-full p-4 md:ml-8 md:p-0">
+        <div v-if="myWorks.length !== 0">{{ `${pager.currentPage} of ${pager.pageAmount}` }}</div>
         <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
           <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
         </div>
@@ -40,6 +41,7 @@ import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
+import { Pager } from '../composables/pager'
 
 export default defineComponent({
   name: 'TheWorksPage',
@@ -59,8 +61,7 @@ export default defineComponent({
     const { getUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
-    const limit = 6
-    const skip = ref<number>(0)
+    const pager = new Pager(6)
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
@@ -89,8 +90,9 @@ export default defineComponent({
 
     const init = async () => {
       isLoading.value = true
-      const entitiesResults = await getUploads(apolloClient, limit, skip.value)
+      const entitiesResults = await getUploads(apolloClient, pager.limit, pager.skip)
       if (entitiesResults !== null) {
+        pager.updateCount = entitiesResults.count
         await prepareCards(entitiesResults.results)
       } else {
         myWorks.value = []
@@ -106,6 +108,7 @@ export default defineComponent({
       router,
       uploadRoute,
       isLoading,
+      pager,
     }
   },
 })
