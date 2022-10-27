@@ -12,9 +12,9 @@
       <profile-side-menu />
       <section class="w-full p-4 md:ml-8 md:p-0">
         <div v-if="myWorks.length !== 0 && pager.pageAmount > 1" class="w-full flex justify-end items-center">
-          <BaseIcon icon="arrowLeftLine" class="stroke-current p-2" @click="pager.goToPreviousPage()" />
+          <BaseIcon icon="arrowLeftLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToPreviousPage()" />
           <p>{{ `${pager.currentPage} of ${pager.pageAmount}` }}</p>
-          <BaseIcon icon="arrowRightLine" class="stroke-current p-2" @click="pager.goToNextPage()" />
+          <BaseIcon icon="arrowRightLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToNextPage()" />
         </div>
         <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
           <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
@@ -41,7 +41,7 @@ import { useUpload, CircleLoader, BaseIcon } from 'coghent-vue-3-component-libra
 import { getMetadataOfTypeFromEntity } from 'coghent-vue-3-component-library'
 import { Entity } from 'coghent-vue-3-component-library'
 import { BaseButton } from 'coghent-vue-3-component-library'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProfileSideMenu from '../components/ProfileSideMenu.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
@@ -65,7 +65,7 @@ export default defineComponent({
     const { getUploads, stripUserUploadPrefix, getMediafiles, getMediafileLink, getFilename, updateAsset } = useUpload()
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
-    const pager = ref(new Pager(6))
+    const pager = reactive(new Pager(6))
     //v-if="myWorks.length !== 0 && pager.pageAmount > 1"
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
@@ -95,9 +95,9 @@ export default defineComponent({
 
     const init = async () => {
       isLoading.value = true
-      const entitiesResults = await getUploads(apolloClient, pager.value.limit, pager.value.skip)
+      const entitiesResults = await getUploads(apolloClient, pager.limit, pager.skip)
       if (entitiesResults !== null) {
-        pager.value.updateCount(entitiesResults.count)
+        pager.updateCount(entitiesResults.count)
         await prepareCards(entitiesResults.results)
       } else {
         myWorks.value = []
