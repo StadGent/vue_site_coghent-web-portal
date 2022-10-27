@@ -20,6 +20,7 @@ export class Pager {
       this.currentPage = 1
     }
     this.skip = this.currentPage * this.limit
+    console.log(this.currentPage)
     return this.currentPage
   }
 
@@ -30,6 +31,7 @@ export class Pager {
       this.currentPage--
     }
     this.skip = this.currentPage * this.limit
+    console.log(this.currentPage)
     return this.currentPage
   }
 
