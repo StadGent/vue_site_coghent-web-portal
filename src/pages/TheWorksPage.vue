@@ -12,9 +12,9 @@
       <profile-side-menu />
       <section class="w-full p-4 md:ml-8 md:p-0">
         <div v-if="myWorks.length !== 0 && pager.pageAmount > 1" class="w-full flex justify-end items-center">
-          <BaseIcon icon="arrowLeftLine" class="stroke-current px-2" />
+          <BaseIcon icon="arrowLeftLine" class="stroke-current p-2" @click="pager.goToPreviousPage()" />
           <p>{{ `${pager.currentPage} of ${pager.pageAmount}` }}</p>
-          <BaseIcon icon="arrowRightLine" class="stroke-current px-2" />
+          <BaseIcon icon="arrowRightLine" class="stroke-current p-2" @click="pager.goToNextPage()" />
         </div>
         <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
           <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
@@ -66,6 +66,7 @@ export default defineComponent({
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
     const pager = ref(new Pager(6))
+    //v-if="myWorks.length !== 0 && pager.pageAmount > 1"
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
