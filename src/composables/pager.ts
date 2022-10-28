@@ -30,7 +30,7 @@ export class Pager {
   goToPreviousPage = (callback: Function): number => {
     if (this.currentPage.value === 1) {
       this.currentPage.value = this.pageAmount.value
-      this.skip.value = 0
+      this.skip.value = (this.pageAmount.value - 1) * this.limit.value
     } else {
       this.currentPage.value--
       this.skip.value = (this.currentPage.value - 1) * this.limit.value
