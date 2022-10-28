@@ -12,9 +12,9 @@
       <profile-side-menu />
       <section class="w-full p-4 md:ml-8 md:p-0">
         <div v-if="myWorks.length !== 0 && pager.pageAmount.value > 1" class="w-full flex justify-end items-center">
-          <BaseIcon icon="arrowLeftLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToPreviousPage()" />
+          <BaseIcon icon="arrowLeftLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToPreviousPage(fetchData())" />
           <p>{{ `${pager.currentPage.value} of ${pager.pageAmount.value}` }}</p>
-          <BaseIcon icon="arrowRightLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToNextPage()" />
+          <BaseIcon icon="arrowRightLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToNextPage(fetchData())" />
         </div>
         <div v-if="isLoading && myWorks.length === 0" class="h-fit p-8 flex flex-col w-full justify-center items-center overflow-hidden">
           <div class="flex justify-center items-center w-full p-4"><CircleLoader /></div>
@@ -93,7 +93,7 @@ export default defineComponent({
       }
     }
 
-    const init = async () => {
+    const fetchData = async () => {
       isLoading.value = true
       const entitiesResults = await getUploads(apolloClient, pager.limit, pager.skip)
       if (entitiesResults !== null) {
@@ -103,6 +103,10 @@ export default defineComponent({
         myWorks.value = []
       }
       isLoading.value = false
+    }
+
+    const init = async () => {
+      fetchData()
     }
 
     watch(
@@ -122,6 +126,7 @@ export default defineComponent({
       uploadRoute,
       isLoading,
       pager,
+      fetchData,
     }
   },
 })

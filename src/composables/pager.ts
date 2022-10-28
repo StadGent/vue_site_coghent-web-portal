@@ -15,25 +15,25 @@ export class Pager {
     this.pageAmount = ref(this.calculatePageAmount())
   }
 
-  goToNextPage = (): number => {
+  goToNextPage = (callback: Function): number => {
     if (this.currentPage.value < this.pageAmount.value) {
       this.currentPage.value++
     } else {
       this.currentPage.value = 1
     }
     this.skip.value = this.currentPage.value * this.limit.value
-    console.log(this.currentPage.value)
+    callback()
     return this.currentPage.value
   }
 
-  goToPreviousPage = (): number => {
+  goToPreviousPage = (callback: Function): number => {
     if (this.currentPage.value === 1) {
       this.currentPage.value = this.pageAmount.value
     } else {
       this.currentPage.value--
     }
     this.skip.value = this.currentPage.value * this.limit.value
-    console.log(this.currentPage)
+    callback()
     return this.currentPage.value
   }
 
