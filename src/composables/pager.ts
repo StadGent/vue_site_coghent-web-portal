@@ -18,10 +18,11 @@ export class Pager {
   goToNextPage = (callback: Function): number => {
     if (this.currentPage.value < this.pageAmount.value) {
       this.currentPage.value++
+      this.skip.value = (this.currentPage.value - 1) * this.limit.value
     } else {
       this.currentPage.value = 1
+      this.skip.value = 0
     }
-    this.skip.value = this.currentPage.value * this.limit.value
     callback()
     return this.currentPage.value
   }
@@ -29,25 +30,28 @@ export class Pager {
   goToPreviousPage = (callback: Function): number => {
     if (this.currentPage.value === 1) {
       this.currentPage.value = this.pageAmount.value
+      this.skip.value = 0
     } else {
       this.currentPage.value--
+      this.skip.value = (this.currentPage.value - 1) * this.limit.value
     }
-    this.skip.value = this.currentPage.value * this.limit.value
     callback()
     return this.currentPage.value
   }
 
   updateCount = (newCount: number): number => {
-    this.currentPage.value = 1
-    this.count.value = newCount
-    this.pageAmount.value = this.calculatePageAmount()
+    if (newCount !== this.count.value) {
+      this.currentPage.value = 1
+      this.count.value = newCount
+      this.pageAmount.value = this.calculatePageAmount()
+    }
     return this.count.value
   }
 
   calculatePageAmount = (): number => {
     let amount = 0
     if (this.count.value !== 0) {
-      amount = Math.floor(this.count.value / this.limit.value)
+      amount = Math.ceil(this.count.value / this.limit.value)
     } else {
       amount = 1
     }

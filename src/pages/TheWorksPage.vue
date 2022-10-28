@@ -66,17 +66,17 @@ export default defineComponent({
     const { ASSET_ID_PARAM } = uploadWizard()
     const { generateUrl } = iiif
     const pager = new Pager(6)
-    //v-if="myWorks.length !== 0 && pager.pageAmount > 1"
 
     const prepareCards = async (_entities: Array<typeof Entity> | null) => {
       if (_entities !== null) {
+        const worksToDisplay = []
         for (const asset of _entities) {
           const mediafiles = await getMediafiles(asset)
           let title = getMetadataOfTypeFromEntity(asset, 'title')
           let maker = getMetadataOfTypeFromEntity(asset, 'maker')
           let publicationStatus = getMetadataOfTypeFromEntity(asset, 'publication_status')
           let userAction = getMetadataOfTypeFromEntity(asset, 'user_action')
-          myWorks.value.push({
+          worksToDisplay.push({
             id: asset.id,
             title: title ? title.value : 'Title placeholder',
             description: maker ? maker.value : 'Onbekend',
@@ -90,10 +90,12 @@ export default defineComponent({
             action: userAction ? userAction.value : 'updated',
           } as ProfileListItemInfo)
         }
+        myWorks.value = worksToDisplay
       }
     }
 
     const fetchData = async () => {
+      myWorks.value = []
       isLoading.value = true
       const entitiesResults = await getUploads(apolloClient, pager.limit, pager.skip)
       if (entitiesResults !== null) {
@@ -108,14 +110,6 @@ export default defineComponent({
     const init = async () => {
       fetchData()
     }
-
-    watch(
-      () => pager,
-      () => {
-        console.log(pager)
-      },
-      { immediate: true }
-    )
 
     init()
 
