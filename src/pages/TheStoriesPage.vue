@@ -28,7 +28,14 @@
       <div v-if="!loading && storyBoxItems.length === 0" class="flex items-center flex-col w-full h-full">
         <h1 v-if="true" class="h-fit mt-12 text-xl">{{ t(`storybox.noStories`) }}</h1>
       </div>
-      <profile-list-item v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :v-show="storyBoxItems.length > 0 && !loading" :profile-list-item-info="storyBoxItem" @update="getStoryBoxes" />
+      <div v-if="storyBoxItems.length > 0 && !loading">
+        <div v-if="pager.pageAmount.value > 1" class="w-full flex justify-end items-center">
+          <BaseIcon icon="arrowLeftLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToPreviousPage(getStoryBoxes)" />
+          <p>{{ `${pager.currentPage.value} of ${pager.pageAmount.value}` }}</p>
+          <BaseIcon icon="arrowRightLine" class="stroke-current p-2 cursor-pointer" @click="pager.goToNextPage(getStoryBoxes)" />
+        </div>
+        <profile-list-item v-for="(storyBoxItem, index) in storyBoxItems" :key="index" :profile-list-item-info="storyBoxItem" @update="getStoryBoxes" />
+      </div>
     </section>
   </section>
 </template>
@@ -46,6 +53,7 @@ import { storyboxDataIsUpdated } from 'coghent-vue-3-component-library'
 import { storyboxCount } from '@/app'
 import QRCodeModal from '../components/QRCodeModal.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
+import { Pager } from '@/composables/pager'
 
 export default defineComponent({
   name: 'TheStoriesPage',
@@ -54,6 +62,7 @@ export default defineComponent({
     const { t } = useI18n()
     const storyBoxItems = ref<ProfileListItemInfo[]>([])
     const loading = ref<Boolean>(false)
+    const pager = new Pager(6)
 
     watch(storyboxDataIsUpdated, async (status: boolean) => {
       if (status === true) {
@@ -63,17 +72,19 @@ export default defineComponent({
     })
 
     const getStoryBoxes = async (_skipGetNew = false) => {
+      const storyBoxItemsToDisplay = []
       storyBoxItems.value = []
       loading.value = true
       if (!_skipGetNew) {
-        await useStorybox(apolloClient).getStoryboxes()
+        await useStorybox(apolloClient).getStoryboxes(pager.limit, pager.skip)
+        pager.updateCount(StoryBoxState.value.count)
         storyboxCount.value = StoryBoxState.value.count
       }
       storyboxCount.value = StoryBoxState.value.count
       for (const _box of StoryBoxState.value.storyboxes) {
         const title = getMetadataOfTypeFromEntity(_box, `title`)
         const description = getMetadataOfTypeFromEntity(_box, `description`)
-        storyBoxItems.value.push({
+        storyBoxItemsToDisplay.push({
           id: _box.id,
           title: title ? title.value : _box.id,
           description: description ? description.value : '',
@@ -82,6 +93,7 @@ export default defineComponent({
           type: ProfileListItemType.story,
         } as ProfileListItemInfo)
       }
+      storyBoxItems.value = storyBoxItemsToDisplay
       loading.value = false
     }
 
@@ -93,6 +105,7 @@ export default defineComponent({
       t,
       router,
       getStoryBoxes,
+      pager,
     }
   },
 })
