@@ -21,10 +21,11 @@
         <OnScreenKeyboard />
       </div>
     </transition>
-    <CookiePreferencesModal :preferenceModalTitle="t('main.cookieConsent.preferenceModalTitle')"
+    <CookiePreferencesModal v-if="!route.query.touch" :preferenceModalTitle="t('main.cookieConsent.preferenceModalTitle')"
       ><template v-slot:logo><img src="./assets/coghent.svg" href="logo" /></template
     ></CookiePreferencesModal>
     <MinimalCookieConsent
+      v-if="!route.query.touch"
       :minimalCookieConsentTitle="t('main.cookieConsent.title')"
       :minimalCookieConsentDescription="t('main.cookieConsent.description')"
       :acceptText="t('main.cookieConsent.accept')"
