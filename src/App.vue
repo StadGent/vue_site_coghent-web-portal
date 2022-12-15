@@ -118,8 +118,13 @@ export default defineComponent({
           name: `ROBOTS`,
           content: getIndexValue(),
         },
+        {
+          name: `og:image`,
+          content: `${window.location.origin}/coghent.svg`
+        }
       ],
     })
+    
 
     watch(
       () => cookieConsentState.value.userAcceptedCookies,
