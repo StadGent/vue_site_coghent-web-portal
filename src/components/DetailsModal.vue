@@ -284,6 +284,8 @@ export default defineComponent({
         let title = getFirstValueOfPropertyFromEntity(entity.value, `title`)
         let description = getFirstValueOfPropertyFromEntity(entity.value, `description`)
         let image = ''
+        let url = window.location.href
+        
         entity.value.primary_transcode ? (image = entity.value.primary_transcode) : ''
         const media = await getFirstMediafileWithFilelocationOfEntity(entity.value)
         media && media.original_file_location ? (image = media.original_file_location) : ``
@@ -301,6 +303,10 @@ export default defineComponent({
               property: 'og:image',
               content: image,
             },
+            {
+              property: 'og:url',
+              content: url
+            }
           ]
         )
       }
