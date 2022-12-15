@@ -52,6 +52,11 @@ export default function (auth: any) {
   })
   if (auth != null) {
     router.beforeEach(async (to, _from, next) => {
+      const tag = document.createElement('meta');
+      tag.setAttribute('name', 'og:image');
+      tag.setAttribute('content', `${window.location.origin}/coghent.svg`);
+      document.head.appendChild(tag)
+
       checkRouteOnRequireAuth(to)
       to.query = removeParametFromQueryParams(to.query, queryParamsToDelete)
       if (routeRequiresAuth.value === true) {
