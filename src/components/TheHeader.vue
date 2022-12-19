@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-between flex-wrap sm:flex-nowrap mt-0 sm:mx-5">
+  <div class="mt-3 sm:mt-0 items-center flex justify-between flex-wrap sm:flex-nowrap mt-0 sm:mx-5">
     <div class="flex gap-2 xl:gap-8">
-      <div class="flex flex-col items-center">
+      <div class="flex flex-col items-center sm:mt-0 mt-2">
         <a class="flex items-center sm:ml-0 ml-3 group cursor-pointer" @click="checkAction">
           <img src="../assets/coghent.svg" href="logo" />
           <div class="sm:flex flex-col items-center mt-5 ml-2 hidden">
@@ -23,9 +23,9 @@
       </div>
     </div>
 
-    <div v-if="!route.query.touch && useAuthFeature === true" class="hidden sm:inline-flex flex ml-3 mt-5">
-      <div v-if="!isMobile" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible" />
-      <span class="hidden sm:inline-flex">
+    <div v-if="!route.query.touch && useAuthFeature === true" class="sm:inline-flex flex ml-3 mt-5">
+      <!-- <div v-if="!isMobile" class="border-r-2 h-auto border-background-dark border-opacity-70 mr-2 sm:invisible sm:hidden" /> -->
+      <span class="sm:inline-flex">
         <base-button
           v-if="!route.query.touch && !userStore.hasUser"
           :text="t('buttons.login')"

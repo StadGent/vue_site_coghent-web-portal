@@ -1,9 +1,9 @@
 <template>
-  <div class="md:bg-background-medium max-h-screen flex p-8 flex-col w-full md:w-2/6 page-height break-all">
+  <div class="md:bg-background-medium max-h-screen flex py-0 sm:py-8 p-8 flex-col w-full md:w-2/6 page-height break-all">
     <div class="flex flex-col justify-between pb-4">
-      <div class="flex justify-between flex-col-reverse lg:flex-col">
-        <h2 v-if="user != null" class="mt-5 font-bold text-4xl">{{ t(`profile.greeting`) }}<br />{{ user.given_name || user.name }}!</h2>
-        <div class="w-full flex justify-end">
+      <div class="flex justify-between flex-row lg:flex-col">
+        <h2 v-if="user != null" class="md:mt-5 font-bold text-4xl">{{ t(`profile.greeting`) }}<br />{{ user.given_name || user.name }}!</h2>
+        <div class="w-10 flex justify-end">
           <base-button
             class="md:hidden block w-8 h-8 bg-neutral-0 rounded-full flex justify-center"
             :on-click="logout"
@@ -14,9 +14,9 @@
           />
         </div>
       </div>
-      <section class="flex md:block whitespace-nowrap overflow-scroll h-24 md:h-auto no-scrollbar h-full">
+      <section class="flex-col sm:flex-row flex md:block whitespace-nowrap overflow-scroll h-24 md:h-auto no-scrollbar h-full">
         <router-link v-for="(page, index) in pages" :key="index" :to="page.link" class="pr-4 md:pr-0" @click="changeActivePage(index)">
-          <p :class="`mt-8 text-lg w-auto ${page.linkIsActive ? 'text-accent-yellow font-bold' : ''}`">
+          <p :class="`mt-4 sm:mt-8 text-lg w-auto ${page.linkIsActive ? 'text-accent-yellow font-bold' : ''}`">
             {{ page.title }}
           </p>
         </router-link>
