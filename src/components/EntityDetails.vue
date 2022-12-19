@@ -60,7 +60,7 @@
           <a
             v-if="isDownloadable && !route.query.touch"
             class="bg-background-light rounded-full p-4"
-            :href="generateUrl(result.Entity?.mediafiles[carouselPictureIndex].filename, 'full')"
+            :href="result.Entity?.mediafiles[carouselPictureIndex].transcode_file_location"
             target="_blank"
             download
           >
