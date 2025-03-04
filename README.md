@@ -1,24 +1,9 @@
-# coghent-frontend
+# Repository Archived for Visibility
 
-## Project setup
-```
-npm install
-```
+This repository is kept alive purely for visibility purposes. Future development, commits, and history can be found on the Inuits GitLab repository.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+You can find the latest version of this project at:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+🔗 [GitLab Repository](https://gitlab.com/inuits/coghent/coghent-web-portal)
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Please refer to the GitLab repository for the most up-to-date changes and contributions.
